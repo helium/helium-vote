@@ -1,18 +1,53 @@
-import Head from 'next/head'
+import Head from "next/head";
+import { useEffect, useState } from "react";
+import Page from "../components/Page";
+import { fetchVotes } from "../data/votes";
+import Link from "next/link";
 
 export default function Home() {
+  const [loading, setLoading] = useState(false);
+  const [activeVotes, setActiveVotes] = useState([]);
+
+  useEffect(() => {
+    const getAllVotes = async () => {
+      setLoading(true);
+      const fetchedVotes = await fetchVotes();
+      setActiveVotes(fetchedVotes);
+      setLoading(false);
+    };
+
+    getAllVotes();
+  }, []);
+
+  console.log(activeVotes);
+
   return (
-    <div className="bg-black flex flex-col items-center justify-center min-h-screen py-2">
+    <Page>
       <Head>
         <title>Helium Vote</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="flex flex-col items-center justify-center w-full flex-1 px-20 text-center">
-        <h1 className="text-white text-6xl font-bold">
-          Coming Soon...
-        </h1>
-      </main>
-    </div>
-  )
+      <div className="flex flex-col space-y-2">
+        {loading ? (
+          <p className="text-lg">{"Loading votes..."}</p>
+        ) : (
+          <div>
+            <p className="text-lg">{"Active votes:"}</p>
+            <div className="flex flex-col space-y-2">
+              {activeVotes.map((v) => {
+                return (
+                  <Link href={`/${v.id}`}>
+                    <a className="w-1/2 border border-gray-300 border-solid p-5 hover:bg-gray-300">
+                      {v.name}
+                    </a>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        )}
+      </div>
+    </Page>
+  );
 }
