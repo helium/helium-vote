@@ -19,7 +19,7 @@ export default function Home() {
     getAllVotes();
   }, []);
 
-  console.log(activeVotes);
+  // console.log(activeVotes);
 
   return (
     <Page>

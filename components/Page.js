@@ -1,8 +1,15 @@
+import NavBar from "./NavBar";
+
 const Page = ({ children }) => {
   return (
-    <main className="w-full h-full py-20 px-10">
-      <div className="max-w-7xl mx-auto bg-gray-100 p-5">{children}</div>
-    </main>
+    <>
+      <NavBar />
+      <main className="w-full min-h-screen bg-gradient-to-b from-gray-700 to-gray-900">
+        <div className="min-h-screen w-full bg-hv-gray-900 bg-opacity-50 py-20 px-10">
+          {children}
+        </div>
+      </main>
+    </>
   );
 };
 
