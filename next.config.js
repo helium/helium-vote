@@ -24,7 +24,7 @@ module.exports = {
         ],
       },
       {
-        id: "13YxdDMkDsjnWAk1MSBKADveZm5RnMTLEqq1yTvzHKBZnvjsZF1",
+        id: "13YxdDMkDsjnWAk1MSBKADveZm5RnMTLEqq1yTvzHKBZnvjsZF2",
         pollster: "13k48bBPBaQ4ezCXpDfNZTiY3CmAMTCmMX7cuVPsvuCi6AgHrFH",
         deadline: 10750000,
         link: "https://github.com/helium/HIP/blob/master/0040-validator-denylist.md",
