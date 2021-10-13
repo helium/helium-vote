@@ -13,7 +13,9 @@ const VoteOption = ({ outcome, expandedId, handleExpandClick }) => {
   return (
     <div className="w-full bg-white bg-opacity-5 rounded-xl p-4 flex space-y-2 flex-col items-start justify-start">
       <div className="flex justify-between items-center w-full">
-        <p className="text-white text-3xl">{outcome.value}</p>
+        <p className="text-white text-md pr-2 sm:pr-1 sm:text-3xl">
+          {outcome.value}
+        </p>
         <button
           className="flex flex-row items-center justify-between px-3 py-2 bg-gray-700 hover:bg-gray-600 outline-none border border-solid border-transparent focus:border-hv-blue-500 transition-all duration-100 rounded-lg w-min"
           onClick={() => {
@@ -25,7 +27,7 @@ const VoteOption = ({ outcome, expandedId, handleExpandClick }) => {
             }
           }}
         >
-          <span className="text-sm text-hv-blue-500 whitespace-nowrap pr-2">
+          <span className="text-xs sm:text-sm text-hv-blue-500 whitespace-nowrap pr-2">
             {expanded ? "Hide" : "Show"} voting instructions
           </span>
           <svg
