@@ -1,101 +1,31 @@
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   calculateResults,
   fetchCurrentHeight,
   fetchVoteDetails,
+  fetchVotes,
 } from "../data/votes";
 import Page from "../components/Page";
 import ContentSection from "../components/ContentSection";
 import classNames from "classnames";
-import QRCode from "react-qr-code";
 import { addMinutes, formatDistanceToNow } from "date-fns";
+import VoteOption from "../components/VoteOption";
+import VoteDetailField from "../components/VoteDetailField";
+import cache from "../utils/cache";
+import { Balance, CurrencyType } from "@helium/currency";
 
-const VoteDetailField = ({ value, label, title = false, small = false }) => {
-  return (
-    <div className="flex flex-col">
-      <p className="text-xs font-light text-gray-500 font-sans">{label}</p>
-      {title ? (
-        <h2 className="text-4xl font-sans text-white">{value}</h2>
-      ) : (
-        <p
-          className={classNames("font-sans break-all text-gray-300", {
-            "text-sm": small,
-            "text-lg": !small,
-          })}
-        >
-          {value}
-        </p>
-      )}
-    </div>
-  );
-};
-
-const VoteOption = ({ outcome }) => {
-  const [expanded, setExpanded] = useState(false);
-
-  return (
-    <div className="w-full bg-white bg-opacity-5 rounded-xl p-4 flex space-y-2 flex-col items-start justify-start">
-      <div className="flex justify-between items-center w-full">
-        <p className="text-white text-3xl">{outcome.value}</p>
-        <button
-          className="flex flex-row items-center justify-between px-3 py-2 bg-gray-700 hover:bg-gray-600 outline-none border border-solid border-transparent focus:border-hv-blue-500 transition-all duration-100 rounded-lg w-min"
-          onClick={() => setExpanded((curr) => !curr)}
-        >
-          <span className="text-sm text-hv-blue-500 whitespace-nowrap pr-2">
-            {expanded ? "Hide" : "Show"} voting instructions
-          </span>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className={classNames("h-3 w-3 text-hv-blue-500", {
-              "rotate-180": expanded,
-            })}
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M19 9l-7 7-7-7"
-            />
-          </svg>
-        </button>
-      </div>
-      {expanded && (
-        <>
-          <p className="text-gray-400 text-sm pb-4">
-            To vote for this option, scan the QR code to burn $1 worth of HNT. By submitting this transaction, the wallet balance of the sender address will be added to the votes (1 HNT = 1 Vote). Burning more HNT will not affect the number of votes. 
-          </p>
-          <div className="space-y-4 flex flex-col items-center justify-start">
-            <span className="flex flex-col items-center space-y-2">
-              <p className="text-gray-300 text-sm">
-                1. Scan this QR code with the Helium app:
-              </p>
-              <div className="flex justify-center items-center p-4 rounded-lg bg-white">
-                <QRCode value={outcome.address} size={175} />
-              </div>
-            </span>
-            <span className="text-lg text-gray-500">OR</span>
-            <span className="flex flex-col items-center space-y-2">
-              <p className="text-gray-300 text-sm">
-                2. Execute the following command with the CLI:
-              </p>
-              <div className="bg-hv-gray-900 rounded-lg p-2 flex flex-col items-start justify-start">
-                <p className="text-hv-blue-500 font-mono break-all">{`helium-wallet burn --0.0000004 --payee ${outcome.address} --commit`}</p>
-              </div>
-            </span>
-          </div>
-        </>
-      )}
-    </div>
-  );
-};
-
-const VoteDetailsPage = () => {
+const VoteDetailsPage = ({ results }) => {
   const router = useRouter();
   const { voteid } = router.query;
+
+  const { outcomes: outcomesResults, timestamp: resultsTimestamp } = results;
+  const votingResults = outcomesResults
+    .sort((a, b) => a.hntVoted - b.hntVoted)
+    .map((r) => ({
+      ...r,
+      hntVoted: new Balance(r.hntVoted, CurrencyType.networkToken),
+    }));
 
   const [loading, setLoading] = useState(false);
   const [voteDetails, setVoteDetails] = useState({});
@@ -136,17 +66,11 @@ const VoteDetailsPage = () => {
     }
   }, [deadline, currentHeight, blocksRemaining]);
 
-  const [results, setResults] = useState([]);
+  const [expandedId, setExpandedId] = useState(null);
 
-  console.log(results);
-
-  useEffect(() => {
-    const getResults = async (voteid) => {
-      const results = await calculateResults(voteid);
-      setResults(results);
-    };
-    getResults(voteid);
-  }, [voteid]);
+  const handleExpandClick = (id) => {
+    setExpandedId(id);
+  };
 
   if (loading) {
     return (
@@ -221,30 +145,80 @@ const VoteDetailsPage = () => {
       </ContentSection>
       <div className="flex flex-col space-y-2 max-w-5xl mx-auto mt-5">
         <div className="flex-col space-y-2">
-          <div className="">
+          <div>
             <p className="text-xs font-light text-gray-500 font-sans pb-2">
               Outcomes
             </p>
             <div className="w-full space-y-2">
               {outcomes?.map((o) => (
-                <VoteOption key={o.address} outcome={o} />
+                <VoteOption
+                  key={o.address}
+                  outcome={o}
+                  expandedId={expandedId}
+                  handleExpandClick={handleExpandClick}
+                />
               ))}
             </div>
           </div>
         </div>
       </div>
-      {results?.length > 0 && (
-        <ContentSection>
-          <p className="text-xs font-light text-gray-400 font-sans pb-2">
-            Results
-          </p>
-          {results.map((r) => {
-            return <div className="text-white text-md">{r.name}</div>;
-          })}
-        </ContentSection>
+      {votingResults?.length > 0 && (
+        <div className="flex flex-col space-y-2 max-w-5xl mx-auto mt-5">
+          <div className="flex-col space-y-2">
+            <div>
+              <p className="text-xs font-light text-gray-500 font-sans pb-2">
+                Results
+              </p>
+              <div className="w-full bg-white bg-opacity-5 rounded-xl p-4">
+                <div className="grid grid-cols-12">
+                  {votingResults.map((r) => {
+                    return (
+                      <React.Fragment key={r.value}>
+                        <div className="text-white text-md col-span-4">
+                          {r.value}
+                        </div>
+                        <div className="text-white text-md col-span-8">
+                          {r.hntVoted.toString(2)}
+                        </div>
+                      </React.Fragment>
+                    );
+                  })}
+                </div>
+                <p className="text-xs font-light text-gray-500 font-sans pt-2">
+                  Last updated {formatDistanceToNow(resultsTimestamp)} ago
+                  (refreshes every 10 minutes)
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
     </Page>
   );
 };
+
+export async function getStaticPaths() {
+  const votes = await fetchVotes();
+  const paths = votes.map(({ id }) => ({ params: { voteid: id } }));
+  return {
+    paths,
+    fallback: false,
+  };
+}
+
+export async function getStaticProps({ params }) {
+  const { voteid } = params;
+
+  const results = await cache.fetch(
+    // the key to look for in the Redis cache
+    voteid,
+    // the function to call if the key is either not there, or the data is expired
+    () => calculateResults(voteid),
+    // the time until the data expires (in seconds)
+    60 * 10
+  );
+
+  return { props: { results }, revalidate: 10 };
+}
 
 export default VoteDetailsPage;
