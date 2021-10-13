@@ -95,7 +95,9 @@ const VoteDetailsPage = ({ results }) => {
             <VoteDetailField value={description} label="Description" />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
               <VoteDetailField value={id} label="Vote ID" small />
-              <VoteDetailField value={pollster} label="Pollster" small />
+              {pollster !== undefined && (
+                <VoteDetailField value={pollster} label="Pollster" small />
+              )}
             </div>
           </div>
           <div className="mt-5">

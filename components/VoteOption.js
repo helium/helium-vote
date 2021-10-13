@@ -13,7 +13,9 @@ const VoteOption = ({ outcome, expandedId, handleExpandClick }) => {
   return (
     <div className="w-full bg-white bg-opacity-5 rounded-xl p-4 flex space-y-2 flex-col items-start justify-start">
       <div className="flex justify-between items-center w-full">
-        <p className="text-white text-3xl">{outcome.value}</p>
+        <p className="text-white text-md pr-2 sm:pr-1 sm:text-3xl">
+          {outcome.value}
+        </p>
         <button
           className="flex flex-row items-center justify-between px-3 py-2 bg-gray-700 hover:bg-gray-600 outline-none border border-solid border-transparent focus:border-hv-blue-500 transition-all duration-100 rounded-lg w-min"
           onClick={() => {
@@ -25,7 +27,7 @@ const VoteOption = ({ outcome, expandedId, handleExpandClick }) => {
             }
           }}
         >
-          <span className="text-sm text-hv-blue-500 whitespace-nowrap pr-2">
+          <span className="text-xs sm:text-sm text-hv-blue-500 whitespace-nowrap pr-2">
             {expanded ? "Hide" : "Show"} voting instructions
           </span>
           <svg
@@ -49,19 +51,18 @@ const VoteOption = ({ outcome, expandedId, handleExpandClick }) => {
       {expanded && (
         <>
           <p className="text-gray-400 text-sm pb-4 max-w-xl">
-            To vote for this option, burn HNT to the address corresponding to
-            the vote option you agree with.
+            To vote for this option, scan the QR code below to burn HNT to the
+            address associated with this option.
           </p>
           <p className="text-gray-400 text-sm pb-4 max-w-xl">
             By submitting this transaction before the voting deadline, the
             wallet balance of the sender address (including staked HNT) will be
-            added to the votes (1 HNT = 1 Vote). To submit a transaction and
-            cast your vote for this option, do one of the following:
+            added to the votes (1 HNT = 1 Vote).
           </p>
           <div className="space-y-4 flex flex-col items-center justify-start w-full">
             <span className="flex flex-col items-center space-y-2">
               <p className="text-gray-300 text-sm">
-                1. Scan this QR code with the Helium app:
+                Scan this QR code with the Helium app:
               </p>
               <div className="flex justify-center items-center p-4 rounded-lg bg-white">
                 <QRCode value={JSON.stringify(voteData)} size={175} />
@@ -70,7 +71,7 @@ const VoteOption = ({ outcome, expandedId, handleExpandClick }) => {
             <span className="text-lg text-gray-500">OR</span>
             <span className="flex flex-col items-center space-y-2 w-full">
               <p className="text-gray-300 text-sm">
-                2. Execute the following command with the CLI:
+                Execute the following command with the CLI:
               </p>
               <div className="bg-hv-gray-900 rounded-lg p-2 flex flex-col items-start justify-start">
                 <p className="text-hv-blue-500 font-mono text-sm break-all">{`helium-wallet burn --0.00000001 --payee ${outcome.address} --commit`}</p>
