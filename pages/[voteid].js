@@ -66,7 +66,7 @@ const VoteOption = ({ outcome }) => {
       {expanded && (
         <>
           <p className="text-gray-400 text-sm pb-4">
-            To vote for this option, do one of the following:
+            To vote for this option, scan the QR code to burn $1 worth of HNT. By submitting this transaction, the wallet balance of the sender address will be added to the votes (1 HNT = 1 Vote). Burning more HNT will not affect the number of votes. 
           </p>
           <div className="space-y-4 flex flex-col items-center justify-start">
             <span className="flex flex-col items-center space-y-2">
