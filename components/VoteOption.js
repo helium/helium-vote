@@ -48,7 +48,7 @@ const VoteOption = ({ outcome, expandedId, handleExpandClick }) => {
             Credits to the address corresponding to the vote option you agree
             with.
           </p>
-          <p className="text-gray-400 text-sm pb-4 max-w-sm">
+          <p className="text-gray-400 text-sm pb-4 max-w-xl">
             To burn Data Credits and cast your vote for this option, do one of
             the following:
           </p>

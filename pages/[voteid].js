@@ -1,9 +1,10 @@
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   calculateResults,
   fetchCurrentHeight,
   fetchVoteDetails,
+  fetchVotes,
 } from "../data/votes";
 import Page from "../components/Page";
 import ContentSection from "../components/ContentSection";
@@ -11,10 +12,20 @@ import classNames from "classnames";
 import { addMinutes, formatDistanceToNow } from "date-fns";
 import VoteOption from "../components/VoteOption";
 import VoteDetailField from "../components/VoteDetailField";
+import cache from "../utils/cache";
+import { Balance, CurrencyType } from "@helium/currency";
 
-const VoteDetailsPage = () => {
+const VoteDetailsPage = ({ results }) => {
   const router = useRouter();
   const { voteid } = router.query;
+
+  const { outcomes: outcomesResults, timestamp: resultsTimestamp } = results;
+  const votingResults = outcomesResults
+    .sort((a, b) => a.hntVoted - b.hntVoted)
+    .map((r) => ({
+      ...r,
+      hntVoted: new Balance(r.hntVoted, CurrencyType.networkToken),
+    }));
 
   const [loading, setLoading] = useState(false);
   const [voteDetails, setVoteDetails] = useState({});
@@ -54,16 +65,6 @@ const VoteDetailsPage = () => {
       setHumanizedDeadline(string);
     }
   }, [deadline, currentHeight, blocksRemaining]);
-
-  const [results, setResults] = useState([]);
-
-  useEffect(() => {
-    const getResults = async (voteid) => {
-      const results = await calculateResults(voteid);
-      setResults(results);
-    };
-    getResults(voteid);
-  }, [voteid]);
 
   const [expandedId, setExpandedId] = useState(null);
 
@@ -144,7 +145,7 @@ const VoteDetailsPage = () => {
       </ContentSection>
       <div className="flex flex-col space-y-2 max-w-5xl mx-auto mt-5">
         <div className="flex-col space-y-2">
-          <div className="">
+          <div>
             <p className="text-xs font-light text-gray-500 font-sans pb-2">
               Outcomes
             </p>
@@ -161,18 +162,63 @@ const VoteDetailsPage = () => {
           </div>
         </div>
       </div>
-      {results?.length > 0 && (
-        <ContentSection>
-          <p className="text-xs font-light text-gray-400 font-sans pb-2">
-            Results
-          </p>
-          {results.map((r) => {
-            return <div className="text-white text-md">{r.name}</div>;
-          })}
-        </ContentSection>
+      {votingResults?.length > 0 && (
+        <div className="flex flex-col space-y-2 max-w-5xl mx-auto mt-5">
+          <div className="flex-col space-y-2">
+            <div>
+              <p className="text-xs font-light text-gray-500 font-sans pb-2">
+                Results
+              </p>
+              <div className="w-full bg-white bg-opacity-5 rounded-xl p-4">
+                <div className="grid grid-cols-12">
+                  {votingResults.map((r) => {
+                    return (
+                      <React.Fragment key={r.value}>
+                        <div className="text-white text-md col-span-4">
+                          {r.value}
+                        </div>
+                        <div className="text-white text-md col-span-8">
+                          {r.hntVoted.toString(2)}
+                        </div>
+                      </React.Fragment>
+                    );
+                  })}
+                </div>
+                <p className="text-xs font-light text-gray-500 font-sans pt-2">
+                  Last updated {formatDistanceToNow(resultsTimestamp)} ago
+                  (refreshes every 10 minutes)
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
     </Page>
   );
 };
+
+export async function getStaticPaths() {
+  const votes = await fetchVotes();
+  const paths = votes.map(({ id }) => ({ params: { voteid: id } }));
+  return {
+    paths,
+    fallback: false,
+  };
+}
+
+export async function getStaticProps({ params }) {
+  const { voteid } = params;
+
+  const results = await cache.fetch(
+    // the key to look for in the Redis cache
+    voteid,
+    // the function to call if the key is either not there, or the data is expired
+    () => calculateResults(voteid),
+    // the time until the data expires (in seconds)
+    60 * 10
+  );
+
+  return { props: { results }, revalidate: 10 };
+}
 
 export default VoteDetailsPage;

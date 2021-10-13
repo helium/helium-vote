@@ -1,17 +1,20 @@
-import { Client } from "@helium/http";
+import client from "./client";
+
+const dev = process.env.NODE_ENV !== "production";
+export const server = dev ? "http://localhost:3000" : "https://heliumvote.com";
 
 export const fetchVotes = async () => {
-  const votes = await fetch("/api/votes");
+  const votes = await fetch(`${server}/api/votes`);
   return await votes.json();
 };
 
 export const fetchVoteDetails = async (id) => {
-  const voteDetails = await fetch(`/api/votes/${id}`);
+  const voteDetails = await fetch(`${server}/api/votes/${id}`);
   return await voteDetails.json();
 };
 
 export const fetchCurrentHeight = async () => {
-  const { height } = await (await fetch(`/api/height`)).json();
+  const { height } = await (await fetch(`${server}/api/height`)).json();
   return height;
 };
 
@@ -19,27 +22,60 @@ export const fetchCurrentHeight = async () => {
 export const calculateResults = async (id) => {
   const { outcomes } = await fetchVoteDetails(id);
 
+  // const outcomesTest = [
+  //   {
+  //     address: "13ENbEQPAvytjLnqavnbSAzurhGoCSNkGECMx7eHHDAfEaDirdY",
+  //     value: "calchip",
+  //   },
+  //   {
+  //     address: "13Zni1he7KY9pUmkXMhEhTwfUpL9AcEV1m2UbbvFsrU9QPTMgE3",
+  //     value: "nebra",
+  //   },
+  // ];
+
   // initialize results array
-  const results = [];
+  const outcomeResults = [];
+  const results = {};
 
   // loop through all outcome wallets
-  outcomes.map(async ({ address }) => {
-    // get all token burns for this wallet
-    const client = new Client();
-    const list = await client
-      .account(address)
-      .activity.list({ filterTypes: ["token_burn_v1"] });
+  await Promise.all(
+    outcomes.map(async (outcome) => {
+      const { address } = outcome;
 
-    const burns = await list.take(10000);
+      // get all token burns for this wallet
+      const list = await client
+        .account(address)
+        .activity.list({ filterTypes: ["token_burn_v1"] });
 
-    // make new array of unique payer addresses in burns list
+      const burns = await list.take(100000);
 
-    // sum balances of unique payer addresses (including staked)
+      // make new array of unique payer addresses in burns list
+      // [...new Set(array)] is an ES6 shortcut for eliminating dupes
+      const burnPayers = [...new Set(burns.map(({ payer }) => payer))];
 
-    // set total sum of balances as outcome.total
+      // sum balances of unique payer addresses (including staked)
+      let summedVotedHnt = 0.0;
 
-    // push outcome to results array
-  });
+      await Promise.all(
+        burnPayers.map(async (voter) => {
+          const account = await client.accounts.get(voter);
+          const totalBalance = account.balance.plus(account?.stakedBalance);
+
+          summedVotedHnt =
+            summedVotedHnt + parseFloat(totalBalance.floatBalance);
+        })
+      );
+
+      // set total sum of balances as outcome.total
+      outcome.hntVoted = summedVotedHnt;
+
+      // push outcome to outcomeResults array
+      outcomeResults.push(outcome);
+    })
+  );
+
+  results.outcomes = outcomeResults;
+  results.timestamp = Date.now();
 
   return results;
 };
