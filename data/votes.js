@@ -34,7 +34,7 @@ export const calculateResults = async (id) => {
 
     // make new array of unique payer addresses in burns list
 
-    // sum balances of unique payer addresses
+    // sum balances of unique payer addresses (including staked)
 
     // set total sum of balances as outcome.total
 

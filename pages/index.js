@@ -20,8 +20,6 @@ export default function Home() {
     getAllVotes();
   }, []);
 
-  // console.log(activeVotes);
-
   return (
     <Page>
       <Head>
@@ -32,15 +30,15 @@ export default function Home() {
       <ContentSection>
         <div className="flex flex-col space-y-2">
           {loading ? (
-            <p className="text-lg">{"Loading votes..."}</p>
+            <p className="text-lg text-white">{"Loading votes..."}</p>
           ) : (
             <div>
-              <p className="text-lg">{"Active votes:"}</p>
+              <p className="text-lg pb-4 text-white">Active votes</p>
               <div className="flex flex-col space-y-2">
                 {activeVotes.map((v) => {
                   return (
                     <Link href={`/${v.id}`}>
-                      <a className="w-full rounded-md border border-gray-300 border-solid p-5 hover:bg-gray-300">
+                      <a className="w-full rounded-md border outline-none border-transparent focus:border-hv-blue-500 border-solid p-5 hover:bg-gray-300 bg-gray-600 transition-all duration-100 text-white text-2xl hover:text-gray-800">
                         {v.name}
                       </a>
                     </Link>

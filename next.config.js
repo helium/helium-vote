@@ -24,11 +24,11 @@ module.exports = {
         ],
       },
       {
-        id: "XXXX",
-        pollster: "asdf",
-        deadline: 1075000000,
+        id: "13YxdDMkDsjnWAk1MSBKADveZm5RnMTLEqq1yTvzHKBZnvjsZF1",
+        pollster: "13k48bBPBaQ4ezCXpDfNZTiY3CmAMTCmMX7cuVPsvuCi6AgHrFH",
+        deadline: 10750000,
         link: "https://github.com/helium/HIP/blob/master/0040-validator-denylist.md",
-        name: "Vote: Best Moon Phase",
+        name: "Best Moon Phase",
         description: "A simple vote test with two outcomes.",
         outcomes: [
           {
