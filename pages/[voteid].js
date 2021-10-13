@@ -1,6 +1,10 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { fetchCurrentHeight, fetchVoteDetails } from "../data/votes";
+import {
+  calculateResults,
+  fetchCurrentHeight,
+  fetchVoteDetails,
+} from "../data/votes";
 import Page from "../components/Page";
 import ContentSection from "../components/ContentSection";
 import classNames from "classnames";
@@ -132,6 +136,18 @@ const VoteDetailsPage = () => {
     }
   }, [deadline, currentHeight, blocksRemaining]);
 
+  const [results, setResults] = useState([]);
+
+  console.log(results);
+
+  useEffect(() => {
+    const getResults = async (voteid) => {
+      const results = await calculateResults(voteid);
+      setResults(results);
+    };
+    getResults(voteid);
+  }, [voteid]);
+
   if (loading) {
     return (
       <Page>
@@ -206,7 +222,7 @@ const VoteDetailsPage = () => {
       <div className="flex flex-col space-y-2 max-w-5xl mx-auto mt-5">
         <div className="flex-col space-y-2">
           <div className="">
-            <p className="text-xs font-light text-gray-700 font-sans pb-2">
+            <p className="text-xs font-light text-gray-500 font-sans pb-2">
               Outcomes
             </p>
             <div className="w-full space-y-2">
@@ -217,6 +233,16 @@ const VoteDetailsPage = () => {
           </div>
         </div>
       </div>
+      {results?.length > 0 && (
+        <ContentSection>
+          <p className="text-xs font-light text-gray-400 font-sans pb-2">
+            Results
+          </p>
+          {results.map((r) => {
+            return <div className="text-white text-md">{r.name}</div>;
+          })}
+        </ContentSection>
+      )}
     </Page>
   );
 };
