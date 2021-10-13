@@ -23,11 +23,11 @@ export const calculateResults = async (id) => {
   const results = [];
 
   // loop through all outcome wallets
-  outcomes.map(async (outcome) => {
+  outcomes.map(async ({ address }) => {
     // get all token burns for this wallet
     const client = new Client();
     const list = await client
-      .account(outcome.address)
+      .account(address)
       .activity.list({ filterTypes: ["token_burn_v1"] });
 
     const burns = await list.take(10000);
