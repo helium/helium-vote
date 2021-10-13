@@ -8,6 +8,7 @@ const VoteOption = ({ outcome, expandedId, handleExpandClick }) => {
     type: "dc_burn",
     address: outcome.address,
     amount: "0.00000001",
+    memo: "",
   };
 
   return (
