@@ -8,8 +8,8 @@ const VoteDetailField = ({ value, label, title = false, small = false }) => {
         <h2 className="text-4xl font-sans text-white">{value}</h2>
       ) : (
         <p
-          className={classNames("font-sans break-all text-gray-300", {
-            "text-sm": small,
+          className={classNames("font-sans text-gray-300 max-w-2xl", {
+            "text-sm break-all": small,
             "text-lg": !small,
           })}
         >
