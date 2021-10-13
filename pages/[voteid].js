@@ -15,7 +15,7 @@ import VoteDetailField from "../components/VoteDetailField";
 import cache from "../utils/cache";
 import { Balance, CurrencyType } from "@helium/currency";
 
-const VoteDetailsPage = ({ results }) => {
+const VoteDetailsPage = ({ results, height, details }) => {
   const router = useRouter();
   const { voteid } = router.query;
 
@@ -27,32 +27,15 @@ const VoteDetailsPage = ({ results }) => {
       hntVoted: new Balance(r.hntVoted, CurrencyType.networkToken),
     }));
 
-  const [loading, setLoading] = useState(false);
-  const [voteDetails, setVoteDetails] = useState({});
-  const [currentHeight, setHeight] = useState(null);
-
-  useEffect(() => {
-    const getData = async () => {
-      setLoading(true);
-      const height = await fetchCurrentHeight();
-      const details = await fetchVoteDetails(voteid);
-      setHeight(height);
-      setVoteDetails(details);
-      setLoading(false);
-    };
-    if (voteid) getData();
-  }, [voteid]);
-
-  const { id, pollster, deadline, name, link, description, outcomes } =
-    voteDetails;
+  const { id, pollster, deadline, name, link, description, outcomes } = details;
 
   const [humanizedDeadline, setHumanizedDeadline] = useState("");
   const [blocksRemaining, setBlocksRemaining] = useState(0);
 
   useEffect(() => {
-    if (deadline && currentHeight)
-      setBlocksRemaining(parseInt(deadline) - parseInt(currentHeight));
-  }, [deadline, currentHeight]);
+    if (deadline && height)
+      setBlocksRemaining(parseInt(deadline) - parseInt(height));
+  }, [deadline, height]);
 
   useEffect(() => {
     if (blocksRemaining !== 0) {
@@ -64,27 +47,13 @@ const VoteDetailsPage = ({ results }) => {
 
       setHumanizedDeadline(string);
     }
-  }, [deadline, currentHeight, blocksRemaining]);
+  }, [deadline, height, blocksRemaining]);
 
   const [expandedId, setExpandedId] = useState(null);
 
   const handleExpandClick = (id) => {
     setExpandedId(id);
   };
-
-  if (loading) {
-    return (
-      <Page>
-        <ContentSection>
-          <div className="flex flex-col space-y-2">
-            <div className="flex-col space-y-2">
-              <VoteDetailField value="Loading..." label="Loading..." />
-            </div>
-          </div>
-        </ContentSection>
-      </Page>
-    );
-  }
 
   return (
     <Page>
@@ -211,6 +180,9 @@ export async function getStaticPaths() {
 export async function getStaticProps({ params }) {
   const { voteid } = params;
 
+  const height = await fetchCurrentHeight();
+  const details = await fetchVoteDetails(voteid);
+
   const results = await cache.fetch(
     // the key to look for in the Redis cache
     voteid,
@@ -220,7 +192,7 @@ export async function getStaticProps({ params }) {
     60 * 10
   );
 
-  return { props: { results }, revalidate: 10 };
+  return { props: { results, height, details }, revalidate: 10 };
 }
 
 export default VoteDetailsPage;
