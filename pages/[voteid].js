@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
+import Head from "next/head";
 import {
   calculateResults,
   fetchCurrentHeight,
@@ -57,6 +58,10 @@ const VoteDetailsPage = ({ results, height, details }) => {
 
   return (
     <Page>
+      <Head>
+        <title>{name}</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <ContentSection flatBottom>
         <div className="flex flex-col">
           <div className="flex-col space-y-2">
