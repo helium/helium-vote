@@ -35,19 +35,34 @@ const VoteDetailsPage = () => {
       setLoading(true);
       const height = await fetchCurrentHeight();
       const details = await fetchVoteDetails(voteid);
-      setVoteDetails(details);
       setHeight(height);
+      setVoteDetails(details);
       setLoading(false);
     };
-    getData();
+    if (voteid) getData();
   }, [voteid]);
 
   const { id, pollster, deadline, name, link, description, outcomes } =
     voteDetails;
 
-  // console.log(voteDetails);
+  const [humanizedDeadline, setHumanizedDeadline] = useState("");
+  const [blocksRemaining, setBlocksRemaining] = useState(0);
 
-  // console.log(currentHeight);
+  useEffect(() => {
+    if (deadline && currentHeight)
+      setBlocksRemaining(parseInt(deadline) - parseInt(currentHeight));
+  }, [deadline, currentHeight]);
+
+  useEffect(() => {
+    if (blocksRemaining !== 0) {
+      const now = new Date(Date.now());
+      const string = formatDistanceToNow(
+        addMinutes(now, parseInt(blocksRemaining))
+      );
+      setHumanizedDeadline(string);
+    }
+  }, [deadline, currentHeight, blocksRemaining]);
+
   if (loading) {
     return (
       <Page>
@@ -62,11 +77,6 @@ const VoteDetailsPage = () => {
       </Page>
     );
   }
-
-  const blocksRemaining = parseInt(deadline) - parseInt(currentHeight);
-  const humanizedDeadline = formatDistanceToNow(
-    new Date(addMinutes(new Date(), blocksRemaining))
-  );
 
   return (
     <Page>
@@ -115,7 +125,10 @@ const VoteDetailsPage = () => {
 
               <div className="w-full grid grid-cols-2 gap-5">
                 {outcomes?.map((o) => (
-                  <div className="w-full bg-gray-200 rounded-xl p-2 flex space-y-2 flex-col items-center justify-start">
+                  <div
+                    key={o.address}
+                    className="w-full bg-gray-200 rounded-xl p-2 flex space-y-2 flex-col items-center justify-start"
+                  >
                     <p className="text-black text-xl font-bold pt-4">
                       {o.value}
                     </p>
