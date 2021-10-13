@@ -4,6 +4,12 @@ import QRCode from "react-qr-code";
 const VoteOption = ({ outcome, expandedId, handleExpandClick }) => {
   const expanded = expandedId === outcome.address;
 
+  const voteData = {
+    type: "dc_burn",
+    address: outcome.address,
+    amount: "0.00000001",
+  };
+
   return (
     <div className="w-full bg-white bg-opacity-5 rounded-xl p-4 flex space-y-2 flex-col items-start justify-start">
       <div className="flex justify-between items-center w-full">
@@ -43,31 +49,31 @@ const VoteOption = ({ outcome, expandedId, handleExpandClick }) => {
       {expanded && (
         <>
           <p className="text-gray-400 text-sm pb-4 max-w-xl">
-            To designate the HNT balance of your wallet (including staked HNT)
-            as a vote for this option, you must burn 0.00001 HNT worth of Data
-            Credits to the address corresponding to the vote option you agree
-            with.
+            To vote for this option, burn HNT to the address corresponding to
+            the vote option you agree with.
           </p>
           <p className="text-gray-400 text-sm pb-4 max-w-xl">
-            To burn Data Credits and cast your vote for this option, do one of
-            the following:
+            By submitting this transaction before the voting deadline, the
+            wallet balance of the sender address (including staked HNT) will be
+            added to the votes (1 HNT = 1 Vote). To submit a transaction and
+            cast your vote for this option, do one of the following:
           </p>
-          <div className="space-y-4 flex flex-col items-center justify-start">
+          <div className="space-y-4 flex flex-col items-center justify-start w-full">
             <span className="flex flex-col items-center space-y-2">
               <p className="text-gray-300 text-sm">
                 1. Scan this QR code with the Helium app:
               </p>
               <div className="flex justify-center items-center p-4 rounded-lg bg-white">
-                <QRCode value={outcome.address} size={175} />
+                <QRCode value={JSON.stringify(voteData)} size={175} />
               </div>
             </span>
             <span className="text-lg text-gray-500">OR</span>
-            <span className="flex flex-col items-center space-y-2">
+            <span className="flex flex-col items-center space-y-2 w-full">
               <p className="text-gray-300 text-sm">
                 2. Execute the following command with the CLI:
               </p>
               <div className="bg-hv-gray-900 rounded-lg p-2 flex flex-col items-start justify-start">
-                <p className="text-hv-blue-500 font-mono break-all">{`helium-wallet burn --0.0000004 --payee ${outcome.address} --commit`}</p>
+                <p className="text-hv-blue-500 font-mono text-sm break-all">{`helium-wallet burn --0.00000001 --payee ${outcome.address} --commit`}</p>
               </div>
             </span>
           </div>
