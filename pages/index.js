@@ -10,6 +10,18 @@ export default function Home({ height, votes }) {
       <Head>
         <title>Helium Vote</title>
         <link rel="icon" href="/favicon.ico" />
+        <meta property="og:title" content="Helium Vote" />
+        <meta property="og:site_name" content="Helium Vote" />
+        <meta property="og:url" content="https://heliumvote.com" />
+        <meta
+          property="og:description"
+          content="A frontend to make it easy to vote on Helium Improvement Proposals."
+        />
+        <meta property="og:type" content="website" />
+        <meta
+          property="og:image"
+          content="https://heliumvote.com/images/og.png"
+        />
       </Head>
 
       <ContentSection>

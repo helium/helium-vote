@@ -61,6 +61,15 @@ const VoteDetailsPage = ({ results, height, details }) => {
       <Head>
         <title>{name}</title>
         <link rel="icon" href="/favicon.ico" />
+        <meta property="og:title" content={name} />
+        <meta property="og:site_name" content="Helium Vote" />
+        <meta property="og:url" content="https://heliumvote.com" />
+        <meta property="og:description" content={description} />
+        <meta property="og:type" content="website" />
+        <meta
+          property="og:image"
+          content="https://heliumvote.com/images/og.png"
+        />
       </Head>
       <ContentSection flatBottom>
         <div className="flex flex-col">
