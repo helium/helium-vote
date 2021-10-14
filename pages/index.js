@@ -24,7 +24,7 @@ export default function Home({ height, votes }) {
         />
       </Head>
 
-      <ContentSection>
+      <ContentSection first>
         <div className="flex flex-col space-y-2">
           <div>
             <p className="text-lg pb-4 text-white">Active votes</p>
