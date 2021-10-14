@@ -22,7 +22,7 @@ const VoteDetailsPage = ({ results, height, details }) => {
 
   const { outcomes: outcomesResults, timestamp: resultsTimestamp } = results;
   const votingResults = outcomesResults
-    .sort((a, b) => a.hntVoted - b.hntVoted)
+    .sort((a, b) => b.hntVoted - a.hntVoted)
     .map((r) => ({
       ...r,
       hntVoted: new Balance(r.hntVoted, CurrencyType.networkToken),
@@ -197,8 +197,8 @@ export async function getStaticProps({ params }) {
     // the time until the data expires (in seconds)
     60 * 10
   );
-
-  return { props: { results, height, details }, revalidate: 10 };
+  // revalidate: 1 means it will check at most every 1 second if the Redis cache has reached 10 minutes old yet. if not, it'll serve the statically saved version of the latest Redis cache. so it'll only call calculateResults() at most once every 10 minutes, and it'll do it in the background with getStaticProps so it won't slow down for the unlucky first visitor after the 10 minute threshold is crossed.
+  return { props: { results, height, details }, revalidate: 1 };
 }
 
 export default VoteDetailsPage;

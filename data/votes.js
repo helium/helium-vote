@@ -1,4 +1,4 @@
-import client from "./client";
+import client, { TAKE_MAX } from "./client";
 
 const dev = process.env.NODE_ENV !== "production";
 export const server = dev ? "http://localhost:3000" : "https://heliumvote.com";
@@ -43,11 +43,11 @@ export const calculateResults = async (id) => {
       const { address } = outcome;
 
       // get all token burns for this wallet
-      const list = await client
-        .account(address)
-        .activity.list({ filterTypes: ["token_burn_v1"] });
+      const list = await client.account(address).activity.list({
+        filterTypes: ["token_burn_v1"],
+      });
 
-      const burns = await list.take(100000);
+      const burns = await list.take(TAKE_MAX);
 
       // make new array of unique payer addresses in burns list
       // [...new Set(array)] is an ES6 shortcut for eliminating dupes
@@ -55,6 +55,7 @@ export const calculateResults = async (id) => {
 
       // sum balances of unique payer addresses (including staked)
       let summedVotedHnt = 0.0;
+      let uniqueWallets = 0;
 
       await Promise.all(
         burnPayers.map(async (voter) => {
@@ -62,12 +63,15 @@ export const calculateResults = async (id) => {
           const totalBalance = account.balance.plus(account?.stakedBalance);
 
           summedVotedHnt =
-            summedVotedHnt + parseFloat(totalBalance.floatBalance);
+            summedVotedHnt + parseFloat(totalBalance.integerBalance);
+
+          uniqueWallets++;
         })
       );
 
       // set total sum of balances as outcome.total
       outcome.hntVoted = summedVotedHnt;
+      outcome.uniqueWallets = uniqueWallets;
 
       // push outcome to outcomeResults array
       outcomeResults.push(outcome);
