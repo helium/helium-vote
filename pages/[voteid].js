@@ -126,8 +126,9 @@ const VoteDetailsPage = ({ results, height, details }) => {
               Outcomes
             </p>
             <div className="w-full space-y-2">
-              {outcomes?.map((o) => (
+              {outcomes?.map((o, i) => (
                 <VoteOption
+                  index={i}
                   key={o.address}
                   outcome={o}
                   expandedId={expandedId}

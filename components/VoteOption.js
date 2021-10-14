@@ -1,14 +1,16 @@
 import classNames from "classnames";
 import QRCode from "react-qr-code";
+import base64 from "base-64";
 
-const VoteOption = ({ outcome, expandedId, handleExpandClick }) => {
+const VoteOption = ({ outcome, expandedId, handleExpandClick, index }) => {
   const expanded = expandedId === outcome.address;
 
+  const encodedMemo = base64.encode(index);
   const voteData = {
     type: "dc_burn",
     address: outcome.address,
     amount: "0.00000001",
-    memo: "",
+    memo: encodedMemo,
   };
 
   return (
