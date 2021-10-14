@@ -123,7 +123,7 @@ const VoteDetailsPage = ({ results, height, details }) => {
         <div className="flex-col space-y-2">
           <div>
             <p className="text-xs font-light text-gray-500 font-sans pb-2">
-              Outcomes
+              Vote Options
             </p>
             <div className="w-full space-y-2">
               {outcomes?.map((o, i) => (
@@ -146,25 +146,62 @@ const VoteDetailsPage = ({ results, height, details }) => {
               <p className="text-xs font-light text-gray-500 font-sans pb-2">
                 Results
               </p>
-              <div className="w-full bg-white bg-opacity-5 rounded-xl p-4">
-                <div className="grid grid-cols-12">
-                  {votingResults.map((r) => {
-                    return (
-                      <React.Fragment key={r.value}>
-                        <div className="text-white text-md col-span-4">
-                          {r.value}
-                        </div>
-                        <div className="text-white text-md col-span-8">
-                          {r.hntVoted.toString(2)}
-                        </div>
-                      </React.Fragment>
-                    );
-                  })}
+              <div className="grid grid-cols-4 sm:grid-cols-3">
+                <div className="text-white text-xs sm:text-lg font-bold bg-gray-600 bg-opacity-10 text-md col-span-2 sm:col-span-1 border-4 border-solid border-opacity-5 border-white p-1 sm:p-4 rounded-tl-xl">
+                  Vote Option
                 </div>
-                <p className="text-xs font-light text-gray-500 font-sans pt-2">
+                <div className="text-white text-xs sm:text-lg text-right font-bold bg-gray-600 bg-opacity-10 text-md col-span-1 border-4 border-solid border-opacity-5 border-white p-1 sm:p-4 border-l-0">
+                  Total HNT Voted
+                </div>
+                <div className="text-white text-xs sm:text-lg text-right font-bold bg-gray-600 bg-opacity-10 text-md col-span-1 border-4 border-solid border-opacity-5 border-white p-1 sm:p-4 rounded-tr-xl border-l-0">
+                  Unique voting wallets
+                </div>
+                {votingResults.map((r, i, { length }) => {
+                  return (
+                    <React.Fragment key={r.value}>
+                      <div
+                        className={classNames(
+                          "break-words text-white text-xs sm:text-lg col-span-2 sm:col-span-1 border-4 border-solid border-opacity-5 bg-white bg-opacity-5 border-white p-1 sm:p-4",
+                          {
+                            "border-t-0": i === 0,
+                            "rounded-bl-xl border-t-0": i === length - 1,
+                          }
+                        )}
+                      >
+                        {r.value}
+                      </div>
+                      <div
+                        className={classNames(
+                          "text-white text-right text-xs sm:text-lg col-span-1 border-4 border-solid border-opacity-5 bg-white bg-opacity-5 border-white p-1 sm:p-4 border-l-0",
+                          {
+                            "border-t-0 ": i === 0 || i === length - 1,
+                          }
+                        )}
+                      >
+                        {r.hntVoted.toString(2)}
+                      </div>
+                      <div
+                        className={classNames(
+                          "text-white text-right text-xs sm:text-lg col-span-1 border-4 border-solid border-opacity-5 bg-white bg-opacity-5 border-white p-1 sm:p-4 border-l-0",
+                          {
+                            "border-t-0": i === 0,
+                            "rounded-br-xl border-t-0": i === length - 1,
+                          }
+                        )}
+                      >
+                        {r.uniqueWallets}
+                      </div>
+                    </React.Fragment>
+                  );
+                })}
+              </div>
+              <div className="flex flex-col sm:flex-row items-end justify-start pt-2">
+                <span className="text-sm font-light text-gray-500 font-sans">
                   Last updated {formatDistanceToNow(resultsTimestamp)} ago
-                  (refreshes every 10 minutes)
-                </p>
+                </span>
+                <span className="font-light text-xs text-gray-600 pl-0 sm:pl-2">
+                  (Results recalculate every 10 minutes)
+                </span>
               </div>
             </div>
           </div>
