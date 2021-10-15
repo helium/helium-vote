@@ -15,6 +15,7 @@ import VoteOption from "../components/VoteOption";
 import VoteDetailField from "../components/VoteDetailField";
 import cache from "../utils/cache";
 import { Balance, CurrencyType } from "@helium/currency";
+import CountdownTimer from "../components/CountdownTimer";
 
 const VoteDetailsPage = ({ results, height, details }) => {
   const router = useRouter();
@@ -123,7 +124,12 @@ const VoteDetailsPage = ({ results, height, details }) => {
             label="Blocks Remaining Until Deadline"
           />
           <VoteDetailField
-            value={humanizedDeadline}
+            value={
+              <CountdownTimer
+                blocksRemaining={blocksRemaining}
+                key={blocksRemaining}
+              />
+            }
             label="Estimated Time Until Deadline"
           />
         </div>
