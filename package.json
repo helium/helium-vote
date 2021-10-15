@@ -18,7 +18,8 @@
     "react": "^17.0.2",
     "react-countdown": "^2.3.2",
     "react-dom": "^17.0.2",
-    "react-qr-code": "^2.0.2"
+    "react-qr-code": "^2.0.2",
+    "swr": "^1.0.1"
   },
   "devDependencies": {
     "autoprefixer": "^10.2.6",

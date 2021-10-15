@@ -1,7 +1,7 @@
 import client, { TAKE_MAX } from "./client";
 
 const dev = process.env.NODE_ENV !== "production";
-export const server = dev ? "http://localhost:3000" : "https://heliumvote.com";
+export const server = dev ? "http://localhost:3000" : "https://www.heliumvote.com";
 
 export const fetchVotes = async () => {
   const votes = await fetch(`${server}/api/votes`);
@@ -14,8 +14,12 @@ export const fetchVoteDetails = async (id) => {
 };
 
 export const fetchCurrentHeight = async () => {
-  const { height } = await (await fetch(`${server}/api/height`)).json();
-  return height;
+  return (await fetch(`${server}/api/height`)).json();
+};
+
+export const fetchResults = async (id) => {
+  const results = await fetch(`${server}/api/results/${id}`);
+  return await results.json();
 };
 
 // TODO: move into a job that can run every 10 min and have the results be accessible at an endpoint (like explorer-api)

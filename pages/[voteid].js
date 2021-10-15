@@ -1,8 +1,8 @@
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Head from "next/head";
 import {
-  calculateResults,
+  fetchResults,
   fetchCurrentHeight,
   fetchVoteDetails,
   fetchVotes,
@@ -13,21 +13,35 @@ import classNames from "classnames";
 import { addMinutes, formatDistanceToNow } from "date-fns";
 import VoteOption from "../components/VoteOption";
 import VoteDetailField from "../components/VoteDetailField";
-import cache from "../utils/cache";
 import { Balance, CurrencyType } from "@helium/currency";
+import useSWR from "swr";
 import CountdownTimer from "../components/CountdownTimer";
 
-const VoteDetailsPage = ({ results, height, details }) => {
+const fetcher = (url) => fetch(url).then((r) => r.json());
+
+const VoteDetailsPage = ({ fallback, details }) => {
   const router = useRouter();
   const { voteid } = router.query;
 
-  const { outcomes: outcomesResults, timestamp: resultsTimestamp } = results;
-  const votingResults = outcomesResults
-    .sort((a, b) => b.hntVoted - a.hntVoted)
-    .map((r) => ({
-      ...r,
-      hntVoted: new Balance(r.hntVoted, CurrencyType.networkToken),
-    }));
+  const { data: results } = useSWR(`/api/results/${voteid}`, fetcher, {
+    fallbackData: fallback.results,
+  });
+
+  const { data: { height } } = useSWR('/api/height', fetcher, {
+    fallbackData: fallback.height,
+  });
+
+  const votingResults = useMemo(() => {
+    if (!results) return [];
+
+    const { outcomes: outcomesResults } = results;
+    return outcomesResults
+      .sort((a, b) => b.hntVoted - a.hntVoted)
+      .map((r) => ({
+        ...r,
+        hntVoted: new Balance(r.hntVoted, CurrencyType.networkToken),
+      }));
+  }, [results]);
 
   const { id, pollster, deadline, name, link, description, outcomes } = details;
 
@@ -200,7 +214,7 @@ const VoteDetailsPage = ({ results, height, details }) => {
                 </div>
                 <div className="flex flex-col sm:flex-row items-end justify-start pt-2">
                   <span className="text-sm font-light text-gray-500 font-sans">
-                    Last updated {formatDistanceToNow(resultsTimestamp)} ago
+                    Last updated {formatDistanceToNow(results.timestamp)} ago
                   </span>
                   <span className="font-light text-xs text-gray-600 pl-0 sm:pl-2">
                     (Results recalculate every 10 minutes)
@@ -227,19 +241,12 @@ export async function getStaticPaths() {
 export async function getStaticProps({ params }) {
   const { voteid } = params;
 
-  const height = await fetchCurrentHeight();
+  const { height } = await fetchCurrentHeight();
   const details = await fetchVoteDetails(voteid);
+  const results = await fetchResults(voteid);
 
-  const results = await cache.fetch(
-    // the key to look for in the Redis cache
-    voteid,
-    // the function to call if the key is either not there, or the data is expired
-    () => calculateResults(voteid),
-    // the time until the data expires (in seconds)
-    60 * 10
-  );
   // revalidate: 1 means it will check at most every 1 second if the Redis cache has reached 10 minutes old yet. if not, it'll serve the statically saved version of the latest Redis cache. so it'll only call calculateResults() at most once every 10 minutes, and it'll do it in the background with getStaticProps so it won't slow down for the unlucky first visitor after the 10 minute threshold is crossed.
-  return { props: { results, height, details }, revalidate: 1 };
+  return { props: { fallback: { results, height }, details }, revalidate: 1 };
 }
 
 export default VoteDetailsPage;
