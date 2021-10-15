@@ -1,4 +1,3 @@
-import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import Head from "next/head";
 import {
@@ -9,13 +8,13 @@ import {
 } from "../data/votes";
 import Page from "../components/Page";
 import ContentSection from "../components/ContentSection";
-import classNames from "classnames";
 import { formatDistanceToNow } from "date-fns";
 import VoteDetailField from "../components/VoteDetailField";
 import cache from "../utils/cache";
 import { Balance, CurrencyType } from "@helium/currency";
 import CountdownTimer from "../components/CountdownTimer";
 import VoteOptionsSection from "../components/VoteOptionsSection";
+import VoteResultsTable from "../components/VoteResultsTable";
 
 const VoteDetailsPage = ({ results, height, details }) => {
   const { outcomes: outcomesResults, timestamp: resultsTimestamp } = results;
@@ -123,52 +122,7 @@ const VoteDetailsPage = ({ results, height, details }) => {
                 <p className="text-xs font-light text-gray-500 font-sans pb-2">
                   Results
                 </p>
-                <div className="grid grid-cols-4 sm:grid-cols-3">
-                  <div className="text-white text-xs sm:text-lg font-bold bg-gray-600 bg-opacity-10 text-md col-span-2 sm:col-span-1 border sm:border-4 border-solid border-opacity-5 border-white px-2.5 py-2 sm:px-4 sm:py-2.5 rounded-tl-xl">
-                    Vote Option
-                  </div>
-                  <div className="text-white text-xs sm:text-lg text-right font-bold bg-gray-600 bg-opacity-10 text-md col-span-1 border sm:border-4 border-solid border-opacity-5 border-white px-2.5 py-2 sm:px-4 sm:py-2.5 border-l-0 sm:border-l-0">
-                    Total Voting Power
-                  </div>
-                  <div className="text-white text-xs sm:text-lg text-right font-bold bg-gray-600 bg-opacity-10 text-md col-span-1 border sm:border-4 border-solid border-opacity-5 border-white px-2.5 py-2 sm:px-4 sm:py-2.5 rounded-tr-xl border-l-0 sm:border-l-0">
-                    Unique Voting Wallets
-                  </div>
-                  {votingResults.map((r, i, { length }) => {
-                    return (
-                      <React.Fragment key={r.value}>
-                        <div
-                          className={classNames(
-                            "break-words text-white text-xs sm:text-lg col-span-2 sm:col-span-1 border sm:border-4 border-solid border-opacity-5 bg-white bg-opacity-5 border-white px-2.5 py-2 sm:px-4 sm:py-2.5",
-                            {
-                              "border-t-0 sm:border-t-0":
-                                i === 0 || (i > 0 && i < length - 1),
-                              "rounded-bl-xl border-t-0 sm:border-t-0":
-                                i === length - 1,
-                            }
-                          )}
-                        >
-                          {r.value}
-                        </div>
-                        <div className="text-white text-right text-xs sm:text-lg col-span-1 border sm:border-4 border-solid border-opacity-5 bg-white bg-opacity-5 border-white px-2.5 py-2 sm:px-4 sm:py-2.5 border-l-0 sm:border-l-0 border-t-0 sm:border-t-0">
-                          {r.hntVoted.toString(2)}
-                        </div>
-                        <div
-                          className={classNames(
-                            "text-white text-right text-xs sm:text-lg col-span-1 border sm:border-4 border-solid border-opacity-5 bg-white bg-opacity-5 border-white px-2.5 py-2 sm:px-4 sm:py-2.5 border-l-0 sm:border-l-0",
-                            {
-                              "border-t-0 sm:border-t-0":
-                                i === 0 || (i > 0 && i < length - 1),
-                              "rounded-br-xl border-t-0 sm:border-t-0":
-                                i === length - 1,
-                            }
-                          )}
-                        >
-                          {r.uniqueWallets}
-                        </div>
-                      </React.Fragment>
-                    );
-                  })}
-                </div>
+                <VoteResultsTable votingResults={votingResults} />
                 <div className="flex flex-col sm:flex-row items-end justify-start pt-2">
                   <span className="text-sm font-light text-gray-500 font-sans">
                     Last updated {formatDistanceToNow(resultsTimestamp)} ago
