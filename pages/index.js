@@ -39,7 +39,7 @@ export default function Home({ height, votes }) {
             </p>
             <br />
             <p className="font-sans text-gray-300 max-w-2xl text-lg">
-              Final votes will be tallied at the block deadline and data credits burned to each vote choice will be purged from the Network.
+              Final votes will be tallied at the block deadline and data credits burned to each vote choice will be purged from the Network. This is our first attempt at an on-chain voting system and an exciting step towards decentralized governance. The votes here are intended to capture community sentiment and support the current rough consensus mechanism. 
             </p>
           </div>
         </div>

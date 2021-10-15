@@ -56,7 +56,7 @@ const VoteOption = ({ outcome, expandedId, handleExpandClick, index }) => {
           <div className="hidden sm:block">
             <p className="text-gray-400 text-sm pb-4 max-w-xl">
               To vote for this option, scan the QR code below to burn HNT to the
-              address associated with this option.
+              address associated with this option. You cannot change your vote after submitting the transaction.
             </p>
             <p className="text-gray-400 text-sm pb-4 max-w-xl">
             Your Vote Power is your HNT balance and staked HNT balance at the block deadline. The Wallet address used to submit the transaction will have its Vote Power counted toward the vote option.
@@ -76,7 +76,7 @@ const VoteOption = ({ outcome, expandedId, handleExpandClick, index }) => {
                   Execute the following command with the CLI:
                 </p>
                 <div className="bg-hv-gray-900 rounded-lg p-2 flex flex-col items-start justify-start">
-                  <p className="text-hv-blue-500 font-mono text-sm break-all">{`helium-wallet burn --0.00000001 --payee ${outcome.address} --commit`}</p>
+                  <p className="text-hv-blue-500 font-mono text-sm break-all">{`helium-wallet burn --amount 0.00000001 --payee ${outcome.address} --commit`}</p>
                 </div>
               </span>
             </div>
@@ -84,7 +84,7 @@ const VoteOption = ({ outcome, expandedId, handleExpandClick, index }) => {
           <div className="flex flex-col sm:hidden">
             <p className="text-gray-400 text-sm pb-2 max-w-xl">
               To vote for this option, burn HNT to the address associated with
-              this option before the voting deadline.
+              this option before the voting deadline. You cannot change your vote after submitting the transaction.
             </p>
             <p className="text-gray-400 text-sm pb-2 max-w-xl">
             Your Vote Power is your HNT balance and staked HNT balance at the block deadline. The Wallet address used to submit the transaction will have its Vote Power counted toward the vote option.
