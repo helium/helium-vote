@@ -28,22 +28,25 @@ export default function Home({ height, votes }) {
         <div className="flex flex-col space-y-2">
           <div className="flex flex-col">
             <h2 className="text-4xl font-sans text-white">Helium Vote</h2>
-
+            <br />
             <p className="font-sans text-gray-300 max-w-2xl text-lg">
-              This is a paragraph text to talk about what Helium vote is.
+              Helium Vote is where the Helium Community comes together to make decisions on the Network. Each vote will be driven by a Helium Improvement Proposal (HIP). When HIPs are ready for voting, they will appear here.
+            <br />
+            <br />
             </p>
             <p className="font-sans text-gray-300 max-w-2xl text-lg">
-              This is a paragraph text to talk about what Helium vote is.
+              The number of votes going towards each voting choice is determined by your HNT and staked HNT wallet balance - this is known as Voting Power. To cast a vote, submit a burn transaction using the wallet of your choosing. Total cost of a burn transaction is 35,000 DC or approximately $0.35.
             </p>
+            <br />
             <p className="font-sans text-gray-300 max-w-2xl text-lg">
-              This is a paragraph text to talk about what Helium vote is.
+              Final votes will be tallied at the block deadline. 
             </p>
           </div>
         </div>
       </ContentSection>
       <ContentSection flatTop>
         <div>
-          <p className="text-lg pb-4 text-white">Active votes</p>
+          <p className="text-lg pb-4 text-white">Active Votes</p>
           <div className="flex flex-col space-y-2">
             {votes.map((v) => {
               return (

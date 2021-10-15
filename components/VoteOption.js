@@ -59,7 +59,7 @@ const VoteOption = ({ outcome, expandedId, handleExpandClick, index }) => {
               address associated with this option.
             </p>
             <p className="text-gray-400 text-sm pb-4 max-w-xl">
-              Your Vote Power is your HNT balance and staked HNT balance at the block deadline. The Wallet address used in the transaction determines Vote Power. 
+            Your Vote Power is your HNT balance and staked HNT balance at the block deadline. The Wallet address used to submit the transaction will have its Vote Power counted toward the vote option.
             </p>
             <div className="space-y-4 flex flex-col items-center justify-start w-full">
               <span className="flex flex-col items-center space-y-2">
@@ -87,7 +87,7 @@ const VoteOption = ({ outcome, expandedId, handleExpandClick, index }) => {
               this option before the voting deadline.
             </p>
             <p className="text-gray-400 text-sm pb-2 max-w-xl">
-            Your Vote Power is your HNT balance and staked HNT balance at the block deadline. The Wallet address used in the transaction determines Vote Power. 
+            Your Vote Power is your HNT balance and staked HNT balance at the block deadline. The Wallet address used to submit the transaction will have its Vote Power counted toward the vote option.
             </p>
             <p className="text-gray-400 text-sm pb-4 max-w-xl">
               To submit the transaction:
