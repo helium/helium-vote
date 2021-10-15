@@ -182,7 +182,8 @@ const VoteDetailsPage = ({ results, height, details }) => {
                           className={classNames(
                             "break-words text-white text-xs sm:text-lg col-span-2 sm:col-span-1 border sm:border-4 border-solid border-opacity-5 bg-white bg-opacity-5 border-white px-2.5 py-2 sm:px-4 sm:py-2.5",
                             {
-                              "border-t-0 sm:border-t-0": i === 0,
+                              "border-t-0 sm:border-t-0":
+                                i === 0 || (i > 0 && i < length - 1),
                               "rounded-bl-xl border-t-0 sm:border-t-0":
                                 i === length - 1,
                             }
@@ -190,22 +191,15 @@ const VoteDetailsPage = ({ results, height, details }) => {
                         >
                           {r.value}
                         </div>
-                        <div
-                          className={classNames(
-                            "text-white text-right text-xs sm:text-lg col-span-1 border sm:border-4 border-solid border-opacity-5 bg-white bg-opacity-5 border-white px-2.5 py-2 sm:px-4 sm:py-2.5 border-l-0 sm:border-l-0",
-                            {
-                              "border-t-0 sm:border-t-0 ":
-                                i === 0 || i === length - 1,
-                            }
-                          )}
-                        >
+                        <div className="text-white text-right text-xs sm:text-lg col-span-1 border sm:border-4 border-solid border-opacity-5 bg-white bg-opacity-5 border-white px-2.5 py-2 sm:px-4 sm:py-2.5 border-l-0 sm:border-l-0 border-t-0 sm:border-t-0">
                           {r.hntVoted.toString(2)}
                         </div>
                         <div
                           className={classNames(
                             "text-white text-right text-xs sm:text-lg col-span-1 border sm:border-4 border-solid border-opacity-5 bg-white bg-opacity-5 border-white px-2.5 py-2 sm:px-4 sm:py-2.5 border-l-0 sm:border-l-0",
                             {
-                              "border-t-0 sm:border-t-0": i === 0,
+                              "border-t-0 sm:border-t-0":
+                                i === 0 || (i > 0 && i < length - 1),
                               "rounded-br-xl border-t-0 sm:border-t-0":
                                 i === length - 1,
                             }
