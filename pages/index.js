@@ -9,7 +9,7 @@ export default function Home({ height, votes }) {
     <Page>
       <Head>
         <title>Helium Vote</title>
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/favicon.png" />
         <meta property="og:title" content="Helium Vote" />
         <meta property="og:site_name" content="Helium Vote" />
         <meta property="og:url" content="https://heliumvote.com" />

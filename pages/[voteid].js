@@ -61,7 +61,7 @@ const VoteDetailsPage = ({ results, height, details }) => {
     <Page>
       <Head>
         <title>{name}</title>
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/favicon.png" />
         <meta property="og:title" content={name} />
         <meta property="og:site_name" content="Helium Vote" />
         <meta property="og:url" content="https://heliumvote.com" />
