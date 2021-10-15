@@ -157,10 +157,10 @@ const VoteDetailsPage = ({ results, height, details }) => {
                     Vote Option
                   </div>
                   <div className="text-white text-xs sm:text-lg text-right font-bold bg-gray-600 bg-opacity-10 text-md col-span-1 border sm:border-4 border-solid border-opacity-5 border-white px-2.5 py-2 sm:px-4 sm:py-2.5 border-l-0 sm:border-l-0">
-                    Total HNT Voted
+                    Total Voting Power
                   </div>
                   <div className="text-white text-xs sm:text-lg text-right font-bold bg-gray-600 bg-opacity-10 text-md col-span-1 border sm:border-4 border-solid border-opacity-5 border-white px-2.5 py-2 sm:px-4 sm:py-2.5 rounded-tr-xl border-l-0 sm:border-l-0">
-                    Unique voting wallets
+                    Unique Voting Wallets
                   </div>
                   {votingResults.map((r, i, { length }) => {
                     return (
