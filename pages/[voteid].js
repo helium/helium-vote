@@ -27,7 +27,9 @@ const VoteDetailsPage = ({ fallback, details }) => {
     fallbackData: fallback.results,
   });
 
-  const { data: { height } } = useSWR('/api/height', fetcher, {
+  const {
+    data: { height },
+  } = useSWR("/api/height", fetcher, {
     fallbackData: fallback.height,
   });
 
@@ -233,8 +235,9 @@ export async function getStaticPaths() {
   const votes = await fetchVotes();
   const paths = votes.map(({ id }) => ({ params: { voteid: id } }));
   return {
-    paths,
-    fallback: false,
+    // paths,
+    paths: [],
+    fallback: "blocking",
   };
 }
 
