@@ -31,25 +31,12 @@ const VoteDetailsPage = ({ results, height, details }) => {
 
   const { id, pollster, deadline, name, link, description, outcomes } = details;
 
-  const [humanizedDeadline, setHumanizedDeadline] = useState("");
   const [blocksRemaining, setBlocksRemaining] = useState(0);
 
   useEffect(() => {
     if (deadline && height)
       setBlocksRemaining(parseInt(deadline) - parseInt(height));
   }, [deadline, height]);
-
-  useEffect(() => {
-    if (blocksRemaining !== 0) {
-      const now = new Date(Date.now());
-      const string =
-        blocksRemaining > 0
-          ? formatDistanceToNow(addMinutes(now, parseInt(blocksRemaining)))
-          : "Voting closed";
-
-      setHumanizedDeadline(string);
-    }
-  }, [deadline, height, blocksRemaining]);
 
   const [expandedId, setExpandedId] = useState(null);
 
