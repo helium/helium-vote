@@ -9,13 +9,13 @@ import {
 } from "../data/votes";
 import Page from "../components/Page";
 import ContentSection from "../components/ContentSection";
-import classNames from "classnames";
-import { addMinutes, formatDistanceToNow } from "date-fns";
-import VoteOption from "../components/VoteOption";
+import { formatDistanceToNow } from "date-fns";
 import VoteDetailField from "../components/VoteDetailField";
 import { Balance, CurrencyType } from "@helium/currency";
 import useSWR from "swr";
 import CountdownTimer from "../components/CountdownTimer";
+import VoteOptionsSection from "../components/VoteOptionsSection";
+import VoteResultsTable from "../components/VoteResultsTable";
 
 const fetcher = (url) => fetch(url).then((r) => r.json());
 
@@ -53,12 +53,6 @@ const VoteDetailsPage = ({ fallback, details }) => {
     if (deadline && height)
       setBlocksRemaining(parseInt(deadline) - parseInt(height));
   }, [deadline, height]);
-
-  const [expandedId, setExpandedId] = useState(null);
-
-  const handleExpandClick = (id) => {
-    setExpandedId(id);
-  };
 
   return (
     <Page>
@@ -138,28 +132,8 @@ const VoteDetailsPage = ({ fallback, details }) => {
         </div>
       </ContentSection>
 
-      <div className="mx-2.5 sm:mx-0">
-        <div className="flex flex-col space-y-2 max-w-5xl mx-auto mt-5">
-          <div className="flex-col space-y-2">
-            <div>
-              <p className="text-xs font-light text-gray-500 font-sans pb-2">
-                Vote Options
-              </p>
-              <div className="w-full space-y-2">
-                {outcomes?.map((o, i) => (
-                  <VoteOption
-                    index={i}
-                    key={o.address}
-                    outcome={o}
-                    expandedId={expandedId}
-                    handleExpandClick={handleExpandClick}
-                  />
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <VoteOptionsSection outcomes={outcomes} />
+
       {votingResults?.length > 0 && (
         <div className="mx-2.5 sm:mx-0">
           <div className="flex flex-col space-y-2 max-w-5xl mx-auto mt-5">
@@ -168,52 +142,7 @@ const VoteDetailsPage = ({ fallback, details }) => {
                 <p className="text-xs font-light text-gray-500 font-sans pb-2">
                   Results
                 </p>
-                <div className="grid grid-cols-4 sm:grid-cols-3">
-                  <div className="text-white text-xs sm:text-lg font-bold bg-gray-600 bg-opacity-10 text-md col-span-2 sm:col-span-1 border sm:border-4 border-solid border-opacity-5 border-white px-2.5 py-2 sm:px-4 sm:py-2.5 rounded-tl-xl">
-                    Vote Option
-                  </div>
-                  <div className="text-white text-xs sm:text-lg text-right font-bold bg-gray-600 bg-opacity-10 text-md col-span-1 border sm:border-4 border-solid border-opacity-5 border-white px-2.5 py-2 sm:px-4 sm:py-2.5 border-l-0 sm:border-l-0">
-                    Total Voting Power
-                  </div>
-                  <div className="text-white text-xs sm:text-lg text-right font-bold bg-gray-600 bg-opacity-10 text-md col-span-1 border sm:border-4 border-solid border-opacity-5 border-white px-2.5 py-2 sm:px-4 sm:py-2.5 rounded-tr-xl border-l-0 sm:border-l-0">
-                    Unique Voting Wallets
-                  </div>
-                  {votingResults.map((r, i, { length }) => {
-                    return (
-                      <React.Fragment key={r.value}>
-                        <div
-                          className={classNames(
-                            "break-words text-white text-xs sm:text-lg col-span-2 sm:col-span-1 border sm:border-4 border-solid border-opacity-5 bg-white bg-opacity-5 border-white px-2.5 py-2 sm:px-4 sm:py-2.5",
-                            {
-                              "border-t-0 sm:border-t-0":
-                                i === 0 || (i > 0 && i < length - 1),
-                              "rounded-bl-xl border-t-0 sm:border-t-0":
-                                i === length - 1,
-                            }
-                          )}
-                        >
-                          {r.value}
-                        </div>
-                        <div className="text-white text-right text-xs sm:text-lg col-span-1 border sm:border-4 border-solid border-opacity-5 bg-white bg-opacity-5 border-white px-2.5 py-2 sm:px-4 sm:py-2.5 border-l-0 sm:border-l-0 border-t-0 sm:border-t-0">
-                          {r.hntVoted.toString(2)}
-                        </div>
-                        <div
-                          className={classNames(
-                            "text-white text-right text-xs sm:text-lg col-span-1 border sm:border-4 border-solid border-opacity-5 bg-white bg-opacity-5 border-white px-2.5 py-2 sm:px-4 sm:py-2.5 border-l-0 sm:border-l-0",
-                            {
-                              "border-t-0 sm:border-t-0":
-                                i === 0 || (i > 0 && i < length - 1),
-                              "rounded-br-xl border-t-0 sm:border-t-0":
-                                i === length - 1,
-                            }
-                          )}
-                        >
-                          {r.uniqueWallets}
-                        </div>
-                      </React.Fragment>
-                    );
-                  })}
-                </div>
+                <VoteResultsTable votingResults={votingResults} />
                 <div className="flex flex-col sm:flex-row items-end justify-start pt-2">
                   <span className="text-sm font-light text-gray-500 font-sans">
                     Last updated {formatDistanceToNow(results.timestamp)} ago
