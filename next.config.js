@@ -7,7 +7,7 @@ module.exports = {
         link: "https://github.com/helium/HIP",
         name: "Test Vote: Ice Cream",
         description:
-          "Tell us what's your favorite ice cream flavor. This voting mechanism will be used for future Helium Improvement Proposal voting.",
+          "Vote for your favorite ice cream flavor. This voting mechanism will be used for future Helium Improvement Proposal voting.",
         outcomes: [
           {
             value: "Chocolate",
