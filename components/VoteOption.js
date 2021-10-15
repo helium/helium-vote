@@ -76,7 +76,7 @@ const VoteOption = ({ outcome, expandedId, handleExpandClick, index }) => {
                   Execute the following command with the CLI:
                 </p>
                 <div className="bg-hv-gray-900 rounded-lg p-2 flex flex-col items-start justify-start">
-                  <p className="text-hv-blue-500 font-mono text-sm break-all">{`helium-wallet burn --0.00000001 --payee ${outcome.address} --commit`}</p>
+                  <p className="text-hv-blue-500 font-mono text-sm break-all">{`helium-wallet burn --amount 0.00000001 --payee ${outcome.address} --commit`}</p>
                 </div>
               </span>
             </div>
