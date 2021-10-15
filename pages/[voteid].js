@@ -10,17 +10,14 @@ import {
 import Page from "../components/Page";
 import ContentSection from "../components/ContentSection";
 import classNames from "classnames";
-import { addMinutes, formatDistanceToNow } from "date-fns";
-import VoteOption from "../components/VoteOption";
+import { formatDistanceToNow } from "date-fns";
 import VoteDetailField from "../components/VoteDetailField";
 import cache from "../utils/cache";
 import { Balance, CurrencyType } from "@helium/currency";
 import CountdownTimer from "../components/CountdownTimer";
+import VoteOptionsSection from "../components/VoteOptionsSection";
 
 const VoteDetailsPage = ({ results, height, details }) => {
-  const router = useRouter();
-  const { voteid } = router.query;
-
   const { outcomes: outcomesResults, timestamp: resultsTimestamp } = results;
   const votingResults = outcomesResults
     .sort((a, b) => b.hntVoted - a.hntVoted)
@@ -37,12 +34,6 @@ const VoteDetailsPage = ({ results, height, details }) => {
     if (deadline && height)
       setBlocksRemaining(parseInt(deadline) - parseInt(height));
   }, [deadline, height]);
-
-  const [expandedId, setExpandedId] = useState(null);
-
-  const handleExpandClick = (id) => {
-    setExpandedId(id);
-  };
 
   return (
     <Page>
@@ -122,28 +113,8 @@ const VoteDetailsPage = ({ results, height, details }) => {
         </div>
       </ContentSection>
 
-      <div className="mx-2.5 sm:mx-0">
-        <div className="flex flex-col space-y-2 max-w-5xl mx-auto mt-5">
-          <div className="flex-col space-y-2">
-            <div>
-              <p className="text-xs font-light text-gray-500 font-sans pb-2">
-                Vote Options
-              </p>
-              <div className="w-full space-y-2">
-                {outcomes?.map((o, i) => (
-                  <VoteOption
-                    index={i}
-                    key={o.address}
-                    outcome={o}
-                    expandedId={expandedId}
-                    handleExpandClick={handleExpandClick}
-                  />
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <VoteOptionsSection outcomes={outcomes} />
+
       {votingResults?.length > 0 && (
         <div className="mx-2.5 sm:mx-0">
           <div className="flex flex-col space-y-2 max-w-5xl mx-auto mt-5">
