@@ -56,7 +56,7 @@ const VoteOption = ({ outcome, expandedId, handleExpandClick, index }) => {
           <div className="hidden sm:block">
             <p className="text-gray-400 text-sm pb-4 max-w-xl">
               To vote for this option, scan the QR code below to burn HNT to the
-              address associated with this option.
+              address associated with this option. If you change your mind, submit another transaction. Changes are allowed until the deadline.
             </p>
             <p className="text-gray-400 text-sm pb-4 max-w-xl">
             Your Vote Power is your HNT balance and staked HNT balance at the block deadline. The Wallet address used to submit the transaction will have its Vote Power counted toward the vote option.
@@ -84,7 +84,7 @@ const VoteOption = ({ outcome, expandedId, handleExpandClick, index }) => {
           <div className="flex flex-col sm:hidden">
             <p className="text-gray-400 text-sm pb-2 max-w-xl">
               To vote for this option, burn HNT to the address associated with
-              this option before the voting deadline.
+              this option before the voting deadline. If you change your mind, submit another transaction. Changes are allowed until the deadline.
             </p>
             <p className="text-gray-400 text-sm pb-2 max-w-xl">
             Your Vote Power is your HNT balance and staked HNT balance at the block deadline. The Wallet address used to submit the transaction will have its Vote Power counted toward the vote option.
