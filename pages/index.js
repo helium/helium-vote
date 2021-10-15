@@ -39,7 +39,7 @@ export default function Home({ height, votes }) {
             </p>
             <br />
             <p className="font-sans text-gray-300 max-w-2xl text-lg">
-              Final votes will be tallied at the block deadline. 
+              Final votes will be tallied at the block deadline and data credits burned to each vote choice will be purged from the Network.
             </p>
           </div>
         </div>
