@@ -1,3 +1,7 @@
 import Redis from "ioredis";
 
-export const redis = new Redis(process.env.NEXT_PUBLIC_REDIS_URL);
+const REDIS_URL = process.env.REDIS_URL
+  ? process.env.REDIS_URL
+  : "redis://localhost:6379";
+
+export const redis = new Redis(REDIS_URL);
