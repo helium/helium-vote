@@ -16,6 +16,7 @@ import useSWR from "swr";
 import CountdownTimer from "../components/CountdownTimer";
 import VoteOptionsSection from "../components/VoteOptionsSection";
 import VoteResultsTable from "../components/VoteResultsTable";
+import { redis } from "../utils/redis";
 
 const fetcher = (url) => fetch(url).then((r) => r.json());
 
@@ -163,6 +164,7 @@ const VoteDetailsPage = ({ fallback, details }) => {
 export async function getStaticPaths() {
   const votes = await fetchVotes();
   const paths = votes.map(({ id }) => ({ params: { voteid: id } }));
+
   return {
     // paths,
     paths: [],
@@ -175,10 +177,23 @@ export async function getStaticProps({ params }) {
 
   const { height } = await fetchCurrentHeight();
   const details = await fetchVoteDetails(voteid);
-  const results = await fetchResults(voteid);
+
+  const { deadline } = details;
+  const expired = height > deadline;
+
+  const getLatest = async (voteid) => {
+    // just fetch the latest cache instead of recalculating
+    const value = await redis.get(voteid);
+    if (!value) return null;
+    return JSON.parse(value);
+  };
+
+  const results = expired
+    ? await getLatest(voteid)
+    : await fetchResults(voteid);
 
   // revalidate: 1 means it will check at most every 1 second if the Redis cache has reached 10 minutes old yet. if not, it'll serve the statically saved version of the latest Redis cache. so it'll only call calculateResults() at most once every 10 minutes, and it'll do it in the background with getStaticProps so it won't slow down for the unlucky first visitor after the 10 minute threshold is crossed.
-  return { props: { fallback: { results, height }, details }, revalidate: 1 };
+  return { props: { fallback: { results, height }, details }, revalidate: 10 };
 }
 
 export default VoteDetailsPage;
