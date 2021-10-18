@@ -4,7 +4,7 @@ import { fetchCurrentHeight, fetchVotes } from "../data/votes";
 import Link from "next/link";
 import ContentSection from "../components/ContentSection";
 
-export default function Home({ height, votes }) {
+export default function Home({ height, activeVotes, completedVotes }) {
   return (
     <Page>
       <Head>
@@ -29,35 +29,68 @@ export default function Home({ height, votes }) {
           <div className="flex flex-col">
             <h2 className="text-4xl font-sans text-white">Helium Vote</h2>
             <br />
+
             <p className="font-sans text-gray-300 max-w-2xl text-lg">
-              Helium Vote is where the Helium Community comes together to make decisions on the Network. Each vote will be driven by a Helium Improvement Proposal (HIP). When HIPs are ready for voting, they will appear here.
-            <br />
-            <br />
+              Helium Vote is where the Helium Community comes together to make
+              decisions on the Network. Each vote will be driven by a Helium
+              Improvement Proposal (HIP). When HIPs are ready for voting, they
+              will appear here.
+              <br />
+              <br />
             </p>
             <p className="font-sans text-gray-300 max-w-2xl text-lg">
-              The number of votes going towards each voting choice is determined by your HNT and staked HNT wallet balance - this is known as Voting Power. To cast a vote, submit a burn transaction using the wallet of your choosing. Total cost of a burn transaction is 35,000 DC or approximately $0.35.
+              The number of votes going towards each voting choice is determined
+              by your HNT and staked HNT wallet balance - this is known as
+              Voting Power. To cast a vote, submit a burn transaction using the
+              wallet of your choosing. Total cost of a burn transaction is
+              35,000 DC or approximately $0.35.
             </p>
             <br />
             <p className="font-sans text-gray-300 max-w-2xl text-lg">
-              Final votes will be tallied at the block deadline and data credits burned to each vote choice will be purged from the Network. This is our first attempt at an on-chain voting system and an exciting step towards decentralized governance. The votes here are intended to capture community sentiment and support the current rough consensus mechanism. 
+              Final votes will be tallied at the block deadline and data credits
+              burned to each vote choice will be purged from the Network. This
+              is our first attempt at an on-chain voting system and an exciting
+              step towards decentralized governance. The votes here are intended
+              to capture community sentiment and support the current rough
+              consensus mechanism.
             </p>
           </div>
         </div>
       </ContentSection>
       <ContentSection flatTop>
-        <div>
-          <p className="text-lg pb-4 text-white">Active Votes</p>
-          <div className="flex flex-col space-y-2">
-            {votes.map((v) => {
-              return (
-                <Link href={`/${v.id}`}>
-                  <a className="w-full rounded-md border outline-none border-transparent focus:border-hv-blue-500 border-solid p-5 hover:bg-gray-300 bg-gray-600 transition-all duration-100 text-white text-2xl hover:text-gray-800">
-                    {v.name}
-                  </a>
-                </Link>
-              );
-            })}
-          </div>
+        <div className="space-y-4">
+          {activeVotes.length > 0 && (
+            <div>
+              <p className="text-lg pb-4 text-white">Active Votes</p>
+              <div className="flex flex-col space-y-2">
+                {activeVotes.map((v) => {
+                  return (
+                    <Link href={`/${v.id}`}>
+                      <a className="w-full rounded-md border outline-none border-transparent focus:border-hv-blue-500 border-solid p-5 hover:bg-gray-300 bg-gray-600 transition-all duration-100 text-white text-2xl hover:text-gray-800">
+                        {v.name}
+                      </a>
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+          {completedVotes.length > 0 && (
+            <div>
+              <p className="text-lg pb-4 text-white">Closed Votes</p>
+              <div className="flex flex-col space-y-2">
+                {completedVotes.map((v) => {
+                  return (
+                    <Link href={`/${v.id}`}>
+                      <a className="w-full rounded-md border outline-none border-transparent focus:border-hv-blue-500 border-solid p-5 hover:bg-gray-300 bg-gray-600 transition-all duration-100 text-white text-2xl hover:text-gray-800">
+                        {v.name}
+                      </a>
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          )}
         </div>
       </ContentSection>
     </Page>
@@ -65,8 +98,14 @@ export default function Home({ height, votes }) {
 }
 
 export async function getStaticProps() {
-  const height = await fetchCurrentHeight();
+  const { height } = await fetchCurrentHeight();
   const votes = await fetchVotes();
 
-  return { props: { height, votes }, revalidate: 60 * 60 };
+  const activeVotes = votes.filter(({ deadline }) => height <= deadline);
+  const completedVotes = votes.filter(({ deadline }) => height > deadline);
+
+  return {
+    props: { height, activeVotes, completedVotes },
+    revalidate: 60 * 60,
+  };
 }
