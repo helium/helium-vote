@@ -134,7 +134,7 @@ const VoteDetailsPage = ({
                 ? `Voting closed at ${format(
                     finalBlockTime * 1000,
                     "h:mm:ss aaa"
-                  )} UTC on ${format(finalBlockTime * 1000, "MMMM do, y")}`
+                  )} on ${format(finalBlockTime * 1000, "MMMM do, y")}`
                 : `${blocksRemaining.toLocaleString()}`
             }
             label="Blocks Remaining Until Deadline"
