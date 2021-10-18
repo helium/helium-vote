@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import React, { useEffect, useMemo, useState } from "react";
 import Head from "next/head";
+import Link from "next/link";
 import {
   fetchResults,
   fetchCurrentHeight,
@@ -67,6 +68,17 @@ const VoteDetailsPage = ({
 
   return (
     <Page>
+      <div
+        className={classNames(
+          "-mt-5 sm:-mt-20 mb-5 h-5 sm:mb-8 sm:h-8 top-0 w-full flex items-center justify-center text-sm font-sans font-normal",
+          {
+            "bg-hv-green-500 text-black": !completed,
+            "bg-hv-blue-700 text-white": completed,
+          }
+        )}
+      >
+        Voting {completed ? "has Closed" : "is Open"}
+      </div>
       <Head>
         <title>{name}</title>
         <link rel="icon" href="/favicon.png" />
@@ -80,7 +92,10 @@ const VoteDetailsPage = ({
           content="https://heliumvote.com/images/og.png"
         />
       </Head>
-      <ContentSection flatBottom first>
+      <ContentSection>
+        <Link href="/">
+          <a className="text-hv-gray-200">{"<- "}Back to Votes</a>
+        </Link>
         <div className="flex flex-col">
           <div className="flex-col space-y-2">
             <VoteDetailField value={name} title label="Vote Title" />

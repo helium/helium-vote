@@ -9,7 +9,7 @@ const VoteDetailField = ({
 }) => {
   return (
     <div className={classNames("flex flex-col", className)}>
-      <p className="text-xs font-light text-gray-500 font-sans">{label}</p>
+      {/* <p className="text-xs font-light text-gray-500 font-sans">{label}</p> */}
       {title ? (
         <h2 className="text-4xl font-sans text-white">{value}</h2>
       ) : (
