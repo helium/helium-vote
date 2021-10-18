@@ -9,7 +9,7 @@ import {
 } from "../data/votes";
 import Page from "../components/Page";
 import ContentSection from "../components/ContentSection";
-import { formatDistanceToNow } from "date-fns";
+import { format, formatDistanceToNow } from "date-fns";
 import VoteDetailField from "../components/VoteDetailField";
 import { Balance, CurrencyType } from "@helium/currency";
 import useSWR from "swr";
@@ -17,10 +17,18 @@ import CountdownTimer from "../components/CountdownTimer";
 import VoteOptionsSection from "../components/VoteOptionsSection";
 import VoteResultsTable from "../components/VoteResultsTable";
 import { redis } from "../utils/redis";
+import client from "../data/client";
+import classNames from "classnames";
 
 const fetcher = (url) => fetch(url).then((r) => r.json());
 
-const VoteDetailsPage = ({ fallback, details }) => {
+const VoteDetailsPage = ({
+  fallback,
+  details,
+  completed,
+  finalBlockTime,
+  blocksRemaining: initialBlocksRemaining,
+}) => {
   const router = useRouter();
   const { voteid } = router.query;
 
@@ -48,7 +56,9 @@ const VoteDetailsPage = ({ fallback, details }) => {
 
   const { id, pollster, deadline, name, link, description, outcomes } = details;
 
-  const [blocksRemaining, setBlocksRemaining] = useState(0);
+  const [blocksRemaining, setBlocksRemaining] = useState(
+    initialBlocksRemaining
+  );
 
   useEffect(() => {
     if (deadline && height)
@@ -118,18 +128,28 @@ const VoteDetailsPage = ({ fallback, details }) => {
             label="Deadline"
           />
           <VoteDetailField
-            value={`${blocksRemaining.toLocaleString()}`}
+            className={classNames({ "sm:col-span-2": completed })}
+            value={
+              completed
+                ? `Voting closed at ${format(
+                    finalBlockTime * 1000,
+                    "h:mm:ss aaa"
+                  )} UTC on ${format(finalBlockTime * 1000, "MMMM do, y")}`
+                : `${blocksRemaining.toLocaleString()}`
+            }
             label="Blocks Remaining Until Deadline"
           />
-          <VoteDetailField
-            value={
-              <CountdownTimer
-                blocksRemaining={blocksRemaining}
-                key={blocksRemaining}
-              />
-            }
-            label="Estimated Time Until Deadline"
-          />
+          {!completed && (
+            <VoteDetailField
+              value={
+                <CountdownTimer
+                  blocksRemaining={blocksRemaining}
+                  key={blocksRemaining}
+                />
+              }
+              label="Estimated Time Until Deadline"
+            />
+          )}
         </div>
       </ContentSection>
 
@@ -179,7 +199,12 @@ export async function getStaticProps({ params }) {
   const details = await fetchVoteDetails(voteid);
 
   const { deadline } = details;
-  const expired = height > deadline;
+  const completed = height > deadline;
+  const blocksRemaining = deadline - height;
+
+  const { time: finalBlockTime } = completed
+    ? await client.blocks.get(deadline)
+    : null;
 
   const getLatest = async (voteid) => {
     // just fetch the latest cache instead of recalculating
@@ -188,12 +213,21 @@ export async function getStaticProps({ params }) {
     return JSON.parse(value);
   };
 
-  const results = expired
+  const results = completed
     ? await getLatest(voteid)
     : await fetchResults(voteid);
 
   // revalidate: 1 means it will check at most every 1 second if the Redis cache has reached 10 minutes old yet. if not, it'll serve the statically saved version of the latest Redis cache. so it'll only call calculateResults() at most once every 10 minutes, and it'll do it in the background with getStaticProps so it won't slow down for the unlucky first visitor after the 10 minute threshold is crossed.
-  return { props: { fallback: { results, height }, details }, revalidate: 10 };
+  return {
+    props: {
+      fallback: { results, height },
+      blocksRemaining,
+      completed,
+      finalBlockTime,
+      details,
+    },
+    revalidate: 10,
+  };
 }
 
 export default VoteDetailsPage;
