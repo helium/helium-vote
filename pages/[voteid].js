@@ -153,7 +153,7 @@ const VoteDetailsPage = ({
         </div>
       </ContentSection>
 
-      <VoteOptionsSection outcomes={outcomes} />
+      {!completed && <VoteOptionsSection outcomes={outcomes} />}
 
       {votingResults?.length > 0 && (
         <div className="mx-2.5 sm:mx-0">
