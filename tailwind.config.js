@@ -12,6 +12,7 @@ module.exports = {
           900: "#1f161d",
         },
         "hv-green": {
+          500: "#20DEB0",
           800: "#13413e",
           900: "#162822",
         },
@@ -21,16 +22,25 @@ module.exports = {
         "hv-turquoise": {
           700: "#124b4b",
         },
+        "hv-purple": {
+          500: "#7B61FF",
+        },
         "hv-gray": {
-          500: "#343847",
+          200: "#737373",
+          300: "#b4b4b4",
+          400: "#535353",
+          450: "#434343",
+          500: "#343434",
           700: "#131419",
+          750: "#272727",
           800: "#2E303B",
           900: "#131419",
+          1000: "#1D1D1D",
         },
       },
     },
     fontFamily: {
-      sans: ['"DM Sans"', "sans-serif"],
+      sans: ["Inter", "sans-serif"],
       mono: [
         "ui-monospace",
         "SFMono-Regular",

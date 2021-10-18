@@ -204,7 +204,7 @@ export async function getStaticProps({ params }) {
 
   const { time: finalBlockTime } = completed
     ? await client.blocks.get(deadline)
-    : null;
+    : { time: null };
 
   const getLatest = async (voteid) => {
     // just fetch the latest cache instead of recalculating
