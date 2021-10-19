@@ -13,12 +13,12 @@ const VoteResults = ({ votingResults, completed }) => {
 
   return (
     <div className="pt-0">
-      <div className="w-full flex flex-col lg:flex-row justify-between mb-10">
+      <div className="w-full flex flex-col lg:flex-row justify-between mb-5 sm:mb-10">
         <p className="text-xl sm:text-3xl text-white font-semibold tracking-tighter">
           {completed ? "Final Results" : "Preliminary Results"}
         </p>
         {completed && (
-          <p className="text-lg sm:text-3xl text-hv-gray-400 font-semibold tracking-tighter pt-4 sm:pt-0">
+          <p className="text-lg sm:text-3xl text-hv-gray-400 font-semibold tracking-tighter pt-4 lg:pt-0">
             <span className="text-white">{winner.value}</span> wins with{" "}
             {winner.hntPercent.toLocaleString(undefined, {
               maximumFractionDigits: 2,
@@ -72,7 +72,7 @@ const VoteResults = ({ votingResults, completed }) => {
                   <div className="text-hv-gray-400 text-lg font-light font-sans flex flex-col lg:flex-row space-x-0 lg:space-x-2">
                     <span>{r.hntVoted.toString(2)}</span>
                     <div className="hidden lg:flex">|</div>
-                    <span> {r.uniqueWallets.toLocaleString()} Votes</span>
+                    <span>{r.uniqueWallets.toLocaleString()} Votes</span>
                   </div>
                   <span className="text-white text-lg font-sans">
                     <span className="text-white hidden lg:flex">
