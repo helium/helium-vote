@@ -1,43 +1,93 @@
-import React from "react";
 import classNames from "classnames";
+
+const getColorClass = (i) => {
+  const COLORS = ["bg-hv-green-500", "bg-hv-blue-700", "bg-hv-purple-500"];
+  return COLORS[i % COLORS.length];
+};
 
 const VoteResults = ({ votingResults, completed }) => {
   const { outcomesResults } = votingResults;
 
+  // the array has already been sorted by .hntVoted
+  const winner = outcomesResults[0];
+
   return (
     <div className="pt-0">
-      <div className="w-full">
-        <p className="text-3xl text-white font-semibold tracking-tighter">
+      <div className="w-full flex flex-col lg:flex-row justify-between mb-10">
+        <p className="text-xl sm:text-3xl text-white font-semibold tracking-tighter">
           {completed ? "Final Results" : "Preliminary Results"}
         </p>
+        {completed && (
+          <p className="text-lg sm:text-3xl text-hv-gray-400 font-semibold tracking-tighter pt-4 sm:pt-0">
+            <span className="text-white">{winner.value}</span> wins with{" "}
+            {winner.hntPercent.toLocaleString(undefined, {
+              maximumFractionDigits: 2,
+            })}
+            % of Vote
+          </p>
+        )}
       </div>
-      {outcomesResults.map((r, i, { length }) => {
-        return (
-          <React.Fragment key={r.value}>
-            <span className="text-md text-hv-gray-500">
-              {r.value}
-              {r.hntVoted.toString(2)}{" "}
-              <span className="text-hv-gray-400 text-sm">
-                (
-                {r.hntPercent.toLocaleString(undefined, {
-                  maximumFractionDigits: 2,
-                })}{" "}
-                %)
-              </span>
-            </span>
-            <span className="text-md text-hv-gray-500">
-              {r.uniqueWallets}{" "}
-              <span className="text-hv-gray-400 text-sm">
-                (
-                {r.walletsPercent.toLocaleString(undefined, {
-                  maximumFractionDigits: 2,
-                })}{" "}
-                %)
-              </span>
-            </span>
-          </React.Fragment>
-        );
-      })}
+      <div className="flex flex-col space-y-5">
+        {outcomesResults.map((r, i, { length }) => {
+          return (
+            <div key={r.value} className="w-full flex flex-col relative">
+              {completed && i === 0 && (
+                <div className="absolute -left-12 hidden xl:flex items-center justify-center h-full">
+                  <img className="w-6 h-6 mr-1.5 mb-1" src="/images/star.svg" />
+                  <div className="w-1 h-full bg-white" />
+                </div>
+              )}
+              <div className="w-full rounded-xl bg-hv-gray-500 flex flex-row items-start justify-start">
+                <div
+                  className={classNames(
+                    "w-1.5 rounded-l-xl h-3",
+                    getColorClass(i)
+                  )}
+                />
+                <div
+                  className={classNames("h-3 rounded-r-xl", getColorClass(i))}
+                  style={{ width: `${r.hntPercent}%` }}
+                />
+              </div>
+              <div className="w-full flex flex-col items-start lg:flex-row lg:items-center justify-between pt-1.5">
+                <h3 className="font-sans text-lg text-white font-semibold tracking-tighter">
+                  <span className="flex flex-row items-center justify-start space-x-2">
+                    <span>{r.value}</span>
+                    <span className="flex lg:hidden">
+                      (
+                      {r.hntPercent.toLocaleString(undefined, {
+                        maximumFractionDigits: 2,
+                      })}
+                      %)
+                    </span>
+                    {completed && i === 0 && (
+                      <img
+                        className="w-5 h-5 flex xl:hidden mb-1"
+                        src="/images/star.svg"
+                      />
+                    )}
+                  </span>
+                </h3>
+                <div className="space-x-2 flex flex-col lg:flex-row">
+                  <div className="text-hv-gray-400 text-lg font-light font-sans flex flex-col lg:flex-row space-x-0 lg:space-x-2">
+                    <span>{r.hntVoted.toString(2)}</span>
+                    <div className="hidden lg:flex">|</div>
+                    <span> {r.uniqueWallets.toLocaleString()} Votes</span>
+                  </div>
+                  <span className="text-white text-lg font-sans">
+                    <span className="text-white hidden lg:flex">
+                      {r.hntPercent.toLocaleString(undefined, {
+                        maximumFractionDigits: 2,
+                      })}
+                      %
+                    </span>
+                  </span>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 };

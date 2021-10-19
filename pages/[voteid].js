@@ -160,7 +160,7 @@ const VoteDetailsPage = ({
       </ContentSection>
 
       <ContentSection className="mt-4 sm:mt-14">
-        <div className="bg-hv-gray-775 rounded-xl p-5 flex flex-col sm:flex-row justify-between space-y-2 sm:space-y-0 align-center w-full">
+        <div className="bg-hv-gray-775 rounded-xl p-5 flex flex-col lg:flex-row justify-between space-y-2 lg:space-y-0 align-center w-full">
           {!completed ? (
             <>
               <div>
@@ -234,11 +234,11 @@ const VoteDetailsPage = ({
                 votingResults={votingResults}
               />
               {/* <VoteResultsTable votingResults={votingResults} /> */}
-              <div className="flex flex-col sm:flex-row items-end justify-start pt-2">
+              <div className="flex flex-col items-end justify-start pt-2">
                 <span className="text-sm font-light text-gray-500 font-sans">
                   Last updated {formatDistanceToNow(results.timestamp)} ago
                 </span>
-                <span className="font-light text-xs text-gray-600 pl-0 sm:pl-2">
+                <span className="font-light text-xs text-gray-600">
                   (Results recalculate every 10 minutes)
                 </span>
               </div>
