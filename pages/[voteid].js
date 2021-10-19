@@ -16,6 +16,7 @@ import useSWR from "swr";
 import CountdownTimer from "../components/CountdownTimer";
 import VoteOptionsSection from "../components/VoteOptionsSection";
 import VoteResultsTable from "../components/VoteResultsTable";
+import VoteResults from "../components/VoteResults";
 import { redis } from "../utils/redis";
 import client from "../data/client";
 import classNames from "classnames";
@@ -227,20 +228,19 @@ const VoteDetailsPage = ({
       {votingResults.outcomesResults?.length > 0 && (
         <div className="">
           <div className="flex flex-col space-y-2 max-w-5xl mx-auto mt-5 px-4 sm:px-10">
-            <div className="flex-col space-y-2">
-              <div>
-                <p className="text-xs font-light text-gray-500 font-sans pb-2">
-                  Results
-                </p>
-                <VoteResultsTable votingResults={votingResults} />
-                <div className="flex flex-col sm:flex-row items-end justify-start pt-2">
-                  <span className="text-sm font-light text-gray-500 font-sans">
-                    Last updated {formatDistanceToNow(results.timestamp)} ago
-                  </span>
-                  <span className="font-light text-xs text-gray-600 pl-0 sm:pl-2">
-                    (Results recalculate every 10 minutes)
-                  </span>
-                </div>
+            <div className="flex-col space-y-2 mt-10 sm:mt-16">
+              <VoteResults
+                completed={completed}
+                votingResults={votingResults}
+              />
+              {/* <VoteResultsTable votingResults={votingResults} /> */}
+              <div className="flex flex-col sm:flex-row items-end justify-start pt-2">
+                <span className="text-sm font-light text-gray-500 font-sans">
+                  Last updated {formatDistanceToNow(results.timestamp)} ago
+                </span>
+                <span className="font-light text-xs text-gray-600 pl-0 sm:pl-2">
+                  (Results recalculate every 10 minutes)
+                </span>
               </div>
             </div>
           </div>
