@@ -6,6 +6,11 @@ module.exports = {
         deadline: 1059000,
         link: "https://github.com/helium/HIP",
         name: "Test Vote: Ice Cream",
+        author: {
+          nickname: "@cokes",
+          // address: "zzzz",
+          // link: "https://github.com/user",
+        },
         description:
           "Vote for your favorite ice cream flavor. This voting mechanism will be used for future Helium Improvement Proposal voting.",
         outcomes: [
@@ -23,57 +28,6 @@ module.exports = {
           },
         ],
       },
-      // {
-      //   id: "zzzzz",
-      //   deadline: 1075000,
-      //   link: "https://github.com/helium/HIP",
-      //   name: "ZZZZZ",
-      //   description: "AASDFSDFSDLFK vote vote vote.",
-      //   outcomes: [
-      //     {
-      //       value: "For",
-      //       address: "13uWWxgbqa5i9W7SFme6NZ2Brr1jDiga4JP7JdQyBRNer9RGozz",
-      //     },
-      //     {
-      //       value: "Against",
-      //       address: "14aVVtQvq7QK2FmU3ZFnXM3o3Nodzve8cFjDQniJGJbq6AZ29dd",
-      //     },
-      //   ],
-      // },
-      // {
-      //   id: "zzzzz2",
-      //   deadline: 1075000,
-      //   link: "https://github.com/helium/HIP",
-      //   name: "ZZZZZ",
-      //   description: "AASDFSDFSDLFK vote vote vote.",
-      //   outcomes: [
-      //     {
-      //       value: "For",
-      //       address: "13uWWxgbqa5i9W7SFme6NZ2Brr1jDiga4JP7JdQyBRNer9RGozz",
-      //     },
-      //     {
-      //       value: "Against",
-      //       address: "14aVVtQvq7QK2FmU3ZFnXM3o3Nodzve8cFjDQniJGJbq6AZ29dd",
-      //     },
-      //   ],
-      // },
-      // {
-      //   id: "zzzzz3",
-      //   deadline: 1075000,
-      //   link: "https://github.com/helium/HIP",
-      //   name: "ZZZZZ",
-      //   description: "AASDFSDFSDLFK vote vote vote.",
-      //   outcomes: [
-      //     {
-      //       value: "For",
-      //       address: "13uWWxgbqa5i9W7SFme6NZ2Brr1jDiga4JP7JdQyBRNer9RGozz",
-      //     },
-      //     {
-      //       value: "Against",
-      //       address: "14aVVtQvq7QK2FmU3ZFnXM3o3Nodzve8cFjDQniJGJbq6AZ29dd",
-      //     },
-      //   ],
-      // },
       {
         id: "13YxdDMkDsjnWAk1MSBKADveZm5RnMTLEqq1yTvzHKBZnvjsZFb",
         deadline: 1075000,

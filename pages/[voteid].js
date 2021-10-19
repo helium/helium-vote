@@ -11,7 +11,6 @@ import {
 import Page from "../components/Page";
 import ContentSection from "../components/ContentSection";
 import { format, formatDistanceToNow } from "date-fns";
-import VoteDetailField from "../components/VoteDetailField";
 import { Balance, CurrencyType } from "@helium/currency";
 import useSWR from "swr";
 import CountdownTimer from "../components/CountdownTimer";
@@ -46,16 +45,35 @@ const VoteDetailsPage = ({
   const votingResults = useMemo(() => {
     if (!results) return [];
 
-    const { outcomes: outcomesResults } = results;
-    return outcomesResults
+    const { outcomes } = results;
+    const totalUniqueWallets = outcomes.reduce(
+      (acc, { uniqueWallets: votes }) => acc + votes,
+      0
+    );
+    const totalHntVoted = outcomes.reduce(
+      (acc, { hntVoted }) => acc + hntVoted,
+      0
+    );
+
+    const outcomesResults = outcomes
       .sort((a, b) => b.hntVoted - a.hntVoted)
       .map((r) => ({
         ...r,
+        hntPercent:
+          r.uniqueWallets === 0 ? 0 : (r.hntVoted / totalHntVoted) * 100,
+        walletsPercent:
+          r.uniqueWallets === 0
+            ? 0
+            : (r.uniqueWallets / totalUniqueWallets) * 100,
         hntVoted: new Balance(r.hntVoted, CurrencyType.networkToken),
       }));
+
+    return { totalUniqueWallets, totalHntVoted, outcomesResults };
   }, [results]);
 
-  const { id, pollster, deadline, name, link, description, outcomes } = details;
+  const { id, author, deadline, name, link, description, outcomes } = details;
+
+  const nickname = author?.nickname;
 
   const [blocksRemaining, setBlocksRemaining] = useState(
     initialBlocksRemaining
@@ -70,7 +88,7 @@ const VoteDetailsPage = ({
     <Page>
       <div
         className={classNames(
-          "-mt-5 sm:-mt-20 mb-5 h-5 sm:mb-8 sm:h-8 top-0 w-full flex items-center justify-center text-sm font-sans font-normal",
+          "h-6 sm:h-8 top-0 fixed w-full flex items-center justify-center text-xs sm:text-sm font-sans font-normal",
           {
             "bg-hv-green-500 text-black": !completed,
             "bg-hv-blue-700 text-white": completed,
@@ -92,87 +110,123 @@ const VoteDetailsPage = ({
           content="https://heliumvote.com/images/og.png"
         />
       </Head>
-      <ContentSection>
-        <Link href="/">
-          <a className="text-hv-gray-200">{"<- "}Back to Votes</a>
-        </Link>
+      <ContentSection className="pt-10 sm:pt-0">
+        <div className="mb-5 sm:mb-10">
+          <Link href="/">
+            <a className="text-hv-gray-200 hover:text-hv-gray-300 outline-none border border-solid border-hv-green-500 border-opacity-0 focus:border-opacity-100 transition-all duration-200 rounded-sm">
+              {"<- "}Back to Votes
+            </a>
+          </Link>
+        </div>
         <div className="flex flex-col">
           <div className="flex-col space-y-2">
-            <VoteDetailField value={name} title label="Vote Title" />
-            <VoteDetailField value={description} label="Description" />
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-              <VoteDetailField value={id} label="Vote ID" small />
-              {pollster !== undefined && (
-                <VoteDetailField value={pollster} label="Pollster" small />
+            <h2 className="text-3xl sm:text-6xl font-sans text-white font-semibold tracking-tighter">
+              {name}
+            </h2>
+            <div>
+              {nickname !== undefined && (
+                <div className="pt-5">
+                  <p className="text-sm text-white text-md">
+                    Author:{" "}
+                    <span className="text-hv-green-500">{nickname}</span>
+                  </p>
+                </div>
               )}
+              <div className="flex flex-col sm:flex-row justify-between align-start mt-5">
+                <p className="font-sans max-w-md break-words text-md leading-tight tracking-tight text-hv-gray-300">
+                  {description}
+                </p>
+                <div className="mt-4 sm:mt-0">
+                  <a
+                    href={link}
+                    rel="noopener noreferrer"
+                    target="_blank"
+                    className="flex items-center justify-between px-3 py-2 bg-hv-gray-475 hover:bg-hv-gray-500 transition-all duration-100 rounded-lg w-min outline-none border border-solid border-transparent focus:border-hv-green-500"
+                  >
+                    <span className="text-sm text-hv-green-500 whitespace-nowrap pr-10">
+                      More Details
+                    </span>
+                    <img
+                      className="w-4 h-4 mr-4"
+                      src="/images/external-link.svg"
+                    />
+                  </a>
+                </div>
+              </div>
             </div>
-          </div>
-          <div className="mt-5">
-            <a
-              href={link}
-              rel="noopener noreferrer"
-              target="_blank"
-              className="flex items-center justify-between px-3 py-2 bg-gray-700 hover:bg-gray-600 transition-all duration-100 rounded-lg w-min outline-none border border-solid border-transparent focus:border-hv-blue-500"
-            >
-              <span className="text-sm text-hv-blue-500 whitespace-nowrap pr-2">
-                More details
-              </span>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-3 w-3 text-hv-blue-500"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                />
-              </svg>
-            </a>
           </div>
         </div>
       </ContentSection>
 
-      <ContentSection flatTop>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-          <VoteDetailField
-            value={`Block ${deadline?.toLocaleString()}`}
-            label="Deadline"
-          />
-          <VoteDetailField
-            className={classNames({ "sm:col-span-2": completed })}
-            value={
-              completed
-                ? `Voting closed at ${format(
-                    finalBlockTime * 1000,
-                    "h:mm:ss aaa"
-                  )} on ${format(finalBlockTime * 1000, "MMMM do, y")}`
-                : `${blocksRemaining.toLocaleString()}`
-            }
-            label="Blocks Remaining Until Deadline"
-          />
-          {!completed && (
-            <VoteDetailField
-              value={
-                <CountdownTimer
-                  blocksRemaining={blocksRemaining}
-                  key={blocksRemaining}
-                />
-              }
-              label="Estimated Time Until Deadline"
-            />
+      <ContentSection className="mt-4 sm:mt-14">
+        <div className="bg-hv-gray-775 rounded-xl p-5 flex flex-col sm:flex-row justify-between space-y-2 sm:space-y-0 align-center w-full">
+          {!completed ? (
+            <>
+              <div>
+                <p className="text-white">Deadline</p>
+                <p className="text-hv-gray-300">
+                  Block {deadline.toLocaleString()}
+                </p>
+              </div>
+              <div>
+                <p className="text-white">Blocks before deadline</p>
+                <p className="text-hv-gray-300">
+                  {blocksRemaining.toLocaleString()}
+                </p>
+              </div>
+              <div>
+                <p className="text-white">Est. Time Remaining</p>
+                <p className="text-hv-gray-300">
+                  <CountdownTimer
+                    blocksRemaining={blocksRemaining}
+                    key={blocksRemaining}
+                  />
+                </p>
+              </div>
+              <div className="sm:pr-20">
+                <p className="text-white">Total Votes</p>
+                <p className="text-hv-gray-300">
+                  {votingResults?.totalUniqueWallets?.toLocaleString()}
+                </p>
+              </div>
+            </>
+          ) : (
+            <>
+              <div>
+                <p className="text-white">Voting Closed</p>
+                <p className="text-hv-gray-300">
+                  Block {deadline.toLocaleString()}
+                </p>
+              </div>
+              <div>
+                <p className="text-white">Blocks since vote</p>
+                <p className="text-hv-gray-300">
+                  {Math.abs(blocksRemaining).toLocaleString()}
+                </p>
+              </div>
+              <div>
+                <p className="text-white">Vote Closed</p>
+                <p className="text-hv-gray-300">{`${format(
+                  finalBlockTime * 1000,
+                  "MMM d, y"
+                )} at ${format(finalBlockTime * 1000, "h:mm:ss aaa")}`}</p>
+              </div>
+              <div className="sm:pr-20">
+                <p className="text-white">Total Votes</p>
+                <p className="text-hv-gray-300">
+                  {votingResults?.totalUniqueWallets?.toLocaleString()}
+                </p>
+              </div>
+            </>
           )}
         </div>
       </ContentSection>
 
       {!completed && <VoteOptionsSection outcomes={outcomes} />}
 
-      {votingResults?.length > 0 && (
-        <div className="mx-2.5 sm:mx-0">
-          <div className="flex flex-col space-y-2 max-w-5xl mx-auto mt-5">
+      {votingResults.outcomesResults?.length > 0 && (
+        <div className="">
+          <div className="flex flex-col space-y-2 max-w-5xl mx-auto mt-5 px-4 sm:px-10">
             <div className="flex-col space-y-2">
               <div>
                 <p className="text-xs font-light text-gray-500 font-sans pb-2">

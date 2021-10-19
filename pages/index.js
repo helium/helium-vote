@@ -14,7 +14,7 @@ const VoteCard = ({ vote, height }) => {
 
   return (
     <Link href={`/${id}`}>
-      <a className="flex-shrink-0 min-w-96 w-full sm:w-96 sm:p-5 border outline-none border-opacity-0 sm:hover:border-opacity-100 border-hv-purple-500 border-dashed duration-100 transition-all">
+      <a className="flex-shrink-0 min-w-96 w-full sm:w-96 sm:p-5 border outline-none border-opacity-0 sm:hover:border-opacity-100 border-hv-purple-500 border-dashed duration-100 transition-all sm:focus:border-opacity-50">
         <div className="h-full w-full flex flex-col transition-all duration-150">
           <span className="pt-5 px-5 rounded-t-3xl bg-hv-gray-450 relative">
             <p className="text-white text-xl tracking-tight leading-tight pb-2">
@@ -120,12 +120,12 @@ export default function Home({ height, activeVotes, completedVotes }) {
         </div>
       </ContentSection>
       <div className="w-full bg-hv-gray-750 py-4 sm:py-10 mt-10 sm:mt-5">
-        <div className="max-w-5xl mx-auto px-4 sm:px-10">
-          <div className="sm:px-10">
-            <div className="sm:pl-5 space-x-2 sm:space-x-6 ">
+        <div className="max-w-6xl mx-auto px-4 lg:px-10">
+          <div className="lg:px-10">
+            <div className="sm:pl-5 space-x-2 sm:space-x-6">
               <button
                 className={classNames(
-                  "outline-none text-lg sm:text-3xl font-semibold tracking-tight",
+                  "outline-none text-lg sm:text-3xl font-semibold tracking-tight border-b-2 border-solid border-opacity-0 focus:border-opacity-25 border-hv-green-500 rounded-sm transition-all duration-200",
                   {
                     "text-hv-green-500": voteFilterTab === 0,
                     "text-hv-gray-400": voteFilterTab !== 0,
@@ -137,7 +137,7 @@ export default function Home({ height, activeVotes, completedVotes }) {
               </button>
               <button
                 className={classNames(
-                  "outline-none text-lg sm:text-3xl font-semibold tracking-tight",
+                  "outline-none text-lg sm:text-3xl font-semibold tracking-tight border-b-2 border-solid border-opacity-0 focus:border-opacity-25 border-hv-green-500 rounded-sm transition-all duration-200",
                   {
                     "text-hv-green-500": voteFilterTab === 1,
                     "text-hv-gray-400": voteFilterTab !== 1,
@@ -150,7 +150,7 @@ export default function Home({ height, activeVotes, completedVotes }) {
             </div>
           </div>
 
-          <div className="pt-4 sm:pl-10">
+          <div className="pt-4 lg:pl-10">
             {filteredVotesList.length > 0 ? (
               <div className="flex flex-col sm:flex-row w-full sm:overflow-x-auto">
                 {filteredVotesList.map((v) => {
@@ -158,7 +158,7 @@ export default function Home({ height, activeVotes, completedVotes }) {
                 })}
               </div>
             ) : (
-              <p className="text-white text-sm font-sans font-light">
+              <p className="text-hv-gray-400 text-sm font-sans font-light sm:pl-5">
                 No votes
               </p>
             )}

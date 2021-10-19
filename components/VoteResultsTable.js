@@ -53,6 +53,7 @@ const VoteResultsColumn = ({
 };
 
 const VoteResultsTable = ({ votingResults }) => {
+  const { outcomesResults } = votingResults;
   return (
     <div className="grid grid-cols-4 sm:grid-cols-3">
       <VoteResultsColumn isHeaderColumn isFirstColumn>
@@ -65,21 +66,35 @@ const VoteResultsTable = ({ votingResults }) => {
         Unique Voting Wallets
       </VoteResultsColumn>
 
-      {votingResults.map((r, i, { length }) => {
+      {outcomesResults.map((r, i, { length }) => {
         return (
           <React.Fragment key={r.value}>
             <VoteResultsColumn isFirstColumn isInLastRow={i === length - 1}>
               {r.value}
             </VoteResultsColumn>
             <VoteResultsColumn className="text-right">
-              {r.hntVoted.toString(2)}
+              {r.hntVoted.toString(2)}{" "}
+              <span className="text-hv-gray-400 text-sm">
+                (
+                {r.hntPercent.toLocaleString(undefined, {
+                  maximumFractionDigits: 2,
+                })}{" "}
+                %)
+              </span>
             </VoteResultsColumn>
             <VoteResultsColumn
               className="text-right"
               isLastColumn
               isInLastRow={i === length - 1}
             >
-              {r.uniqueWallets}
+              {r.uniqueWallets}{" "}
+              <span className="text-hv-gray-400 text-sm">
+                (
+                {r.walletsPercent.toLocaleString(undefined, {
+                  maximumFractionDigits: 2,
+                })}{" "}
+                %)
+              </span>
             </VoteResultsColumn>
           </React.Fragment>
         );
