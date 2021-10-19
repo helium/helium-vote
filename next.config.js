@@ -6,6 +6,9 @@ module.exports = {
         deadline: 1059000,
         link: "https://github.com/helium/HIP",
         name: "Test Vote: Ice Cream",
+        author: {
+          nickname: "cokes",
+        },
         description:
           "Vote for your favorite ice cream flavor. This voting mechanism will be used for future Helium Improvement Proposal voting.",
         outcomes: [
@@ -28,6 +31,9 @@ module.exports = {
         deadline: 1075000,
         link: "https://github.com/helium/HIP/blob/master/0040-validator-denylist.md",
         name: "HIP 40: Validator Denylist",
+        author: {
+          nickname: "hiptest",
+        },
         description:
           "This plan proposes that validators would maintain a denylist file of Hotspot addresses which are selected from a basic floor function, selecting the hotspots where earnings are abnormal.",
         outcomes: [
