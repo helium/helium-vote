@@ -43,10 +43,24 @@ const VoteDetailsPage = ({
     fallbackData: fallback.height,
   });
 
+  const {
+    id,
+    author,
+    deadline,
+    name,
+    link,
+    description,
+    outcomes: outcomesInitial,
+  } = details;
+
+  // to give each one an index so the colour code stays consistent, but we can still sort by votes
+  const outcomes = outcomesInitial.map((o, i) => ({ ...o, index: i }));
+
   const votingResults = useMemo(() => {
     if (!results) return [];
 
     const { outcomes } = results;
+
     const totalUniqueWallets = outcomes.reduce(
       (acc, { uniqueWallets: votes }) => acc + votes,
       0
@@ -57,7 +71,6 @@ const VoteDetailsPage = ({
     );
 
     const outcomesResults = outcomes
-      .sort((a, b) => b.hntVoted - a.hntVoted)
       .map((r) => ({
         ...r,
         hntPercent:
@@ -67,12 +80,10 @@ const VoteDetailsPage = ({
             ? 0
             : (r.uniqueWallets / totalUniqueWallets) * 100,
         hntVoted: new Balance(r.hntVoted, CurrencyType.networkToken),
-      }));
-
+      }))
+      .sort((a, b) => b.hntVoted.floatBalance - a.hntVoted.floatBalance);
     return { totalUniqueWallets, totalHntVoted, outcomesResults };
   }, [results]);
-
-  const { id, author, deadline, name, link, description, outcomes } = details;
 
   const nickname = author?.nickname;
 
@@ -230,6 +241,7 @@ const VoteDetailsPage = ({
           <div className="flex flex-col space-y-2 max-w-5xl mx-auto mt-5 px-4 sm:px-10">
             <div className="flex-col space-y-2 mt-10 sm:mt-16">
               <VoteResults
+                outcomes={outcomes}
                 completed={completed}
                 votingResults={votingResults}
               />

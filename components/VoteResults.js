@@ -1,11 +1,7 @@
 import classNames from "classnames";
+import { getColorClass } from "../utils/colors";
 
-const getColorClass = (i) => {
-  const COLORS = ["bg-hv-green-500", "bg-hv-blue-700", "bg-hv-purple-500"];
-  return COLORS[i % COLORS.length];
-};
-
-const VoteResults = ({ votingResults, completed }) => {
+const VoteResults = ({ votingResults, outcomes, completed }) => {
   const { outcomesResults } = votingResults;
 
   // the array has already been sorted by .hntVoted
@@ -28,7 +24,15 @@ const VoteResults = ({ votingResults, completed }) => {
         )}
       </div>
       <div className="flex flex-col space-y-5">
-        {outcomesResults.map((r, i, { length }) => {
+        {outcomesResults.map((r, i) => {
+          // find the initial index (the order it was in in the JSON for the vote) to keep the colour scheme consistent
+          const initial = outcomes.find((o) => o.address === r.address);
+
+          let outcomeInitialIndex = 2;
+          if (initial) {
+            outcomeInitialIndex = initial?.index;
+          }
+
           return (
             <div key={r.value} className="w-full flex flex-col relative">
               {completed && i === 0 && (
@@ -41,11 +45,14 @@ const VoteResults = ({ votingResults, completed }) => {
                 <div
                   className={classNames(
                     "w-1.5 rounded-l-xl h-3",
-                    getColorClass(i)
+                    getColorClass(outcomeInitialIndex)
                   )}
                 />
                 <div
-                  className={classNames("h-3 rounded-r-xl", getColorClass(i))}
+                  className={classNames(
+                    "h-3 rounded-r-xl",
+                    getColorClass(outcomeInitialIndex)
+                  )}
                   style={{ width: `${r.hntPercent}%` }}
                 />
               </div>

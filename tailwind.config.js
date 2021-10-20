@@ -24,7 +24,7 @@ module.exports = {
           700: "#124b4b",
         },
         "hv-purple": {
-          500: "#7B61FF",
+          500: "#B14FFF",
         },
         "hv-gray": {
           200: "#737373",
