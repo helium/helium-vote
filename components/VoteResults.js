@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { getColorClass } from "../utils/colors";
+import { getBackgroundColor, getTextColor } from "../utils/colors";
 
 const VoteResults = ({ votingResults, outcomes, completed }) => {
   const { outcomesResults } = votingResults;
@@ -27,11 +27,13 @@ const VoteResults = ({ votingResults, outcomes, completed }) => {
         {outcomesResults.map((r, i) => {
           // find the initial index (the order it was in in the JSON for the vote) to keep the colour scheme consistent
           const initial = outcomes.find((o) => o.address === r.address);
-
           let outcomeInitialIndex = 2;
           if (initial) {
             outcomeInitialIndex = initial?.index;
           }
+
+          const bg = getBackgroundColor(outcomeInitialIndex);
+          const fg = getTextColor(outcomeInitialIndex);
 
           return (
             <div key={r.value} className="w-full flex flex-col relative">
@@ -43,16 +45,18 @@ const VoteResults = ({ votingResults, outcomes, completed }) => {
               )}
               <div className="w-full rounded-xl bg-hv-gray-500 flex flex-row items-start justify-start">
                 <div
-                  className={classNames(
-                    "w-1.5 rounded-l-xl h-3",
-                    getColorClass(outcomeInitialIndex)
-                  )}
+                  className={classNames("w-1.5 rounded-l-xl h-3", {
+                    "bg-hv-green-500": bg === "green",
+                    "bg-hv-blue-500": bg === "blue",
+                    "bg-hv-purple-500": bg === "purple",
+                  })}
                 />
                 <div
-                  className={classNames(
-                    "h-3 rounded-r-xl",
-                    getColorClass(outcomeInitialIndex)
-                  )}
+                  className={classNames("h-3 rounded-r-xl", {
+                    "bg-hv-green-500": bg === "green",
+                    "bg-hv-blue-500": bg === "blue",
+                    "bg-hv-purple-500": bg === "purple",
+                  })}
                   style={{ width: `${r.hntPercent}%` }}
                 />
               </div>

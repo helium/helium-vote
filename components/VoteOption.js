@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import QRCode from "react-qr-code";
 import base64 from "base-64";
-import { getColorClass, getTextColorClass } from "../utils/colors";
+import { getBackgroundColor, getTextColor } from "../utils/colors";
 import CopyableText from "./CopyableText";
 
 const VoteOption = ({
@@ -22,6 +22,9 @@ const VoteOption = ({
   };
 
   const cliCommand = `helium-wallet burn --amount 0.00000001 --payee ${outcome.address} --commit`;
+
+  const bg = getBackgroundColor(index);
+  const fg = getTextColor(index);
 
   return (
     <>
@@ -50,10 +53,11 @@ const VoteOption = ({
         <div className="flex flex-col sm:flex-row justify-between items-center w-full">
           <div className="flex flex-row items-center justify-start">
             <span
-              className={classNames(
-                "rounded-full w-4 h-4 mr-2 sm:mr-4",
-                getColorClass(index)
-              )}
+              className={classNames("rounded-full w-4 h-4 mr-2 sm:mr-4", {
+                "bg-hv-green-500": bg === "green",
+                "bg-hv-blue-500": bg === "blue",
+                "bg-hv-purple-500": bg === "purple",
+              })}
             />
             <p className="text-white text-md pr-2 sm:pr-1 sm:text-xl md:text-3xl">
               {outcome.value}
@@ -84,21 +88,28 @@ const VoteOption = ({
             <a
               className={classNames(
                 "px-3 py-2 rounded-lg flex flex-row items-center justify-center w-full",
-                getColorClass(index)
+                {
+                  "bg-hv-green-500": bg === "green",
+                  "bg-hv-blue-500": bg === "blue",
+                  "bg-hv-purple-500": bg === "purple",
+                }
               )}
               href={`helium://dc_burn?address=${outcome.address}&amount=0.00000001&memo=${encodedMemo}`}
             >
               <span
-                className={classNames(
-                  "pr-1 font-sans",
-                  getTextColorClass(index)
-                )}
+                className={classNames("pr-1 font-sans", {
+                  "text-white": fg === "white",
+                  "text-black": fg === "black",
+                })}
               >
                 Vote with Helium app
               </span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className={classNames("ml-1 h-5 w-5", getTextColorClass(index))}
+                className={classNames("ml-1 h-5 w-5", {
+                  "text-white": fg === "white",
+                  "text-black": fg === "black",
+                })}
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"

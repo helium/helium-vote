@@ -1,3 +1,4 @@
+// Use this example as a placeholder you can copy and paste into the array below when submitting a PR to create a new community vote
 const templateExample = {
   // The ID should be a unique ID for each vote. This will also be what populates the URL (e.g. heliumvote.com/1234)
   id: "135xR8htbqTHCkWVPJEeqJuDVtyZJB852WuAzL7XwSVaVhdtH8q",

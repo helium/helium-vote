@@ -1,13 +1,13 @@
 export const COLORS = [
-  { background: "bg-hv-green-500", text: "text-black" },
-  { background: "bg-hv-blue-700", text: "text-white" },
-  { background: "bg-hv-purple-500", text: "text-white" },
+  { background: "green", text: "black" },
+  { background: "blue", text: "white" },
+  { background: "purple", text: "white" },
 ];
 
-export const getColorClass = (i) => {
+export const getBackgroundColor = (i) => {
   return COLORS[i % COLORS.length].background;
 };
 
-export const getTextColorClass = (i) => {
+export const getTextColor = (i) => {
   return COLORS[i % COLORS.length].text;
 };
