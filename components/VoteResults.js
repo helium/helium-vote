@@ -13,7 +13,7 @@ const VoteResults = ({ votingResults, outcomes, completed }) => {
         <p className="text-xl sm:text-3xl text-white font-semibold tracking-tighter">
           {completed ? "Final Results" : "Preliminary Results"}
         </p>
-        {completed && (
+        {/* {completed && (
           <p className="text-lg sm:text-3xl text-hv-gray-400 font-semibold tracking-tighter pt-4 lg:pt-0">
             <span className="text-white">{winner.value}</span> wins with{" "}
             {winner.hntPercent.toLocaleString(undefined, {
@@ -21,7 +21,7 @@ const VoteResults = ({ votingResults, outcomes, completed }) => {
             })}
             % of Vote
           </p>
-        )}
+        )} */}
       </div>
       <div className="flex flex-col space-y-5">
         {outcomesResults.map((r, i) => {
