@@ -5,3 +5,12 @@ body {
   background: #1d1d1d;
   min-height: 100vh;
 }
+
+::-moz-selection {
+  color: black;
+  background: #20deb0;
+}
+::selection {
+  color: black;
+  background: #20deb0;
+}
