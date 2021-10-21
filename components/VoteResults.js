@@ -33,7 +33,6 @@ const VoteResults = ({ votingResults, outcomes, completed }) => {
           }
 
           const bg = getBackgroundColor(outcomeInitialIndex);
-          const fg = getTextColor(outcomeInitialIndex);
 
           return (
             <div key={r.value} className="w-full flex flex-col relative">

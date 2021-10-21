@@ -103,7 +103,7 @@ const VoteDetailsPage = ({
           "h-6 sm:h-8 top-0 fixed w-full flex items-center justify-center text-xs sm:text-sm font-sans font-normal",
           {
             "bg-hv-green-500 text-black": !completed,
-            "bg-hv-blue-700 text-white": completed,
+            "bg-hv-blue-500 text-white": completed,
           }
         )}
       >
