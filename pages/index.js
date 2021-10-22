@@ -6,6 +6,7 @@ import ContentSection from "../components/ContentSection";
 import { useState } from "react";
 import classNames from "classnames";
 import CountdownTimer from "../components/CountdownTimer";
+import MetaTags from "../components/MetaTags";
 
 const VoteCard = ({ vote, height }) => {
   const { name, description, id, deadline } = vote;
@@ -53,23 +54,7 @@ export default function Home({ height, activeVotes, completedVotes }) {
 
   return (
     <Page>
-      <Head>
-        <title>Helium Vote</title>
-        <link rel="icon" href="/favicon.png" />
-        <meta property="og:title" content="Helium Vote" />
-        <meta property="og:site_name" content="Helium Vote" />
-        <meta property="og:url" content="https://heliumvote.com" />
-        <meta
-          property="og:description"
-          content="A frontend to make it easy to vote on Helium Improvement Proposals."
-        />
-        <meta property="og:type" content="website" />
-        <meta
-          property="og:image"
-          content="https://heliumvote.com/images/og.png"
-        />
-      </Head>
-
+      <MetaTags />
       <ContentSection className="sm:pt-20">
         <div className="flex flex-col space-y-2">
           <div className="flex flex-col">
