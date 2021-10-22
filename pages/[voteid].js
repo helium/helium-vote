@@ -33,9 +33,11 @@ const VoteDetailsPage = ({
   const router = useRouter();
   const { voteid } = router.query;
 
-  const { data: results } = useSWR(`/api/results/${voteid}`, fetcher, {
-    fallbackData: fallback.results,
-  });
+  // const { data: results } = useSWR(`/api/results/${voteid}`, fetcher, {
+  //   fallbackData: fallback.results,
+  // });
+
+  const results = fallback.results;
 
   useEffect(() => {
     const testFunc = async () => {
@@ -222,7 +224,9 @@ export async function getStaticProps({ params }) {
     return JSON.parse(value);
   };
 
-  const results = completed ? await getLatest(voteid) : await getLatest(voteid);
+  const results = completed
+    ? await calculateResults(voteid)
+    : await getLatest(voteid);
   // : await fetchResults(voteid);
 
   // revalidate: 1 means it will check at most every 1 second if the Redis cache has reached 10 minutes old yet. if not, it'll serve the statically saved version of the latest Redis cache. so it'll only call calculateResults() at most once every 10 minutes, and it'll do it in the background with getStaticProps so it won't slow down for the unlucky first visitor after the 10 minute threshold is crossed.

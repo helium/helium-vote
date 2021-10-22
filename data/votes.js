@@ -50,10 +50,12 @@ export const calculateResults = async (id) => {
   // loop through all outcome wallets
   let i = 0;
 
-  let allBurnPayerWallets = [];
+  const allBurnPayerTxns = [];
 
   await Promise.all(
     outcomesTest.map(async (outcome) => {
+      i = 0;
+
       // outcomes.map(async (outcome) => {
       const { address } = outcome;
 
@@ -64,11 +66,50 @@ export const calculateResults = async (id) => {
 
       const burns = await list.take(TAKE_MAX);
 
+      // check payers of burns against list of all payers (across vote options)
+      const filteredBurnsList = burns.filter((burnTxn) => {
+        const burnPayer = burnTxn.payer;
+        const matchIndex = allBurnPayTxns.findIndex(
+          ({ payer: existingPayer }) => burnPayer === existingPayer
+        );
+
+        if (matchIndex !== -1) {
+          console.log("match");
+          console.log(matchIndex);
+          // .find will only find the first match
+          // so we need to check the remainder of the array after the first match
+
+          // create remainder array to search
+          const remainingAllBurnTxns = allBurnPayTxns.slice(-matchIndex);
+
+          // create results array of matches (with the first one at the start)
+          const txnsWithSamePayer = [].push(allBurnPayTxns[matchIndex]);
+
+          //  use .filter on remainder array to see if there were > 1 match (to get the latest one)
+          const moreMatches = remainingAllBurnTxns.filter(
+            ({ payer: existingPayer }) => burnPayer === existingPayer
+          );
+
+          //TODO: return false if not latest txn
+        }
+
+        allBurnPayerTxns.push(burnTxn);
+      });
+
+      // if there is a match, ignore their vote if the one for the other option was more recent
+
       // make new array of unique payer addresses in burns list
       // [...new Set(array)] is an ES6 shortcut for eliminating dupes
-      const burnPayers = [...new Set(burns.map(({ payer }) => payer))];
+      //
+      const burnPayers = [
+        ...new Set(filteredBurnsList.map(({ payer }) => payer)),
+      ];
 
-      allBurnPayerWallets = [...allBurnPayerWallets, burnPayers];
+      // burnPayers.push("145jrRJ82ik95xnJ96eJJeanTamy35DWAXFPp1tGDYStcmqU74A");
+
+      // allBurnPayerWallets.push(...burnPayers);
+
+      // console.log(allBurnPayerWallets.length);
 
       // sum balances of unique payer addresses (including staked)
       let summedVotedHnt = 0.0;
@@ -76,12 +117,14 @@ export const calculateResults = async (id) => {
 
       await Promise.all(
         burnPayers.map(async (voter) => {
-          i++;
           const alreadyVoted = allBurnPayerWallets.find(
             (existingVoter) => voter === existingVoter
           );
-          console.log(alreadyVoted);
-          if (i < 30) {
+          if (alreadyVoted) {
+            console.log(alreadyVoted);
+          }
+          if (i < 100) {
+            i++;
             const account = await client.accounts.get(voter);
             const totalBalance = account.balance.plus(account?.stakedBalance);
 
@@ -93,14 +136,14 @@ export const calculateResults = async (id) => {
         })
       );
 
+      i = 0;
+
       // set total sum of balances as outcome.total
       outcome.hntVoted = summedVotedHnt;
       outcome.uniqueWallets = uniqueWallets;
 
       // push outcome to outcomeResults array
       outcomeResults.push(outcome);
-
-      i = 0;
     })
   );
 

@@ -77,19 +77,19 @@
   resolved "https://registry.yarnpkg.com/@hapi/hoek/-/hoek-9.2.1.tgz#9551142a1980503752536b5050fd99f4a7f13b17"
   integrity sha512-gfta+H8aziZsm8pZa0vj04KO6biEiisppNgA1kbJvFrrWu9Vm7eaUEy76DIxsuTaWvti5fkJVhllWc6ZTE+Mdw==
 
-"@helium/currency@^3.25.1":
-  version "3.25.1"
-  resolved "https://registry.yarnpkg.com/@helium/currency/-/currency-3.25.1.tgz#83b6146b93423791c2b3f96188999d8c7447037b"
-  integrity sha512-qaF9KlCRW30XARgyVed1MZXQjrtNcsmCYow9yGHRBOGIE/RjY2lGaymH0OCSsE93SrDaD3rNqGGarHs1BF4thg==
+"@helium/currency@^3.45.0":
+  version "3.45.0"
+  resolved "https://registry.yarnpkg.com/@helium/currency/-/currency-3.45.0.tgz#326933225047601f447209fb9c77c6d4b114c381"
+  integrity sha512-6hajnB+L5OQgbQJyGzzYrHlcpRnt1j9thjt+zKhLP672VgfqJWaBs5unI+yhqHvF3JPB2/DsLj3/oT4hL0z84A==
   dependencies:
     bignumber.js "^9.0.0"
 
-"@helium/http@^3.44.0":
-  version "3.44.0"
-  resolved "https://registry.yarnpkg.com/@helium/http/-/http-3.44.0.tgz#518feaa6d3c92e94fd3c9b93ed97622488263015"
-  integrity sha512-JQKnKnym8Vi57Jt00UBE2BCyHMO65aer52prSV9B+boJ9Eb3okYAIiRnNJwXKAjRjxRefF4ji4g8sXwnzFD3MQ==
+"@helium/http@^3.45.0":
+  version "3.45.0"
+  resolved "https://registry.yarnpkg.com/@helium/http/-/http-3.45.0.tgz#ecfe7ba1230b25287fc9baa5018eea2b6b82a300"
+  integrity sha512-qxeWufeDyWj02xVBtr2kfgCe5EkSMU90vl4LNIOr6TMNaWafvE48DdOS4of70IxP5UMn/6rwSkUGH/lTgvqq+g==
   dependencies:
-    "@helium/currency" "^3.25.1"
+    "@helium/currency" "^3.45.0"
     axios "^0.21.1"
     camelcase-keys "^6.2.2"
     qs "^6.9.3"
