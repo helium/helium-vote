@@ -1,8 +1,32 @@
 import classNames from "classnames";
 import QRCode from "react-qr-code";
 import base64 from "base-64";
+import { getBackgroundColor, getTextColor } from "../utils/colors";
+import CopyableText from "./CopyableText";
+import { useState } from "react";
 
-const VoteOption = ({ outcome, expandedId, handleExpandClick, index }) => {
+const WarningBox = () => {
+  return (
+    <div className="bg-hv-red-500 bg-opacity-10 rounded-xl w-full flex flex-col p-5 mt-8">
+      <span className="text-red-500 font-semibold text-left text-sm sm:text-base leading-tight">
+        Warning!
+      </span>
+      <span className="text-white text-left opacity-50 font-light text-sm sm:text-base leading-tight">
+        Votes are final and cannot be changed after submitting. Your Vote is
+        weighted by Vote Power (your HNT balance and staked HNT balance at the
+        voting deadline).
+      </span>
+    </div>
+  );
+};
+
+const VoteOption = ({
+  outcome,
+  expandedId,
+  handleExpandClick,
+  index,
+  length,
+}) => {
   const expanded = expandedId === outcome.address;
 
   const encodedMemo = base64.encode(index);
@@ -13,99 +37,66 @@ const VoteOption = ({ outcome, expandedId, handleExpandClick, index }) => {
     memo: encodedMemo,
   };
 
+  const cliCommand = `helium-wallet burn --amount 0.00000001 --payee ${outcome.address} --commit`;
+
+  const bg = getBackgroundColor(index);
+  const fg = getTextColor(index);
+
+  const [tab, setTab] = useState(1);
+
   return (
-    <div className="flex w-full bg-white bg-opacity-5 rounded-xl p-4 space-y-2 flex-col items-start justify-start">
-      <div className="flex flex-col sm:flex-row justify-between items-center w-full">
-        <p className="text-white text-md pr-2 sm:pr-1 sm:text-3xl">
-          {outcome.value}
-        </p>
-        <button
-          className="flex mt-2 sm:mt-0 flex-row items-center justify-between px-3 py-2 bg-gray-700 hover:bg-gray-600 outline-none border border-solid border-transparent focus:border-hv-blue-500 transition-all duration-100 rounded-lg w-min"
-          onClick={() => {
-            if (expandedId === outcome.address) {
-              // if it's open, close it
-              handleExpandClick(null);
-            } else {
-              handleExpandClick(outcome.address);
-            }
-          }}
-        >
-          <span className="text-xs sm:text-sm text-hv-blue-500 whitespace-nowrap pr-2">
-            {expanded ? "Hide" : "Show"} voting instructions
-          </span>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className={classNames("h-3 w-3 text-hv-blue-500", {
-              "rotate-180": expanded,
-            })}
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M19 9l-7 7-7-7"
-            />
-          </svg>
-        </button>
-      </div>
-      {expanded && (
-        <>
-          <div className="hidden sm:block">
-            <p className="text-gray-400 text-sm pb-4 max-w-xl">
-              To vote for this option, scan the QR code below to burn HNT to the
-              address associated with this option. You cannot change your vote after submitting the transaction.
-            </p>
-            <p className="text-gray-400 text-sm pb-4 max-w-xl">
-            Your Vote Power is your HNT balance and staked HNT balance at the block deadline. The Wallet address used to submit the transaction will have its Vote Power counted toward the vote option.
-            </p>
-            <div className="space-y-4 flex flex-col items-center justify-start w-full">
-              <span className="flex flex-col items-center space-y-2">
-                <p className="text-gray-300 text-sm">
-                  Scan this QR code with the Helium app:
-                </p>
-                <div className="flex justify-center items-center p-4 rounded-lg bg-white">
-                  <QRCode value={JSON.stringify(voteData)} size={175} />
-                </div>
-              </span>
-              <span className="text-lg text-gray-500">OR</span>
-              <span className="flex flex-col items-center space-y-2 w-full">
-                <p className="text-gray-300 text-sm">
-                  Execute the following command with the CLI:
-                </p>
-                <div className="bg-hv-gray-900 rounded-lg p-2 flex flex-col items-start justify-start">
-                  <p className="text-hv-blue-500 font-mono text-sm break-all">{`helium-wallet burn --amount 0.00000001 --payee ${outcome.address} --commit`}</p>
-                </div>
-              </span>
+    <div
+      className={classNames(
+        "flex flex-col mb-2 bg-white bg-opacity-5 rounded-none",
+        {
+          "sm:rounded-t-xl": index === 0,
+          "sm:rounded-b-xl": index === length - 1,
+        }
+      )}
+    >
+      <div
+        className={classNames(
+          "flex w-full cursor-pointer sm:hover:bg-opacity-10 p-4 space-y-2 rounded-none flex-col items-start justify-start bg-white bg-opacity-0 hover:bg-opacity-5 transition-all duration-100",
+          {
+            "sm:rounded-t-xl": index === 0,
+            "sm:rounded-b-xl": index === length - 1 && !expanded,
+          }
+        )}
+        onClick={() => {
+          if (expandedId === outcome.address) {
+            // if it's open, close it
+            handleExpandClick(null);
+          } else {
+            handleExpandClick(outcome.address);
+          }
+        }}
+      >
+        <div className="flex flex-col sm:flex-row justify-between items-center w-full">
+          <div className="flex flex-row justify-between items-center w-full">
+            <div className="flex flex-row items-center justify-start">
+              <span
+                className={classNames("rounded-full w-4 h-4 mr-2 sm:mr-4", {
+                  "bg-hv-green-500": bg === "green",
+                  "bg-hv-blue-500": bg === "blue",
+                  "bg-hv-purple-500": bg === "purple",
+                })}
+              />
+              <p className="text-white text-md pr-2 sm:pr-1 sm:text-xl md:text-3xl">
+                {outcome.value}
+              </p>
             </div>
-          </div>
-          <div className="flex flex-col sm:hidden">
-            <p className="text-gray-400 text-sm pb-2 max-w-xl">
-              To vote for this option, burn HNT to the address associated with
-              this option before the voting deadline. You cannot change your vote after submitting the transaction.
-            </p>
-            <p className="text-gray-400 text-sm pb-2 max-w-xl">
-            Your Vote Power is your HNT balance and staked HNT balance at the block deadline. The Wallet address used to submit the transaction will have its Vote Power counted toward the vote option.
-            </p>
-            <p className="text-gray-400 text-sm pb-4 max-w-xl">
-              To submit the transaction:
-            </p>
-            <p className="text-gray-100 text-sm pb-4 max-w-xl">
-              1. Open the Helium app and open the QR Scanner.
-            </p>
-            <p className="text-gray-100 text-sm pb-4 max-w-xl">
-              2. Come back to this page and click the button below:
-            </p>
-            <a
-              className="px-2 py-1 bg-red-500 border rounded-lg border-solid border-red-400 flex flex-row items-center justify-center"
-              href={`helium://dc_burn?address=${outcome.address}&amount=0.00000001&memo=${encodedMemo}`}
-            >
-              <span className="pr-1 text-white">Initiate transaction</span>
+            <div className="flex flex-row items-center justify-between px-3 py-2 outline-none border border-solid border-transparent focus:border-hv-green-500 transition-all duration-100 rounded-lg w-min">
+              <span className="hidden sm:block text-xs sm:text-sm text-hv-gray-300 whitespace-nowrap pr-2">
+                {expanded ? "Hide" : "Show"} Voting Instructions
+              </span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-4 w-4 text-white"
+                className={classNames(
+                  "h-5 sm:h-3 w-5 sm:w-3 text-hv-gray-300 transition-all duration-100",
+                  {
+                    "rotate-180": expanded,
+                  }
+                )}
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -114,18 +105,117 @@ const VoteOption = ({ outcome, expandedId, handleExpandClick, index }) => {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"
-                />
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z"
+                  d="M19 9l-7 7-7-7"
                 />
               </svg>
-            </a>
+            </div>
           </div>
-        </>
+        </div>
+      </div>
+      {expanded && (
+        <div className="flex flex-col items-start justify-start w-full mt-2 p-4">
+          <div className="sm:hidden space-x-2 pb-4 w-full mx-auto flex flex-row items-center justify-center">
+            <span
+              className={classNames("cursor-pointer", {
+                "text-white": tab === 0,
+                "text-hv-gray-350": tab !== 0,
+              })}
+              onClick={() => {
+                setTab(0);
+              }}
+            >
+              Desktop
+            </span>
+            <span
+              className={classNames("cursor-pointer", {
+                "text-white": tab === 1,
+                "text-hv-gray-350": tab !== 1,
+              })}
+              onClick={() => {
+                setTab(1);
+              }}
+            >
+              Mobile
+            </span>
+          </div>
+          {tab === 1 && (
+            <span className="w-full flex sm:hidden flex-col items-center justify-center text-center">
+              <div className="max-w-xs px-14">
+                <a
+                  className={classNames(
+                    "px-4 py-3 rounded-lg flex flex-row items-center justify-center w-full mb-4",
+                    {
+                      "bg-hv-green-500": bg === "green",
+                      "bg-hv-blue-500": bg === "blue",
+                      "bg-hv-purple-500": bg === "purple",
+                    }
+                  )}
+                  href={`helium://dc_burn?address=${outcome.address}&amount=0.00000001&memo=${encodedMemo}`}
+                >
+                  <span
+                    className={classNames("pr-1 font-sans", {
+                      "text-white": fg === "white",
+                      "text-black": fg === "black",
+                    })}
+                  >
+                    Submit Vote in App
+                  </span>
+                </a>
+                <p className="text-white text-md sm:text-lg">
+                  Vote with Mobile App
+                </p>
+                <p className="text-hv-gray-300 font-light leading-tight text-md sm:text-lg">
+                  Ensure you have Helium App installed
+                </p>
+              </div>
+              {/* <WarningBox /> */}
+            </span>
+          )}
+          <div
+            className={classNames(
+              "space-y-10 sm:space-y-4 sm:flex flex-col md:flex-row items-center justify-start w-full h-full py-10",
+              { "hidden sm:flex": tab === 1 }
+            )}
+          >
+            <span className="w-full flex flex-col items-center justify-center text-center">
+              <div className="flex justify-center items-center p-4 rounded-lg bg-white">
+                <QRCode value={JSON.stringify(voteData)} size={140} />
+              </div>
+              <div className="pt-5 max-w-xs px-14">
+                <p className="text-white text-md sm:text-lg">
+                  Vote with QR Code
+                </p>
+                <p className="text-hv-gray-300 font-light leading-tight text-md sm:text-lg">
+                  Scan this QR code with your Helium app
+                </p>
+              </div>
+            </span>
+            <div className="hidden md:flex bg-hv-gray-400 sm:h-60 sm:w-0.5 mx-5 h-px w-full" />
+            <span className="flex flex-col items-center space-y-2 w-full">
+              <div className="bg-hv-gray-775 rounded-lg flex flex-col items-start justify-start relative">
+                <div className="p-4">
+                  <p className="w-72 text-hv-green-500 font-mono text-sm break-all">
+                    {cliCommand}
+                  </p>
+                </div>
+                <button className="rounded-b-lg bg-hv-gray-450 p-2 w-full flex flex-row items-center justify-center">
+                  <span className="text-sm text-white font-sans font-light">
+                    <CopyableText textToCopy={cliCommand} iconClasses="w-4 h-4">
+                      Copy command to clipboard
+                    </CopyableText>
+                  </span>
+                </button>
+              </div>
+              <div className="pt-5 max-w-xs px-14 text-center">
+                <p className="text-white text-md sm:text-lg">Vote with CLI</p>
+                <p className="text-hv-gray-300 font-light leading-tight text-md sm:text-lg">
+                  Execute the following command with the CLI
+                </p>
+              </div>
+            </span>
+          </div>
+          <WarningBox />
+        </div>
       )}
     </div>
   );
