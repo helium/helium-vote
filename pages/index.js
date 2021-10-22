@@ -112,10 +112,12 @@ export default function Home({ height, activeVotes, completedVotes }) {
                   </p>
                 </span>
               </div>
-              <img
-                src="/images/helium-vote-icon.png"
-                className="w-20 h-auto sm:w-52"
-              />
+              <div>
+                <img
+                  src="/images/helium-vote-icon.png"
+                  className="w-20 sm:w-52 h-auto"
+                />
+              </div>
             </div>
           </div>
         </div>
