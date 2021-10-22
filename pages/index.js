@@ -188,6 +188,6 @@ export async function getStaticProps() {
 
   return {
     props: { height, activeVotes, completedVotes },
-    revalidate: 60 * 60,
+    revalidate: 60,
   };
 }
