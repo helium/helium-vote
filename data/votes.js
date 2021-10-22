@@ -1,7 +1,9 @@
 import client, { TAKE_MAX } from "./client";
 
 const dev = process.env.NODE_ENV !== "production";
-export const server = dev ? "http://localhost:3000" : "https://www.heliumvote.com";
+export const server = dev
+  ? "http://localhost:3000"
+  : "https://www.heliumvote.com";
 
 export const fetchVotes = async () => {
   const votes = await fetch(`${server}/api/votes`);
@@ -26,24 +28,33 @@ export const fetchResults = async (id) => {
 export const calculateResults = async (id) => {
   const { outcomes } = await fetchVoteDetails(id);
 
-  // const outcomesTest = [
-  //   {
-  //     address: "13ENbEQPAvytjLnqavnbSAzurhGoCSNkGECMx7eHHDAfEaDirdY",
-  //     value: "calchip",
-  //   },
-  //   {
-  //     address: "13Zni1he7KY9pUmkXMhEhTwfUpL9AcEV1m2UbbvFsrU9QPTMgE3",
-  //     value: "nebra",
-  //   },
-  // ];
+  const outcomesTest = [
+    {
+      address: "14aVVtQvq7QK2FmU3ZFnXM3o3Nodzve8cFjDQniJGJbq6AZ29a7",
+      value: "strawberry",
+    },
+    {
+      address: "13yWhaorHn8Es6jujCw9HCFAjDyecCv5HMwzoa4gp26awSw7z3b",
+      value: "vanilla",
+    },
+    {
+      address: "13uWWxgbqa5i9W7SFme6NZ2Brr1jDiga4JP7JdQyBRNer9RGoii",
+      value: "chocolate",
+    },
+  ];
 
   // initialize results array
   const outcomeResults = [];
   const results = {};
 
   // loop through all outcome wallets
+  let i = 0;
+
+  let allBurnPayerWallets = [];
+
   await Promise.all(
-    outcomes.map(async (outcome) => {
+    outcomesTest.map(async (outcome) => {
+      // outcomes.map(async (outcome) => {
       const { address } = outcome;
 
       // get all token burns for this wallet
@@ -57,19 +68,28 @@ export const calculateResults = async (id) => {
       // [...new Set(array)] is an ES6 shortcut for eliminating dupes
       const burnPayers = [...new Set(burns.map(({ payer }) => payer))];
 
+      allBurnPayerWallets = [...allBurnPayerWallets, burnPayers];
+
       // sum balances of unique payer addresses (including staked)
       let summedVotedHnt = 0.0;
       let uniqueWallets = 0;
 
       await Promise.all(
         burnPayers.map(async (voter) => {
-          const account = await client.accounts.get(voter);
-          const totalBalance = account.balance.plus(account?.stakedBalance);
+          i++;
+          const alreadyVoted = allBurnPayerWallets.find(
+            (existingVoter) => voter === existingVoter
+          );
+          console.log(alreadyVoted);
+          if (i < 30) {
+            const account = await client.accounts.get(voter);
+            const totalBalance = account.balance.plus(account?.stakedBalance);
 
-          summedVotedHnt =
-            summedVotedHnt + parseFloat(totalBalance.integerBalance);
+            summedVotedHnt =
+              summedVotedHnt + parseFloat(totalBalance.integerBalance);
 
-          uniqueWallets++;
+            uniqueWallets++;
+          }
         })
       );
 
@@ -79,6 +99,8 @@ export const calculateResults = async (id) => {
 
       // push outcome to outcomeResults array
       outcomeResults.push(outcome);
+
+      i = 0;
     })
   );
 
