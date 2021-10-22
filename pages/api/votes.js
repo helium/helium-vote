@@ -2,9 +2,10 @@ import getConfig from "next/config";
 
 const { serverRuntimeConfig } = getConfig();
 const votes = serverRuntimeConfig.votes.map(
-  ({ id, name, outcomes, deadline }) => ({
+  ({ id, name, description, outcomes, deadline }) => ({
     id,
     name,
+    description,
     deadline,
     outcomes: outcomes.map((o) => o.value),
   })
