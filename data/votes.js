@@ -79,9 +79,9 @@ export const calculateResults = async (id) => {
         if (matchIndex !== -1) {
           // .find will only find the first match so we need to check the remainder of the array after the first match
 
-          console.log("match");
-          console.log(matchIndex);
-          console.log(allBurnPayTxns[matchIndex]);
+          // console.log("match");
+          // console.log(matchIndex);
+          // console.log(allBurnPayTxns[matchIndex]);
 
           // create remainder array to search
           const remainingAllBurnTxns = allBurnPayTxns.slice(-matchIndex);
@@ -95,20 +95,57 @@ export const calculateResults = async (id) => {
             ({ payer: existingPayer }) => burnPayer === existingPayer
           );
 
-          txnsWithSamePayer.push(moreMatches);
+          txnsWithSamePayer.push(...moreMatches);
 
           const latest = maxBy(txnsWithSamePayer, "height");
 
-          console.log("all:");
-          console.log(txnsWithSamePayer);
-          console.log("——————");
-          console.log("latest:");
-          console.log(latest);
+          // TODO: check that payee matches one of the outcome wallets, filter (return false) if not
+
+          if (burnTxn.payee !== latest.payee) {
+            console.log("DIFF PAYEE");
+            console.log("burnTxn");
+            console.log(burnTxn);
+            console.log("latest");
+            console.log(latest);
+          }
+
+          // if it wasn't the latest one, don't include it
+          if (latest.hash !== burnTxn.hash) {
+            // console.log("latest.payer");
+            // console.log(latest.payer);
+            // console.log("burnTxn.payer");
+            // console.log(burnTxn.payer);
+
+            // console.log("latest.hash");
+            // console.log(latest.hash);
+            // console.log("burnTxn.hash");
+            // console.log(burnTxn.hash);
+
+            // console.log("latest.height");
+            // console.log(latest.height);
+            // console.log("burnTxn.height");
+            // console.log(burnTxn.height);
+            return false;
+          }
+
+          // console.log("all:");
+          // console.log(txnsWithSamePayer);
+          // console.log("——————");
+          // const test1 = txnsWithSamePayer.filter((txn) => {
+          //   console.log("txn.payee");
+          //   console.log(txn.payee);
+          //   console.log(address);
+          //   return txn.payee !== address;
+          // });
+          // console.log(test1);
+          // console.log("latest:");
+          // console.log(latest);
 
           //TODO: return false if not latest txn
         }
-
         allBurnPayTxns.push(burnTxn);
+
+        return true;
       });
 
       // if there is a match, ignore their vote if the one for the other option was more recent
@@ -132,12 +169,12 @@ export const calculateResults = async (id) => {
 
       await Promise.all(
         burnPayers.map(async (voter) => {
-          const alreadyVoted = allBurnPayerWallets.find(
-            (existingVoter) => voter === existingVoter
-          );
-          if (alreadyVoted) {
-            console.log(alreadyVoted);
-          }
+          // const alreadyVoted = allBurnPayTxns.find(
+          //   (existingVoter) => voter === existingVoter
+          // );
+          // if (alreadyVoted) {
+          //   console.log(alreadyVoted);
+          // }
           if (i < 100) {
             i++;
             const account = await client.accounts.get(voter);
