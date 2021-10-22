@@ -32,13 +32,13 @@ const MetaTags = ({ title, description, openGraphImageAbsoluteUrl, url }) => {
       <meta name="twitter:site" content="@helium" />
 
       {/* Open Graph / Facebook */}
-      <meta name="og:title" content={metaTitle} />
-      <meta name="og:description" content={metaDescription} />
-      <meta name="og:image" content={metaImage} />
-      <meta name="og:url" content={metaUrl} />
-      <meta name="og:site_name" content="Helium Vote" />
-      <meta name="og:locale" content="en_US" />
-      <meta name="og:type" content="website" />
+      <meta property="og:title" content={metaTitle} />
+      <meta property="og:description" content={metaDescription} />
+      <meta property="og:image" content={metaImage} />
+      <meta property="og:url" content={metaUrl} />
+      <meta property="og:site_name" content="Helium Vote" />
+      <meta property="og:locale" content="en_US" />
+      <meta property="og:type" content="website" />
     </Head>
   );
 };
