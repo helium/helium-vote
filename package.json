@@ -14,6 +14,7 @@
     "classnames": "^2.3.1",
     "date-fns": "^2.25.0",
     "ioredis": "^4.28.0",
+    "lodash.maxby": "^4.6.0",
     "next": "^11.1.2",
     "react": "^17.0.2",
     "react-countdown": "^2.3.2",
