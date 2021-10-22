@@ -1,6 +1,16 @@
-@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&display=swap");
+/* @import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&display=swap"); */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap");
 
 body {
-  background: linear-gradient(#131419, #124b4b);
+  background: #1d1d1d;
   min-height: 100vh;
+}
+
+::-moz-selection {
+  color: black;
+  background: #20deb0;
+}
+::selection {
+  color: black;
+  background: #20deb0;
 }
