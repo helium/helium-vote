@@ -132,19 +132,6 @@ const VoteDetailsPage = ({
       >
         Voting {completed ? "has Closed" : "is Open"}
       </div>
-      <Head>
-        <title>{name}</title>
-        <link rel="icon" href="/favicon.png" />
-        <meta property="og:title" content={name} />
-        <meta property="og:site_name" content="Helium Vote" />
-        <meta property="og:url" content="https://heliumvote.com" />
-        <meta property="og:description" content={description} />
-        <meta property="og:type" content="website" />
-        <meta
-          property="og:image"
-          content="https://heliumvote.com/images/og.png"
-        />
-      </Head>
       <ContentSection className="pt-10 sm:pt-0">
         <div className="mb-5 sm:mb-10">
           <Link href="/">
