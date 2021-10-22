@@ -21,7 +21,7 @@ const VoteCard = ({ vote, height }) => {
               {name}
             </p>
             <p className="text-hv-gray-300 h-14 overflow-hidden text-sm leading-tight">
-              {description.substring(0, 80)}...
+              {description?.substring(0, 80)}...
             </p>
           </span>
           <div className="rounded-b-3xl bg-hv-gray-500 group-hover:bg-hv-gray-550 transition-all duration-150 p-5 flex flex-col">
