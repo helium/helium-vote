@@ -7,7 +7,7 @@ const MetaTags = ({ title, description, openGraphImageAbsoluteUrl, url }) => {
     : "Helium Vote is where the Helium Community comes together to make decisions on the Network.";
   const metaImage = openGraphImageAbsoluteUrl
     ? openGraphImageAbsoluteUrl
-    : "https://heliumvote.com/images/og.png";
+    : "https://heliumvote.com/images/o-g.png";
   const metaUrl = url ? url : "https://heliumvote.com";
 
   return (
