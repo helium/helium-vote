@@ -5,6 +5,21 @@ import { getBackgroundColor, getTextColor } from "../utils/colors";
 import CopyableText from "./CopyableText";
 import { useState } from "react";
 
+const WarningBox = () => {
+  return (
+    <div className="bg-hv-red-500 bg-opacity-10 rounded-xl w-full flex flex-col p-5 mt-8">
+      <span className="text-red-500 font-semibold text-left text-sm sm:text-base leading-tight">
+        Warning!
+      </span>
+      <span className="text-white text-left opacity-50 font-light text-sm sm:text-base leading-tight">
+        Votes are final and cannot be changed after submitting. Your Vote is
+        weighted by Vote Power (your HNT balance and staked HNT balance at the
+        voting deadline).
+      </span>
+    </div>
+  );
+};
+
 const VoteOption = ({
   outcome,
   expandedId,
@@ -97,7 +112,6 @@ const VoteOption = ({
           </div>
         </div>
       </div>
-
       {expanded && (
         <div className="flex flex-col items-start justify-start w-full mt-2 p-4">
           <div className="sm:hidden space-x-2 pb-4 w-full mx-auto flex flex-row items-center justify-center">
@@ -154,6 +168,7 @@ const VoteOption = ({
                   Ensure you have Helium App installed
                 </p>
               </div>
+              {/* <WarningBox /> */}
             </span>
           )}
           <div
@@ -199,6 +214,7 @@ const VoteOption = ({
               </div>
             </span>
           </div>
+          <WarningBox />
         </div>
       )}
     </div>

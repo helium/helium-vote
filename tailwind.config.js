@@ -6,6 +6,7 @@ module.exports = {
     extend: {
       colors: {
         "hv-red": {
+          500: "#FF625A",
           600: "#401c2b",
           700: "#752e49",
           800: "#E43B70",
