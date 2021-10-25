@@ -1,5 +1,5 @@
 import client, { TAKE_MAX } from "./client";
-import maxBy from "lodash.maxby";
+import { chain, maxBy } from "lodash";
 
 const dev = process.env.NODE_ENV !== "production";
 export const server = dev
@@ -25,41 +25,35 @@ export const fetchResults = async (id) => {
   return await results.json();
 };
 
-// TODO: move into a job that can run every 10 min and have the results be accessible at an endpoint (like explorer-api)
 export const calculateResults = async (id) => {
-  console.log("STARTING CALCULATING RESULTS");
+  const { outcomes, deadline } = await fetchVoteDetails(id);
 
-  const { outcomes } = await fetchVoteDetails(id);
+  // test values:
+  // const outcomes = [
+  //   {
+  //     address: "14aVVtQvq7QK2FmU3ZFnXM3o3Nodzve8cFjDQniJGJbq6AZ29a7",
+  //     value: "strawberry",
+  //   },
+  //   {
+  //     address: "13yWhaorHn8Es6jujCw9HCFAjDyecCv5HMwzoa4gp26awSw7z3b",
+  //     value: "vanilla",
+  //   },
+  //   {
+  //     address: "13uWWxgbqa5i9W7SFme6NZ2Brr1jDiga4JP7JdQyBRNer9RGoii",
+  //     value: "chocolate",
+  //   },
+  // ];
+  // const deadline = 1059000;
 
-  const outcomesTest = [
-    {
-      address: "14aVVtQvq7QK2FmU3ZFnXM3o3Nodzve8cFjDQniJGJbq6AZ29a7",
-      value: "strawberry",
-    },
-    {
-      address: "13yWhaorHn8Es6jujCw9HCFAjDyecCv5HMwzoa4gp26awSw7z3b",
-      value: "vanilla",
-    },
-    {
-      address: "13uWWxgbqa5i9W7SFme6NZ2Brr1jDiga4JP7JdQyBRNer9RGoii",
-      value: "chocolate",
-    },
-  ];
-
-  // initialize results array
-  const outcomeResults = [];
+  // initialize empty results object
   const results = {};
 
-  // loop through all outcome wallets
-  let i = 0;
-
+  // build one array of all burn txns for all options
+  // loop through them all before starting to tally, so we can make sure for any given payer, only their latest vote gets counted.
+  // otherwise, if building that index to check against during
   const allBurnPayTxns = [];
-
   await Promise.all(
-    outcomesTest.map(async (outcome) => {
-      i = 0;
-
-      // outcomes.map(async (outcome) => {
+    outcomes.map(async (outcome) => {
       const { address } = outcome;
 
       // get all token burns for this wallet
@@ -69,137 +63,57 @@ export const calculateResults = async (id) => {
 
       const burns = await list.take(TAKE_MAX);
 
-      // check payers of burns against list of all payers (across vote options)
-      const filteredBurnsList = burns.filter((burnTxn) => {
-        const burnPayer = burnTxn.payer;
-        const matchIndex = allBurnPayTxns.findIndex(
-          ({ payer: existingPayer }) => burnPayer === existingPayer
-        );
+      allBurnPayTxns.push(...burns);
+    })
+  );
 
-        if (matchIndex !== -1) {
-          // .find will only find the first match so we need to check the remainder of the array after the first match
+  const unsortedTotalVotesToCount = chain(allBurnPayTxns)
+    .groupBy((txn) => txn.payer)
+    .map((value, key) => {
+      // get each payer's latest burn txn (to one of the outcome addresses)
+      const txn = maxBy(value, "height");
+      return txn;
+    })
+    .value();
 
-          // console.log("match");
-          // console.log(matchIndex);
-          // console.log(allBurnPayTxns[matchIndex]);
+  const outcomesResults = [];
 
-          // create remainder array to search
-          const remainingAllBurnTxns = allBurnPayTxns.slice(-matchIndex);
+  await Promise.all(
+    outcomes.map(async (outcome) => {
+      const { address } = outcome;
 
-          // create results array of matches (with the first one at the start)
-          const txnsWithSamePayer = [];
-          txnsWithSamePayer.push(allBurnPayTxns[matchIndex]);
-
-          //  use .filter on remainder array to see if there were > 1 match (to get the latest one)
-          const moreMatches = remainingAllBurnTxns.filter(
-            ({ payer: existingPayer }) => burnPayer === existingPayer
-          );
-
-          txnsWithSamePayer.push(...moreMatches);
-
-          const latest = maxBy(txnsWithSamePayer, "height");
-
-          // TODO: check that payee matches one of the outcome wallets, filter (return false) if not
-
-          if (burnTxn.payee !== latest.payee) {
-            console.log("DIFF PAYEE");
-            console.log("burnTxn");
-            console.log(burnTxn);
-            console.log("latest");
-            console.log(latest);
-          }
-
-          // if it wasn't the latest one, don't include it
-          if (latest.hash !== burnTxn.hash) {
-            // console.log("latest.payer");
-            // console.log(latest.payer);
-            // console.log("burnTxn.payer");
-            // console.log(burnTxn.payer);
-
-            // console.log("latest.hash");
-            // console.log(latest.hash);
-            // console.log("burnTxn.hash");
-            // console.log(burnTxn.hash);
-
-            // console.log("latest.height");
-            // console.log(latest.height);
-            // console.log("burnTxn.height");
-            // console.log(burnTxn.height);
-            return false;
-          }
-
-          // console.log("all:");
-          // console.log(txnsWithSamePayer);
-          // console.log("——————");
-          // const test1 = txnsWithSamePayer.filter((txn) => {
-          //   console.log("txn.payee");
-          //   console.log(txn.payee);
-          //   console.log(address);
-          //   return txn.payee !== address;
-          // });
-          // console.log(test1);
-          // console.log("latest:");
-          // console.log(latest);
-
-          //TODO: return false if not latest txn
-        }
-        allBurnPayTxns.push(burnTxn);
-
-        return true;
-      });
-
-      // if there is a match, ignore their vote if the one for the other option was more recent
-
-      // make new array of unique payer addresses in burns list
-      // [...new Set(array)] is an ES6 shortcut for eliminating dupes
-      //
-      const burnPayers = [
-        ...new Set(filteredBurnsList.map(({ payer }) => payer)),
-      ];
-
-      // burnPayers.push("145jrRJ82ik95xnJ96eJJeanTamy35DWAXFPp1tGDYStcmqU74A");
-
-      // allBurnPayerWallets.push(...burnPayers);
-
-      // console.log(allBurnPayerWallets.length);
-
-      // sum balances of unique payer addresses (including staked)
+      // sum balances
       let summedVotedHnt = 0.0;
-      let uniqueWallets = 0;
+      let votingWallets = 0;
 
       await Promise.all(
-        burnPayers.map(async (voter) => {
-          // const alreadyVoted = allBurnPayTxns.find(
-          //   (existingVoter) => voter === existingVoter
-          // );
-          // if (alreadyVoted) {
-          //   console.log(alreadyVoted);
-          // }
-          if (i < 100) {
-            i++;
-            const account = await client.accounts.get(voter);
-            const totalBalance = account.balance.plus(account?.stakedBalance);
+        unsortedTotalVotesToCount.map(async (txn) => {
+          if (txn.payee === address) {
+            const { payer: voter } = txn;
+
+            // TODO: update @helium/http once helium-js PR #249 is merged and a new version is published: https://github.com/helium/helium-js/pull/249
+            const account = await client.accounts.get(voter, {
+              maxBlock: deadline,
+            });
+
+            const totalBalance = account.balance.plus(account.stakedBalance);
 
             summedVotedHnt =
-              summedVotedHnt + parseFloat(totalBalance.integerBalance);
+              summedVotedHnt + parseInt(totalBalance.integerBalance);
 
-            uniqueWallets++;
+            votingWallets++;
           }
         })
       );
 
-      i = 0;
-
-      // set total sum of balances as outcome.total
       outcome.hntVoted = summedVotedHnt;
-      outcome.uniqueWallets = uniqueWallets;
+      outcome.uniqueWallets = votingWallets;
 
-      // push outcome to outcomeResults array
-      outcomeResults.push(outcome);
+      outcomesResults.push(outcome);
     })
   );
 
-  results.outcomes = outcomeResults;
+  results.outcomes = outcomesResults;
   results.timestamp = Date.now();
 
   return results;
