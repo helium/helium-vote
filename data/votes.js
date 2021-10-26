@@ -50,7 +50,7 @@ export const calculateResults = async (id) => {
 
   // build one array of all burn txns for all options
   // loop through them all before starting to tally, so we can make sure for any given payer, only their latest vote gets counted.
-  // otherwise, if building that index to check against during
+  // otherwise, if building that index to check against during the loop, it wouldn't have the complete list to find the transaction from any given payer with the largest height
   const allBurnPayTxns = [];
   await Promise.all(
     outcomes.map(async (outcome) => {
@@ -67,10 +67,10 @@ export const calculateResults = async (id) => {
     })
   );
 
-  const unsortedTotalVotesToCount = chain(allBurnPayTxns)
+  const ungroupedAllVotesToCount = chain(allBurnPayTxns)
     .groupBy((txn) => txn.payer)
     .map((value, key) => {
-      // get each payer's latest burn txn (to one of the outcome addresses)
+      // get each payer's latest burn txn
       const txn = maxBy(value, "height");
       return txn;
     })
@@ -80,26 +80,28 @@ export const calculateResults = async (id) => {
 
   await Promise.all(
     outcomes.map(async (outcome) => {
+      // loop through all different outcomes (e.g. chocolate, vanilla, strawberry)
       const { address } = outcome;
 
-      // sum balances
+      // initialize totals
       let summedVotedHnt = 0.0;
       let votingWallets = 0;
 
       await Promise.all(
-        unsortedTotalVotesToCount.map(async (txn) => {
+        ungroupedAllVotesToCount.map(async (txn) => {
+          // tally the votes for this outcome, skip everything else
           if (txn.payee === address) {
             const { payer: voter } = txn;
 
             // TODO: update @helium/http once helium-js PR #249 is merged and a new version is published: https://github.com/helium/helium-js/pull/249
+            // get snapshot of account as of the deadline block
             const account = await client.accounts.get(voter, {
               maxBlock: deadline,
             });
 
             const totalBalance = account.balance.plus(account.stakedBalance);
 
-            summedVotedHnt =
-              summedVotedHnt + parseInt(totalBalance.integerBalance);
+            summedVotedHnt += parseInt(totalBalance.integerBalance);
 
             votingWallets++;
           }
