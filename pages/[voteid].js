@@ -54,7 +54,7 @@ const VoteDetailsPage = ({
   } = details;
 
   // to give each one an index so the colour code stays consistent, but we can still sort by votes
-  const outcomes = outcomesInitial.map((o, i) => ({ ...o, index: i }));
+  const outcomes = outcomesInitial?.map((o, i) => ({ ...o, index: i }));
 
   const votingResults = useMemo(() => {
     if (!results) return [];
@@ -100,7 +100,7 @@ const VoteDetailsPage = ({
     <Page>
       <div
         className={classNames(
-          "h-6 sm:h-8 top-0 fixed w-full flex items-center justify-center text-xs sm:text-sm font-sans font-normal",
+          "h-6 sm:h-8 top-0 fixed w-full flex items-center justify-center text-xs sm:text-sm font-sans font-normal z-30",
           {
             "bg-hv-green-500 text-black": !completed,
             "bg-hv-blue-500 text-white": completed,
