@@ -93,7 +93,6 @@ export const calculateResults = async (id) => {
           if (txn.payee === address) {
             const { payer: voter } = txn;
 
-            // TODO: update @helium/http once helium-js PR #249 is merged and a new version is published: https://github.com/helium/helium-js/pull/249
             // get snapshot of account as of the deadline block
             const account = await client.accounts.get(voter, {
               maxBlock: deadline,

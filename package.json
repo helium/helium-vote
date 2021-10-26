@@ -9,7 +9,7 @@
     ".next/cache"
   ],
   "dependencies": {
-    "@helium/http": "^3.45.0",
+    "@helium/http": "^3.47.0",
     "base-64": "^1.0.0",
     "classnames": "^2.3.1",
     "date-fns": "^2.25.0",
