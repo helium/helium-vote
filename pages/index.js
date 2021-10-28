@@ -22,18 +22,15 @@ const VoteCard = ({ vote, height }) => {
                 {name}
               </p>
               {tags && (
-                <div className="flex flex-row items-center justify-start space-x-2">
-                  {tags?.primary && (
+                <div className="flex flex-row items-center justify-start">
+                  {(tags?.primary || tags?.secondary) && (
                     <div className="py-0.5 px-2 bg-hv-gray-500 group-hover:bg-hv-gray-550 transition-all duration-150 rounded-lg">
                       <span className="text-xs sm:text-sm text-hv-gray-350 font-light">
-                        {tags.primary}
-                      </span>
-                    </div>
-                  )}
-                  {tags?.secondary && !tags?.primary && (
-                    <div className="py-0.5 px-2 bg-hv-gray-500 group-hover:bg-hv-gray-550 transition-all duration-150 rounded-lg">
-                      <span className="text-xs sm:text-sm text-hv-gray-350 font-light">
-                        {tags.secondary}
+                        {tags?.primary
+                          ? tags.primary
+                          : tags?.secondary && !tags?.primary
+                          ? tags.secondary
+                          : ""}
                       </span>
                     </div>
                   )}

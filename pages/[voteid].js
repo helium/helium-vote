@@ -134,7 +134,7 @@ const VoteDetailsPage = ({
         <div className="flex flex-col">
           <div className="flex-col space-y-2">
             {tags && (
-              <div className="flex flex-row items-center justify-start space-x-2">
+              <div className="flex flex-row items-center justify-start space-x-2 pb-2">
                 {tags?.primary && (
                   <div className="py-0.5 px-2 bg-white rounded-lg">
                     <span className="text-xs sm:text-sm text-hv-gray-1100 font-light">
