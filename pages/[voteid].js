@@ -226,7 +226,9 @@ const VoteDetailsPage = ({
               <div className="sm:pr-20">
                 <p className="text-white">Total Votes</p>
                 <p className="text-hv-gray-300">
-                  {votingResults?.totalUniqueWallets?.toLocaleString()}
+                  {votingResults && votingResults.totalUniqueWallets
+                    ? votingResults.totalUniqueWallets.toLocaleString()
+                    : "Calculating..."}
                 </p>
               </div>
             </>

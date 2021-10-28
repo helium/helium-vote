@@ -17,7 +17,11 @@ const get = async (key) => {
 const set = async (key, fetcherFunction, expires) => {
   const value = await fetcherFunction();
 
-  await redis.set(key, JSON.stringify(value), "EX", expires);
+  if (value) {
+    await redis.set(key, JSON.stringify(value), "EX", expires);
+  } else {
+    console.error("Error setting results");
+  }
   return value;
 };
 
