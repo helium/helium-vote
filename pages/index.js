@@ -8,7 +8,7 @@ import classNames from "classnames";
 import CountdownTimer from "../components/CountdownTimer";
 
 const VoteCard = ({ vote, height }) => {
-  const { name, description, id, deadline } = vote;
+  const { name, description, id, deadline, tags } = vote;
 
   const blocksRemaining = deadline - height;
 
@@ -17,9 +17,29 @@ const VoteCard = ({ vote, height }) => {
       <Link href={`/${id}`}>
         <a className="group h-full w-full flex flex-col transition-all duration-150 outline-none border border-solid border-opacity-0 focus:border-opacity-50 border-hv-green-500 rounded-3xl">
           <span className="pt-5 px-5 rounded-t-3xl bg-hv-gray-450 group-hover:bg-hv-gray-400 transition-all duration-150">
-            <p className="text-white text-xl tracking-tight leading-tight pb-2">
-              {name}
-            </p>
+            <div className="flex items-start justify-between">
+              <p className="text-white text-xl tracking-tight leading-tight pb-2 pt-4">
+                {name}
+              </p>
+              {tags && (
+                <div className="flex flex-row items-center justify-start space-x-2">
+                  {tags?.primary && (
+                    <div className="py-0.5 px-2 bg-hv-gray-500 group-hover:bg-hv-gray-550 transition-all duration-150 rounded-lg">
+                      <span className="text-xs sm:text-sm text-hv-gray-350 font-light">
+                        {tags.primary}
+                      </span>
+                    </div>
+                  )}
+                  {tags?.secondary && !tags?.primary && (
+                    <div className="py-0.5 px-2 bg-hv-gray-500 group-hover:bg-hv-gray-550 transition-all duration-150 rounded-lg">
+                      <span className="text-xs sm:text-sm text-hv-gray-350 font-light">
+                        {tags.secondary}
+                      </span>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
             <p className="text-hv-gray-300 h-14 overflow-hidden text-sm leading-tight">
               {description?.substring(0, 80)}...
             </p>

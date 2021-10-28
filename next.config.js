@@ -49,8 +49,8 @@ module.exports = {
         link: "https://github.com/helium/HIP",
         name: "Test Vote: Ice Cream",
         tags: {
-          primary: "HIP 31",
-          secondary: "Economics",
+          primary: "TEST",
+          secondary: "Ice Cream",
         },
         author: {
           nickname: "@cokes",

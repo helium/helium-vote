@@ -48,6 +48,7 @@ const VoteDetailsPage = ({
     author,
     deadline,
     name,
+    tags,
     link,
     description,
     outcomes: outcomesInitial,
@@ -132,6 +133,24 @@ const VoteDetailsPage = ({
         </div>
         <div className="flex flex-col">
           <div className="flex-col space-y-2">
+            {tags && (
+              <div className="flex flex-row items-center justify-start space-x-2">
+                {tags?.primary && (
+                  <div className="py-0.5 px-2 bg-white rounded-lg">
+                    <span className="text-xs sm:text-sm text-hv-gray-1100 font-light">
+                      {tags.primary}
+                    </span>
+                  </div>
+                )}
+                {tags?.secondary && (
+                  <div className="py-0.5 px-2 bg-hv-gray-775 rounded-lg">
+                    <span className="text-xs sm:text-sm text-hv-gray-350 font-light">
+                      {tags.secondary}
+                    </span>
+                  </div>
+                )}
+              </div>
+            )}
             <h2 className="text-3xl sm:text-6xl font-sans text-white font-semibold tracking-tighter">
               {name}
             </h2>
