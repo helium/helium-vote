@@ -32,7 +32,9 @@ const VoteResults = ({ votingResults, outcomes, completed }) => {
             outcomeInitialIndex = initial?.index;
           }
 
-          const bg = getBackgroundColor(outcomeInitialIndex);
+          const bg = initial?.color
+            ? "custom"
+            : getBackgroundColor(outcomeInitialIndex);
 
           return (
             <div key={r.value} className="w-full flex flex-col relative">
@@ -49,6 +51,9 @@ const VoteResults = ({ votingResults, outcomes, completed }) => {
                     "bg-hv-blue-500": bg === "blue",
                     "bg-hv-purple-500": bg === "purple",
                   })}
+                  style={
+                    bg === "custom" ? { backgroundColor: outcome.color } : {}
+                  }
                 />
                 <div
                   className={classNames("h-3 rounded-r-xl", {
@@ -56,7 +61,14 @@ const VoteResults = ({ votingResults, outcomes, completed }) => {
                     "bg-hv-blue-500": bg === "blue",
                     "bg-hv-purple-500": bg === "purple",
                   })}
-                  style={{ width: `${r.hntPercent}%` }}
+                  style={
+                    bg === "custom"
+                      ? {
+                          backgroundColor: outcome.color,
+                          width: `${r.hntPercent}%`,
+                        }
+                      : { width: `${r.hntPercent}%` }
+                  }
                 />
               </div>
               <div className="w-full flex flex-col items-start lg:flex-row lg:items-center justify-between pt-1.5">

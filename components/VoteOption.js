@@ -39,8 +39,8 @@ const VoteOption = ({
 
   const cliCommand = `helium-wallet burn --amount 0.00000001 --payee ${outcome.address} --commit`;
 
-  const bg = getBackgroundColor(index);
-  const fg = getTextColor(index);
+  const bg = outcome?.color ? "custom" : getBackgroundColor(index);
+  const fg = outcome?.color ? "custom" : getTextColor(index);
 
   const [tab, setTab] = useState(1);
 
@@ -80,6 +80,9 @@ const VoteOption = ({
                   "bg-hv-blue-500": bg === "blue",
                   "bg-hv-purple-500": bg === "purple",
                 })}
+                style={
+                  bg === "custom" ? { backgroundColor: outcome.color } : {}
+                }
               />
               <p className="text-white text-md pr-2 sm:pr-1 sm:text-xl md:text-3xl">
                 {outcome.value}
@@ -150,10 +153,14 @@ const VoteOption = ({
                       "bg-hv-purple-500": bg === "purple",
                     }
                   )}
+                  style={
+                    bg === "custom" ? { backgroundColor: outcome.color } : {}
+                  }
                   href={`helium://dc_burn?address=${outcome.address}&amount=0.00000001&memo=${encodedMemo}`}
                 >
                   <span
                     className={classNames("pr-1 font-sans", {
+                      "text-black": fg === "custom",
                       "text-white": fg === "white",
                       "text-black": fg === "black",
                     })}

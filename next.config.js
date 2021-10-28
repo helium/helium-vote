@@ -8,6 +8,12 @@ const templateExample = {
   link: "https://github.com/helium/HIP",
   // The title of the vote. If it's for a HIP, put a descriptive title like "HIP 39: Redenomination"
   name: "Test Vote: Ice Cream",
+  tags: {
+    // If it's a HIP, put "HIP [#]" as the primary tag
+    primary: "HIP 31",
+    // Use the optional secondary tag for a general descriptive term, such as "Economics"
+    secondary: "Ice Cream",
+  },
   // The person calling for the vote
   author: {
     nickname: "@cokes",
@@ -28,6 +34,8 @@ const templateExample = {
     {
       value: "Vanilla",
       address: "13yWhaorHn8Es6jujCw9HCFAjDyecCv5HMwzoa4gp26awSw7z3b",
+      // an optional color field that will override the default vote option colors
+      color: "#EEEEEE",
     },
   ],
 };
@@ -40,6 +48,10 @@ module.exports = {
         deadline: 1059000,
         link: "https://github.com/helium/HIP",
         name: "Test Vote: Ice Cream",
+        tags: {
+          primary: "HIP 31",
+          secondary: "Economics",
+        },
         author: {
           nickname: "@cokes",
           // address: "zzzz",
@@ -59,6 +71,7 @@ module.exports = {
           {
             value: "Vanilla",
             address: "13yWhaorHn8Es6jujCw9HCFAjDyecCv5HMwzoa4gp26awSw7z3b",
+            color: "#EEEEEE",
           },
         ],
       },
