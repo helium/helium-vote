@@ -308,18 +308,12 @@ export async function getStaticProps({ params }) {
     ? await client.blocks.get(deadline)
     : { time: null };
 
-  const getLatest = async (voteid) => {
-    // just fetch the latest cache instead of recalculating
-    const value = await redis.get(voteid);
-    if (!value) return null;
-    return JSON.parse(value);
-  };
+  const results = await fetchResults(voteid);
 
-  const results = completed
-    ? await getLatest(voteid)
-    : await fetchResults(voteid);
-
-  // revalidate: 1 means it will check at most every 1 second if the Redis cache has reached 10 minutes old yet. if not, it'll serve the statically saved version of the latest Redis cache. so it'll only call calculateResults() at most once every 10 minutes, and it'll do it in the background with getStaticProps so it won't slow down for the unlucky first visitor after the 10 minute threshold is crossed.
+  // revalidate: 1 means it will check at most every 1 second if the Redis cache has reached 10 minutes old yet:
+  // fetchResults() calls calculateResults() only if the Redis cache is more than 60sec * 10 old
+  // if the cache is < 10 min old, fetchResults() will return the latest Redis cache
+  // and swr will keep the results updated while the page is open
   return {
     props: {
       fallback: { results, height },
@@ -328,7 +322,7 @@ export async function getStaticProps({ params }) {
       finalBlockTime,
       details,
     },
-    revalidate: 10,
+    revalidate: 1,
   };
 }
 

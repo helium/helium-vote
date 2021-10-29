@@ -21,8 +21,13 @@ export const fetchCurrentHeight = async () => {
 };
 
 export const fetchResults = async (id) => {
-  const results = await fetch(`${server}/api/results/${id}`);
-  return await results.json();
+  try {
+    const results = await fetch(`${server}/api/results/${id}`);
+    return await results.json();
+  } catch (e) {
+    console.error(e);
+    return null;
+  }
 };
 
 export const calculateResults = async (id) => {

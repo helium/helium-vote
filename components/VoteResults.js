@@ -52,7 +52,7 @@ const VoteResults = ({ votingResults, outcomes, completed }) => {
                     "bg-hv-purple-500": bg === "purple",
                   })}
                   style={
-                    bg === "custom" ? { backgroundColor: outcome.color } : {}
+                    bg === "custom" ? { backgroundColor: initial?.color } : {}
                   }
                 />
                 <div
@@ -64,7 +64,7 @@ const VoteResults = ({ votingResults, outcomes, completed }) => {
                   style={
                     bg === "custom"
                       ? {
-                          backgroundColor: outcome.color,
+                          backgroundColor: initial?.color,
                           width: `${r.hntPercent}%`,
                         }
                       : { width: `${r.hntPercent}%` }
