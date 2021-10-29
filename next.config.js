@@ -77,7 +77,7 @@ module.exports = {
       },
       {
         id: "13YxdDMkDsjnWAk1MSBKADveZm5RnMTLEqq1yTvzHKBZnvjsZFb",
-        deadline: 1075000,
+        deadline: 1095000,
         link: "https://github.com/helium/HIP/blob/master/0040-validator-denylist.md",
         name: "HIP 40: Validator Denylist",
         description:

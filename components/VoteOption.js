@@ -38,11 +38,13 @@ const VoteOption = ({
   };
 
   const cliCommand = `helium-wallet burn --amount 0.00000001 --payee ${outcome.address} --commit`;
+  const ledgerCliCommand = `helium-ledger-cli burn --amount 0.00000001 --payee ${outcome.address} --commit`;
 
   const bg = outcome?.color ? "custom" : getBackgroundColor(index);
   const fg = outcome?.color ? "custom" : getTextColor(index);
 
   const [tab, setTab] = useState(1);
+  const [cliTab, setCliTab] = useState(0);
 
   return (
     <div
@@ -199,17 +201,42 @@ const VoteOption = ({
             </span>
             <div className="hidden md:flex bg-hv-gray-400 sm:h-60 sm:w-0.5 mx-5 h-px w-full" />
             <span className="flex flex-col items-center space-y-2 w-full">
-              <div className="bg-hv-gray-775 rounded-lg flex flex-col items-start justify-start relative">
+              <div className="space-x-5 pb-4 w-full mx-auto flex flex-row items-center justify-center">
+                <span
+                  className={classNames("cursor-pointer", {
+                    "text-white": cliTab === 0,
+                    "text-hv-gray-350": cliTab !== 0,
+                  })}
+                  onClick={() => {
+                    setCliTab(0);
+                  }}
+                >
+                  CLI
+                </span>
+                <span
+                  className={classNames("cursor-pointer", {
+                    "text-white": cliTab === 1,
+                    "text-hv-gray-350": cliTab !== 1,
+                  })}
+                  onClick={() => {
+                    setCliTab(1);
+                  }}
+                >
+                  Ledger App
+                </span>
+              </div>
+              <div className="bg-hv-gray-775 rounded-lg flex flex-col items-start justify-start relative pb-4">
                 <div className="p-4">
                   <p className="w-72 text-hv-green-500 font-mono text-sm break-all">
-                    {cliCommand}
+                    {cliTab === 0 ? cliCommand : ledgerCliCommand}
                   </p>
                 </div>
-                <button className="rounded-b-lg bg-hv-gray-450 p-2 w-full flex flex-row items-center justify-center">
-                  <span className="text-sm text-white font-sans font-light">
-                    <CopyableText textToCopy={cliCommand} iconClasses="w-4 h-4">
-                      Copy command to clipboard
-                    </CopyableText>
+                <button className="absolute right-3 bottom-3 rounded-lg bg-hv-gray-1000 bg-opacity-50 hover:bg-opacity-25 transition-all duration-100 p-2 w-8 h-8 flex flex-row items-center justify-center">
+                  <span className="text-sm flex items-center justify-center text-white font-sans font-light">
+                    <CopyableText
+                      textToCopy={cliTab === 0 ? cliCommand : ledgerCliCommand}
+                      iconClasses="w-4 h-4"
+                    ></CopyableText>
                   </span>
                 </button>
               </div>
