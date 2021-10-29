@@ -101,7 +101,7 @@ export const calculateResults = async (id) => {
 
               // get snapshot of account as of the deadline block
               const account = await client.accounts.get(voter, {
-                maxBlock: deadline,
+                // maxBlock: deadline,
               });
 
               const totalBalance = account.balance.plus(account.stakedBalance);
