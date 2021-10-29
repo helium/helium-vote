@@ -1,9 +1,7 @@
 import { useRouter } from "next/router";
 import React, { useEffect, useMemo, useState } from "react";
-import Head from "next/head";
 import Link from "next/link";
 import {
-  fetchResults,
   fetchCurrentHeight,
   fetchVoteDetails,
   fetchVotes,
@@ -16,7 +14,6 @@ import useSWR from "swr";
 import CountdownTimer from "../components/CountdownTimer";
 import VoteOptionsSection from "../components/VoteOptionsSection";
 import VoteResults from "../components/VoteResults";
-import { redis } from "../utils/redis";
 import client from "../data/client";
 import classNames from "classnames";
 import CopyableText from "../components/CopyableText";
@@ -34,9 +31,7 @@ const VoteDetailsPage = ({
   const router = useRouter();
   const { voteid } = router.query;
 
-  const { data: results } = useSWR(`/api/results/${voteid}`, fetcher, {
-    fallbackData: fallback.results,
-  });
+  const { data: results } = useSWR(`/api/results/${voteid}`, fetcher);
 
   const {
     data: { height },
@@ -374,15 +369,11 @@ export async function getStaticProps({ params }) {
     ? await client.blocks.get(deadline)
     : { time: null };
 
-  const results = await fetchResults(voteid);
-
-  // revalidate: 1 means it will check at most every 1 second if the Redis cache has reached 10 minutes old yet:
-  // fetchResults() calls calculateResults() only if the Redis cache is more than 60sec * 10 old
-  // if the cache is < 10 min old, fetchResults() will return the latest Redis cache
-  // and swr will keep the results updated while the page is open
   return {
     props: {
-      fallback: { results, height },
+      fallback: {
+        height,
+      },
       blocksRemaining,
       completed,
       finalBlockTime,

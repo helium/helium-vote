@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { getBackgroundColor, getTextColor } from "../utils/colors";
+import { getBackgroundColor } from "../utils/colors";
 
 const VoteResults = ({ votingResults, outcomes, completed }) => {
   const { outcomesResults } = votingResults;

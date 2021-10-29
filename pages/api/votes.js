@@ -8,7 +8,7 @@ const votes = serverRuntimeConfig.votes.map(
     description,
     tags,
     deadline,
-    outcomes: outcomes.map((o) => o.value),
+    outcomes,
   })
 );
 
