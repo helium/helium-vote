@@ -82,6 +82,10 @@ module.exports = {
         name: "HIP 40: Validator Denylist",
         description:
           "This plan proposes that validators would maintain a denylist file of Hotspot addresses which are selected from a basic floor function, selecting the hotspots where earnings are abnormal.",
+        tags: {
+          primary: "HIP 40",
+          secondary: "Validators",
+        },
         outcomes: [
           {
             value: "For Validator Denylist",

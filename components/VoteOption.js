@@ -12,9 +12,9 @@ const WarningBox = () => {
         Warning!
       </span>
       <span className="text-white text-left opacity-50 font-light text-sm sm:text-base leading-tight">
-        Votes are final and cannot be changed after submitting. Your Vote is
-        weighted by Vote Power (your HNT balance and staked HNT balance at the
-        voting deadline).
+        If you vote for multiple options, only your most recent vote will be
+        counted. Your Vote is weighted by Vote Power (your HNT balance and
+        staked HNT balance at the voting deadline).
       </span>
     </div>
   );
