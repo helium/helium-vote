@@ -18,6 +18,7 @@ import client from "../data/client";
 import classNames from "classnames";
 import CopyableText from "../components/CopyableText";
 import MetaTags from "../components/MetaTags";
+import { getBackgroundColor } from "../utils/colors";
 
 const fetcher = (url) => fetch(url).then((r) => r.json());
 
@@ -262,7 +263,7 @@ const VoteDetailsPage = ({
 
       {!completed && <VoteOptionsSection outcomes={outcomes} />}
 
-      {votingResults.outcomesResults?.length > 0 && (
+      {votingResults.outcomesResults?.length > 0 ? (
         <div className="flex flex-col space-y-2 max-w-5xl mx-auto mt-5 px-4 sm:px-10">
           <div className="flex-col space-y-2 mt-10 sm:mt-16">
             <VoteResults
@@ -270,7 +271,6 @@ const VoteDetailsPage = ({
               completed={completed}
               votingResults={votingResults}
             />
-            {/* <VoteResultsTable votingResults={votingResults} /> */}
             <div className="flex flex-col items-end justify-start pt-2">
               <span className="text-sm font-light text-gray-500 font-sans">
                 Last updated {formatDistanceToNow(results.timestamp)} ago
@@ -278,6 +278,70 @@ const VoteDetailsPage = ({
               <span className="font-light text-xs text-gray-600">
                 (Results recalculate every 10 minutes)
               </span>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="flex flex-col space-y-2 max-w-5xl mx-auto mt-5 px-4 sm:px-10">
+          <div className="flex-col space-y-2 mt-10 sm:mt-16">
+            <div className="pt-0">
+              <div className="w-full flex flex-col lg:flex-row justify-between mb-5 sm:mb-10">
+                <p className="text-xl sm:text-3xl text-white font-semibold tracking-tighter">
+                  Results loading...
+                </p>
+              </div>
+              <div className="flex flex-col space-y-5">
+                {outcomes.map((r, i) => {
+                  const bg = r?.color ? "custom" : getBackgroundColor(i);
+
+                  return (
+                    <div
+                      key={r.value}
+                      className="w-full flex flex-col relative"
+                    >
+                      <div className="w-full rounded-xl bg-hv-gray-500 flex flex-row items-start justify-start">
+                        <div
+                          className={classNames("w-1.5 rounded-l-xl h-3", {
+                            "bg-hv-green-500": bg === "green",
+                            "bg-hv-blue-500": bg === "blue",
+                            "bg-hv-purple-500": bg === "purple",
+                          })}
+                          style={
+                            bg === "custom" ? { backgroundColor: r?.color } : {}
+                          }
+                        />
+                        <div
+                          className={classNames("h-3 rounded-r-xl", {
+                            "bg-hv-green-500": bg === "green",
+                            "bg-hv-blue-500": bg === "blue",
+                            "bg-hv-purple-500": bg === "purple",
+                          })}
+                          style={
+                            bg === "custom"
+                              ? {
+                                  backgroundColor: r?.color,
+                                  width: `${1 / outcomes.length}%`,
+                                }
+                              : { width: `${1 / outcomes.length}%` }
+                          }
+                        />
+                      </div>
+                      <div className="w-full flex flex-col items-start lg:flex-row lg:items-center justify-between pt-1.5">
+                        <h3 className="font-sans text-lg text-white font-semibold tracking-tighter">
+                          <span className="flex flex-row items-center justify-start space-x-2">
+                            <span>{r.value}</span>
+                          </span>
+                        </h3>
+                        <div className="space-x-2 flex flex-col lg:flex-row">
+                          <div className="text-hv-gray-400 text-lg font-light font-sans flex flex-col lg:flex-row space-x-0 lg:space-x-2">
+                            <span>Loading...</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </div>
