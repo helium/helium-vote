@@ -78,60 +78,34 @@ module.exports = {
           },
         ],
       },
-      // {
-      //   id: "testvoteid",
-      //   deadline: 1095000,
-      //   link: "https://github.com/helium/HIP/blob/master/XXXX-generic-improvement.md",
-      //   name: "HIP X: Generic Improvement",
-      //   description:
-      //     "This plan proposes an improvement that if implemented will make things better.",
-      //   authors: [
-      //     {
-      //       nickname: "@name",
-      //       // link: "https://github.com/user",
-      //     },
-      //     {
-      //       nickname: "@name2",
-      //       link: "https://github.com/helium",
-      //     },
-      //   ],
-      //   tags: {
-      //     primary: "HIP X",
-      //     secondary: "Improvement",
-      //   },
-      //   outcomes: [
-      //     {
-      //       value: "For Improvement",
-      //       address: "11_OPTION_ONE_WALLET",
-      //     },
-      //     {
-      //       value: "Against Improvement",
-      //       address: "12_OPTION_TWO_WALLET",
-      //     },
-      //   ],
-      // },
-      // {
-      //   id: "13YxdDMkDsjnWAk1MSBKADveZm5RnMTLEqq1yTvzHKBZnvjsZFb",
-      //   deadline: 1095000,
-      //   link: "https://github.com/helium/HIP/blob/master/0040-validator-denylist.md",
-      //   name: "HIP 40: Validator Denylist",
-      //   description:
-      //     "This plan proposes that validators would maintain a denylist file of Hotspot addresses which are selected from a basic floor function, selecting the hotspots where earnings are abnormal.",
-      //   tags: {
-      //     primary: "HIP 40",
-      //     secondary: "Validators",
-      //   },
-      //   outcomes: [
-      //     {
-      //       value: "For Validator Denylist",
-      //       address: "13DB1TNxeCiVATE8tfC38NisYXJebx59K2SCXY6tuWv2McYW1rw",
-      //     },
-      //     {
-      //       value: "Against Validator Denylist",
-      //       address: "14QKWs6GhqJkrXhwj2r3aXJFQVN5TbhHfDMnkGGAtxTg5apx32M",
-      //     },
-      //   ],
-      // },
+      {
+        id: "14MnuexopPfDg3bmq8JdCm7LMDkUBoqhqanD9QzLrUURLZxFHBx",
+        deadline: 1100000,
+        link: "https://github.com/helium/HIP/blob/master/0039-hnt-redenomination.md",
+        name: "HIP 39: Redenomination",
+        description:
+          "This proposal suggests a redenomination of the conversion rate between bones and HNT. Currently there are 100,000,000 (10^8) bones per HNT and under the proposed redenomination the conversion rate would be adjusted to 100,000 (10^5) bones per HNT.",
+        authors: [
+          {
+            nickname: "@JMF",
+            link: "https://github.com/JMFayal",
+          },
+        ],
+        tags: {
+          primary: "HIP 39",
+          secondary: "Economic",
+        },
+        outcomes: [
+          {
+            value: "For Redenomination",
+            address: "13qVx7MRzocyKZ4bW3oEkvnQrTK4DftKEcjHVYP1zhMtUhnqYye",
+          },
+          {
+            value: "Against Redenomination",
+            address: "13pPtEyg3idu2GDeFCjbuU1uVLaZax9yBqDouPPdgsAYznq7982",
+          },
+        ],
+      },
     ],
   },
   webpack: (config, { isServer }) => {
