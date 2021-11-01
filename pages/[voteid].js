@@ -1,9 +1,7 @@
 import { useRouter } from "next/router";
 import React, { useEffect, useMemo, useState } from "react";
-import Head from "next/head";
 import Link from "next/link";
 import {
-  fetchResults,
   fetchCurrentHeight,
   fetchVoteDetails,
   fetchVotes,
@@ -16,11 +14,11 @@ import useSWR from "swr";
 import CountdownTimer from "../components/CountdownTimer";
 import VoteOptionsSection from "../components/VoteOptionsSection";
 import VoteResults from "../components/VoteResults";
-import { redis } from "../utils/redis";
 import client from "../data/client";
 import classNames from "classnames";
 import CopyableText from "../components/CopyableText";
 import MetaTags from "../components/MetaTags";
+import { getBackgroundColor } from "../utils/colors";
 
 const fetcher = (url) => fetch(url).then((r) => r.json());
 
@@ -34,9 +32,7 @@ const VoteDetailsPage = ({
   const router = useRouter();
   const { voteid } = router.query;
 
-  const { data: results } = useSWR(`/api/results/${voteid}`, fetcher, {
-    fallbackData: fallback.results,
-  });
+  const { data: results } = useSWR(`/api/results/${voteid}`, fetcher);
 
   const {
     data: { height },
@@ -49,13 +45,14 @@ const VoteDetailsPage = ({
     author,
     deadline,
     name,
+    tags,
     link,
     description,
     outcomes: outcomesInitial,
   } = details;
 
   // to give each one an index so the colour code stays consistent, but we can still sort by votes
-  const outcomes = outcomesInitial.map((o, i) => ({ ...o, index: i }));
+  const outcomes = outcomesInitial?.map((o, i) => ({ ...o, index: i }));
 
   const votingResults = useMemo(() => {
     if (!results) return [];
@@ -123,7 +120,7 @@ const VoteDetailsPage = ({
       />
       <div
         className={classNames(
-          "h-6 sm:h-8 top-0 fixed w-full flex items-center justify-center text-xs sm:text-sm font-sans font-normal",
+          "h-6 sm:h-8 top-0 fixed w-full flex items-center justify-center text-xs sm:text-sm font-sans font-normal z-30",
           {
             "bg-hv-green-500 text-black": !completed,
             "bg-hv-blue-500 text-white": completed,
@@ -142,6 +139,24 @@ const VoteDetailsPage = ({
         </div>
         <div className="flex flex-col">
           <div className="flex-col space-y-2">
+            {tags && (
+              <div className="flex flex-row items-center justify-start space-x-2 pb-2">
+                {tags?.primary && (
+                  <div className="py-0.5 px-2 bg-white rounded-lg">
+                    <span className="text-xs sm:text-sm text-hv-gray-1100 font-light">
+                      {tags.primary}
+                    </span>
+                  </div>
+                )}
+                {tags?.secondary && (
+                  <div className="py-0.5 px-2 bg-hv-gray-775 rounded-lg">
+                    <span className="text-xs sm:text-sm text-hv-gray-350 font-light">
+                      {tags.secondary}
+                    </span>
+                  </div>
+                )}
+              </div>
+            )}
             <h2 className="text-3xl sm:text-6xl font-sans text-white font-semibold tracking-tighter">
               {name}
             </h2>
@@ -236,7 +251,9 @@ const VoteDetailsPage = ({
               <div className="sm:pr-20">
                 <p className="text-white">Total Votes</p>
                 <p className="text-hv-gray-300">
-                  {votingResults?.totalUniqueWallets?.toLocaleString()}
+                  {votingResults && votingResults.totalUniqueWallets
+                    ? votingResults.totalUniqueWallets.toLocaleString()
+                    : "Calculating..."}
                 </p>
               </div>
             </>
@@ -246,7 +263,7 @@ const VoteDetailsPage = ({
 
       {!completed && <VoteOptionsSection outcomes={outcomes} />}
 
-      {votingResults.outcomesResults?.length > 0 && (
+      {votingResults.outcomesResults?.length > 0 ? (
         <div className="flex flex-col space-y-2 max-w-5xl mx-auto mt-5 px-4 sm:px-10">
           <div className="flex-col space-y-2 mt-10 sm:mt-16">
             <VoteResults
@@ -254,7 +271,6 @@ const VoteDetailsPage = ({
               completed={completed}
               votingResults={votingResults}
             />
-            {/* <VoteResultsTable votingResults={votingResults} /> */}
             <div className="flex flex-col items-end justify-start pt-2">
               <span className="text-sm font-light text-gray-500 font-sans">
                 Last updated {formatDistanceToNow(results.timestamp)} ago
@@ -262,6 +278,70 @@ const VoteDetailsPage = ({
               <span className="font-light text-xs text-gray-600">
                 (Results recalculate every 10 minutes)
               </span>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="flex flex-col space-y-2 max-w-5xl mx-auto mt-5 px-4 sm:px-10">
+          <div className="flex-col space-y-2 mt-10 sm:mt-16">
+            <div className="pt-0">
+              <div className="w-full flex flex-col lg:flex-row justify-between mb-5 sm:mb-10">
+                <p className="text-xl sm:text-3xl text-white font-semibold tracking-tighter">
+                  Results loading...
+                </p>
+              </div>
+              <div className="flex flex-col space-y-5">
+                {outcomes.map((r, i) => {
+                  const bg = r?.color ? "custom" : getBackgroundColor(i);
+
+                  return (
+                    <div
+                      key={r.value}
+                      className="w-full flex flex-col relative"
+                    >
+                      <div className="w-full rounded-xl bg-hv-gray-500 flex flex-row items-start justify-start">
+                        <div
+                          className={classNames("w-1.5 rounded-l-xl h-3", {
+                            "bg-hv-green-500": bg === "green",
+                            "bg-hv-blue-500": bg === "blue",
+                            "bg-hv-purple-500": bg === "purple",
+                          })}
+                          style={
+                            bg === "custom" ? { backgroundColor: r?.color } : {}
+                          }
+                        />
+                        <div
+                          className={classNames("h-3 rounded-r-xl", {
+                            "bg-hv-green-500": bg === "green",
+                            "bg-hv-blue-500": bg === "blue",
+                            "bg-hv-purple-500": bg === "purple",
+                          })}
+                          style={
+                            bg === "custom"
+                              ? {
+                                  backgroundColor: r?.color,
+                                  width: `${1 / outcomes.length}%`,
+                                }
+                              : { width: `${1 / outcomes.length}%` }
+                          }
+                        />
+                      </div>
+                      <div className="w-full flex flex-col items-start lg:flex-row lg:items-center justify-between pt-1.5">
+                        <h3 className="font-sans text-lg text-white font-semibold tracking-tighter">
+                          <span className="flex flex-row items-center justify-start space-x-2">
+                            <span>{r.value}</span>
+                          </span>
+                        </h3>
+                        <div className="space-x-2 flex flex-col lg:flex-row">
+                          <div className="text-hv-gray-400 text-lg font-light font-sans flex flex-col lg:flex-row space-x-0 lg:space-x-2">
+                            <span>Loading...</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </div>
@@ -353,27 +433,17 @@ export async function getStaticProps({ params }) {
     ? await client.blocks.get(deadline)
     : { time: null };
 
-  const getLatest = async (voteid) => {
-    // just fetch the latest cache instead of recalculating
-    const value = await redis.get(voteid);
-    if (!value) return null;
-    return JSON.parse(value);
-  };
-
-  const results = completed
-    ? await getLatest(voteid)
-    : await fetchResults(voteid);
-
-  // revalidate: 1 means it will check at most every 1 second if the Redis cache has reached 10 minutes old yet. if not, it'll serve the statically saved version of the latest Redis cache. so it'll only call calculateResults() at most once every 10 minutes, and it'll do it in the background with getStaticProps so it won't slow down for the unlucky first visitor after the 10 minute threshold is crossed.
   return {
     props: {
-      fallback: { results, height },
+      fallback: {
+        height,
+      },
       blocksRemaining,
       completed,
       finalBlockTime,
       details,
     },
-    revalidate: 10,
+    revalidate: 1,
   };
 }
 

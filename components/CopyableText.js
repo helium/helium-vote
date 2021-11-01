@@ -65,11 +65,16 @@ const CopyableText = ({
   return (
     <>
       <span
-        className="relative flex items-center justify-center"
+        className="relative inline-flex items-center justify-center"
         onClick={() => copyTextToClipboard(textToCopy)}
       >
-        <span className="relative flex items-center justify-center">
-          <span className={classNames({ "mr-2": !className }, className)}>
+        <span className="relative inline-flex items-center justify-between">
+          <span
+            className={classNames(
+              { "mr-2": !className && children },
+              className
+            )}
+          >
             {children}
           </span>
           <span className="flex-1">

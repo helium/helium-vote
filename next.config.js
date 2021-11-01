@@ -8,6 +8,12 @@ const templateExample = {
   link: "https://github.com/helium/HIP",
   // The title of the vote. If it's for a HIP, put a descriptive title like "HIP 39: Redenomination"
   name: "Test Vote: Ice Cream",
+  tags: {
+    // If it's a HIP, put "HIP [#]" as the primary tag
+    primary: "HIP 31",
+    // Use the optional secondary tag for a general descriptive term, such as "Economics"
+    secondary: "Ice Cream",
+  },
   // The person calling for the vote
   author: {
     nickname: "@cokes",
@@ -28,6 +34,8 @@ const templateExample = {
     {
       value: "Vanilla",
       address: "13yWhaorHn8Es6jujCw9HCFAjDyecCv5HMwzoa4gp26awSw7z3b",
+      // an optional color field that will override the default vote option colors
+      color: "#EEEEEE",
     },
   ],
 };
@@ -40,6 +48,10 @@ module.exports = {
         deadline: 1059000,
         link: "https://github.com/helium/HIP",
         name: "Test Vote: Ice Cream",
+        tags: {
+          primary: "TEST",
+          secondary: "Ice Cream",
+        },
         author: {
           nickname: "@cokes",
           // address: "zzzz",
@@ -59,27 +71,41 @@ module.exports = {
           {
             value: "Vanilla",
             address: "13yWhaorHn8Es6jujCw9HCFAjDyecCv5HMwzoa4gp26awSw7z3b",
+            color: "#EEEEEE",
           },
         ],
       },
-      // {
-      //   id: "13YxdDMkDsjnWAk1MSBKADveZm5RnMTLEqq1yTvzHKBZnvjsZFb",
-      //   deadline: 1075000,
-      //   link: "https://github.com/helium/HIP/blob/master/0040-validator-denylist.md",
-      //   name: "HIP 40: Validator Denylist",
-      //   description:
-      //     "This plan proposes that validators would maintain a denylist file of Hotspot addresses which are selected from a basic floor function, selecting the hotspots where earnings are abnormal.",
-      //   outcomes: [
-      //     {
-      //       value: "For Validator Denylist",
-      //       address: "13DB1TNxeCiVATE8tfC38NisYXJebx59K2SCXY6tuWv2McYW1rw",
-      //     },
-      //     {
-      //       value: "Against Validator Denylist",
-      //       address: "14QKWs6GhqJkrXhwj2r3aXJFQVN5TbhHfDMnkGGAtxTg5apx32M",
-      //     },
-      //   ],
-      // },
+      {
+        id: "13YxdDMkDsjnWAk1MSBKADveZm5RnMTLEqq1yTvzHKBZnvjsZFb",
+        deadline: 1095000,
+        link: "https://github.com/helium/HIP/blob/master/0040-validator-denylist.md",
+        name: "HIP 40: Validator Denylist",
+        description:
+          "This plan proposes that validators would maintain a denylist file of Hotspot addresses which are selected from a basic floor function, selecting the hotspots where earnings are abnormal.",
+        tags: {
+          primary: "HIP 40",
+          secondary: "Validators",
+        },
+        outcomes: [
+          {
+            value: "For Validator Denylist",
+            address: "13DB1TNxeCiVATE8tfC38NisYXJebx59K2SCXY6tuWv2McYW1rw",
+          },
+          {
+            value: "Against Validator Denylist",
+            address: "14QKWs6GhqJkrXhwj2r3aXJFQVN5TbhHfDMnkGGAtxTg5apx32M",
+          },
+        ],
+      },
     ],
+  },
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.resolve.fallback.fs = false;
+      config.resolve.fallback.dns = false;
+      config.resolve.fallback.net = false;
+      config.resolve.fallback.tls = false;
+    }
+    return config;
   },
 };
