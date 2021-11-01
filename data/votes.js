@@ -2,9 +2,13 @@ import client, { TAKE_MAX } from "./client";
 import { chain, maxBy } from "lodash";
 
 const dev = process.env.NODE_ENV !== "production";
-export const server = dev
-  ? "http://localhost:3000"
-  : "https://www.heliumvote.com";
+
+const prodServer =
+  process.env.HEROKU_APP_NAME !== undefined
+    ? `https://${process.env.HEROKU_APP_NAME}.herokuapp.com`
+    : "https://www.heliumvote.com";
+
+export const server = dev ? "http://localhost:3000" : prodServer;
 
 export const fetchVotes = async () => {
   const votes = await fetch(`${server}/api/votes`);
@@ -62,10 +66,20 @@ export const calculateResults = async (id) => {
       outcomes.map(async (outcome) => {
         const { address } = outcome;
 
+        const activityOptions = {};
+        activityOptions.filterTypes = ["token_burn_v1"];
+
+        try {
+          const deadlineBlock = await client.blocks.get(deadline);
+          activityOptions.maxTime = new Date(deadlineBlock.time * 1000);
+        } catch (e) {
+          console.error(e);
+        }
+
         // get all token burns for this wallet
-        const list = await client.account(address).activity.list({
-          filterTypes: ["token_burn_v1"],
-        });
+        const list = await client
+          .account(address)
+          .activity.list(activityOptions);
 
         const burns = await list.take(TAKE_MAX);
 
@@ -95,6 +109,8 @@ export const calculateResults = async (id) => {
 
         await Promise.all(
           ungroupedAllVotesToCount.map(async (txn) => {
+            if (txn.height > deadline) return;
+
             // tally the votes for this outcome, skip everything else
             if (txn.payee === address) {
               const { payer: voter } = txn;
