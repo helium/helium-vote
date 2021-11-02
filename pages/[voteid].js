@@ -42,7 +42,7 @@ const VoteDetailsPage = ({
 
   const {
     id,
-    author,
+    authors,
     deadline,
     name,
     tags,
@@ -82,8 +82,6 @@ const VoteDetailsPage = ({
       .sort((a, b) => b.hntVoted.floatBalance - a.hntVoted.floatBalance);
     return { totalUniqueWallets, totalHntVoted, outcomesResults };
   }, [results]);
-
-  const nickname = author?.nickname;
 
   const [blocksRemaining, setBlocksRemaining] = useState(
     initialBlocksRemaining
@@ -161,11 +159,24 @@ const VoteDetailsPage = ({
               {name}
             </h2>
             <div>
-              {nickname !== undefined && (
+              {authors && (
                 <div className="pt-5">
                   <p className="text-sm text-white text-md">
-                    Author:{" "}
-                    <span className="text-hv-green-500">{nickname}</span>
+                    {`Author${authors.length > 1 ? "s" : ""}: `}
+                    {authors.map(({ nickname, link }, i, { length }) => (
+                      <>
+                        <a
+                          href={link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <span className="text-hv-green-500">{nickname}</span>
+                        </a>
+                        {length > 1 && i + 1 !== length && (
+                          <span className="text-hv-gray-200">, </span>
+                        )}
+                      </>
+                    ))}
                   </p>
                 </div>
               )}

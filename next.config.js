@@ -14,12 +14,15 @@ const templateExample = {
     // Use the optional secondary tag for a general descriptive term, such as "Economics"
     secondary: "Ice Cream",
   },
-  // The person calling for the vote
-  author: {
-    nickname: "@cokes",
-    // address: "zzzz",
-    // link: "https://github.com/user",
-  },
+  // An array of the person(s) calling for the vote
+  authors: [
+    {
+      // How this person is generally known in the community
+      nickname: "@cokes",
+      // A link to their profile (GitHub is probably the most useful, maybe Twitter?)
+      link: "https://github.com/user",
+    },
+  ],
   // A brief description of what the vote is for. It doesn't have to be comprehensive.
   description:
     "Vote for your favorite ice cream flavor. This voting mechanism will be used for future Helium Improvement Proposal voting.",
@@ -52,11 +55,12 @@ module.exports = {
           primary: "TEST",
           secondary: "Ice Cream",
         },
-        author: {
-          nickname: "@cokes",
-          // address: "zzzz",
-          // link: "https://github.com/user",
-        },
+        authors: [
+          {
+            nickname: "@cokes",
+            // link: "https://github.com/user",
+          },
+        ],
         description:
           "Vote for your favorite ice cream flavor. This voting mechanism will be used for future Helium Improvement Proposal voting.",
         outcomes: [
@@ -71,6 +75,38 @@ module.exports = {
           {
             value: "Vanilla",
             address: "13yWhaorHn8Es6jujCw9HCFAjDyecCv5HMwzoa4gp26awSw7z3b",
+          },
+        ],
+      },
+      {
+        id: "testvoteid",
+        deadline: 1095000,
+        link: "https://github.com/helium/HIP/blob/master/XXXX-generic-improvement.md",
+        name: "HIP X: Generic Improvement",
+        description:
+          "This plan proposes an improvement that if implemented will make things better.",
+        authors: [
+          {
+            nickname: "@name",
+            // link: "https://github.com/user",
+          },
+          {
+            nickname: "@name2",
+            link: "https://github.com/helium",
+          },
+        ],
+        tags: {
+          primary: "HIP X",
+          secondary: "Improvement",
+        },
+        outcomes: [
+          {
+            value: "For Improvement",
+            address: "11_OPTION_ONE_WALLET",
+          },
+          {
+            value: "Against Improvement",
+            address: "12_OPTION_TWO_WALLET",
           },
         ],
       },

@@ -73,7 +73,7 @@ export const calculateResults = async (id) => {
           const deadlineBlock = await client.blocks.get(deadline);
           activityOptions.maxTime = new Date(deadlineBlock.time * 1000);
         } catch (e) {
-          console.error(e);
+          // console.error(e);
         }
 
         // get all token burns for this wallet
