@@ -391,7 +391,7 @@ const VoteDetailsPage = ({
                 </defs>
               </svg>
             </a>
-            <div className="cursor-pointer">
+            <div className="cursor-pointer flex items-center justify-center">
               <CopyableText
                 iconClasses="w-3 h-3 sm:w-5 sm:h-5"
                 customIcon={
