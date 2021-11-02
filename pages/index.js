@@ -66,7 +66,7 @@ const VoteCard = ({ vote, height }) => {
                 <div className="flex flex-row items-center justify-start">
                   {(tags?.primary || tags?.secondary) && (
                     <div className="py-0.5 px-2 bg-hv-gray-500 group-hover:bg-hv-gray-550 transition-all duration-150 rounded-lg">
-                      <span className="text-xs sm:text-sm text-hv-gray-350 font-light">
+                      <span className="text-xs sm:text-sm text-hv-gray-350 font-light whitespace-nowrap">
                         {tags?.primary
                           ? tags.primary
                           : tags?.secondary && !tags?.primary
@@ -101,7 +101,7 @@ const VoteCard = ({ vote, height }) => {
                 </span>
               </div>
             </div>
-            {votingResults && (
+            {votingResults && votingResults.totalHntVoted > 0 && (
               <div className="flex flex-row items-center justify-center w-full pt-5 pb-2">
                 <div className="rounded-full w-full h-2.5 flex flex-row items-center">
                   {votingResults?.outcomesResults?.map(
