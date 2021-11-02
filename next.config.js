@@ -78,38 +78,38 @@ module.exports = {
           },
         ],
       },
-      {
-        id: "testvoteid",
-        deadline: 1095000,
-        link: "https://github.com/helium/HIP/blob/master/XXXX-generic-improvement.md",
-        name: "HIP X: Generic Improvement",
-        description:
-          "This plan proposes an improvement that if implemented will make things better.",
-        authors: [
-          {
-            nickname: "@name",
-            // link: "https://github.com/user",
-          },
-          {
-            nickname: "@name2",
-            link: "https://github.com/helium",
-          },
-        ],
-        tags: {
-          primary: "HIP X",
-          secondary: "Improvement",
-        },
-        outcomes: [
-          {
-            value: "For Improvement",
-            address: "11_OPTION_ONE_WALLET",
-          },
-          {
-            value: "Against Improvement",
-            address: "12_OPTION_TWO_WALLET",
-          },
-        ],
-      },
+      // {
+      //   id: "testvoteid",
+      //   deadline: 1095000,
+      //   link: "https://github.com/helium/HIP/blob/master/XXXX-generic-improvement.md",
+      //   name: "HIP X: Generic Improvement",
+      //   description:
+      //     "This plan proposes an improvement that if implemented will make things better.",
+      //   authors: [
+      //     {
+      //       nickname: "@name",
+      //       // link: "https://github.com/user",
+      //     },
+      //     {
+      //       nickname: "@name2",
+      //       link: "https://github.com/helium",
+      //     },
+      //   ],
+      //   tags: {
+      //     primary: "HIP X",
+      //     secondary: "Improvement",
+      //   },
+      //   outcomes: [
+      //     {
+      //       value: "For Improvement",
+      //       address: "11_OPTION_ONE_WALLET",
+      //     },
+      //     {
+      //       value: "Against Improvement",
+      //       address: "12_OPTION_TWO_WALLET",
+      //     },
+      //   ],
+      // },
       // {
       //   id: "13YxdDMkDsjnWAk1MSBKADveZm5RnMTLEqq1yTvzHKBZnvjsZFb",
       //   deadline: 1095000,
