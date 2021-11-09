@@ -3,10 +3,9 @@ import { chain, maxBy } from "lodash";
 
 const dev = process.env.NODE_ENV !== "production";
 
-const prodServer =
-  process.env.HEROKU_APP_NAME !== undefined
-    ? `https://${process.env.HEROKU_APP_NAME}.herokuapp.com`
-    : "https://www.heliumvote.com";
+export const server = dev
+  ? "http://localhost:3000"
+  : "https://www.heliumvote.com";
 
 export const server = dev ? "http://localhost:3000" : prodServer;
 
