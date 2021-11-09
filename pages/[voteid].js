@@ -2,8 +2,8 @@ import { useRouter } from "next/router";
 import React, { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import {
-  calculateResults,
   fetchCurrentHeight,
+  fetchResults,
   fetchVoteDetails,
   fetchVotes,
 } from "../data/votes";
@@ -27,16 +27,15 @@ const VoteDetailsPage = ({
   fallback,
   details,
   completed,
-  results,
   finalBlockTime,
   blocksRemaining: initialBlocksRemaining,
 }) => {
   const router = useRouter();
   const { voteid } = router.query;
 
-  // const { data: results } = useSWR(`/api/results/${voteid}`, fetcher, {
-  //   fallbackData: fallback.results,
-  // });
+  const { data: results } = useSWR(`/api/results/${voteid}`, fetcher, {
+    fallbackData: fallback.results,
+  });
 
   const {
     data: { height },
@@ -438,8 +437,9 @@ export async function getStaticProps({ params }) {
   const { voteid } = params;
 
   const { height } = await fetchCurrentHeight();
-  const results = await calculateResults(voteid);
   const details = await fetchVoteDetails(voteid);
+
+  const results = await fetchResults(voteid);
 
   const { deadline } = details;
   const completed = height > deadline;
@@ -451,8 +451,8 @@ export async function getStaticProps({ params }) {
 
   return {
     props: {
-      results,
       fallback: {
+        results,
         height,
       },
       blocksRemaining,
