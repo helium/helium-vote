@@ -38,7 +38,7 @@ const VoteOption = ({
   };
 
   const cliCommand = `helium-wallet burn --amount 0.00000001 --payee ${outcome.address} --commit`;
-  const ledgerCliCommand = `helium-ledger-cli burn --amount 0.00000001 --payee ${outcome.address} --commit`;
+  const ledgerCliCommand = `helium-ledger-cli burn --amount 0.00000001 --payee ${outcome.address}`;
 
   const bg = outcome?.color ? "custom" : getBackgroundColor(index);
   const fg = outcome?.color ? "custom" : getTextColor(index);
