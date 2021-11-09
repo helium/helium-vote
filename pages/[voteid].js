@@ -420,8 +420,8 @@ const VoteDetailsPage = ({
 };
 
 export async function getStaticPaths() {
-  // const votes = await fetchVotes();
-  // const paths = votes.map(({ id }) => ({ params: { voteid: id } }));
+  const votes = await fetchVotes();
+  const paths = votes.map(({ id }) => ({ params: { voteid: id } }));
 
   return {
     // paths,
