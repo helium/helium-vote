@@ -7,8 +7,6 @@ export const server = dev
   ? "http://localhost:3000"
   : "https://www.heliumvote.com";
 
-export const server = dev ? "http://localhost:3000" : prodServer;
-
 export const fetchVotes = async () => {
   const votes = await fetch(`${server}/api/votes`);
   return await votes.json();
