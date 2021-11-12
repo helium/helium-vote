@@ -84,7 +84,7 @@ module.exports = {
         link: "https://github.com/helium/HIP/blob/master/0039-hnt-redenomination.md",
         name: "HIP 39: Redenomination",
         description:
-          "This proposal suggests a redenomination of the conversion rate between bones and HNT. Currently there are 100,000,000 (10^8) bones per HNT and under the proposed redenomination the conversion rate would be adjusted to 100,000 (10^5) bones per HNT. This change represents a 1000:1 token redenomination. Rough consensus to pass this HIP is achieved when the 'For Denomination' vote receives at least 66% of the vote.",
+          "This proposal suggests a redenomination of the conversion rate between bones and HNT. Currently there are 100,000,000 (10^8) bones per HNT and under the proposed redenomination the conversion rate would be adjusted to 100,000 (10^5) bones per HNT. This change represents a 1000:1 token redenomination. Rough consensus to pass this HIP is achieved when the 'For Redenomination' vote receives at least 66% of the vote.",
         authors: [
           {
             nickname: "@JMF",
