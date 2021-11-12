@@ -135,7 +135,6 @@ export const calculateResults = async (id) => {
 
     results.outcomes = outcomesResults;
     results.timestamp = Date.now();
-
     return results;
   } catch (e) {
     console.error(e);
