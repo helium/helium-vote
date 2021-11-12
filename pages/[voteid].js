@@ -460,7 +460,7 @@ export async function getStaticProps({ params }) {
       finalBlockTime,
       details,
     },
-    revalidate: 60 * 10,
+    revalidate: 60,
   };
 }
 
