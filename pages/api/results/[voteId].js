@@ -1,5 +1,4 @@
 import getConfig from "next/config";
-import { calculateResults } from "../../../data/votes";
 import cache from "../../../utils/cache";
 
 const { serverRuntimeConfig } = getConfig();
@@ -13,13 +12,9 @@ export default async function handler(req, res) {
     return;
   }
 
-  const results = await cache.fetch(
+  const results = await cache.get(
     // the key to look for in the Redis cache
-    voteId,
-    // the function to call if the key is either not there, or the data is expired
-    () => calculateResults(voteId),
-    // the time until the data expires (in seconds)
-    60 * 10
+    voteId
   );
 
   res.status(200).json(results);
