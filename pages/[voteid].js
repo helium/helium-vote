@@ -286,10 +286,10 @@ const VoteDetailsPage = ({
               votingResults={votingResults}
             />
             <div className="flex flex-col items-end justify-start pt-2">
-              <span className="text-sm font-light text-hv-gray-500 font-sans">
+              <span className="text-sm font-light text-hv-gray-200 font-sans">
                 Last updated {formatDistanceToNow(results.timestamp)} ago
               </span>
-              <span className="font-light text-xs text-hv-gray-600">
+              <span className="font-light text-xs text-hv-gray-200">
                 (Results recalculate roughly every 10 minutes)
               </span>
             </div>
