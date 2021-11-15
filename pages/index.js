@@ -208,7 +208,7 @@ export default function Home({ height, activeVotes, completedVotes }) {
                     Helium Vote is where the Helium Community comes together to
                     make decisions on the Network.
                   </p>
-                  <p className="font-light text-gray-500 text-lg max-w-md leading-tight">
+                  <p className="font-light text-hv-gray-200 text-lg max-w-md leading-tight ">
                     Each vote will be driven by a Helium Improvement Proposal
                     (HIP). When HIPs are ready for voting, they will appear
                     here.
@@ -276,14 +276,14 @@ export default function Home({ height, activeVotes, completedVotes }) {
           How does it work?
         </p>
         <div className="flex flex-col sm:flex-row sm:space-x-10 space-y-4 sm:space-y-0">
-          <p className="font-sans font-light text-hv-gray-200 max-w-2xl text-md sm:text-lg w-full sm:w-1/2 leading-tight tracking-tight">
+          <p className="font-light text-hv-gray-200 text-lg max-w-md leading-snug">
             The number of votes going towards each voting choice is determined
             by your HNT and staked HNT wallet balance - this is known as Voting
             Power. To cast a vote, submit a burn transaction using the wallet of
             your choosing. Total cost of a burn transaction is 35,000 DC or
             approximately $0.35.
           </p>
-          <p className="font-sans font-light text-hv-gray-200 max-w-2xl text-md sm:text-lg w-full sm:w-1/2 leading-tight tracking-tight">
+          <p className="font-light text-hv-gray-200 text-lg max-w-md leading-snug">
             Final votes will be tallied at the block deadline and data credits
             burned to each vote choice will be purged from the Network. This is
             our first attempt at an on-chain voting system and an exciting step

@@ -23,7 +23,7 @@ const VoteResults = ({ votingResults, outcomes, completed }) => {
           </p>
         )} */}
       </div>
-      <div className="flex flex-col space-y-5">
+      <div className="flex flex-col space-y-10">
         {outcomesResults.map((r, i) => {
           // find the initial index (the order it was in in the JSON for the vote) to keep the colour scheme consistent
           const initial = outcomes.find((o) => o.address === r.address);

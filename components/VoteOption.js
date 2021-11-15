@@ -49,7 +49,7 @@ const VoteOption = ({
   return (
     <div
       className={classNames(
-        "flex flex-col mb-2 bg-white bg-opacity-5 rounded-none",
+        "flex flex-col mb-1 bg-white bg-opacity-5 rounded-none",
         {
           "sm:rounded-t-xl": index === 0,
           "sm:rounded-b-xl": index === length - 1,
@@ -86,7 +86,7 @@ const VoteOption = ({
                   bg === "custom" ? { backgroundColor: outcome.color } : {}
                 }
               />
-              <p className="text-white text-md pr-2 sm:pr-1 sm:text-xl md:text-3xl">
+              <p className="text-white text-md font-semibold tracking-tight pr-2 sm:pr-1 sm:text-xl md:text-2xl">
                 {outcome.value}
               </p>
             </div>
