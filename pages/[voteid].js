@@ -275,57 +275,7 @@ const VoteDetailsPage = ({
         </div>
       </ContentSection>
 
-      <ContentSection className="mt-10 sm:mt-14">
-        <div className="bg-yellow-400 bg-opacity-20 rounded-xl px-4 sm:px-5 py-2 sm:py-3 flex flex-row justify-between align-center w-full my-5 space-x-2">
-          <div>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-4 w-4 text-gray-400 mt-0.5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-          </div>
-          <span className="text-gray-400 font-sans font-light text-left w-full text-sm">
-            The blockchain is currently halted and no blocks are being produced.
-            This will automatically push out the vote deadline as it is counted
-            in blocks (not clock-time).
-          </span>
-        </div>
-      </ContentSection>
-
       {!completed && <VoteOptionsSection outcomes={outcomes} />}
-
-      <ContentSection className="mt-10 sm:mt-14">
-        <div className="bg-yellow-400 bg-opacity-20 rounded-xl px-4 sm:px-5 py-2 sm:py-3 flex flex-row justify-between align-center w-full my-5 space-x-2">
-          <div>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-4 w-4 text-gray-400 mt-0.5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-          </div>
-          <span className="text-gray-400 font-sans font-light text-left w-full text-sm">
-            Votes cannot be counted until block production resumes.
-          </span>
-        </div>
-      </ContentSection>
 
       {votingResults.outcomesResults?.length > 0 ? (
         <div className="flex flex-col space-y-2 max-w-5xl mx-auto mt-5 px-4 sm:px-10">
