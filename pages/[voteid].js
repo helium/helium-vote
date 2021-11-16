@@ -275,40 +275,35 @@ const VoteDetailsPage = ({
         </div>
       </ContentSection>
 
+<a href="https://status.helium.com">
       <ContentSection className="mt-10 sm:mt-14">
-        <div className="bg-yellow-400 bg-opacity-20 rounded-xl px-4 sm:px-5 py-2 sm:py-3 flex flex-row justify-between align-center w-full my-5 space-x-2">
-          <div>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-4 w-4 text-gray-400 mt-0.5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
+        <div className="bg-yellow-400 rounded-xl px-4 sm:px-5 py-2 sm:py-3 flex flex-row justify-between align-center w-full my-5 space-x-2">
+          <div className="pt-1 pr-2">
+          <svg width="39" height="38" viewBox="0 0 39 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M36.5839 18.9545C36.5839 28.5885 28.774 36.3984 19.14 36.3984C9.50596 36.3984 1.69604 28.5885 1.69604 18.9545C1.69604 9.32048 9.50596 1.51056 19.14 1.51056C28.774 1.51056 36.5839 9.32048 36.5839 18.9545ZM38.0839 18.9545C38.0839 29.4169 29.6024 37.8984 19.14 37.8984C8.67753 37.8984 0.196045 29.4169 0.196045 18.9545C0.196045 8.49205 8.67753 0.0105591 19.14 0.0105591C29.6024 0.0105591 38.0839 8.49205 38.0839 18.9545ZM18.003 10.3281H20.2767L20.1095 22.6324H18.1702L18.003 10.3281ZM20.6445 26.0763C20.6445 26.9039 19.9674 27.5809 19.1399 27.5809C18.3123 27.5809 17.6353 26.9039 17.6353 26.0763C17.6353 25.2488 18.3123 24.5717 19.1399 24.5717C19.9674 24.5717 20.6445 25.2488 20.6445 26.0763Z" fill="#1D1D1D"/>
+</svg>
+
           </div>
-          <span className="text-gray-400 font-sans font-light text-left w-full text-sm">
-            The blockchain is currently halted and no blocks are being produced.
-            This will automatically push out the vote deadline as it is counted
-            in blocks (not clock-time).
-          </span>
+          <div className="flex-grow">
+          <p className="text-gray-900 font-sans font-medium text-left w-full text-md">
+          Voting is suspended while the blockchain is currently halted.
+          </p>
+          <p className="text-gray-900 font-sans font-light text-left w-full text-sm">This will automatically push out the vote deadline as it is counted
+            in blocks (not clock-time).</p>
+            </div>
         </div>
       </ContentSection>
+      </a>
 
       {!completed && <VoteOptionsSection outcomes={outcomes} />}
 
+      <a href="https://status.helium.com">
       <ContentSection className="mt-10 sm:mt-14">
-        <div className="bg-yellow-400 bg-opacity-20 rounded-xl px-4 sm:px-5 py-2 sm:py-3 flex flex-row justify-between align-center w-full my-5 space-x-2">
+        <div className="bg-yellow-400 rounded-xl px-4 sm:px-5 py-2 sm:py-3 flex flex-row justify-between align-center w-full my-5 space-x-2">
           <div>
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-4 w-4 text-gray-400 mt-0.5"
+              className="h-4 w-4 text-gray-900 mt-0.5"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -321,11 +316,11 @@ const VoteDetailsPage = ({
               />
             </svg>
           </div>
-          <span className="text-gray-400 font-sans font-light text-left w-full text-sm">
-            Votes cannot be counted until block production resumes.
-          </span>
+          <span className="text-gray-900 font-sans font-normal text-left w-full text-sm">
+            Votes cannot be counted until block production resumes.</span><span className="text-gray-900 font-sans font-light text-right w-full text-sm">Click here for status updates.</span>
         </div>
       </ContentSection>
+      </a>
 
       {votingResults.outcomesResults?.length > 0 ? (
         <div className="flex flex-col space-y-2 max-w-5xl mx-auto mt-5 px-4 sm:px-10">
