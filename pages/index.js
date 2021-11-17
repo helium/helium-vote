@@ -227,27 +227,6 @@ export default function Home({ height, activeVotes, completedVotes }) {
       </ContentSection>
 
 
-      <a href="https://status.helium.com">
-      <ContentSection className=" mb-20 sm:mt-14 md:mt-5">
-        <div className="bg-yellow-400 rounded-xl py-2 px-4 sm:px-5 sm:py-3 flex flex-row justify-between align-center w-full my-5 space-x-2">
-          <div className="pt-1 pr-2">
-          <svg width="39" height="38" viewBox="0 0 39 38" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path fill-rule="evenodd" clip-rule="evenodd" d="M36.5839 18.9545C36.5839 28.5885 28.774 36.3984 19.14 36.3984C9.50596 36.3984 1.69604 28.5885 1.69604 18.9545C1.69604 9.32048 9.50596 1.51056 19.14 1.51056C28.774 1.51056 36.5839 9.32048 36.5839 18.9545ZM38.0839 18.9545C38.0839 29.4169 29.6024 37.8984 19.14 37.8984C8.67753 37.8984 0.196045 29.4169 0.196045 18.9545C0.196045 8.49205 8.67753 0.0105591 19.14 0.0105591C29.6024 0.0105591 38.0839 8.49205 38.0839 18.9545ZM18.003 10.3281H20.2767L20.1095 22.6324H18.1702L18.003 10.3281ZM20.6445 26.0763C20.6445 26.9039 19.9674 27.5809 19.1399 27.5809C18.3123 27.5809 17.6353 26.9039 17.6353 26.0763C17.6353 25.2488 18.3123 24.5717 19.1399 24.5717C19.9674 24.5717 20.6445 25.2488 20.6445 26.0763Z" fill="#1D1D1D"/>
-</svg>
-
-          </div>
-          <div className="flex-grow">
-          <p className="text-gray-900 font-sans font-medium text-left w-full text-md">
-            Voting is suspended while the blockchain is currently halted.
-          </p>
-          <p className="text-gray-900 font-sans font-light text-left w-full text-sm">This will automatically push out vote deadlines as they are counted
-            in blocks (not clock-time).</p>
-            </div>
-        </div>
-      </ContentSection>
-      </a>
-
-
       <div className="w-full bg-hv-gray-750 py-4 sm:py-10 mt-10 sm:mt-5">
         <div className="max-w-6xl mx-auto px-4 lg:px-10">
           <div className="lg:px-10">
