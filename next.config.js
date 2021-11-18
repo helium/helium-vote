@@ -80,7 +80,7 @@ module.exports = {
       },
       {
         id: "14MnuexopPfDg3bmq8JdCm7LMDkUBoqhqanD9QzLrUURLZxFHBx",
-        deadline: 1104000,
+        deadline: 1105440,
         link: "https://github.com/helium/HIP/blob/master/0039-hnt-redenomination.md",
         name: "HIP 39: Redenomination",
         description:
