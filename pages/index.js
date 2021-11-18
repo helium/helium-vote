@@ -9,6 +9,7 @@ import MetaTags from "../components/MetaTags";
 import useSWR from "swr";
 import { Balance, CurrencyType } from "@helium/currency";
 import { getBackgroundColor } from "../utils/colors";
+import client from "../data/client";
 
 const fetcher = (url) => fetch(url).then((r) => r.json());
 
@@ -320,7 +321,8 @@ export default function Home({ height, activeVotes, completedVotes }) {
 }
 
 export async function getStaticProps() {
-  const { height } = await fetchCurrentHeight();
+  // const { height } = await fetchCurrentHeight();
+  const height = await client.blocks.getHeight();
   const votes = await fetchVotes();
 
   const activeVotes = votes.filter(({ deadline }) => height <= deadline);
