@@ -181,6 +181,11 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
+"@supercharge/promise-pool@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@supercharge/promise-pool/-/promise-pool-2.0.0.tgz#bfb0b2adebf798361a98ab4e977c63dbc9cf3dca"
+  integrity sha512-j6J0MFycKPB8wv+hxnYYxi+4KIyKvkdQC3apkZ242ZOD2INWMrAW57Acyl/0RX78fj6upiSq3VssnW0Fx4H5IA==
+
 "@types/node@*":
   version "16.10.3"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-16.10.3.tgz#7a8f2838603ea314d1d22bb3171d899e15c57bd5"

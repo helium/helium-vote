@@ -2,6 +2,7 @@ const { chain, maxBy } = require("lodash");
 const { client, TAKE_MAX } = require("./client");
 const fetch = require("node-fetch");
 const cache = require("./cache");
+const { PromisePool } = require("@supercharge/promise-pool");
 
 const dev = process.env.NODE_ENV !== "production";
 const server = dev ? "http://localhost:3000" : "https://www.heliumvote.com";
@@ -67,27 +68,47 @@ const calculateResultsForVote = async (id) => {
         let summedVotedHnt = 0.0;
         let votingWallets = 0;
 
-        await Promise.all(
-          ungroupedAllVotesToCount.map(async (txn) => {
-            if (txn.height > deadline) return;
+        await PromisePool.for(ungroupedAllVotesToCount).process(async (txn) => {
+          if (txn.height > deadline) return;
 
-            // tally the votes for this outcome, skip everything else
-            if (txn.payee === address) {
-              const { payer: voter } = txn;
+          // tally the votes for this outcome, skip everything else
+          if (txn.payee === address) {
+            const { payer: voter } = txn;
 
-              // get snapshot of account as of the deadline block
-              const account = await client.accounts.get(voter, {
-                maxBlock: deadline,
-              });
+            // get snapshot of account as of the deadline block
+            const account = await client.accounts.get(voter, {
+              maxBlock: deadline,
+            });
 
-              const totalBalance = account.balance.plus(account.stakedBalance);
+            const totalBalance = account.balance.plus(account.stakedBalance);
 
-              summedVotedHnt += parseInt(totalBalance.integerBalance);
+            summedVotedHnt += parseInt(totalBalance.integerBalance);
 
-              votingWallets++;
-            }
-          })
-        );
+            votingWallets++;
+          }
+        });
+
+        // await Promise.all(
+        //   ungroupedAllVotesToCount.map(async (txn) => {
+        //     if (txn.height > deadline) return;
+
+        //     // tally the votes for this outcome, skip everything else
+        //     if (txn.payee === address) {
+        //       const { payer: voter } = txn;
+
+        //       // get snapshot of account as of the deadline block
+        //       const account = await client.accounts.get(voter, {
+        //         maxBlock: deadline,
+        //       });
+
+        //       const totalBalance = account.balance.plus(account.stakedBalance);
+
+        //       summedVotedHnt += parseInt(totalBalance.integerBalance);
+
+        //       votingWallets++;
+        //     }
+        //   })
+        // );
 
         outcome.hntVoted = summedVotedHnt;
         outcome.uniqueWallets = votingWallets;
