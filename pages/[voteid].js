@@ -480,7 +480,9 @@ export async function getStaticPaths() {
 export async function getStaticProps({ params }) {
   const { voteid } = params;
 
-  const { height } = await fetchCurrentHeight();
+  // const { height } = await fetchCurrentHeight();
+
+  const height = await client.blocks.getHeight();
   const details = await fetchVoteDetails(voteid);
 
   const results = await fetchResults(voteid);
