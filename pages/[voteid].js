@@ -286,10 +286,9 @@ const VoteDetailsPage = ({
           </div>
           <div className="flex-grow">
           <p className="text-gray-900 font-sans font-medium text-left w-full text-md">
-          Voting is suspended while the blockchain is currently halted.
+          Voting is suspended while the API is down for Emergency Maintenance.
           </p>
-          <p className="text-gray-900 font-sans font-light text-left w-full text-sm">This will automatically push out the vote deadline as it is counted
-            in blocks (not clock-time).</p>
+          <p className="text-gray-900 font-sans font-light text-left w-full text-sm">Click this banner for status updates. Downtime is expected to end November 18, 13:00 PT. </p>
             </div>
         </div>
       </ContentSection>
@@ -317,7 +316,7 @@ const VoteDetailsPage = ({
             </svg>
           </div>
           <span className="text-gray-900 font-sans font-normal text-left w-full text-sm">
-            Votes cannot be counted until block production resumes.</span><span className="text-gray-900 font-sans font-light text-right w-full text-sm">Click here for status updates.</span>
+            Votes cannot be submitted until API is back online</span><span className="text-gray-900 font-sans font-light text-right w-full text-sm">Click here for status updates.</span>
         </div>
       </ContentSection>
       </a>

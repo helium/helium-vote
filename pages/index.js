@@ -238,10 +238,9 @@ export default function Home({ height, activeVotes, completedVotes }) {
           </div>
           <div className="flex-grow">
           <p className="text-gray-900 font-sans font-medium text-left w-full text-md">
-            Voting is suspended while the blockchain is currently halted.
+          Voting is suspended while the API is down for Emergency Maintenance.
           </p>
-          <p className="text-gray-900 font-sans font-light text-left w-full text-sm">This will automatically push out vote deadlines as they are counted
-            in blocks (not clock-time).</p>
+          <p className="text-gray-900 font-sans font-light text-left w-full text-sm">Click this banner for status updates. Downtime is expected to end November 18 13:00 PT. </p>
             </div>
         </div>
       </ContentSection>
