@@ -1,5 +1,4 @@
 import getConfig from "next/config";
-import cache from "../../../utils/cache";
 
 const { serverRuntimeConfig } = getConfig();
 const votes = new Map(serverRuntimeConfig.votes.map((i) => [i.id, i]));
@@ -12,10 +11,18 @@ export default async function handler(req, res) {
     return;
   }
 
-  const results = await cache.get(
-    // the key to look for in the Redis cache
-    voteId
-  );
+  const { result: results } = await fetch(
+    `${process.env.READ_ONLY_REDIS_URL}/get/${voteId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${process.env.REDIS_BEARER_TOKEN}`,
+      },
+    }
+  )
+    .then((response) => response.json())
+    .then((data) => {
+      return data;
+    });
 
   res.status(200).json(results);
 }
