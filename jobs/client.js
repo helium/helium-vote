@@ -1,7 +1,9 @@
 const { default: Client, Network } = require("@helium/http");
 
 const TAKE_MAX = 100000;
-const STAKEJOY_API_BASE_URL = "https://tileserver.skittles.stakejoy.com";
+const STAKEJOY_API_BASE_URL = process.env.API_URL
+  ? process.env.API_URL
+  : "https://helium-api.stakejoy.com";
 
 const client = new Client(
   new Network({ baseURL: STAKEJOY_API_BASE_URL, version: 1 }),
