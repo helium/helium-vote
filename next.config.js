@@ -1,41 +1,47 @@
 // Use this example as a placeholder you can copy and paste into the array below when submitting a PR to create a new community vote
 const templateExample = {
   // The ID should be a unique ID for each vote. This will also be what populates the URL (e.g. heliumvote.com/1234)
-  id: "135xR8htbqTHCkWVPJEeqJuDVtyZJB852WuAzL7XwSVaVhdtH8q",
+  id: "TBD",
   // The deadline is the block at which all voting wallets' balances will be counted toward a vote
-  deadline: 1059000,
+  deadline: TBD,
   // This is the link where the "More details" button goes
-  link: "https://github.com/helium/HIP",
+  link: "https://github.com/helium/HIP/blob/master/0037-omni-protocol-poc.md",
   // The title of the vote. If it's for a HIP, put a descriptive title like "HIP 39: Redenomination"
-  name: "Test Vote: Ice Cream",
+  name: "HIP 37: Omni-Protocol PoC on Helium Network",
   tags: {
     // If it's a HIP, put "HIP [#]" as the primary tag
-    primary: "HIP 31",
+    primary: "HIP 37",
     // Use the optional secondary tag for a general descriptive term, such as "Economics"
-    secondary: "Ice Cream",
+    secondary: "Economic",
   },
   // An array of the person(s) calling for the vote
   authors: [
     {
       // How this person is generally known in the community
-      nickname: "@cokes",
+      nickname: "@zer0tweets",
       // A link to their profile (GitHub is probably the most useful, maybe Twitter?)
-      link: "https://github.com/user",
+      link: "https://twitter.com/Open5G/",
+    },
+    {
+      // How this person is generally known in the community
+      nickname: "@lxie",
+      // A link to their profile (GitHub is probably the most useful, maybe Twitter?)
+      link: "https://github.com/lxie123",
     },
   ],
   // A brief description of what the vote is for. It doesn't have to be comprehensive.
   description:
-    "Vote for your favorite ice cream flavor. This voting mechanism will be used for future Helium Improvement Proposal voting.",
+    "HIP 37 is the first step in earning HNT with 5G and WI-FI. This proposal outlines both the economic incentives and implementation strategy to support proof-of-coverage with the new wireless network types. The comprehensive details of the reward incentives and implementation strategy is outlined in the proposal linked in more details. Rough consensus to pass this HIP is achieved when the "For HIP 37" vote receives at least 66% of the vote.",
   // If this is a "For" vs "Against" vote, put the "For" option first, to keep the colour scheme consistent
   outcomes: [
     {
       // This is the title of each option. Try to keep it to a couple words at most to make the interface as readable as possible
-      value: "Chocolate",
+      value: "For HIP 37",
       // The wallet address associated with each option
       address: "13uWWxgbqa5i9W7SFme6NZ2Brr1jDiga4JP7JdQyBRNer9RGoii",
     },
     {
-      value: "Vanilla",
+      value: "Against HIP 37",
       address: "13yWhaorHn8Es6jujCw9HCFAjDyecCv5HMwzoa4gp26awSw7z3b",
       // an optional color field that will override the default vote option colors
       color: "#EEEEEE",
