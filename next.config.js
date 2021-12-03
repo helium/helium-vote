@@ -20,7 +20,13 @@ const templateExample = {
       // How this person is generally known in the community
       nickname: "@zer0tweets",
       // A link to their profile (GitHub is probably the most useful, maybe Twitter?)
-      link: "https://twitter.com/Open5G/",
+      link: "https://twitter.com/zer0tweets",
+    },
+    { 
+      // How this person is generally known in the community
+      nickname: "@JMF",
+      // A link to their profile (GitHub is probably the most useful, maybe Twitter?)
+      link: "https://github.com/JMFayal",
     },
     {
       // How this person is generally known in the community
@@ -31,7 +37,11 @@ const templateExample = {
   ],
   // A brief description of what the vote is for. It doesn't have to be comprehensive.
   description:
-    "HIP 37 is the first step in earning HNT with 5G and WI-FI. This proposal outlines both the economic incentives and implementation strategy to support proof-of-coverage with the new wireless network types. The comprehensive details of the reward incentives and implementation strategy is outlined in the proposal linked in more details. Rough consensus to pass this HIP is achieved when the "For HIP 37" vote receives at least 66% of the vote.",
+    "HIP 37 lays the foundation for earning HNT for providing 5G and WiFi coverage on the Helium network. 
+     This proposal outlines both the economic incentives and implementation strategy to support Proof-of-Coverage 
+     with new wireless network types. The comprehensive details of the reward incentives and implementation strategy 
+     are available by clicking more details. Rough consensus to pass this HIP is achieved when "For HIP 37"  
+     receives at least 66% of the vote.",
   // If this is a "For" vs "Against" vote, put the "For" option first, to keep the colour scheme consistent
   outcomes: [
     {
