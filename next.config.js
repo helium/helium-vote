@@ -37,10 +37,7 @@ const templateExample = {
   ],
   // A brief description of what the vote is for. It doesn't have to be comprehensive.
   description:
-    "HIP 37 lays the foundation for earning HNT for providing 5G and WiFi coverage on the Helium network. 
-     This proposal outlines both the economic incentives and implementation strategy to support Proof-of-Coverage 
-     with new wireless network types. The comprehensive details of the reward incentives and implementation strategy 
-     are available by clicking more details. Rough consensus to pass this HIP is achieved when "For HIP 37"  
+    "HIP 37 lays the foundation for earning HNT for providing 5G and WiFi coverage on the Helium network. This proposal outlines both the economic incentives and implementation strategy to support Proof-of-Coverage with new wireless network types. The comprehensive details of the reward incentives and implementation strategy are available by clicking more details. Rough consensus to pass this HIP is achieved when "For HIP 37"  
      receives at least 66% of the vote.",
   // If this is a "For" vs "Against" vote, put the "For" option first, to keep the colour scheme consistent
   outcomes: [
