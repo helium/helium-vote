@@ -184,7 +184,7 @@ const VoteDetailsPage = ({
                 </div>
               )}
               <div className="flex flex-col sm:flex-row justify-between align-start mt-5">
-                <p className="font-sans max-w-lg break-words text-md leading-snug tracking-tight text-hv-gray-300">
+                <p className="font-sans max-w-lg break-words whitespace-pre-wrap text-md leading-snug tracking-tight text-hv-gray-300">
                   {description}
                 </p>
                 <div className="mt-4 sm:mt-0">
