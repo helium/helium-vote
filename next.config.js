@@ -122,7 +122,7 @@ module.exports = {
           },
         ],
         description:
-          "This proposal seeks to regulate the number of witnesses a Hotspot is rewarded for based on the success of beacons. By tying the reward for witnesses of Hotspots to successful beacons, we incentivize healthy network coverage. \nA vote for this HIP is considered a signal of intent. The particular implementation of this HIP is subject to change.",
+          "This proposal seeks to regulate the number of witnesses a Hotspot is rewarded for based on the success of beacons. By tying the reward for witnesses of Hotspots to successful beacons, we incentivize healthy network coverage.\n\nA vote for this HIP is considered a signal of intent. The particular implementation of this HIP is subject to change.",
         outcomes: [
           {
             value: "For Beacon/Witness Ratio",
@@ -133,7 +133,7 @@ module.exports = {
             address: "134UcXhcGD1fxR3XrA3rgXXiQCjNFiB8MbnxsTX8z1iv3CQ52Zs",
           },
         ],
-      }
+      },
     ],
   },
   webpack: (config, { isServer }) => {
