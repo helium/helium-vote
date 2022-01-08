@@ -285,9 +285,9 @@ const VoteDetailsPage = ({
       </ContentSection>
       <ContentSection>
       {tags?.tertiary && (
-                  <div className="py-2 px-2 bg-yellow-400 rounded-lg mt-10" >
+                  <div className="py-2 px-4 bg-yellow-400 rounded-lg mt-10 leading-none" >
                     <span className="text-xs sm:text-sm text-black font-bold">
-                      {tags.tertiary} <span className="text-xs sm:text-sm text-black font-light"> This vote acts as a temperature check only, in order to gauge interest.</span>
+                      {tags.tertiary} <span className="text-xs sm:text-sm text-black font-light">This vote acts as a check in order to gauge interest.</span>
                     </span>
                   </div>
                 )}
