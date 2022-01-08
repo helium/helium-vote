@@ -110,10 +110,11 @@ module.exports = {
         id: "13NyqFtVKsifrh6HQ7DjSBKXRDi7qLHDoATHogoSgvBh56oZJv8",
         deadline: 1185690,
         link: "https://github.com/helium/HIP/blob/master/0042-beacon-witness-ratio-witness-reward-limit.md",
-        name: "Temperature Check—HIP 42: Beacon/Witness Ratio",
+        name: "Beacon/Witness Ratio",
         tags: {
           primary: "HIP 42",
           secondary: "Technical",
+          tertiary: "Temp Check",
         },
         authors: [
           {

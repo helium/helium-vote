@@ -144,15 +144,22 @@ const VoteDetailsPage = ({
               <div className="flex flex-row items-center justify-start space-x-2 pb-2">
                 {tags?.primary && (
                   <div className="py-0.5 px-2 bg-white rounded-lg">
-                    <span className="text-xs sm:text-sm text-hv-gray-1100 font-light">
+                    <span className="text-xs sm:text-sm text-hv-gray-1100 font-reg">
                       {tags.primary}
                     </span>
                   </div>
                 )}
                 {tags?.secondary && (
                   <div className="py-0.5 px-2 bg-hv-gray-775 rounded-lg">
-                    <span className="text-xs sm:text-sm text-hv-gray-350 font-light">
+                    <span className="text-xs sm:text-sm text-hv-gray-350 font-reg">
                       {tags.secondary}
+                    </span>
+                  </div>
+                )}
+                 {tags?.tertiary && (
+                  <div className="py-0.5 px-2 bg-yellow-400 rounded-lg">
+                    <span className="text-xs sm:text-sm text-black font-reg">
+                      {tags.tertiary}
                     </span>
                   </div>
                 )}
@@ -208,6 +215,8 @@ const VoteDetailsPage = ({
           </div>
         </div>
       </ContentSection>
+
+    
 
       <ContentSection className="mt-4 sm:mt-14">
         <div className="bg-hv-gray-775 rounded-xl p-5 flex flex-col lg:flex-row justify-between space-y-2 lg:space-y-0 align-center w-full">
@@ -274,6 +283,7 @@ const VoteDetailsPage = ({
           )}
         </div>
       </ContentSection>
+      
 
       {!completed && <VoteOptionsSection outcomes={outcomes} />}
 
@@ -360,6 +370,17 @@ const VoteDetailsPage = ({
           </div>
         </div>
       )}
+
+<ContentSection>
+      {tags?.tertiary && (
+                  <div className="py-2 px-2 bg-yellow-400 rounded-lg mt-10" >
+                    <span className="text-xs sm:text-sm text-black font-bold">
+                      {tags.tertiary} <span className="text-xs sm:text-sm text-black font-light"> This vote acts as a temperature check only, in order to gauge interest.</span>
+                    </span>
+                  </div>
+                )}
+      </ContentSection>
+
 
       <ContentSection className="mt-10 sm:mt-14">
         <div className="bg-hv-gray-775 rounded-xl px-4 sm:px-7 py-4 sm:py-7 flex flex-row justify-between align-center w-full">
