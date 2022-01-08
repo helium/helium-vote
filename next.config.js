@@ -108,7 +108,7 @@ module.exports = {
       },
       {
         id: "13NyqFtVKsifrh6HQ7DjSBKXRDi7qLHDoATHogoSgvBh56oZJv8",
-        deadline: 1185690,
+        deadline: 1183225,
         link: "https://github.com/helium/HIP/blob/master/0042-beacon-witness-ratio-witness-reward-limit.md",
         name: "Beacon/Witness Ratio",
         tags: {
