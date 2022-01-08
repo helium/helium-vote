@@ -110,7 +110,7 @@ module.exports = {
         id: "13NyqFtVKsifrh6HQ7DjSBKXRDi7qLHDoATHogoSgvBh56oZJv8",
         deadline: 1185690,
         link: "https://github.com/helium/HIP/blob/master/0042-beacon-witness-ratio-witness-reward-limit.md",
-        name: "HIP 42: Beacon/Witness Ratio",
+        name: "Temperature Check—HIP 42: Beacon/Witness Ratio",
         tags: {
           primary: "HIP 42",
           secondary: "Technical",
@@ -122,7 +122,7 @@ module.exports = {
           },
         ],
         description:
-          "This proposal seeks to regulate the number of witnesses a Hotspot is rewarded for based on the success of beacons. By tying the reward for witnesses of Hotspots to successful beacons, we incentivize healthy network coverage.\n\nA vote for this HIP is considered a signal of intent. The particular implementation of this HIP is subject to change.",
+          "This proposal seeks to regulate the number of witnesses a Hotspot is rewarded for based on the success of beacons. By tying the reward for witnesses of Hotspots to successful beacons, we incentivize healthy network coverage.\n\nVotes for this HIP are considered a temperature check. The implementation of this HIP is not guaranteed and is subject to follow‑up votes.",
         outcomes: [
           {
             value: "For Beacon/Witness Ratio",
