@@ -14,6 +14,7 @@ const fetchVoteDetails = async (id) => {
 
 const calculateResultsForVote = async (id) => {
   try {
+    console.log("fetching vote details for:", id);
     const { outcomes, deadline } = await fetchVoteDetails(id);
 
     // initialize empty results object
@@ -31,12 +32,14 @@ const calculateResultsForVote = async (id) => {
         activityOptions.filterTypes = ["token_burn_v1"];
 
         try {
+          console.log("fetching deadline details for:", id, "deadline:", deadline);
           const deadlineBlock = await client.blocks.get(deadline);
           activityOptions.maxTime = new Date(deadlineBlock.time * 1000);
         } catch (e) {
           // console.error(e);
         }
 
+        console.log("fetching token burns for:", id, "address:", address);
         // get all token burns for this wallet
         const list = await client
           .account(address)
@@ -87,6 +90,7 @@ const calculateResultsForVote = async (id) => {
             votingWallets++;
           }
         });
+        console.log("tracking balance for vote:", id, "outcome:", address, "total:", summedVotedHnt);
 
         // await Promise.all(
         //   ungroupedAllVotesToCount.map(async (txn) => {
@@ -117,6 +121,7 @@ const calculateResultsForVote = async (id) => {
       })
     );
 
+    console.log("calculated results for:", id);
     results.outcomes = outcomesResults;
     results.timestamp = Date.now();
     return results;
@@ -134,7 +139,7 @@ const checkVotes = async () => {
 
   await Promise.all(
     activeVotes.map(async ({ id }) => {
-      console.log("calculating: ", id);
+      console.log("calculating:", id);
       const voteResults = await calculateResultsForVote(id);
 
       await cache.set(id, voteResults);
