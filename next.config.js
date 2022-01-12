@@ -137,56 +137,56 @@ module.exports = {
       },
       {
         id: "14iwaexUYUe5taFgb5hx2BZw74z3TSyonRLYyZU1RbddV4bJest",
-        deadline: 1180209,
-        // link: "https://github.com/helium/HIP/blob/master/0039-hnt-redenomination.md",
-        name: "Helium, Inc Manage Denylist",
+        deadline: 1180295,
+        link: "https://discord.gg/helium",
+        name: "Maintain Temporary Hotspot Denylist",
         description:
-          "Should Helium, Inc continue to manage the denylist that is embedded in miner images until such time that a HIP-40 implementation is approved or if HIP-40 is rejected by the community?",
-        // authors: [
-        //   {
-        //     nickname: "@JMF",
-        //     link: "https://github.com/JMFayal",
-        //   },
-        // ],
+          "As the Helium Network has grown, so too has the prevalence of malicious activity and institutional cheating. This activity seeks to game the system with the sole intent of exploiting Proof-of-Coverage rewards without providing any real value to the network.\n\nShould Helium, Inc continue to temporarily manage the denylist that is embedded in miner images until such time that a HIP-40 implementation is approved or if HIP-40 is rejected by the community?\n\nJoin the conversation on Discord and see announcements channel for more details.",
+        authors: [
+          {
+            nickname: "Helium Inc.",
+            // link: "",
+          },
+        ],
         tags: {
           primary: "Denylist",
-          // secondary: "Economic",
+          // secondary: "",
         },
         outcomes: [
           {
-            value: "For Helium Maintaining Denylist",
+            value: "For Temporarily Maintaining Denylist",
             address: "14i2TpGTLB8SRGURXRumcGv7sDD1ABQJLbLphdyDaTTBQG4ZTCb",
           },
           {
-            value: "Against Helium Maintaining Denylist",
+            value: "Against Temporarily Maintaining Denylist",
             address: "13aRcLjXSjWdYCwihwGnJYiCP87BGniMN2g74Mm7rV6ZVXecDMQ",
           },
         ],
       },
       {
         id: "13wCuq7XGnc4xgxPAc9n9ragKsRfmH9t9jB3c1smfKPZWSikZkd",
-        deadline: 1180209,
-        // link: "https://github.com/helium/HIP/blob/master/0039-hnt-redenomination.md",
-        name: "Helium Inc Publish Existing Denylist",
+        deadline: 1180295,
+        link: "https://discord.gg/helium",
+        name: "Publish Temporary Hotspot Denylist",
         description:
-          "Should Helium, Inc. publish the current denylist even though it may allow existing gaming hotspots to change their setups to avoid being detected?",
+          "As the Helium Network has grown, so too has the prevalence of malicious activity and institutional cheating. This activity seeks to game the system with the sole intent of exploiting Proof-of-Coverage rewards without providing any real value to the network.\n\nShould Helium Inc. publish the current denylist even though it may allow existing gaming hotspots to change their setups to avoid being detected?\n\nJoin the conversation on Discord and see announcements channel for more details.",
         authors: [
           {
             nickname: "Helium Inc.",
-            // link: "https://github.com/JMFayal",
+            // link: "",
           },
         ],
         tags: {
           primary: "Denylist",
-          // secondary: "Economic",
+          // secondary: "",
         },
         outcomes: [
           {
-            value: "For Publishing Helium Denylist",
+            value: "For Publishing Hotspot Denylist",
             address: "13pk2QHtwZKYbZH9oAr9oajwzBERsZCNzNWF3uwud5TrisTywQN",
           },
           {
-            value: "Against Publishing Helium Denylist",
+            value: "Against Publishing Hotspot Denylist",
             address: "14dtRgHykFreu2NSRqQvMprCXMSpA3Z9iW4i5Wf9FWfhKARH3iU",
           },
         ],
