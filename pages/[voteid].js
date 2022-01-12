@@ -195,20 +195,22 @@ const VoteDetailsPage = ({
                   {description}
                 </p>
                 <div className="mt-4 sm:mt-0">
-                  <a
-                    href={link}
-                    rel="noopener noreferrer"
-                    target="_blank"
-                    className="flex items-center justify-between px-3 py-2 bg-hv-gray-475 hover:bg-hv-gray-500 transition-all duration-100 rounded-lg w-min outline-none border border-solid border-transparent focus:border-hv-green-500"
-                  >
-                    <span className="text-sm text-hv-green-500 whitespace-nowrap pr-10">
-                      More Details
-                    </span>
-                    <img
-                      className="w-4 h-4 mr-4"
-                      src="/images/external-link.svg"
-                    />
-                  </a>
+                  {link && (
+                    <a
+                      href={link}
+                      rel="noopener noreferrer"
+                      target="_blank"
+                      className="flex items-center justify-between px-3 py-2 bg-hv-gray-475 hover:bg-hv-gray-500 transition-all duration-100 rounded-lg w-min outline-none border border-solid border-transparent focus:border-hv-green-500"
+                    >
+                      <span className="text-sm text-hv-green-500 whitespace-nowrap pr-10">
+                        More Details
+                      </span>
+                      <img
+                        className="w-4 h-4 mr-4"
+                        src="/images/external-link.svg"
+                      />
+                    </a>
+                  )}
                 </div>
               </div>
             </div>
