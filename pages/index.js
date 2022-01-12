@@ -55,10 +55,10 @@ const VoteCard = ({ vote, height }) => {
   const outcomes = outcomesInitial?.map((o, i) => ({ ...o, index: i }));
 
   return (
-    <div className="flex-shrink-0 min-w-96 w-full sm:w-96 sm:p-5">
+    <div className="flex-shrink-1 w-full basis-full mb-2 sm:mb-0 md:basis-6/12 lg:w-4/12 sm:p-5">
       <Link href={`/${id}`}>
         <a className="group h-full w-full flex flex-col transition-all duration-150 outline-none border border-solid border-opacity-0 focus:border-opacity-50 border-hv-green-500 rounded-3xl">
-          <span className="pt-5 px-5 rounded-t-3xl bg-hv-gray-450 group-hover:bg-hv-gray-400 transition-all duration-150">
+          <span className="py-5 px-5 rounded-t-3xl bg-hv-gray-450 group-hover:bg-hv-gray-400 lg:min-h-[200px] transition-all duration-150">
           {tags && (
                 <div className="flex flex-row items-center justify-end">
                   {(tags?.primary || tags?.secondary) && (
@@ -92,7 +92,7 @@ const VoteCard = ({ vote, height }) => {
               </p>
               
             </div>
-            <p className="text-hv-gray-300 h-14 overflow-hidden text-sm leading-tight">
+            <p className="text-hv-gray-300 h-6 lg:h-14 overflow-hidden text-sm leading-tight">
               {description?.substring(0, 80)}...
             </p>
           </span>
@@ -273,7 +273,7 @@ export default function Home({ height, activeVotes, completedVotes }) {
 
           <div className="pt-4 lg:pl-10">
             {filteredVotesList.length > 0 ? (
-              <div className="flex flex-col sm:flex-row w-full sm:overflow-x-auto">
+              <div className="flex flex-col sm:flex-row w-full flex-wrap">
                 {filteredVotesList.map((v) => {
                   return <VoteCard vote={v} height={height} />;
                 })}
