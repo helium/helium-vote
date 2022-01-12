@@ -20,10 +20,10 @@ const calculateResultsForVote = async (id) => {
     // initialize empty results object
     const results = {};
 
-    // build one array of all burn txns for all options
+    // build one array of all burn txns for all options through the roles endpoint
     // loop through them all before starting to tally, so we can make sure for any given payer, only their latest vote gets counted.
     // otherwise, if building that index to check against during the loop, it wouldn't have the complete list to find the transaction from any given payer with the largest height
-    const allBurnPayTxns = [];
+    const allBurnRoles = [];
     await Promise.all(
       outcomes.map(async (outcome) => {
         const { address } = outcome;
@@ -39,17 +39,27 @@ const calculateResultsForVote = async (id) => {
           // console.error(e);
         }
 
-        console.log("fetching token burns for:", id, "address:", address);
-        // get all token burns for this wallet
+        console.log("fetching token burns roles for:", id, "address:", address);
+        // get all token burns roles for this wallet
         const list = await client
           .account(address)
-          .activity.list(activityOptions);
+          .roles.list(activityOptions);
 
         const burns = await list.take(TAKE_MAX);
 
-        allBurnPayTxns.push(...burns);
+        allBurnRoles.push(...burns);
       })
     );
+
+    const allBurnPayTxns = [];
+    await Promise.all(
+      allBurnRoles.map(async ({ hash, height}) => {
+        if (height > deadline) return;
+
+        const txn = await client.transactions.get(hash);
+        allBurnPayTxns.push(txn);
+      })
+    )
 
     const ungroupedAllVotesToCount = chain(allBurnPayTxns)
       .groupBy((txn) => txn.payer)
@@ -91,28 +101,6 @@ const calculateResultsForVote = async (id) => {
           }
         });
         console.log("tracking balance for vote:", id, "outcome:", address, "total:", summedVotedHnt);
-
-        // await Promise.all(
-        //   ungroupedAllVotesToCount.map(async (txn) => {
-        //     if (txn.height > deadline) return;
-
-        //     // tally the votes for this outcome, skip everything else
-        //     if (txn.payee === address) {
-        //       const { payer: voter } = txn;
-
-        //       // get snapshot of account as of the deadline block
-        //       const account = await client.accounts.get(voter, {
-        //         maxBlock: deadline,
-        //       });
-
-        //       const totalBalance = account.balance.plus(account.stakedBalance);
-
-        //       summedVotedHnt += parseInt(totalBalance.integerBalance);
-
-        //       votingWallets++;
-        //     }
-        //   })
-        // );
 
         outcome.hntVoted = summedVotedHnt;
         outcome.uniqueWallets = votingWallets;
