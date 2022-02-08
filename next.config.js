@@ -190,7 +190,43 @@ module.exports = {
             address: "14dtRgHykFreu2NSRqQvMprCXMSpA3Z9iW4i5Wf9FWfhKARH3iU",
           },
         ],
-      }
+      },
+      {
+        id: "14iwaexUYUe5taFgb5hx2BZw74z3TSyonRLYyZU1RbddV4bJest",
+        deadline: 1180295,
+        link: "https://github.com/helium/HIP/blob/main/0054-h3dex-targeting.md",
+        name: "H3Dex-based PoC Targeting",
+        tags: {
+          primary: "HIP 54",
+          secondary: "Technical",
+        },
+        authors: [
+          {
+            nickname: "@Vagabond",
+            link: "https://github.com/Vagabond",
+          },
+          {
+            nickname: "@vihu",
+            link: "https://github.com/vihu",
+          },
+          {
+            nickname: "@abhay",
+            link: "https://github.com/abhay",
+          },
+        ],
+        description:
+          "This proposal for a more scalable replacement using an H3-based index. We are proposing it as a HIP to communicate and acknowledge that this is a change to the current implementation but we believe it still falls within the original intent of PoC.\n\n\n\nWe will consider this proposal as approved if it passes with 2/3 of the vote power by the deadline.\n\nJoin the conversation on Discord and see #hip54-h3dex-poc-targeting channel for more details.",
+        outcomes: [
+          {
+            value: "For HIP 54",
+            address: "139PKnj4Na9ABLk6nLNJEWc1JBXHBHv2pwo5NXAcnjxzCnv9xBz",
+          },
+          {
+            value: "Against HIP 54",
+            address: "134DktjwZfaATjJvfkCgX2MZUquaKsn9cF6hnNSEbHyFhqoiV5X",
+          },
+        ],
+      },
     ],
   },
   webpack: (config, { isServer }) => {
