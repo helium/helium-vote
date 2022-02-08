@@ -215,7 +215,7 @@ module.exports = {
           },
         ],
         description:
-          "This proposal for a more scalable replacement using an H3-based index. We are proposing it as a HIP to communicate and acknowledge that this is a change to the current implementation but we believe it still falls within the original intent of PoC.\n\n\n\nWe will consider this proposal as approved if it passes with 2/3 of the vote power by the deadline.\n\nJoin the conversation on Discord and see #hip54-h3dex-poc-targeting channel for more details.",
+          "This is a proposal for a more scalable replacement for Proof-of-Coverage (PoC) targeting using an H3-based index. We are proposing it as a HIP to communicate and acknowledge that this is a change to the current implementation but we believe it still falls within the original intent of PoC.\n\nApproving this HIP implies that the community has reviewed the implementation and the relevant Chain Variables. We will consider this proposal as approved if it passes with 2/3 of the vote power by the deadline.\n\nPlease note that this change will be activated only after approval and through a Chain Variable but the code to support this change may be available on chain before the HIP is approved.\n\nJoin the conversation on Discord and see the #hip54-h3dex-poc-targeting channel for more details.",
         outcomes: [
           {
             value: "For HIP 54",
