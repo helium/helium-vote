@@ -192,7 +192,7 @@ module.exports = {
         ],
       },
       {
-        id: "14iwaexUYUe5taFgb5hx2BZw74z3TSyonRLYyZU1RbddV4bJest",
+        id: "14me3X7jpEmn3eeFfnAkMvUoFU3cN6GAS3CDomqCikr7VQfHWrU",
         deadline: 1180295,
         link: "https://github.com/helium/HIP/blob/main/0054-h3dex-targeting.md",
         name: "H3Dex-based PoC Targeting",
@@ -219,11 +219,11 @@ module.exports = {
         outcomes: [
           {
             value: "For HIP 54",
-            address: "139PKnj4Na9ABLk6nLNJEWc1JBXHBHv2pwo5NXAcnjxzCnv9xBz",
+            address: "13Cq1jr9HTVZAxgrD9kXg3ytqjWZ4D2bEGJejPs2bb3vAZJz3sM",
           },
           {
             value: "Against HIP 54",
-            address: "134DktjwZfaATjJvfkCgX2MZUquaKsn9cF6hnNSEbHyFhqoiV5X",
+            address: "1344XqCee51BkNzbjAjW1MyR17qvhc9952ygWbz5eMNn4nnPxHZ",
           },
         ],
       },
