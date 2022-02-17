@@ -193,7 +193,7 @@ module.exports = {
       },
       {
         id: "14me3X7jpEmn3eeFfnAkMvUoFU3cN6GAS3CDomqCikr7VQfHWrU",
-        deadline: 1180295,
+        deadline: 1237200,
         link: "https://github.com/helium/HIP/blob/main/0054-h3dex-targeting.md",
         name: "H3Dex-based PoC Targeting",
         tags: {
@@ -215,7 +215,7 @@ module.exports = {
           },
         ],
         description:
-          "This is a proposal for a more scalable replacement for Proof-of-Coverage (PoC) targeting using an H3-based index. We are proposing it as a HIP to communicate and acknowledge that this is a change to the current implementation but we believe it still falls within the original intent of PoC.\n\nApproving this HIP implies that the community has reviewed the implementation and the relevant Chain Variables. We will consider this proposal as approved if it passes with 2/3 of the vote power by the deadline.\n\nPlease note that this change will be activated only after approval and through a Chain Variable but the code to support this change may be available on chain before the HIP is approved.\n\nJoin the conversation on Discord and see the #hip54-h3dex-poc-targeting channel for more details.",
+          "This is a proposal for a more scalable replacement for Proof-of-Coverage (PoC) targeting using an H3-based index. We are proposing it as a HIP to communicate and acknowledge that this is a change to the current implementation but we believe it still falls within the original intent of PoC.\n\nApproving this HIP implies that the community has reviewed the implementation and the relevant Chain Variables. We will consider this proposal as approved if it passes with 2/3 of the vote power by the deadline.\n\nJoin the conversation on Discord and see the #hip54-h3dex-poc-targeting channel for more details.",
         outcomes: [
           {
             value: "For HIP 54",
@@ -224,6 +224,42 @@ module.exports = {
           {
             value: "Against HIP 54",
             address: "1344XqCee51BkNzbjAjW1MyR17qvhc9952ygWbz5eMNn4nnPxHZ",
+          },
+        ],
+      },
+      {
+        id: "14Rjhhz1DXLVmSRdzappqWgD6rfgu6XYxmdaSCvWLyLH8ZWbciK",
+        deadline: 1237200,
+        link: "https://github.com/helium/HIP/blob/main/0055-validator-challenges.md",
+        name: "Validator Challenges",
+        tags: {
+          primary: "HIP 55",
+          secondary: "Technical",
+        },
+        authors: [
+          {
+            nickname: "@Vagabond",
+            link: "https://github.com/Vagabond",
+          },
+          {
+            nickname: "@andymck",
+            link: "https://github.com/andymck",
+          },
+          {
+            nickname: "@abhay",
+            link: "https://github.com/abhay",
+          },
+        ],
+        description:
+          "This is a proposal to change how Proof-of-Coverage (PoC) Challenges are generated and submitted to the Helium blockchain that allows for further network scalability and lowers the hardware complexity/cost of Hotspots. Specifically, it moves the responsibility of PoC Challenge creation to Validators and consequently proposes moving the economic reward for creating Challenges to this group as well.\n\nApproving this HIP implies that the community has reviewed the implementation and the relevant Chain Variables. We will consider this proposal as approved if it passes with 2/3 of the vote power by the deadline.\n\nJoin the conversation on Discord and see the #hip55-validator-challenges channel for more details.",
+        outcomes: [
+          {
+            value: "For HIP 55",
+            address: "13pshKABnfUBSAcXJrgDYxvwXxJ6UMD1LrXA2ZDXwCKGNu83hyY",
+          },
+          {
+            value: "Against HIP 55",
+            address: "13v6vkBUaHjoGx2daVCxXtyDkaKMP1Key4WphkkGsc3gpPpgTh4",
           },
         ],
       },
