@@ -263,6 +263,49 @@ module.exports = {
           },
         ],
       },
+      {
+        id: "13UrtNApGd3NbeP3NyyTejqNEPAv3NGxkGjvtwTVdaRs24NT7Wy",
+        deadline: 1256800,
+        link: "https://github.com/helium/HIP/blob/main/0056-state-channel-dispute-strategy.md",
+        name: "Improved State Channel Disputes",
+        tags: {
+          primary: "HIP 56",
+          secondary: "Technical",
+        },
+        authors: [
+          {
+            nickname: "@macpie",
+            link: "https://github.com/macpie",
+          },
+          {
+            nickname: "@michaeldjeffrey",
+            link: "https://github.com/michaeldjeffrey",
+          },
+          {
+            nickname: "@Vagabond",
+            link: "https://github.com/Vagabond",
+          },
+          {
+            nickname: "@abhay",
+            link: "https://github.com/abhay",
+          },
+          {
+            nickname: "et al."
+          }
+        ],
+        description:
+          "HIP 56 describes an update to the dispute mechanism for State Channels that would improve blockchain scaling. These changes allow Validators to better reconcile Data Transfer activity and rewards for Hotspots. The change would also address recent issues around large block sizes. This vote is for the new dispute mechanism to be enabled by a chain variable.\n\nApproving this HIP implies that the community has reviewed the implementation and the relevant Chain Variables. We will consider this proposal as approved if it passes with 2/3 of the vote power by the deadline.\n\nJoin the conversation on Discord and see the #hip‑56‑improved‑state‑channel‑disputes channel for more details.",
+        outcomes: [
+          {
+            value: "For HIP 56",
+            address: "14afviZLjBxH4neJEK3TxDuhhHJk9C7rnJe4AxcJKUNda435biL",
+          },
+          {
+            value: "Against HIP 56",
+            address: "14ExX6eX6tw76f6pu7z3PinTMGcZ3D5mxHYB59u25pFyp2ZK8tw",
+          },
+        ],
+      },
     ],
   },
   webpack: (config, { isServer }) => {
