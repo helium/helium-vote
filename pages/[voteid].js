@@ -175,13 +175,17 @@ const VoteDetailsPage = ({
                     {`Author${authors.length > 1 ? "s" : ""}: `}
                     {authors.map(({ nickname, link }, i, { length }) => (
                       <>
-                        <a
-                          href={link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          <span className="text-hv-green-500">{nickname}</span>
-                        </a>
+                        {link ? // if link, use anchor
+                          <a
+                            href={link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <span className="text-hv-green-500">{nickname}</span>
+                          </a>
+                          : //if no link, show plain text
+                          <span>{nickname}</span>
+                        }
                         {length > 1 && i + 1 !== length && (
                           <span className="text-hv-gray-200">, </span>
                         )}
