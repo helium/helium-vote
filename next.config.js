@@ -294,7 +294,7 @@ module.exports = {
           }
         ],
         description:
-          "HIP 56 describes an update to the dispute mechanism for State Channels that would improve blockchain scaling. These changes allow Validators to better reconcile Data Transfer activity and rewards for Hotspots. The change would also address recent issues around large block sizes. This vote is for the new dispute mechanism to be enabled by a chain variable.\n\nApproving this HIP implies that the community has reviewed the implementation and the relevant Chain Variables. We will consider this proposal as approved if it passes with 2/3 of the vote power by the deadline.\n\nJoin the conversation on Discord and see the #hip‑56‑improved‑state‑channel‑disputes channel for more details.",
+          "HIP 56 describes an update to the dispute mechanism for State Channels that will enable better accounting of State Channel activity and more accurate rewards for Data Transfer while improving blockchain scaling. It specifically protects against an edge case that could cause blockchain halts due to the dispute mechanism. This vote is for the new dispute mechanism to be enabled by a chain variable.\n\nApproving this HIP implies that the community has reviewed the implementation and the relevant Chain Variables. We will consider this proposal as approved if it passes with 2/3 of the vote power by the deadline.\n\nJoin the conversation on Discord and see the #hip‑56‑improved‑state‑channel‑disputes channel for more details.",
         outcomes: [
           {
             value: "For HIP 56",
