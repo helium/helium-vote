@@ -47,6 +47,34 @@ module.exports = {
   serverRuntimeConfig: {
     votes: [
       {
+        id: "TBD",
+        deadline: TBD,
+        link: "https://github.com/helium/HIP/blob/master/0037-omni-protocol-poc.md",
+        name: "HIP 37: Omni-Protocol PoC on Helium Network",
+        tags: {
+          primary: "HIP 37",
+          secondary: "Economic",
+        },
+        authors: [
+          {
+            nickname: "@lxie",
+            link: "https://github.com/lxie123",
+          },
+        ],
+        description:
+          "HIP 37 lays the foundation for earning HNT for providing 5G and WiFi coverage on the Helium network. This proposal outlines both the economic incentives and implementation strategy to support Proof-of-Coverage with new wireless network types. The comprehensive details of the reward incentives and implementation strategy are available by clicking more details. Rough consensus to pass this HIP is achieved when "For HIP 37" receives at least 66% of the vote.",
+        outcomes: [
+          {
+            value: "For HIP 37",
+            address: "TBD",
+          },
+          {
+            value: "Against HIP 37",
+            address: "TBD",
+          },
+        ],
+      },
+      {
         id: "135xR8htbqTHCkWVPJEeqJuDVtyZJB852WuAzL7XwSVaVhdtH8q",
         deadline: 1059000,
         link: "https://github.com/helium/HIP",
