@@ -46,38 +46,38 @@ const templateExample = {
 module.exports = {
   serverRuntimeConfig: {
     votes: [
-      {
-        id: "135xR8htbqTHCkWVPJEeqJuDVtyZJB852WuAzL7XwSVaVhdtH8q",
-        deadline: 1059000,
-        link: "https://github.com/helium/HIP",
-        name: "Test Vote: Ice Cream",
-        tags: {
-          primary: "TEST",
-          secondary: "Ice Cream",
-        },
-        authors: [
-          {
-            nickname: "@cokes",
-            // link: "https://github.com/user",
-          },
-        ],
-        description:
-          "Vote for your favorite ice cream flavor. This voting mechanism will be used for future Helium Improvement Proposal voting.",
-        outcomes: [
-          {
-            value: "Chocolate",
-            address: "13uWWxgbqa5i9W7SFme6NZ2Brr1jDiga4JP7JdQyBRNer9RGoii",
-          },
-          {
-            value: "Strawberry",
-            address: "14aVVtQvq7QK2FmU3ZFnXM3o3Nodzve8cFjDQniJGJbq6AZ29a7",
-          },
-          {
-            value: "Vanilla",
-            address: "13yWhaorHn8Es6jujCw9HCFAjDyecCv5HMwzoa4gp26awSw7z3b",
-          },
-        ],
-      },
+      // {
+      //   id: "135xR8htbqTHCkWVPJEeqJuDVtyZJB852WuAzL7XwSVaVhdtH8q",
+      //   deadline: 1059000,
+      //   link: "https://github.com/helium/HIP",
+      //   name: "Test Vote: Ice Cream",
+      //   tags: {
+      //     primary: "TEST",
+      //     secondary: "Ice Cream",
+      //   },
+      //   authors: [
+      //     {
+      //       nickname: "@cokes",
+      //       // link: "https://github.com/user",
+      //     },
+      //   ],
+      //   description:
+      //     "Vote for your favorite ice cream flavor. This voting mechanism will be used for future Helium Improvement Proposal voting.",
+      //   outcomes: [
+      //     {
+      //       value: "Chocolate",
+      //       address: "13uWWxgbqa5i9W7SFme6NZ2Brr1jDiga4JP7JdQyBRNer9RGoii",
+      //     },
+      //     {
+      //       value: "Strawberry",
+      //       address: "14aVVtQvq7QK2FmU3ZFnXM3o3Nodzve8cFjDQniJGJbq6AZ29a7",
+      //     },
+      //     {
+      //       value: "Vanilla",
+      //       address: "13yWhaorHn8Es6jujCw9HCFAjDyecCv5HMwzoa4gp26awSw7z3b",
+      //     },
+      //   ],
+      // },
       {
         id: "14MnuexopPfDg3bmq8JdCm7LMDkUBoqhqanD9QzLrUURLZxFHBx",
         deadline: 1105440,
