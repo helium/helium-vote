@@ -306,6 +306,41 @@ module.exports = {
           },
         ],
       },
+      {
+        id: "xxx",
+        deadline: 1311000,
+        link: "https://github.com/helium/HIP/blob/main/0058-poc-distance-limit.md",
+        name: "PoC Distance Limit",
+        tags: {
+          primary: "HIP 58",
+          secondary: "Technical",
+        },
+        authors: [
+          {
+            nickname: "@abhay",
+            link: "https://github.com/abhay",
+          },
+          {
+            nickname: "@mrpatrick1991",
+            link: "https://github.com/mrpatrick1991",
+          },
+          {
+            nickname: "et al."
+          }
+        ],
+        description:
+          "HIP 58 seeks to nullify a certain gaming vector of Proof of Coverage rewards by aligning the expected range of PoC with the range of LoRaWAN devices.\n\nThe current PoC mechanics allow manipulation of witness RF data at long distances and thus, we find evidence of gaming at the edges. This improvement implements a sanity check filter on Proof of Coverage and reduces the maximum range of PoC activity to 100km. The distance is based on the notion that typical devices are able to be heard 30-50km away. The distance is doubled to 100km in order to incentivize new Hotspot placements. The impact on a few legitimate witness events that are > 100km is limited as described in the dataset in the HIP.\n\nApproving this HIP implies that the community has reviewed the implementation and relevant Chain Variable. We will consider this proposal as approved if it passed with 2/3 of the vote power by the deadline.\n\nJoin the conversation on Discord and see the #hip‑58‑poc‑distance‑limit channel for more details.",
+        outcomes: [
+          {
+            value: "For HIP 58",
+            address: "xxx",
+          },
+          {
+            value: "Against HIP 58",
+            address: "xxx",
+          },
+        ],
+      }
     ],
   },
   webpack: (config, { isServer }) => {
