@@ -307,7 +307,7 @@ module.exports = {
         ],
       },
       {
-        id: "xxx",
+        id: "14KhDJUdvAXNVVP5m5cqEaLGNC859sXvpHtxWX9r999pZKC8xAs",
         deadline: 1311000,
         link: "https://github.com/helium/HIP/blob/main/0058-poc-distance-limit.md",
         name: "PoC Distance Limit",
@@ -333,11 +333,11 @@ module.exports = {
         outcomes: [
           {
             value: "For HIP 58",
-            address: "xxx",
+            address: "13rz3LEqJyfiv6sTSb5rcLKUiDVUa5XgkYi9qtfhoNsziijEwQ5",
           },
           {
             value: "Against HIP 58",
-            address: "xxx",
+            address: "12zsif7QE9dhQyhzmbT1mLtTrinTFQdNyjJZkty6N4hRPYVoReB",
           },
         ],
       }
