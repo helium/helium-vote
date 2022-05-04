@@ -340,6 +340,38 @@ module.exports = {
             address: "12zsif7QE9dhQyhzmbT1mLtTrinTFQdNyjJZkty6N4hRPYVoReB",
           },
         ],
+      },
+      {
+        id: "14cXnMdXYcS7WKNh33dYUaPeo8bZmRFn5AoPA78AZtAgfFXu9jf",
+        deadline: 1350360,
+        link: "https://github.com/helium/HIP/blob/main/0059-reduce-xor-filter-fees.md",
+        name: "Reduce XOR Filter Fees",
+        tags: {
+          primary: "HIP 59",
+          secondary: "Technical",
+        },
+        authors: [
+          {
+            nickname: "@macpie",
+            link: "https://github.com/macpie",
+          },
+          {
+            nickname: "@jdgemm",
+            link: "https://github.com/jdgemm",
+          }
+        ],
+        description:
+          "HIP 59 proposes a change for how fees are calculated when doing a XOR filter update with the goal of reducing these fees and enabling more updates to XOR filters. \n\nOn the Helium blockchain, fees are calculated based on the byte_size of the transaction. XOR filter fees are operational costs related to maintaining OUIs on the blockchain. With the current implementation as more devices get added to the filter, it grows. Meaning that any update is calculated based on the full size of the filter. This can increase the cost of an XOR filter update to tens of thousands of Data Credits (DC). This is not sustainable as the network grows.\n\nHIP 59 proposes to not account for the full size of the XOR filter every time but only the difference compared to the previous update. For example: if the previous XOR had a size of 100 bytes and the update is 110 bytes then fees would be calculated on the difference: (110 - 100 = 10) 10 bytes. \n\nIf approved this approach increases the commercial viability for community members to host a Console/Router instance, since only the difference of the XOR filter will be calculated vs paying for the entire amount each time.",
+        outcomes: [
+          {
+            value: "For HIP 59",
+            address: "14KKzNXWp9rgkNvASAq7LYRkxZuyWpe1NEfYkr1y4vjACb6skPh",
+          },
+          {
+            value: "Against HIP 59",
+            address: "14nP4TKN3Q7aMwNyBP1qTstV6mrrVvP5Sau3t1vaff7nyqyyigg",
+          },
+        ],
       }
     ],
   },
