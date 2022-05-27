@@ -372,6 +372,46 @@ module.exports = {
             address: "14nP4TKN3Q7aMwNyBP1qTstV6mrrVvP5Sau3t1vaff7nyqyyigg",
           },
         ],
+      },
+      {
+        id: "14rifUhocpzdwsrWaG5PDbdREDkzyesKe1hXuWzibv8h9DdqKLe",
+        deadline: 1387090,
+        link: "https://github.com/helium/HIP/blob/main/0051-helium-dao.md",
+        name: "Helium DAO",
+        tags: {
+          primary: "HIP 51",
+          secondary: "Economic / Technical",
+        },
+        authors: [
+          {
+            nickname: "@tjain-mcc",
+            link: "https://github.com/tjain-mcc",
+          },
+          {
+            nickname: "@shayons297",
+            link: "https://github.com/shayons297",
+          },
+          {
+            nickname: "@jmfayal",
+            link: "https://github.com/jmfayal",
+          },
+          {
+            nickname: "@abhay",
+            link: "https://github.com/abhay",
+          }
+        ],
+        description:
+          "HIP 51 seeks to allow Helium and its token HNT to become a ‘Network of Networks’, opening the door for multiple network protocols and multiple tokens to exist in the ecosystem. \n\nFor the IoT network, Hotspots would start earning a new token called $IOT, while 5G Hotspots would earn a token called $MOBILE. All new tokens are backed by HNT and can always be converted to HNT. Existing holdings of HNT remain unaffected.\n\nThis HIP provides a general structure for onboarding new network protocols, of which HIP 52: LoRaWAN DAO and HIP 53: 5G DAO exist as two current proposals. HIP 51 aims to create an economy where the underlying HNT-Data Credit burn-and-mint equilibrium continues to power the Helium Flywheel, while Proof-of-Coverage rules and earnings are dictated by each corresponding subDAO.\n\nApproving this HIP implies that the community has reviewed the implementation. We will consider this proposal as approved if it passes with 2/3 of the vote power by the deadline.\n\nJoin the conversation on Discord and see the #hip‑51‑helium-dao channel for more details.",
+        outcomes: [
+          {
+            value: "For HIP 51",
+            address: "14kJVKqZ3Fh5FaqxW727yL3tKcdgWWA5oMKupCNwnZDRFPgixYY",
+          },
+          {
+            value: "Against HIP 51",
+            address: "13BnnYVKUDbaRynWHe6JNj7tx55meLBAGmtoYLMUDK9cL3ZKd8T",
+          },
+        ],
       }
     ],
   },
