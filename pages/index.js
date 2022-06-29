@@ -90,7 +90,7 @@ const VoteCard = ({ vote, height }) => {
               <p className="text-white text-xl tracking-tight leading-tight pb-2 pt-4">
                 {name}
               </p>
-              
+
             </div>
             <p className="text-hv-gray-300 h-6 lg:h-14 overflow-hidden text-sm leading-tight">
               {description?.substring(0, 80)}...
@@ -318,7 +318,7 @@ export async function getStaticProps() {
   const votes = await fetchVotes();
 
   const activeVotes = votes.filter(({ deadline }) => height <= deadline);
-  const completedVotes = votes.filter(({ deadline }) => height > deadline);
+  const completedVotes = votes.filter(({ deadline }) => height > deadline).reverse();
 
   return {
     props: { height, activeVotes, completedVotes },
