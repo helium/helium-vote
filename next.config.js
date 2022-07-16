@@ -452,6 +452,49 @@ module.exports = {
             address: "14m8SxU8RGd5cLhyQbWQyNPzjYczUXY6n1opaXKyYYXZXUk82oD",
           },
         ],
+      },
+      {
+        id: "14hfi6Vs9YmwYLwVHKygqyEqwTERRrx5kfQkVoX1uqMTxiE5EgJ",
+        deadline: 1454400,
+        link: "https://github.com/helium/HIP/blob/main/0053-mobile-dao.md",
+        name: "Mobile subDAO",
+        tags: {
+          primary: "HIP 53",
+          secondary: "Economic / Technical",
+        },
+        authors: [
+          {
+            nickname: "@zer0tweets",
+            link: "https://github.com/zer0tweets"
+          },
+          {
+            nickname: "@tjain-mcc",
+            link: "https://github.com/tjain-mcc",
+          },
+          {
+            nickname: "@shayons297",
+            link: "https://github.com/shayons297",
+          },
+          {
+            nickname: "@abhay",
+            link: "https://github.com/abhay",
+          },
+          {
+            nickname: "Joey Padden"
+          }
+        ],
+        description:
+          "HIP 53 establishes the MOBILE token and subDAO under the framework established by HIP 51: Helium DAO. In summary, the Helium MOBILE subDAO handles all MOBILE emissions, mining rewards, programmatic treasury, and governance operations for mobile device networks.\n\nHNT tokens will be emitted to the MOBILE subDAO treasury as required by HIP 51 and will be used to back the MOBILE token. The MOBILE token will thus always be redeemable for HNT within the Helium ecosystem upon demand through a programmatic treasury controlled by the MOBILE subDAO. Oracles in the MOBILE subDAO will confirm Proof of Coverage, data transfer, and add blocks to the MOBILE subnetwork.\n\nApproving this HIP implies that the community has reviewed the implementation. We will consider this proposal as approved if it passes with 2/3 of the vote power by the deadline.\n\nJoin the conversation on Discord and see the #hip‑53‑5g‑subdao channel for more details.",
+        outcomes: [
+          {
+            value: "For HIP 53",
+            address: "14UbGr7ZVR544vadj4EW2bvGa9Dd78hnM3Ab7AgxmbNUbGDpH5v",
+          },
+          {
+            value: "Against HIP 53",
+            address: "14L1X3yHDN8wRgLs2k7cvxeTR7Xm62CVTRpYFFw1kpM9HFovCe3",
+          },
+        ],
       }
     ],
   },
