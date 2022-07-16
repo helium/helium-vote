@@ -412,6 +412,46 @@ module.exports = {
             address: "13BnnYVKUDbaRynWHe6JNj7tx55meLBAGmtoYLMUDK9cL3ZKd8T",
           },
         ],
+      },
+      {
+        id: "14XDEkg1t398kvqvgxMMKH8qzVGNBb1mgHhTjNmc5KkC3XJxu8p",
+        deadline: 1454400,
+        link: "https://github.com/helium/HIP/blob/main/0052-iot-dao.md",
+        name: "IOT subDAO",
+        tags: {
+          primary: "HIP 52",
+          secondary: "Economic / Technical",
+        },
+        authors: [
+          {
+            nickname: "@tjain-mcc",
+            link: "https://github.com/tjain-mcc",
+          },
+          {
+            nickname: "@shayons297",
+            link: "https://github.com/shayons297",
+          },
+          {
+            nickname: "@jmfayal",
+            link: "https://github.com/jmfayal",
+          },
+          {
+            nickname: "@abhay",
+            link: "https://github.com/abhay",
+          }
+        ],
+        description:
+          "HIP 52 establishes the IOT token and subDAO under the framework established by HIP 51: Helium DAO. In summary, the Helium IOT subDAO handles the existing Helium LoRaWAN network, all IOT emissions, mining rewards, programmatic treasury, and governance operations.\n\nIOT subDAO participants may choose to lock and delegate their IOT tokens as veIOT to gain voting power in IOT subDAO governance proposals. HNT tokens will be emitted to the IOT subDAO treasury as required by HIP 51 and will be used to back the IOT token. The IOT token will thus always be redeemable for HNT within the Helium ecosystem upon demand through a programmatic treasury controlled by the IOT subDAO. The initial HNT exchange rate will be proportional to the amount of HNT in the treasury over the amount of IOT tokens in existence, subject to future change by the IOT subDAO through governance.\n\nOracles in the IOT subDAO will confirm Proof of Coverage, data transfer, and add blocks to the IOT subnetwork. Oracles serve state data around PoC challenges and data transfer. veIOT holders can choose to delegate their holdings to Oracles of their choice or run their own Oracles.\n\nIn addition to governance, locked IOT tokens may also be used for staking for or against hotspots to increase or decrease the challenge (beacon) rate of hotspots. Users staking for hotspots will earn a portion of the resulting increase in rewards for that hotspot. Hotspots found to be cheating will have the veIOT staked for them distributed pro-rata to the subDAO participants who staked veIOT against that hotspot.\n\nApproving this HIP implies that the community has reviewed the implementation. We will consider this proposal as approved if it passes with 2/3 of the vote power by the deadline.\n\nJoin the conversation on Discord and see the #hip‑51‑helium-dao channel for more details.",
+        outcomes: [
+          {
+            value: "For HIP 52",
+            address: "14KTnuEofehSvwfrWcrURb3nXDe5NnbZN5G3GWeRNzTAUqsYPPj",
+          },
+          {
+            value: "Against HIP 52",
+            address: "14m8SxU8RGd5cLhyQbWQyNPzjYczUXY6n1opaXKyYYXZXUk82oD",
+          },
+        ],
       }
     ],
   },
