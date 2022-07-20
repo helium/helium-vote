@@ -417,7 +417,7 @@ module.exports = {
         id: "14XDEkg1t398kvqvgxMMKH8qzVGNBb1mgHhTjNmc5KkC3XJxu8p",
         deadline: 1454400,
         link: "https://github.com/helium/HIP/blob/main/0052-iot-dao.md",
-        name: "IOT subDAO",
+        name: "IoT subDAO",
         tags: {
           primary: "HIP 52",
           secondary: "Economic / Technical",
