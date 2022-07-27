@@ -515,11 +515,11 @@ module.exports = {
           "HIP 67 proposes to rescind the community vote for HIP 39 - Redenomination. This HIP was previously approved November 21, 2021 by the Helium community.\n\nOne of the core motivations of HIP 39 was to bring back ‘whole value HNT mining’, which is an objective now solved by the Network of Networks HIPs 51, 52, and 53.\n\nHIP 39 was one of the last votes to come without an implementation plan. Complexities not accounted for in the HIP meant the immediate implementation of HIP39 would come at the cost of significantly higher engineering time than initially allotted. The initial proposal would have introduced a HNT token arbitrage, putting network integrity at risk – among other concerns.\n\nA vote for HIP 67 means no implementation of HIP 39 should take place.\nA vote against HIP 67 means HIP 39 should be implemented.\n\nWe will consider this proposal as approved if it passes with 2/3 of the vote power by the deadline.\n\nJoin the conversation on Discord and see the existing #hip‑39‑hnt‑redenomination channel for more details.",
         outcomes: [
           {
-            value: "For HIP 67",
+            value: "For HIP 67 (Do Not Redenominate)",
             address: "14LKcAKs413toCce7hsYNMywdDqUPEBpJLRn9bmbZMMUdpSVgxj",
           },
           {
-            value: "Against HIP 67",
+            value: "Against HIP 67 (Keep Redenomination)",
             address: "13vac93ky5Wb4VhrWZT7gFgvEdotJBrUSMxfY7yVHY63Tb9N4mK",
           },
         ],
