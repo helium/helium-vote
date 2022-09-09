@@ -523,6 +523,33 @@ module.exports = {
             address: "13vac93ky5Wb4VhrWZT7gFgvEdotJBrUSMxfY7yVHY63Tb9N4mK",
           },
         ],
+      },
+      {
+        id: "asda",
+        deadline: 1762500,
+        link: "https://github.com/helium/HIP/blob/main/0070-scaling-helium.md",
+        name: "Scaling the Helium Network",
+        tags: {
+          primary: "HIP 70",
+          secondary: "Technical",
+        },
+        authors: [
+          {
+            nickname: "Helium Core Developers"
+          }
+        ],
+        description:
+          "HIP 70 proposes moving Proof-of-Coverage and Data Transfer accounting to off-chain Oracles, subsequently simplifying the needs of the blockchain to payments and identity management. Because of this simplification, a new Layer 1, Solana, would be adopted. For Helium, Oracles would provide Proof-of-Coverage activity and Data Transfer information to the Solana blockchain in order to accurately distribute token rewards.\n\nThe proposed changes provide several benefits to the Helium Network: More rewards for Hotspot owners; more consistent mining activity; Data transfer for devices would be made faster, more reliable, and more scalable; and more ecosystem support.\n\nHNT and all other tokens (IOT, MOBILE, DC) would be seamlessly migrated to the Solana chain. \n\n Since block production would be handled by the Solana chain, the proposal removes the need for Validators. Validators have the option to migrate their stake to veHNT which can earn returns from the subnetworks as defined in HIP 52 & 53.\n\nApproving this HIP implies that the community has reviewed the implementation. We would consider this proposal as approved if it passes with 2/3 of the vote power by the deadline.\n\nJoin the conversation on Discord and see the #hip‑70‑scaling‑the‑helium‑network channel for more details. Read the full hip proposal on Github.",
+        outcomes: [
+          {
+            value: "For HIP 70",
+            address: "a",
+          },
+          {
+            value: "Against HIP 70",
+            address: "b",
+          },
+        ],
       }
     ],
   },
