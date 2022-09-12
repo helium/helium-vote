@@ -525,7 +525,7 @@ module.exports = {
         ],
       },
       {
-        id: "asda",
+        id: "13Y79HnMVt4Epug2rbLYivMPvrcpC2wYUNbZK5Dga3tw3VBpBjk",
         deadline: 1535850,
         link: "https://github.com/helium/HIP/blob/main/0070-scaling-helium.md",
         name: "Scaling the Helium Network",
@@ -543,11 +543,11 @@ module.exports = {
         outcomes: [
           {
             value: "For HIP 70",
-            address: "a",
+            address: "144FS4XwDfAS4QerhVPARGZuqjUvFDHti96peum6uzwETog7v7J",
           },
           {
             value: "Against HIP 70",
-            address: "b",
+            address: "13EUfEDbJVXtzrf3fn1mX1fj8NtYLiik56WdaZB5vEEjr66pRMm",
           },
         ],
       }
