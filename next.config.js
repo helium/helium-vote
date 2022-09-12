@@ -526,7 +526,7 @@ module.exports = {
       },
       {
         id: "asda",
-        deadline: 1533000,
+        deadline: 1535850,
         link: "https://github.com/helium/HIP/blob/main/0070-scaling-helium.md",
         name: "Scaling the Helium Network",
         tags: {
