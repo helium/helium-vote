@@ -20,49 +20,62 @@ const calculateResultsForVote = async (id) => {
     // initialize empty results object
     const results = {};
 
-    // build one array of all burn txns for all options through the roles endpoint
+    var deadlineBlock;
+    try {
+      console.log("fetching deadline details for:", id, "deadline:", deadline);
+      deadlineBlock = await client.blocks.get(deadline);
+    } catch (e) {
+      // console.error(e);
+    }
+
+    const tallies = [];
+
+    // build one array of all payment and burn txns for all options through the roles endpoint
     // loop through them all before starting to tally, so we can make sure for any given payer, only their latest vote gets counted.
     // otherwise, if building that index to check against during the loop, it wouldn't have the complete list to find the transaction from any given payer with the largest height
-    const allBurnRoles = [];
-    await Promise.all(
-      outcomes.map(async (outcome) => {
-        const { address } = outcome;
 
-        const activityOptions = {};
-        activityOptions.filterTypes = ["token_burn_v1"];
+    const allRoles = [];
+    await Promise.all(outcomes.map(async (outcome) => {
+      const { address } = outcome;
+      
+      const activityOptions = {};
+      activityOptions.filterTypes = ["token_burn_v1", "payment_v2"];
+      if (deadlineBlock) {
+        activityOptions.maxTime = new Date(deadlineBlock.time * 1000);
+      }
 
-        try {
-          console.log("fetching deadline details for:", id, "deadline:", deadline);
-          const deadlineBlock = await client.blocks.get(deadline);
-          activityOptions.maxTime = new Date(deadlineBlock.time * 1000);
-        } catch (e) {
-          // console.error(e);
-        }
+      console.log("fetching roles for:", id, "address:", address);
+      // get all roles for this wallet
+      const list = await client
+        .account(address)
+        .roles.list(activityOptions);
 
-        console.log("fetching token burns roles for:", id, "address:", address);
-        // get all token burns roles for this wallet
-        const list = await client
-          .account(address)
-          .roles.list(activityOptions);
+      const payments = await list.take(TAKE_MAX);
+      allRoles.push(...payments);
+    }));
 
-        const burns = await list.take(TAKE_MAX);
+    await PromisePool.for(allRoles).withConcurrency(3).process(async ({hash, height}) => {
+      if (height > deadline) return;
 
-        allBurnRoles.push(...burns);
-      })
-    );
+      const txn = await client.transactions.get(hash);
+      switch (txn.type) {
+        case "payment_v2":
+          txn.payments.forEach(({ payee }) => {
+            const tally = { height: txn.height, payer: txn.payer, payee }
+            tallies.push(tally);
+          });
+          break;
+        case "token_burn_v1":
+          const tally = { height: txn.height, payer: txn.payer, payee: txn.payee }
+          tallies.push(tally);
+          break;
+        default:
+          // console.log(txn.type);
+      }
+    })
 
-    const allBurnPayTxns = [];
-    await Promise.all(
-      await PromisePool.for(allBurnRoles).withConcurrency(3).process(async ({hash, height}) => {
-        if (height > deadline) return;
-
-        const txn = await client.transactions.get(hash);
-        allBurnPayTxns.push(txn);
-      })
-    )
-
-    const ungroupedAllVotesToCount = chain(allBurnPayTxns)
-      .groupBy((txn) => txn.payer)
+    const ungroupedTalliesToCount = chain(tallies)
+      .groupBy((tally) => tally.payer)
       .map((value, key) => {
         // get each payer's latest burn txn
         const txn = maxBy(value, "height");
@@ -81,20 +94,17 @@ const calculateResultsForVote = async (id) => {
         let summedVotedHnt = 0.0;
         let votingWallets = 0;
 
-        await PromisePool.for(ungroupedAllVotesToCount).withConcurrency(3).process(async (txn) => {
-          if (txn.height > deadline) return;
+        await PromisePool.for(ungroupedTalliesToCount).withConcurrency(3).process(async ({ height, payer: voter, payee }) => {
+          if (height > deadline) return;
 
           // tally the votes for this outcome, skip everything else
-          if (txn.payee === address) {
-            const { payer: voter } = txn;
-
+          if (payee === address) {
             // get snapshot of account as of the deadline block
             const account = await client.accounts.get(voter, {
               maxBlock: deadline,
             });
 
             const totalBalance = account.balance.plus(account.stakedBalance);
-
             summedVotedHnt += parseInt(totalBalance.integerBalance);
 
             votingWallets++;
