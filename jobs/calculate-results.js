@@ -15,7 +15,7 @@ const fetchVoteDetails = async (id) => {
 const calculateResultsForVote = async (id) => {
   try {
     console.log("fetching vote details for:", id);
-    const { outcomes, deadline } = await fetchVoteDetails(id);
+    const { outcomes, deadline, filters } = await fetchVoteDetails(id);
 
     // initialize empty results object
     const results = {};
@@ -58,6 +58,10 @@ const calculateResultsForVote = async (id) => {
       if (height > deadline) return;
 
       const txn = await client.transactions.get(hash);
+
+      // apply filters
+      if (filters && filters.length > 0 && filters.includes(txn.payer)) return;
+
       switch (txn.type) {
         case "payment_v2":
           txn.payments.forEach(({ payee }) => {
