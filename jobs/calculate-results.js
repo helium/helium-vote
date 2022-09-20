@@ -53,7 +53,7 @@ const calculateResultsForVote = async (id) => {
 
     const allBurnPayTxns = [];
     await Promise.all(
-      allBurnRoles.map(async ({ hash, height}) => {
+      await PromisePool.for(allBurnRoles).withConcurrency(3).process(async ({hash, height}) => {
         if (height > deadline) return;
 
         const txn = await client.transactions.get(hash);
@@ -81,7 +81,7 @@ const calculateResultsForVote = async (id) => {
         let summedVotedHnt = 0.0;
         let votingWallets = 0;
 
-        await PromisePool.for(ungroupedAllVotesToCount).process(async (txn) => {
+        await PromisePool.for(ungroupedAllVotesToCount).withConcurrency(3).process(async (txn) => {
           if (txn.height > deadline) return;
 
           // tally the votes for this outcome, skip everything else
