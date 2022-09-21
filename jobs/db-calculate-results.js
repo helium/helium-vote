@@ -92,14 +92,14 @@ const fetchWeightsForTallies = async (tallies, deadline) => {
   const weights = [];
   const currentQuery = `
   select last_block
-       , (balance + staked_balance)::numeric / 100000000 as weight
+       , (balance + staked_balance)::numeric as weight
   from account_inventory a
   where a.address = $1
   limit 1
   `;
 
   const historicalQuery = `
-  select (balance + staked_balance)::numeric / 100000000 as weight
+  select (balance + staked_balance)::numeric as weight
   from accounts a
   where a.address = $1
     and a.block <= $2
