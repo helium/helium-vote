@@ -169,6 +169,8 @@ const calculateResultsForVote = async (id, outcomes, deadline) => {
     outcome.uniqueWallets = votingWallets;
     outcomesResults.push(outcome);
   });
+
+  return outcomesResults;
 };
 
 const checkVotes = async () => {
