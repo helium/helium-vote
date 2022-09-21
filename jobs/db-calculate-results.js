@@ -59,7 +59,7 @@ const fetchTalliesForVote = async (addresses, deadline) => {
   where ta.block <= $1
   and ta.actor = ANY($2)
   and ta.actor_role = 'payee'
-  and t.type IN ('token_burn_v1')
+  and t.type IN ('token_burn_v1', 'payment_v2')
   `;
 
   const dbClient = await pool.connect();
@@ -86,6 +86,14 @@ const filterLatestTallies = (tallies) => {
         return txn;
       })
       .value();
+};
+
+const filterTallies = (tallies, filters) => {
+  return chain(tallies)
+    .filter(({ payer }) => {
+      return !filters.includes(payer);
+    })
+    .value();
 };
 
 const fetchWeightsForTallies = async (tallies, deadline) => {
@@ -135,9 +143,9 @@ const fetchWeightsForTallies = async (tallies, deadline) => {
   return weights;
 }
 
-const calculateResultsForVote = async (id, outcomes, deadline) => {
+const calculateResultsForVote = async (id, outcomes, deadline, filters) => {
   console.log("Calculating results for vote:", id);
-  const tallies = await fetchTalliesForVote(outcomes.map(({address}) => address), deadline);
+  var tallies = await fetchTalliesForVote(outcomes.map(({address}) => address), deadline);
   if (tallies.length == 0) {
     console.log("No tallies to report for:", id);
     return {};
@@ -145,9 +153,15 @@ const calculateResultsForVote = async (id, outcomes, deadline) => {
 
   console.log("Loaded", tallies.length, "tallies for", id);
 
-  const latestTallies = filterLatestTallies(tallies);
-  console.log("Filtered to", latestTallies.length, "latest tallies for", id);
-  const voteWeights = await fetchWeightsForTallies(latestTallies, deadline);
+  tallies = filterLatestTallies(tallies);
+  console.log("Filtered to", tallies.length, "latest tallies for", id);
+
+  if (filters && filters.length > 0) {
+    tallies = filterTallies(tallies, filters);
+    console.log("Filtered to", tallies.length, "tallies for", id);
+  }
+
+  const voteWeights = await fetchWeightsForTallies(tallies, deadline);
 
   const outcomesResults = [];
 
@@ -179,9 +193,9 @@ const checkVotes = async () => {
 
   const activeVotes = votes.filter(({ deadline }) => deadline > height);
 
-  await PromisePool.withConcurrency(1).for(activeVotes).process(async ({ id, outcomes, deadline}) => {
+  await PromisePool.withConcurrency(1).for(activeVotes).process(async ({ id, outcomes, deadline, filters}) => {
     const results = {}
-    results.outcomes = await calculateResultsForVote(id, outcomes, deadline);
+    results.outcomes = await calculateResultsForVote(id, outcomes, deadline, filters);
     results.timestamp = Date.now();
 
     console.log("Setting cache for: ", id);
