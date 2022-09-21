@@ -92,14 +92,14 @@ const fetchWeightsForTallies = async (tallies, deadline) => {
   const weights = [];
   const currentQuery = `
   select last_block
-       , (balance + staked_balance)::numeric / 100000000 as weight
+       , (balance + staked_balance)::numeric as weight
   from account_inventory a
   where a.address = $1
   limit 1
   `;
 
   const historicalQuery = `
-  select (balance + staked_balance)::numeric / 100000000 as weight
+  select (balance + staked_balance)::numeric as weight
   from accounts a
   where a.address = $1
     and a.block <= $2
@@ -180,10 +180,12 @@ const checkVotes = async () => {
   const activeVotes = votes.filter(({ deadline }) => deadline > height);
 
   await PromisePool.withConcurrency(1).for(activeVotes).process(async ({ id, outcomes, deadline}) => {
-    const voteResults = await calculateResultsForVote(id, outcomes, deadline);
+    const results = {}
+    results.outcomes = await calculateResultsForVote(id, outcomes, deadline);
+    results.timestamp = Date.now();
 
     console.log("Setting cache for: ", id);
-    await cache.set(id, voteResults);
+    await cache.set(id, results);
   });
 
   await pool.end()
