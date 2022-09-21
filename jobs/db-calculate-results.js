@@ -180,10 +180,12 @@ const checkVotes = async () => {
   const activeVotes = votes.filter(({ deadline }) => deadline > height);
 
   await PromisePool.withConcurrency(1).for(activeVotes).process(async ({ id, outcomes, deadline}) => {
-    const voteResults = await calculateResultsForVote(id, outcomes, deadline);
+    const results = {}
+    results.outcomes = await calculateResultsForVote(id, outcomes, deadline);
+    results.timestamp = Date.now();
 
     console.log("Setting cache for: ", id);
-    await cache.set(id, voteResults);
+    await cache.set(id, results);
   });
 
   await pool.end()
