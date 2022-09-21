@@ -10,7 +10,7 @@ const set = async (key, value) => {
   if (value) {
     await redis.set(key, JSON.stringify(value));
   } else {
-    console.error("Error setting results");
+    console.error("Error setting results:", value);
   }
   return value;
 };
