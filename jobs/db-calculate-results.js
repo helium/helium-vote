@@ -30,7 +30,7 @@ const fetchAllVotes = async () => {
 };
 
 const fetchBlockHeight = async () => {
-  query = `
+  const query = `
   select height
   from blocks
   order by height desc
@@ -177,14 +177,12 @@ const checkVotes = async () => {
 
   const activeVotes = votes.filter(({ deadline }) => deadline > height);
 
-  await Promise.all(
-    activeVotes.map(async ({ id, outcomes, deadline }) => {
-      const voteResults = await calculateResultsForVote(id, outcomes, deadline);
+  await PromisePool.withConcurrency(1).for(activeVotes).process(async ({ id, outcomes, deadline}) => {
+    const voteResults = await calculateResultsForVote(id, outcomes, deadline);
 
-      console.log("Setting cache for: ", id);
-      await cache.set(id, voteResults);
-    })
-  );
+    console.log("Setting cache for: ", id);
+    await cache.set(id, voteResults);
+  });
 
   await pool.end()
   return process.exit(0);
