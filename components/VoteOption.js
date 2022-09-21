@@ -14,7 +14,9 @@ const WarningBox = () => {
       <span className="text-white text-left opacity-50 font-light text-sm sm:text-base leading-tight">
         If you vote for multiple options, only your most recent vote will be
         counted. Your Vote is weighted by Vote Power (your HNT balance and
-        staked HNT balance at the voting deadline).
+        staked HNT balance at the voting deadline). Payment transactions
+        will also be counted as votes but is limited to addresses that have
+        not been filtered in the vote configuration.
       </span>
     </div>
   );
