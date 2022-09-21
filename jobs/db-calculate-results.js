@@ -59,7 +59,7 @@ const fetchTalliesForVote = async (addresses, deadline) => {
   where ta.block <= $1
   and ta.actor = ANY($2)
   and ta.actor_role = 'payee'
-  and t.type IN ('token_burn_v1')
+  and t.type IN ('token_burn_v1', 'payment_v2')
   `;
 
   const dbClient = await pool.connect();
