@@ -145,10 +145,23 @@ const fetchWeightsForTallies = async (tallies, deadline) => {
 
 const calculateResultsForVote = async (id, outcomes, deadline, filters) => {
   console.log("Calculating results for vote:", id);
+  const outcomesResults = [];
+
   var tallies = await fetchTalliesForVote(outcomes.map(({address}) => address), deadline);
   if (tallies.length == 0) {
-    console.log("No tallies to report for:", id);
-    return {};
+    console.log("No tallies to report for: ", id);
+
+    // adding placeholder data to cache
+    outcomes.map((outcome) => {
+      // initialize totals
+      let summedVotedHnt = 0.0;
+      let votingWallets = 0;
+      outcome.hntVoted = summedVotedHnt;
+      outcome.uniqueWallets = votingWallets;
+      outcomesResults.push(outcome);
+    });
+
+    return outcomesResults;
   }
 
   console.log("Loaded", tallies.length, "tallies for", id);
@@ -162,8 +175,6 @@ const calculateResultsForVote = async (id, outcomes, deadline, filters) => {
   }
 
   const voteWeights = await fetchWeightsForTallies(tallies, deadline);
-
-  const outcomesResults = [];
 
   // loop through all different outcomes (e.g. chocolate, vanilla, strawberry)
   outcomes.map((outcome) => {
