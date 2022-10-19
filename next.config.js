@@ -575,8 +575,8 @@ module.exports = {
         },
         authors: [
           {
-            nickname: "@paulm",
-            link: "https://github.com/paulm"
+            nickname: "@PaulVMo",
+            link: "https://github.com/paulvmo"
           }
         ],
         description:
