@@ -8,6 +8,9 @@
   "cacheDirectories": [
     ".next/cache"
   ],
+  "engines": {
+    "node": ">=16.0.0 <17.0.0"
+  },
   "dependencies": {
     "@helium/http": "^3.47.0",
     "@supercharge/promise-pool": "^2.0.0",
