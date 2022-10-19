@@ -566,7 +566,7 @@ module.exports = {
       },
       {
         id: "13Z3p82AX8H1EUQF74cP2qq7RmmhbKBAiGWWsyA7WLxQ9NENTVW",
-        deadline: 1580800,
+        deadline: 1580900,
         link: "https://github.com/helium/HIP/blob/main/0073-consensus-deselection-history-weight.md",
         name: "Consensus Deselection Weighting",
         tags: {
@@ -580,7 +580,7 @@ module.exports = {
           }
         ],
         description:
-          "HIP 73 proposes a new chain variable to improve the performance of the current Helium L1 and enable quick removal of low-performing Validators from the Consensus Group (CG). This specifically changes the CG election algorithm and adjusts the weight given to historical penalties when selecting CG members for removal. By reducing the weight of previous penalties of CG members, performance penalties earned in the current epoch have a larger impact on the selection. This will help eject poor performers from the CG more quickly and maintain the overall high performance of the chain.\n\nCode for this change is available for review by the Helium Core Developers and will be activated upon HIP approval.\n\nA vote for HIP 73 means the chain variable will be implemented.\n\nA vote against HIP 73 means the chain variable will not be implemented.\n\nWe will consider this proposal as approved if it passes with 2/3 of the vote power by the deadline.\n\nJoin the conversation on Discord and see the existing #hip‑73‑consensus‑deselection‑weighting channel for more details.",        
+          "HIP 73 proposes a new chain variable to improve the performance of the current Helium L1 and enable quick removal of low-performing Validators from the Consensus Group (CG). This specifically changes the CG election algorithm and adjusts the weight given to historical penalties when selecting CG members for removal. By reducing the weight of previous penalties of CG members, performance penalties earned in the current epoch have a larger impact on the selection. This will help eject poor performers from the CG more quickly and maintain the overall high performance of the chain. \n\nCode for this change is available for review by the community and has been reviewed by the Helium Core Developers. The chain variable gating this change will be activated upon HIP approval.\n\nWe will consider this proposal as approved if it passes with 2/3 of the vote power by the deadline.\n\nJoin the conversation on Discord and see the existing #hip‑73‑consensus‑deselection‑weighting channel for more details.",        
           outcomes: [
           {
             value: "For HIP 73",
