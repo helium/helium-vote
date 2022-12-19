@@ -601,7 +601,45 @@ module.exports = {
           "13d4ieU8x4n3v7XtkiLio1NmT9WzKJS4BFC7jDJNbGjB5xciQC8", // kucoin
           "133d47AMU6nQ7mZ1fF4dFJfoLhqCUnTSRhZAwmcahBoEtZPGF4U", // gate.io
         ],
-      }
+      },
+      {
+        id: "xyz need ID number",
+        deadline: 2337200,
+        link: "https://github.com/helium/HIP/blob/main/0074-mobile-poc-modeled-coverage-rewards.md",
+        name: "MOBILE PoC - Modeled Coverage Rewards",
+        tags: {
+          primary: "HIP 74",
+          secondary: "Economic / Technical",
+        },
+        authors: [
+          {
+            nickname: "@thehardbits, @zer0tweets, @jpad-freedomfi, @meowshka"
+          }
+        ],
+        description:
+        "HIP-74 proposes moving MOBILE Proof-of-Coverage away from the Genesis Phase and into a new phase called Modeled Coverage. Modeled Coverage replaces the current algorithm for MOBILE Rewards initially introduced during the Genesis Phase based on Radio Type multipliers. The new algorithm uses the location of the Radio to calculate MOBILE Rewards based on the hexes the Radio covers. Modeled Coverage aims to improve the current method by considering the directionality of Radios and environmental obstructions that prevent the propagation of the signals they generate. Modeled Coverage, combined with other parameters like uptime (Heartbeats) and backhaul (Speed Test), aims to allow for more fair Rewards and incentivizes the deployment of Radios at optimal locations. \n\nTo support this change, HIP-74 additionally introduces a new MOBILE Explorer. The first iteration of the MOBILE Explorer proposes a basic map overlay of 5G data coverage with signal strength. \n\nApproving HIP-74 implies that the community has reviewed the implementation. We would consider this proposal as approved if it passes with 2/3 of the vote power by the deadline. \n\nJoin the conversation on Discord and see the #hip-74-mobile-poc-modeled-coverage-rewards channel for more details.",
+        
+        outcomes: [
+          {
+            value: "For HIP 74",
+            address: "144FS4XwDfAS4QerhVPARGZuqjUvFDHti96peum6uzwETog7v7J",
+          },
+          {
+            value: "Against HIP 74",
+            address: "13EUfEDbJVXtzrf3fn1mX1fj8NtYLiik56WdaZB5vEEjr66pRMm",
+          },
+        ],
+        filters: [
+          // these are known exchange wallets, more can be added before the vote closes.
+          "14YeKFGXE23yAdACj6hu5NWEcYzzKxptYbm5jHgzw9A1P1UQfMv", // binance.com
+          "13HPSdf8Ng8E2uKpLm8Ba3sQ6wdNimTcaKXYmMkHyTUUeUELPwJ", // binance.us
+          "148W6v8vaS4npmQQ2PtPQhSLBhNWg6oYjvxne3VdsEAQq8r2GeT", // binance.us (?)
+          "13TFnZyGDy95neRAxnP5Y9FLHqW7Mu28U9VgmZz2hgNhi7qG3qF", // binance.us (?)
+          "13PBfQf1kaZPD3zN8LyoY5QtEDSZKJYZS5N7S5hZYaEz2Kh8znT", // crypto.com
+          "13d4ieU8x4n3v7XtkiLio1NmT9WzKJS4BFC7jDJNbGjB5xciQC8", // kucoin
+          "133d47AMU6nQ7mZ1fF4dFJfoLhqCUnTSRhZAwmcahBoEtZPGF4U", // gate.io 
+        ],
+      },
     ],
   },
   webpack: (config, { isServer }) => {
