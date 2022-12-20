@@ -613,7 +613,20 @@ module.exports = {
         },
         authors: [
           {
-            nickname: "@thehardbits, @zer0tweets, @jpad-freedomfi, @meowshka"
+            nickname: "@thehardbits",
+            link: "https://github.com/thehardbits"
+          },
+          {
+            nickname: "@zer0tweets",
+            link: "https://github.com/zer0tweets"
+          },
+          {
+            nickname: "@jpad-freedomfi",
+            link: "https://github.com/jpad-freedomfi"
+          },
+          {
+            nickname: "@meowshka",
+            link: "https://github.com/meowshka"
           }
         ],
         description:
