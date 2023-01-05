@@ -604,7 +604,7 @@ module.exports = {
       },
       {
         id: "14jH67zhctwb3B5NmwiAjaXQuyF7jZMZCAnfyBYhSpRS3L22sQE",
-        deadline: 1679181,
+        deadline: 1702000,
         link: "https://github.com/helium/HIP/blob/main/0074-mobile-poc-modeled-coverage-rewards.md",
         name: "MOBILE PoC - Modeled Coverage Rewards",
         tags: {
@@ -630,8 +630,7 @@ module.exports = {
           }
         ],
         description:
-        "HIP-74 proposes moving MOBILE earnings away from the Genesis Phase and into an implementation of Proof-of-Coverage called Modeled Coverage. Modeled Coverage replaces the current algorithm for MOBILE Rewards initially introduced during the Genesis Phase based on Radio Type multipliers. The new algorithm uses the location of the Radio to calculate MOBILE Rewards based on the hexes the Radio covers. Modeled Coverage aims to improve the current method by considering the directionality of Radios and environmental obstructions that prevent the propagation of the signals they generate. Modeled Coverage, combined with other parameters like uptime (Heartbeats) and backhaul (Speed Test), aims to allow for more fair Rewards and incentivizes the deployment of Radios at optimal locations. \n\nApproving HIP-74 implies that the community has reviewed the implementation. We would consider this proposal as approved if it passes with 2/3 of the vote power by the deadline. \n\nJoin the conversation on Discord and see the #hip-74-mobile-poc-modeled-coverage-rewards channel for more details.",
-        
+          "HIP-74 proposes an implementation of Proof-of-Coverage called Modeled Coverage. Modeled Coverage replaces the current algorithm for MOBILE Rewards initially introduced based on Radio Type multipliers. The new algorithm uses the location of the Radio to calculate MOBILE Rewards based on the hexes the Radio covers. Modeled Coverage aims to improve the current method by considering the directionality of Radios and environmental obstructions that prevent the propagation of the signals they generate. Modeled Coverage, combined with other parameters like uptime (Heartbeats) and backhaul (Speed Test), aims to allow for more fair Rewards and incentivizes the deployment of Radios at optimal locations. \n\nHIP 74 is the first in a series of HIPs authored to improve MOBILE PoC. This HIP affects only the Helium 5G network and has no impact on IoT rewards. \n\nApproving HIP-74 implies that the community has reviewed the implementation. We would consider this proposal as approved if it passes with 2/3 of the vote power by the deadline. \n\nJoin the conversation on Discord and see the #hip-74-mobile-poc-modeled-coverage-rewards channel for more details.",
         outcomes: [
           {
             value: "For HIP 74",
