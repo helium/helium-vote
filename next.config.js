@@ -604,7 +604,7 @@ module.exports = {
       },
       {
         id: "14jH67zhctwb3B5NmwiAjaXQuyF7jZMZCAnfyBYhSpRS3L22sQE",
-        deadline: 1710000,
+        deadline: 1707000,
         link: "https://github.com/helium/HIP/blob/main/0074-mobile-poc-modeled-coverage-rewards.md",
         name: "MOBILE PoC - Modeled Coverage Rewards",
         tags: {
