@@ -652,6 +652,48 @@ module.exports = {
           "133d47AMU6nQ7mZ1fF4dFJfoLhqCUnTSRhZAwmcahBoEtZPGF4U", // gate.io 
         ],
       },
+      {
+        id: "143vgVpLgC3LcXLZCyXYZiHCFcsH9UNz3vR8CL6SDxTLPL5tWtr",
+        deadline: 1728767,
+        link: "https://github.com/helium/HIP/blob/main/0075-mobile-poc-initiate-programmatic-minting-and-updated-emissions-curve.md",
+        name: "MOBILE PoC - Initiate Programmatic Minting with an Updated Emissions Curve",
+        tags: {
+          primary: "HIP 75",
+          secondary: "Economic / Technical",
+        },
+        authors: [
+          {
+            nickname: "@zer0tweets",
+            link: "https://github.com/zer0tweets"
+          },
+          {
+            nickname: "@meowshka",
+            link: "https://github.com/meowshka"
+          }
+        ],
+        description:
+          "HIP-75 proposes to begin MOBILE minting on the Helium L1 alongside a revised MOBILE emissions curve. These proposed changes do not affect the monthly rewards that current MOBILE Hotspot deployers earn, which will continue to be 3 Billion MOBILE tokens per month. The proposed solution maintains rewards continuity for Hotspot owners between the premine and the permanent solution of L1 minting. The proposed new curve maintains rewards distributions as they are today to match the development pace of Mobile Proof-of-Coverage more closely. Under the current emissions schedule, and without this new curve, a large number of tokens would be minted in a shorter period, front-loading MOBILE rewards while decreasing later MOBILE rewards.\n\nThis HIP affects only the Helium 5G network and has no impact on HNT rewards. \n\nApproving HIP-75 implies that the community has reviewed the implementation. We would consider this proposal as approved if it passes with 2/3 of the vote power by the deadline. \n\nJoin the conversation on Discord and see the #hip-75-programmatic-minting-and-updated-curve channel for more details.",         
+          outcomes: [
+          {
+            value: "For HIP 75",
+            address: "14EoGWxBjBGQootk1f9gE8CPJhSpSCUQ89Hk5nvHPruWjgQ2vnL",
+          },
+          {
+            value: "Against HIP 75",
+            address: "13QeGddbx4Z65h1UDFzdAeDPdLoGhvhuVz1szN6UkcGjsy4Jocz",
+          },
+        ],
+        filters: [
+          // these are known exchange wallets, more can be added before the vote closes.
+          "14YeKFGXE23yAdACj6hu5NWEcYzzKxptYbm5jHgzw9A1P1UQfMv", // binance.com
+          "13HPSdf8Ng8E2uKpLm8Ba3sQ6wdNimTcaKXYmMkHyTUUeUELPwJ", // binance.us
+          "148W6v8vaS4npmQQ2PtPQhSLBhNWg6oYjvxne3VdsEAQq8r2GeT", // binance.us (?)
+          "13TFnZyGDy95neRAxnP5Y9FLHqW7Mu28U9VgmZz2hgNhi7qG3qF", // binance.us (?)
+          "13PBfQf1kaZPD3zN8LyoY5QtEDSZKJYZS5N7S5hZYaEz2Kh8znT", // crypto.com
+          "13d4ieU8x4n3v7XtkiLio1NmT9WzKJS4BFC7jDJNbGjB5xciQC8", // kucoin
+          "133d47AMU6nQ7mZ1fF4dFJfoLhqCUnTSRhZAwmcahBoEtZPGF4U", // gate.io 
+        ],
+      },
     ],
   },
   webpack: (config, { isServer }) => {
