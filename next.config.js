@@ -654,7 +654,7 @@ module.exports = {
       },
       {
         id: "143vgVpLgC3LcXLZCyXYZiHCFcsH9UNz3vR8CL6SDxTLPL5tWtr",
-        deadline: 1728767,
+        deadline: 1729100,
         link: "https://github.com/helium/HIP/blob/main/0075-mobile-poc-initiate-programmatic-minting-and-updated-emissions-curve.md",
         name: "MOBILE PoC - Initiate Programmatic Minting with an Updated Emissions Curve",
         tags: {
