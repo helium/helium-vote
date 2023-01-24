@@ -654,7 +654,7 @@ module.exports = {
       },
       {
         id: "143vgVpLgC3LcXLZCyXYZiHCFcsH9UNz3vR8CL6SDxTLPL5tWtr",
-        deadline: 1727667,
+        deadline: 1728767,
         link: "https://github.com/helium/HIP/blob/main/0075-mobile-poc-initiate-programmatic-minting-and-updated-emissions-curve.md",
         name: "MOBILE PoC - Initiate Programmatic Minting with an Updated Emissions Curve",
         tags: {
@@ -672,7 +672,7 @@ module.exports = {
           }
         ],
         description:
-          "HIP-75 proposes to begin MOBILE minting on the Helium L1 alongside a revised MOBILE emissions curve. Both of these proposed changes do not affect the amount of rewards that current MOBILE Hotspot deployers earn, which will continue to be 3 Billion MOBILE tokens per month. The proposed solution maintains the continuity of rewards for Hotspot owners between the premine and the permanent solution of L1 minting. The proposed new curve is adjusted to maintain rewards as they are distributed today in order to better match the development pace of Mobile Proof-of-Coverage. Under the current emissions schedule, and without this new curve, a large number of tokens would be minted in a shorter period of time, front-loading MOBILE rewards while decreasing later MOBILE rewards. \n\nThis HIP affects only the Helium 5G network and has no impact on HNT rewards. \n\nApproving HIP-75 implies that the community has reviewed the implementation. We would consider this proposal as approved if it passes with 2/3 of the vote power by the deadline. \n\nJoin the conversation on Discord and see the #hip-75-programmatic-minting-and-updated-curve channel for more details.",         
+          "HIP-75 proposes to begin MOBILE minting on the Helium L1 alongside a revised MOBILE emissions curve. These proposed changes do not affect the monthly rewards that current MOBILE Hotspot deployers earn, which will continue to be 3 Billion MOBILE tokens per month. The proposed solution maintains rewards continuity for Hotspot owners between the premine and the permanent solution of L1 minting. The proposed new curve maintains rewards distributions as they are today to match the development pace of Mobile Proof-of-Coverage more closely. Under the current emissions schedule, and without this new curve, a large number of tokens would be minted in a shorter period, front-loading MOBILE rewards while decreasing later MOBILE rewards.\n\nThis HIP affects only the Helium 5G network and has no impact on HNT rewards. \n\nApproving HIP-75 implies that the community has reviewed the implementation. We would consider this proposal as approved if it passes with 2/3 of the vote power by the deadline. \n\nJoin the conversation on Discord and see the #hip-75-programmatic-minting-and-updated-curve channel for more details.",         
           outcomes: [
           {
             value: "For HIP 75",
