@@ -696,7 +696,7 @@ module.exports = {
       },
       {
         id: "13KaGoC2ED8kEh2sXLZ7eGWrqDUMyFH5k48VQ3LLjU5QoQidMV4",
-        deadline: 1739999,
+        deadline: 1740300,
         link: "https://github.com/helium/HIP/blob/main/0069-reassertion-fee-reduction.md",
         name: "Re-assertion Fee Reduction",
         tags: {
