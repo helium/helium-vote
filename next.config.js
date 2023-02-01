@@ -694,6 +694,44 @@ module.exports = {
           "133d47AMU6nQ7mZ1fF4dFJfoLhqCUnTSRhZAwmcahBoEtZPGF4U", // gate.io 
         ],
       },
+      {
+        id: "13KaGoC2ED8kEh2sXLZ7eGWrqDUMyFH5k48VQ3LLjU5QoQidMV4",
+        deadline: 1739999,
+        link: "https://github.com/helium/HIP/blob/main/0069-reassertion-fee-reduction.md",
+        name: "Re-assertion Fee Reduction",
+        tags: {
+          primary: "HIP 69",
+          secondary: "Economic",
+        },
+        authors: [
+          {
+            nickname: "@TheRealJohnMac50",
+            link: "https://github.com/TheRealJohnMac50"
+          },
+        ],
+        description:
+          "HIP 69 proposes reducing re-assertion fees by half (from 1,000,000 DC to 500,000 DC) on the IOT/LoRaWAN network for a total of three months. If this HIP passes, the fee reduction will begin upon the Solana migration. The intended purpose of the reduced fee is to incentivize honest hotspot owners to reassert in less dense hexes and correct any inaccurately asserted hotspots. \n\nApproving HIP 69 implies that the community has reviewed the implementation. We would consider this proposal as approved if it passes with 2/3 of the vote power by the deadline. \n\nJoin the conversation on Discord and see the #hip-69-re-assertion-fee-reduction channel for more details.",
+          outcomes: [
+          {
+            value: "For HIP 69",
+            address: "139LARBfojBxAinZNfxEMbnx1Q7vRUv26Z2ZwP8wxDZV5grZ8Ae",
+          },
+          {
+            value: "Against HIP 69",
+            address: "13QJxjioAgQiLaNMXJE1CGXMj1786T39zGRNoojCchWzzqr5mig",
+          },
+        ],
+        filters: [
+          // these are known exchange wallets, more can be added before the vote closes.
+          "14YeKFGXE23yAdACj6hu5NWEcYzzKxptYbm5jHgzw9A1P1UQfMv", // binance.com
+          "13HPSdf8Ng8E2uKpLm8Ba3sQ6wdNimTcaKXYmMkHyTUUeUELPwJ", // binance.us
+          "148W6v8vaS4npmQQ2PtPQhSLBhNWg6oYjvxne3VdsEAQq8r2GeT", // binance.us (?)
+          "13TFnZyGDy95neRAxnP5Y9FLHqW7Mu28U9VgmZz2hgNhi7qG3qF", // binance.us (?)
+          "13PBfQf1kaZPD3zN8LyoY5QtEDSZKJYZS5N7S5hZYaEz2Kh8znT", // crypto.com
+          "13d4ieU8x4n3v7XtkiLio1NmT9WzKJS4BFC7jDJNbGjB5xciQC8", // kucoin
+          "133d47AMU6nQ7mZ1fF4dFJfoLhqCUnTSRhZAwmcahBoEtZPGF4U", // gate.io 
+        ],
+      },
     ],
   },
   webpack: (config, { isServer }) => {
