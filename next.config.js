@@ -732,6 +732,44 @@ module.exports = {
           "133d47AMU6nQ7mZ1fF4dFJfoLhqCUnTSRhZAwmcahBoEtZPGF4U", // gate.io 
         ],
       },
+      {
+        id: "144wSVHr4cuVSjxEC62X1bHuLsc5Hcpq6XBhfSY8BQwiyMborFZ",
+        deadline: 1746600,
+        link: "https://github.com/helium/HIP/blob/main/0076-linear-lockup-curve.md",
+        name: "Linear Lockup Curve",
+        tags: {
+          primary: "HIP 76",
+          secondary: "Technical",
+        },
+        authors: [
+          {
+            nickname: "@Ferebee",
+            link: "https://github.com/ferebee" 
+          },
+        ],
+        description:
+          "HIP 76 proposes key technical and economic changes to the veHNT smart contracts for implementation upon the Solana Migration. HIP 76 proposes to 1.) Simplify the lockup curve for veHNT and all ve-subDAO (veDNT) tokens; 2.) Eliminate the 6-month minimum lockup period, excluding Validators; 3.) Introduce a minimum of 1 HNT lockup position to prevent spam and; 4.) Specify the 3x Landrush Rules that are unclearly defined in HIP 70.\n\nApproving HIP 76 implies that the community has reviewed the implementation. We would consider this proposal as approved if it passes with 2/3 of the vote power by the deadline.\n\nJoin the conversation on Discord and see the #hip-76-linear-lockup-curve channel for more details.",
+          outcomes: [
+          {
+            value: "For HIP 76",
+            address: "13Z46nMa5Su5p2h2FhAWADXcTimwADeXks8VB5tXwwsVuXuh3gF",
+          },
+          {
+            value: "Against HIP 76",
+            address: "12xdsVwZxhm5KXupbcovapYiruyxJCCFroAebgZE1yj6ZioTdik",
+          },
+        ],
+        filters: [
+          // these are known exchange wallets, more can be added before the vote closes.
+          "14YeKFGXE23yAdACj6hu5NWEcYzzKxptYbm5jHgzw9A1P1UQfMv", // binance.com
+          "13HPSdf8Ng8E2uKpLm8Ba3sQ6wdNimTcaKXYmMkHyTUUeUELPwJ", // binance.us
+          "148W6v8vaS4npmQQ2PtPQhSLBhNWg6oYjvxne3VdsEAQq8r2GeT", // binance.us (?)
+          "13TFnZyGDy95neRAxnP5Y9FLHqW7Mu28U9VgmZz2hgNhi7qG3qF", // binance.us (?)
+          "13PBfQf1kaZPD3zN8LyoY5QtEDSZKJYZS5N7S5hZYaEz2Kh8znT", // crypto.com
+          "13d4ieU8x4n3v7XtkiLio1NmT9WzKJS4BFC7jDJNbGjB5xciQC8", // kucoin
+          "133d47AMU6nQ7mZ1fF4dFJfoLhqCUnTSRhZAwmcahBoEtZPGF4U", // gate.io 
+        ],
+      },
     ],
   },
   webpack: (config, { isServer }) => {
