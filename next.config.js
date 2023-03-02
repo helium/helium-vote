@@ -734,7 +734,7 @@ module.exports = {
       },
       {
         id: "144wSVHr4cuVSjxEC62X1bHuLsc5Hcpq6XBhfSY8BQwiyMborFZ",
-        deadline: 1782300,
+        deadline: 1783450,
         link: "https://github.com/helium/HIP/blob/main/0076-linear-lockup-curve.md",
         name: "Linear Lockup Curve",
         tags: {
