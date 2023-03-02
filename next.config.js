@@ -734,7 +734,7 @@ module.exports = {
       },
       {
         id: "144wSVHr4cuVSjxEC62X1bHuLsc5Hcpq6XBhfSY8BQwiyMborFZ",
-        deadline: 1746600,
+        deadline: 1782300,
         link: "https://github.com/helium/HIP/blob/main/0076-linear-lockup-curve.md",
         name: "Linear Lockup Curve",
         tags: {
@@ -748,7 +748,7 @@ module.exports = {
           },
         ],
         description:
-          "HIP 76 proposes key technical and economic changes to the veHNT smart contracts for implementation upon the Solana Migration. HIP 76 proposes to 1.) Simplify the lockup curve for veHNT and all ve-subDAO (veDNT) tokens; 2.) Eliminate the 6-month minimum lockup period, excluding Validators; 3.) Introduce a minimum of 1 HNT lockup position to prevent spam and; 4.) Specify the 3x Landrush Rules that are unclearly defined in HIP 70.\n\nApproving HIP 76 implies that the community has reviewed the implementation. We would consider this proposal as approved if it passes with 2/3 of the vote power by the deadline.\n\nJoin the conversation on Discord and see the #hip-76-linear-lockup-curve channel for more details.",
+          "HIP 76 proposes key technical and economic changes to the veHNT smart contracts for implementation upon the Solana Migration. HIP 76 proposes to: \n1) Simplify the lockup curve for veHNT and subDAO (veDNT) tokens. \n2) Eliminate the 6-month minimum lockup period, excluding Validators. \n3) Introduce a minimum of 1 HNT lockup position to prevent spam. \n4) Specify the 3x Landrush Rules that are unclearly defined in HIP 70.\n\nApproving HIP 76 implies that the community has reviewed the implementation. We would consider this proposal as approved if it passes with 2/3 of the vote power by the deadline.\n\nJoin the conversation on Discord and see the #hip-76-linear-lockup-curve channel for more details.",
           outcomes: [
           {
             value: "For HIP 76",
