@@ -739,7 +739,7 @@ module.exports = {
         name: "Linear Lockup Curve",
         tags: {
           primary: "HIP 76",
-          secondary: "Technical",
+          secondary: "Economic / Technical",
         },
         authors: [
           {
