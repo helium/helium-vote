@@ -770,6 +770,48 @@ module.exports = {
           "133d47AMU6nQ7mZ1fF4dFJfoLhqCUnTSRhZAwmcahBoEtZPGF4U", // gate.io 
         ],
       },
+      {
+        id: "146pksPcH7C3Wz8hN5NxL544k1VVq6Z4W2iB14e1yJ1HFJ3Wtf3",
+        deadline: 1820000,
+        link: "https://github.com/helium/HIP/blob/main/0077-solana-parameters.md",
+        name: "Linear Lockup Curve",
+        tags: {
+          primary: "HIP 77",
+          secondary: "Economic / Technical",
+        },
+        authors: [
+          {
+            nickname: "@abhay",
+            link: "https://github.com/abhay" 
+          },
+          {
+            nickname: "@ChewingGlass",
+            link: "https://github.com/ChewingGlass" 
+          },
+        ],
+        description:
+          "HIP 77 proposes necessary parameters for a mainnet launch on Solana. This includes parameters from governance settings to circuit breaker settings, and the number of decimals in Helium tokens (HNT, IOT & MOBILE) to prevent overflow. Most importantly, HIP 77 proposes to 1.) define the number of decimals from 8 to 6; and 2.) create a multisig managed by the Helium Foundation. \n\nApproving HIP 77 implies that the community has reviewed the implementation. We would consider this proposal as approved if it passes with 2/3 of the vote power by the deadline. \n\nJoin the conversation on Discord and see the #hip-77-solana-parameters channel for more details.",
+          outcomes: [
+          {
+            value: "For HIP 77",
+            address: "13ZC3V2mnWyCAVqkc56ohJU9RiZyJaqnMT8A2mKBvnCvDrCL8Fk",
+          },
+          {
+            value: "Against HIP 77",
+            address: "14HtYN7RmKpsJHThAosiJKCLwsscFEisJHc4M1WEcn8EFmpt9tJ",
+          },
+        ],
+        filters: [
+          // these are known exchange wallets, more can be added before the vote closes.
+          "14YeKFGXE23yAdACj6hu5NWEcYzzKxptYbm5jHgzw9A1P1UQfMv", // binance.com
+          "13HPSdf8Ng8E2uKpLm8Ba3sQ6wdNimTcaKXYmMkHyTUUeUELPwJ", // binance.us
+          "148W6v8vaS4npmQQ2PtPQhSLBhNWg6oYjvxne3VdsEAQq8r2GeT", // binance.us (?)
+          "13TFnZyGDy95neRAxnP5Y9FLHqW7Mu28U9VgmZz2hgNhi7qG3qF", // binance.us (?)
+          "13PBfQf1kaZPD3zN8LyoY5QtEDSZKJYZS5N7S5hZYaEz2Kh8znT", // crypto.com
+          "13d4ieU8x4n3v7XtkiLio1NmT9WzKJS4BFC7jDJNbGjB5xciQC8", // kucoin
+          "133d47AMU6nQ7mZ1fF4dFJfoLhqCUnTSRhZAwmcahBoEtZPGF4U", // gate.io 
+        ],
+      },
     ],
   },
   webpack: (config, { isServer }) => {
