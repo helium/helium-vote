@@ -790,7 +790,7 @@ module.exports = {
           },
         ],
         description:
-          "HIP 77 proposes necessary parameters for a mainnet launch on Solana. This includes parameters from governance settings to circuit breaker settings, and the number of decimals in Helium tokens (HNT, IOT & MOBILE) to prevent overflow. Most importantly, HIP 77 proposes to 1.) define the number of decimals from 8 to 6; and 2.) create a multisig managed by the Helium Foundation. \n\nApproving HIP 77 implies that the community has reviewed the implementation. We would consider this proposal as approved if it passes with 2/3 of the vote power by the deadline. \n\nJoin the conversation on Discord and see the #hip-77-solana-parameters channel for more details.",
+          "HIP 77 proposes necessary parameters for a Mainnet launch on Solana. This includes parameters from governance settings to circuit breaker settings, and the number of decimals in Helium tokens (HNT, IOT & MOBILE) to prevent overflow. Equally important is that HIP 77 proposes to create a multisig initially managed by the Helium Foundation. \n\nApproving HIP 77 implies that the community has reviewed the implementation. We would consider this proposal as approved if it passes with 2/3 of the vote power by the deadline. \n\nJoin the conversation on Discord and see the #hip-77-solana-parameters channel for more details.",
           outcomes: [
           {
             value: "For HIP 77",
