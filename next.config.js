@@ -774,7 +774,7 @@ module.exports = {
         id: "146pksPcH7C3Wz8hN5NxL544k1VVq6Z4W2iB14e1yJ1HFJ3Wtf3",
         deadline: 1820000,
         link: "https://github.com/helium/HIP/blob/main/0077-solana-parameters.md",
-        name: "Linear Lockup Curve",
+        name: "Launch Parameters for Solana Migration",
         tags: {
           primary: "HIP 77",
           secondary: "Economic / Technical",
