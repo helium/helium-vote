@@ -772,7 +772,7 @@ module.exports = {
       },
       {
         id: "146pksPcH7C3Wz8hN5NxL544k1VVq6Z4W2iB14e1yJ1HFJ3Wtf3",
-        deadline: 1820000,
+        deadline: 1830000,
         link: "https://github.com/helium/HIP/blob/main/0077-solana-parameters.md",
         name: "Launch Parameters for Solana Migration",
         tags: {
@@ -794,11 +794,11 @@ module.exports = {
           outcomes: [
           {
             value: "For HIP 77",
-            address: "13ZC3V2mnWyCAVqkc56ohJU9RiZyJaqnMT8A2mKBvnCvDrCL8Fk",
+            address: "13r8YY1MCkxsnMhzv6QrXiVhPwNoXuztSnpUBHMgUrvve7Cg7f9",
           },
           {
             value: "Against HIP 77",
-            address: "14HtYN7RmKpsJHThAosiJKCLwsscFEisJHc4M1WEcn8EFmpt9tJ",
+            address: "14rSs88Ky4n3cL1JCbu2yJmNxa51wgSmm99erfKrfJtGFf2D3TN",
           },
         ],
         filters: [
