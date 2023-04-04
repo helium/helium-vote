@@ -815,48 +815,47 @@ module.exports = {
         ],
       },
       {
-        id: "test",
+        id: "13F5AWLhxwTjhDMnZ6ww4oJWgRkBoW9ji4JnDzwQXjsQhiT2kcX",
         deadline: 1830000,
-        link: "https://github.com/helium/HIP/pull/593",
-        name: " Australian Frequency Plan Choice",
-        temperatureCheck: "Voting for this temperature check will provide guidance to the Helium Foundation on a regional frequency plan for Hotspots asserted in Australia.",
+        link: "https://discord.com/channels/404106811252408320/730243559873052754",
+        name: "Guidance on Australian Frequency Plan",
+        temperatureCheck: "Voting for this temperature check will provide guidance to the Helium Foundation on a regional frequency plan for Hotspots asserted in Australia.\n\nThis temperature check does not affect Hotspots asserted outside of Australia.",
         tags: {
-          // primary: "",
           secondary: "Governance",
           tertiary: "Temp Check"
         },
         authors: [
           {
             nickname: "@plainsimpledot",
-            link: "https://github.com/plainsimpledot" 
+            link: "https://github.com/plainsimpledot",
           },
           {
             nickname: "@Buckshot22",
-            link: "https://github.com/Buckshot22" 
+            link: "https://github.com/Buckshot22",
           },
           {
             nickname: "@mcauser",
-            link: "https://github.com/mcauser" 
+            link: "https://github.com/mcauser",
           },
           {
-            nickname: "@leogaggl,",
-            link: "https://github.com/leogaggl," 
+            nickname: "@leogaggl",
+            link: "https://github.com/leogaggl",
           },
           {
-            nickname: "@tonysmith55,",
-            link: "https://github.com/tonysmith55," 
+            nickname: "@tonysmith55",
+            link: "https://github.com/tonysmith55",
           },
         ],
         description:
-          "Two different channel plans are authorised for use in Australia, AU915 and AS923-1. The Helium network operated on AU915 FSB2 up until November last year, when it was switched to an AS923-1 variant with partial support for AU915 sensors./n/nThe Top4 benefits for each option are described below:/nAU915 Option - With support for AU915 sensors on Subband 2./n/n - The majority of AU915 Sensors can work out of the box at up to the maximum allowed 30dBm/n - Private, Commercial and Public AU915 operators can roam the network./n - Full support by Chirpstack and other LNS options (rather than split LNS)/n - Helium continues to be part of the Australian public LoRaWAN network ecosystem/n/nAS923-1C Option - dual plan or AS923 and limited support for some AU915 sensors./n - AS923 is a dynamic frequency plan and could take advantage of possible new frequencies./n - Private and Commercial AS923 operators can roam the network./n - Manufacturer-supplied AS923 Sensors will work on this network./n - Due to only two join channels faster OTAA joins (on AS923)/n/nIt is noted that PoC will be the same from a power perspective for both Frequency Channel Plans./n/nPrevious discussions can be found at:/n/n[#hip-45-lora-frequency-selection](https://discord.com/channels/404106811252408320/908961947830071316)/n[#poc aus/nz dualplan](https://discordapp.com/channels/404106811252408320/1043247093831192587)/n[#au-australia](https://discordapp.com/channels/404106811252408320/778989538755346442)/n[#hip-discussion](https://discordapp.com/channels/404106811252408320/730243559873052754)",
+          "Two different channel plans are authorized for use in Australia, AU915 and AS923-1. The Helium network operated on AU915 sub-band 2 (SB2) until November 2022, when it was switched to an AS923-1 variant with support for AU915 sensors on SB6.\n\nA breakdown of the two options presented are as follows:\n\n➤ Return to AU915 plan with support for AU915 sensors on SB2\n\nThis option will re-enable support for all AU915 SB2 sensors as was the case prior to the chain variable change in November 2022. This option is currently supported by all known manufacturers but the Helium Foundation will confirm before pushing this configuration change.\n\n1. AU915 sensors will work on this network at 22dBm, some possibly higher.\n2. AU915 sensors on SB2 join the network faster vs sometimes not at all on AS923-1C\n3. Full support by Chirpstack and other LNS options (rather than having to split LNS for AU915 vs AS923 sensors).\n4. Helium continues to be part of the Australian public LoRaWAN network ecosystem.\n\n➤ Remain on AS923-1C Plan with a power adjustment to 27 dBm\n\nThis option retains the existing \"dual plan\" for AS923 sensors and limited support for some AU915 sensors on SB6. Assuming hardware/firmware support from manufacturers, this option also allows for a power increase that should match prior expectations on power for Proof-of-Coverage. Specific additional details:\n\n1. AS923 sensors will work on this network at 16dBm, some possibly higher.\n2. AS923 is a dynamic frequency plan and can take advantage of upcoming spectrum changes in the region.\n3. Due to only two join channels AS923 sensors join the network faster.\n4. Commercial operators have expressed interest in roaming on AS923 but we are not aware of existing roaming activity at scale.\n\nIt should be noted that Proof-of-Coverage will be the same from a power perspective for both channel plan options and only operators using the specific frequency plan can roam on Helium Hotspots regardless of choice.\n\nPrevious discussions can be found on Discord: https://discord.gg/helium\n\nVoting on this temperature check implies that the community has reviewed the two options and is providing guidance to the Helium Foundation on a path forward of implementation in the IoT Configuration Service.\n\nJoin the conversation on Discord in the #hip-discussion channel for more details.",
           outcomes: [
           {
-            value: "For AU915FSB2: Reinstate AU915 FSB2 plan",
-            address: "...",
+            value: "Return to AU915 Plan",
+            address: "14jqcPiL8BYLgivEFLEczHHkWmFEgG9YCKq6P15BHtrZw1fKjSq",
           },
           {
-            value: "For AS923-1C: Remain on AS923-1C dual plan",
-            address: "...",
+            value: "Remain on AS923-1C Plan",
+            address: "14jpcmeZU6JmL6YPhv26EwivZ3Bjse71UvdCsW7pwkSnfjYgVwg",
           },
         ],
         filters: [
