@@ -817,29 +817,45 @@ module.exports = {
       {
         id: "test",
         deadline: 1830000,
-        link: "...",
-        name: "Australian Frequency Plan Guidance",
-        temperatureCheck: "Please note that this vote is for gauging opinions and will not lead to any direct action. \nThis vote is being used by the Helium Foundation to gauge sentiment around a specific issue.",
+        link: "https://github.com/helium/HIP/pull/593",
+        name: " Australian Frequency Plan Choice",
+        temperatureCheck: "Voting for this temperature check will provide guidance to the Helium Foundation on a regional frequency plan for Hotspots asserted in Australia.",
         tags: {
           // primary: "",
           secondary: "Governance",
           tertiary: "Temp Check"
         },
-        // authors: [
-        //   {
-        //     nickname: "",
-        //     link: "" 
-        //   },
-        // ],
+        authors: [
+          {
+            nickname: "@plainsimpledot",
+            link: "https://github.com/plainsimpledot" 
+          },
+          {
+            nickname: "@Buckshot22",
+            link: "https://github.com/Buckshot22" 
+          },
+          {
+            nickname: "@mcauser",
+            link: "https://github.com/mcauser" 
+          },
+          {
+            nickname: "@leogaggl,",
+            link: "https://github.com/leogaggl," 
+          },
+          {
+            nickname: "@tonysmith55,",
+            link: "https://github.com/tonysmith55," 
+          },
+        ],
         description:
-          "The newly deployed IOT Configuration Service allows developers in the Helium ecosystem to implement specific regional plans for Data Transfer and Proof-of-Coverage on Helium Hotspots. \n\nVoting for this temperature check will provide guidance to the Helium Foundation on a regional frequency plan for Hotspots asserted in Australia. This temperature check does not affect Hotspots asserted anywhere else in the AS923 region including New Zealand, Asia, etc.",
+          "Two different channel plans are authorised for use in Australia, AU915 and AS923-1. The Helium network operated on AU915 FSB2 up until November last year, when it was switched to an AS923-1 variant with partial support for AU915 sensors./n/nThe Top4 benefits for each option are described below:/nAU915 Option - With support for AU915 sensors on Subband 2./n/n - The majority of AU915 Sensors can work out of the box at up to the maximum allowed 30dBm/n - Private, Commercial and Public AU915 operators can roam the network./n - Full support by Chirpstack and other LNS options (rather than split LNS)/n - Helium continues to be part of the Australian public LoRaWAN network ecosystem/n/nAS923-1C Option - dual plan or AS923 and limited support for some AU915 sensors./n - AS923 is a dynamic frequency plan and could take advantage of possible new frequencies./n - Private and Commercial AS923 operators can roam the network./n - Manufacturer-supplied AS923 Sensors will work on this network./n - Due to only two join channels faster OTAA joins (on AS923)/n/nIt is noted that PoC will be the same from a power perspective for both Frequency Channel Plans./n/nPrevious discussions can be found at:/n/n[#hip-45-lora-frequency-selection](https://discord.com/channels/404106811252408320/908961947830071316)/n[#poc aus/nz dualplan](https://discordapp.com/channels/404106811252408320/1043247093831192587)/n[#au-australia](https://discordapp.com/channels/404106811252408320/778989538755346442)/n[#hip-discussion](https://discordapp.com/channels/404106811252408320/730243559873052754)",
           outcomes: [
           {
-            value: "For Temp Check",
+            value: "For AU915FSB2: Reinstate AU915 FSB2 plan",
             address: "...",
           },
           {
-            value: "Against Temp Check",
+            value: "For AS923-1C: Remain on AS923-1C dual plan",
             address: "...",
           },
         ],
