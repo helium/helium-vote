@@ -814,6 +814,48 @@ module.exports = {
           "133d47AMU6nQ7mZ1fF4dFJfoLhqCUnTSRhZAwmcahBoEtZPGF4U", // gate.io 
         ],
       },
+      {
+        id: "test",
+        deadline: 1830000,
+        link: "...",
+        name: "Australian Frequency Plan Guidance",
+        temperatureCheck: "Please note that this vote is for gauging opinions and will not lead to any direct action. \nThis vote is being used by the Helium Foundation to gauge sentiment around a specific issue.",
+        tags: {
+          // primary: "",
+          secondary: "Governance",
+          tertiary: "Temp Check"
+        },
+        // authors: [
+        //   {
+        //     nickname: "",
+        //     link: "" 
+        //   },
+        // ],
+        description:
+          "The newly deployed IOT Configuration Service allows developers in the Helium ecosystem to implement specific regional plans for Data Transfer and Proof-of-Coverage on Helium Hotspots. \n\nVoting for this temperature check will provide guidance to the Helium Foundation on a regional frequency plan for Hotspots asserted in Australia. This temperature check does not affect Hotspots asserted anywhere else in the AS923 region including New Zealand, Asia, etc.",
+          outcomes: [
+          {
+            value: "For Temp Check",
+            address: "...",
+          },
+          {
+            value: "Against Temp Check",
+            address: "...",
+          },
+        ],
+        filters: [
+          // these are known exchange wallets, more can be added before the vote closes.
+          "14YeKFGXE23yAdACj6hu5NWEcYzzKxptYbm5jHgzw9A1P1UQfMv", // binance.com
+          "13HPSdf8Ng8E2uKpLm8Ba3sQ6wdNimTcaKXYmMkHyTUUeUELPwJ", // binance.us
+          "148W6v8vaS4npmQQ2PtPQhSLBhNWg6oYjvxne3VdsEAQq8r2GeT", // binance.us (?)
+          "13TFnZyGDy95neRAxnP5Y9FLHqW7Mu28U9VgmZz2hgNhi7qG3qF", // binance.us (?)
+          "13PBfQf1kaZPD3zN8LyoY5QtEDSZKJYZS5N7S5hZYaEz2Kh8znT", // crypto.com
+          "148W6v8vaS4npmQQ2PtPQhSLBhNWg6oYjvxne3VdsEAQq8r2GeT", // crypto.com
+          "13d4ieU8x4n3v7XtkiLio1NmT9WzKJS4BFC7jDJNbGjB5xciQC8", // kucoin
+          "13Nj4KCnuBruSYvbxCgTLdeoyTN6Q5cZsNnJw3rh8WLZt9wBYih", // kucoin
+          "133d47AMU6nQ7mZ1fF4dFJfoLhqCUnTSRhZAwmcahBoEtZPGF4U", // gate.io 
+        ],
+      },
     ],
   },
   webpack: (config, { isServer }) => {

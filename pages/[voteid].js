@@ -51,6 +51,7 @@ const VoteDetailsPage = ({
     tags,
     link,
     description,
+    temperatureCheck,
     outcomes: outcomesInitial,
   } = details;
 
@@ -290,13 +291,23 @@ const VoteDetailsPage = ({
         </div>
       </ContentSection>
       <ContentSection>
-      {tags?.tertiary && (
-                  <div className="py-2 px-4 bg-yellow-400 rounded-lg mt-10 leading-none" >
-                    <span className="text-xs sm:text-sm text-black font-bold">
-                      {tags.tertiary} <span className="text-xs sm:text-sm text-black font-light">This vote acts as a check in order to gauge interest.</span>
-                    </span>
-                  </div>
-                )}
+      {tags.tertiary && (
+        <div className="border-solid border-2 border-yellow-400 bg-yellow-400 rounded-lg mt-10 leading-none" >
+          <div className="py-2 px-4">
+            <span className="text-xs sm:text-sm text-black font-bold">
+            Temperature Check 
+            </span>
+            {!temperatureCheck && (
+              <span className="text-xs sm:text-sm text-black font-light"> This vote acts as a check in order to gauge community sentiment.</span>
+            )}
+          </div>
+          {temperatureCheck && (
+            <span className="bg-yellow-50 rounded-md block py-4 px-4 pb-5 text-md sm:text-base text-black font-normal font-light break-words whitespace-pre-wrap leading-snug tracking-normal">
+              {temperatureCheck}
+            </span>
+          )}
+        </div>
+      )}
       </ContentSection>
 
       {!completed && <VoteOptionsSection outcomes={outcomes} />}
