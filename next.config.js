@@ -816,7 +816,7 @@ module.exports = {
       },
       {
         id: "13F5AWLhxwTjhDMnZ6ww4oJWgRkBoW9ji4JnDzwQXjsQhiT2kcX",
-        deadline: 1830000,
+        deadline: 1831250,
         link: "https://github.com/leogaggl/HIP/blob/d1c9b208410fe5e51c2504d92927b3e4bf411d7b/00YZ-au-frequency-plan-choice.md",
         name: "Guidance on Australian Frequency Plan",
         temperatureCheck: "Voting for this temperature check will provide guidance to the Helium Foundation on a regional frequency plan for Hotspots asserted in Australia.\n\nThis temperature check does not affect Hotspots asserted outside of Australia.",
