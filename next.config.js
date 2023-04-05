@@ -814,6 +814,63 @@ module.exports = {
           "133d47AMU6nQ7mZ1fF4dFJfoLhqCUnTSRhZAwmcahBoEtZPGF4U", // gate.io 
         ],
       },
+      {
+        id: "13F5AWLhxwTjhDMnZ6ww4oJWgRkBoW9ji4JnDzwQXjsQhiT2kcX",
+        deadline: 1831250,
+        link: "https://github.com/leogaggl/HIP/blob/d1c9b208410fe5e51c2504d92927b3e4bf411d7b/00YZ-au-frequency-plan-choice.md",
+        name: "Guidance on Australian Frequency Plan",
+        temperatureCheck: "Voting for this temperature check will provide guidance to the Helium Foundation on a regional frequency plan for Hotspots asserted in Australia.\n\nThis temperature check does not affect Hotspots asserted outside of Australia.",
+        tags: {
+          secondary: "Governance",
+          tertiary: "Temp Check"
+        },
+        authors: [
+          {
+            nickname: "@plainsimpledot",
+            link: "https://github.com/plainsimpledot",
+          },
+          {
+            nickname: "@Buckshot22",
+            link: "https://github.com/Buckshot22",
+          },
+          {
+            nickname: "@mcauser",
+            link: "https://github.com/mcauser",
+          },
+          {
+            nickname: "@leogaggl",
+            link: "https://github.com/leogaggl",
+          },
+          {
+            nickname: "@tonysmith55",
+            link: "https://github.com/tonysmith55",
+          },
+        ],
+        description:
+          "Two different channel plans are authorized for use in Australia, AU915 and AS923-1. The Helium network operated on AU915 sub-band 2 (SB2) until November 2022, when it was switched to an AS923-1 variant with support for AU915 sensors on SB6.\n\nA breakdown of the two options presented are as follows:\n\n➤ Return to AU915 plan with support for AU915 sensors on SB2\n\nThis option will re-enable support for all AU915 SB2 sensors as was the case prior to the chain variable change in November 2022. This option is currently supported by all known manufacturers but the Helium Foundation will confirm before pushing this configuration change.\n\n1. AU915 sensors will work on the network at 22dBm, some possibly higher.\n2. AU915 sensors on SB2 join the network faster vs sometimes not at all on AS923-1C\n3. Full support by Chirpstack and other LNS options (rather than having to split LNS for AU915 vs AS923 sensors).\n4. Helium continues to be part of the Australian public LoRaWAN network ecosystem. Private, commercial and public operators can roam the network.\n\nThis proposal has been presented by existing members of the AU community as a draft HIP which is linked as More Details on this page.\n\n➤ Remain on AS923-1C Plan with a power adjustment to 27 dBm\n\nThis option retains the existing \"dual plan\" for AS923 sensors and limited support for some AU915 sensors on SB6. Assuming hardware/firmware support from manufacturers, this option also allows for a power increase that should match prior expectations on power for Proof-of-Coverage. Specific additional details:\n\n1. AS923 sensors will work on the network at 16dBm, some possibly higher.\n2. AS923 is a dynamic frequency plan and can take advantage of upcoming spectrum changes in the region.\n3. Due to only two join channels AS923 sensors join the network faster.\n4. Commercial operators have expressed interest in roaming on AS923 but we are not aware of existing roaming activity at scale.\n\nIt should be noted that Proof-of-Coverage will be the same from a power perspective for both channel plan options and only operators using the specific frequency plan can roam on Helium Hotspots regardless of choice.\n\nPrevious discussions can be found on Discord: https://discord.gg/helium\n\nVoting on this temperature check implies that the community has reviewed the two options and is providing guidance to the Helium Foundation on a path forward of implementation in the IoT Configuration Service.\n\nJoin the conversation on Discord in the #hip-discussion channel for more details.",
+          outcomes: [
+          {
+            value: "Return to AU915 Plan",
+            address: "14jqcPiL8BYLgivEFLEczHHkWmFEgG9YCKq6P15BHtrZw1fKjSq",
+          },
+          {
+            value: "Remain on AS923-1C Plan",
+            address: "14jpcmeZU6JmL6YPhv26EwivZ3Bjse71UvdCsW7pwkSnfjYgVwg",
+          },
+        ],
+        filters: [
+          // these are known exchange wallets, more can be added before the vote closes.
+          "14YeKFGXE23yAdACj6hu5NWEcYzzKxptYbm5jHgzw9A1P1UQfMv", // binance.com
+          "13HPSdf8Ng8E2uKpLm8Ba3sQ6wdNimTcaKXYmMkHyTUUeUELPwJ", // binance.us
+          "148W6v8vaS4npmQQ2PtPQhSLBhNWg6oYjvxne3VdsEAQq8r2GeT", // binance.us (?)
+          "13TFnZyGDy95neRAxnP5Y9FLHqW7Mu28U9VgmZz2hgNhi7qG3qF", // binance.us (?)
+          "13PBfQf1kaZPD3zN8LyoY5QtEDSZKJYZS5N7S5hZYaEz2Kh8znT", // crypto.com
+          "148W6v8vaS4npmQQ2PtPQhSLBhNWg6oYjvxne3VdsEAQq8r2GeT", // crypto.com
+          "13d4ieU8x4n3v7XtkiLio1NmT9WzKJS4BFC7jDJNbGjB5xciQC8", // kucoin
+          "13Nj4KCnuBruSYvbxCgTLdeoyTN6Q5cZsNnJw3rh8WLZt9wBYih", // kucoin
+          "133d47AMU6nQ7mZ1fF4dFJfoLhqCUnTSRhZAwmcahBoEtZPGF4U", // gate.io 
+        ],
+      },
     ],
   },
   webpack: (config, { isServer }) => {
