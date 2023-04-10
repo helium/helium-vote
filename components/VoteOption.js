@@ -160,7 +160,7 @@ const VoteOption = ({
                   style={
                     bg === "custom" ? { backgroundColor: outcome.color } : {}
                   }
-                  href={`helium://dc_burn?address=${outcome.address}&amount=0.00000001&memo=${encodedMemo}`}
+                  href={`heliumwallet://dc_burn?address=${outcome.address}&amount=0.00000001&memo=${encodedMemo}`}
                 >
                   <span
                     className={classNames("pr-1 font-sans", {
