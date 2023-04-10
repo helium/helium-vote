@@ -176,7 +176,7 @@ const VoteOption = ({
                   Vote with Mobile App
                 </p>
                 <p className="text-hv-gray-300 font-light leading-tight text-md sm:text-lg">
-                  Ensure you have Helium App installed
+                  Ensure you have Helium Wallet App installed
                 </p>
               </div>
               {/* <WarningBox /> */}
@@ -197,7 +197,7 @@ const VoteOption = ({
                   Vote with QR Code
                 </p>
                 <p className="text-hv-gray-300 font-light leading-tight text-md sm:text-lg">
-                  Scan this QR code with your Helium app
+                  Scan this QR code with your Helium Wallet app
                 </p>
               </div>
             </span>
