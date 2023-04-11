@@ -871,6 +871,102 @@ module.exports = {
           "133d47AMU6nQ7mZ1fF4dFJfoLhqCUnTSRhZAwmcahBoEtZPGF4U", // gate.io 
         ],
       },
+      {
+        id: "14rmHKjpZhsnrA2j24KiGzg8teA1zAMRhVGcWVUdmTAomTrJJQf",
+        deadline: 1839850,
+        link: "https://github.com/helium/HIP/blob/main/0080-simplifying-dao-utility-score.md",
+        name: "Simplifying the DAO Utility Score",
+        tags: {
+          primary: 'HIP 80',
+          secondary: "Economic"
+        },
+        authors: [
+          {
+            nickname: "@ferebee",
+            link: "https://github.com/ferebee",
+          },
+          {
+            nickname: "@jmfayal",
+            link: "https://github.com/jmfayal",
+          },
+          {
+            nickname: "@rawrmaan",
+            link: "https://github.com/rawrmaan",
+          },
+          {
+            nickname: "@gateholder",
+            link: "https://github.com/gateholder",
+          },
+        ],
+        description:
+          "HIP 80 proposes a new DAO Utility Score formula, removing the number of Hotspots and their onboarding fees and instead using only the square root of the product of DC Burn and delegated veHNT. Additionally, a DC Burn Floor is added for all subDAOs with a 5x higher floor for the IOT subDAO. Although the onboarding fee is no longer relevant to the DAO Utility Score, the HIP proposes to maintain a $5 onboarding fee as revenue and spam resistance for the subDAO. As a one-time exception, all MOBILE Hotspots onboarded prior to the implementation of HIP 70 shall be considered onboarded to both the MOBILE and the IOT subDAOs.\n\nDAO Utility Score as proposed in HIP 80 is V × D, where\nV is veHNT delegated to a particular subDAO\nD is (DCs burned by a particular subDAO)^(\½)\n\nApproving HIP 80 implies that the community has reviewed the implementation. \n\nThe HIP 80 vote is running concurrently with HIP 81. Both proposals should be voted on independently. We would consider this proposal as approved if it passes with 2/3 of the vote power by the deadline. If both HIP 80 and HIP 81 pass, then a selection rule will govern: The HIP with the greater HNT vote power will be adopted. \nBoth votes should be voted on independently. If both fail to reach a super majority, the original DAO Utility Score specified in HIP 51 will be implemented. In the highly unlikely event of a tie in vote power, the Helium Foundation will decide a winner.\n\nJoin the conversation on Discord and see the #hip-80-simplifying-dao-utility-score channel for more details.",
+          outcomes: [
+          {
+            value: "For HIP 80",
+            address: "13nJcKR3nFNYqrQyTfb3pjx7Eq1ThgcV22P94fviLVf5BypAYyc",
+          },
+          {
+            value: "Against HIP 80",
+            address: "14d8wxarhR2uXG4PzqW7tutUJ6gMKNkZir4HMvW23jLoETM7juT",
+          },
+        ],
+        filters: [
+          // these are known exchange wallets, more can be added before the vote closes.
+          "14YeKFGXE23yAdACj6hu5NWEcYzzKxptYbm5jHgzw9A1P1UQfMv", // binance.com
+          "13HPSdf8Ng8E2uKpLm8Ba3sQ6wdNimTcaKXYmMkHyTUUeUELPwJ", // binance.us
+          "148W6v8vaS4npmQQ2PtPQhSLBhNWg6oYjvxne3VdsEAQq8r2GeT", // binance.us (?)
+          "13TFnZyGDy95neRAxnP5Y9FLHqW7Mu28U9VgmZz2hgNhi7qG3qF", // binance.us (?)
+          "13PBfQf1kaZPD3zN8LyoY5QtEDSZKJYZS5N7S5hZYaEz2Kh8znT", // crypto.com
+          "148W6v8vaS4npmQQ2PtPQhSLBhNWg6oYjvxne3VdsEAQq8r2GeT", // crypto.com
+          "13d4ieU8x4n3v7XtkiLio1NmT9WzKJS4BFC7jDJNbGjB5xciQC8", // kucoin
+          "13Nj4KCnuBruSYvbxCgTLdeoyTN6Q5cZsNnJw3rh8WLZt9wBYih", // kucoin
+          "133d47AMU6nQ7mZ1fF4dFJfoLhqCUnTSRhZAwmcahBoEtZPGF4U", // gate.io 
+        ],
+      },
+      {
+        id: "147pXvGVcLKU76D7Hdi7iTTLvLw9qX8jXsCgNkKSHqo3rnfzkby",
+        deadline: 1839850,
+        link: "https://github.com/helium/HIP/blob/main/0081-minimum-onboarding-fee.md",
+        name: "Minimum Onboarding Fee",
+        tags: {
+          primary: 'HIP 81',
+          secondary: "Economic"
+        },
+        authors: [
+          {
+            nickname: "@mawdegroot",
+            link: "https://github.com/mawdegroot",
+          },
+          {
+            nickname: "@Maxgold91",
+            link: "https://github.com/Maxgold91",
+          },
+        ],
+        description:
+          "HIP 81 proposes to maintain the DAO Utility Score codified by the community with HIP 51, but defines minimum onboarding fees for subDAOs as $10 with a halving schedule matching the halving schedule of HNT emissions. This proposal seeks to solve the problem created by radios that have not paid an onboarding fee by giving manufacturers and/or the subDAO a grace period ending on August 1, 2023 to retroactively onboard devices on behalf of the radio owners.\n\nDAO Utility Score as proposed in HIP 81 is V × D × A, where\nV is veHNT delegated to a particular subDAO\nD is (DCs burned by a particular subDAO)^(½)\nA is (Active Hotspots in subDAO × Onboarding Fee)^(\¼)\n\nApproving HIP 81 implies that the community has reviewed the implementation. \n\nThe HIP 81 vote is running concurrently with HIP 80. Both proposals should be voted on independently. We would consider this proposal as approved if it passes with 2/3 of the vote power by the deadline. If both HIP 81 and HIP 80 pass, then a selection rule will govern: The HIP with the greater HNT vote power will be adopted. \nBoth votes should be voted on independently. If both fail to reach a super majority, the original DAO Utility Score specified in HIP 51 will be implemented. In the highly unlikely event of a tie in vote power, the Helium Foundation will decide a winner.\n\nJoin the conversation on Discord and see the #hip-81-minimum-onboarding-fee channel for more details.",
+          outcomes: [
+          {
+            value: "For HIP 81",
+            address: "13JQNSJsGXf8iVZjkJdV4scxfjB4XgdMnkUwBMh36xPxYznkcX71",
+          },
+          {
+            value: "Against HIP 81",
+            address: "14akKMDWUmEvJoe2bojEkooBM6Sdfd1pWgpWXpCh94HxrrtGJGE",
+          },
+        ],
+        filters: [
+          // these are known exchange wallets, more can be added before the vote closes.
+          "14YeKFGXE23yAdACj6hu5NWEcYzzKxptYbm5jHgzw9A1P1UQfMv", // binance.com
+          "13HPSdf8Ng8E2uKpLm8Ba3sQ6wdNimTcaKXYmMkHyTUUeUELPwJ", // binance.us
+          "148W6v8vaS4npmQQ2PtPQhSLBhNWg6oYjvxne3VdsEAQq8r2GeT", // binance.us (?)
+          "13TFnZyGDy95neRAxnP5Y9FLHqW7Mu28U9VgmZz2hgNhi7qG3qF", // binance.us (?)
+          "13PBfQf1kaZPD3zN8LyoY5QtEDSZKJYZS5N7S5hZYaEz2Kh8znT", // crypto.com
+          "148W6v8vaS4npmQQ2PtPQhSLBhNWg6oYjvxne3VdsEAQq8r2GeT", // crypto.com
+          "13d4ieU8x4n3v7XtkiLio1NmT9WzKJS4BFC7jDJNbGjB5xciQC8", // kucoin
+          "13Nj4KCnuBruSYvbxCgTLdeoyTN6Q5cZsNnJw3rh8WLZt9wBYih", // kucoin
+          "133d47AMU6nQ7mZ1fF4dFJfoLhqCUnTSRhZAwmcahBoEtZPGF4U", // gate.io 
+        ],
+      },
     ],
   },
   webpack: (config, { isServer }) => {
