@@ -873,7 +873,7 @@ module.exports = {
       },
       {
         id: "14rmHKjpZhsnrA2j24KiGzg8teA1zAMRhVGcWVUdmTAomTrJJQf",
-        deadline: 1839850,
+        deadline: 1836950,
         link: "https://github.com/helium/HIP/blob/main/0080-simplifying-dao-utility-score.md",
         name: "Simplifying the DAO Utility Score",
         tags: {
@@ -899,7 +899,7 @@ module.exports = {
           },
         ],
         description:
-          "HIP 80 proposes a new DAO Utility Score formula, removing the number of Hotspots and their onboarding fees and instead using only the square root of the product of DC Burn and delegated veHNT. Additionally, a DC Burn Floor is added for all subDAOs with a 5x higher floor for the IOT subDAO. Although the onboarding fee is no longer relevant to the DAO Utility Score, the HIP proposes to maintain a $5 onboarding fee as revenue and spam resistance for the subDAO. As a one-time exception, all MOBILE Hotspots onboarded prior to the implementation of HIP 70 shall be considered onboarded to both the MOBILE and the IOT subDAOs.\n\nDAO Utility Score as proposed in HIP 80 is V × D, where\nV is veHNT delegated to a particular subDAO\nD is (DCs burned by a particular subDAO)^(\½)\n\nApproving HIP 80 implies that the community has reviewed the implementation. \n\nThe HIP 80 vote is running concurrently with HIP 81. Both proposals should be voted on independently.\n\nWe would consider this proposal as approved if it passes with 2/3 of the vote power by the deadline. If both fail to reach a super majority, the original DAO Utility Score specified in HIP 51 will be implemented.\n\nJoin the conversation on Discord and see the #hip-80-simplifying-dao-utility-score channel for more details.",
+          "HIP 80 proposes a new DAO Utility Score formula, removing the number of Hotspots and their onboarding fees and instead using only the square root of the product of DC Burn and delegated veHNT. Additionally, a DC Burn Floor is added for all subDAOs with a 5x higher floor for the IOT subDAO. Although the onboarding fee is no longer relevant to the DAO Utility Score, the HIP proposes to maintain a $5 onboarding fee as revenue and spam resistance for the subDAO. As a one-time exception, all MOBILE Hotspots onboarded prior to the implementation of HIP 70 shall be considered onboarded to both the MOBILE and the IOT subDAOs. The specific updates to the formula can be seen in the HIP.\n\nApproving HIP 80 implies that the community has reviewed the implementation. \n\nThe HIP 80 vote is running concurrently with HIP 81. Both proposals should be voted on independently.\n\nWe would consider this proposal as approved if it passes with 2/3 of the vote power by the deadline. If both fail to reach a super majority, the original DAO Utility Score specified in HIP 51 will be implemented.\n\nJoin the conversation on Discord and see the #hip-80-simplifying-dao-utility-score channel for more details.",
           outcomes: [
           {
             value: "For HIP 80",
@@ -925,7 +925,7 @@ module.exports = {
       },
       {
         id: "147pXvGVcLKU76D7Hdi7iTTLvLw9qX8jXsCgNkKSHqo3rnfzkby",
-        deadline: 1839850,
+        deadline: 1836950,
         link: "https://github.com/helium/HIP/blob/main/0081-minimum-onboarding-fee.md",
         name: "Minimum Onboarding Fee",
         tags: {
@@ -943,7 +943,7 @@ module.exports = {
           },
         ],
         description:
-          "HIP 81 proposes to maintain the DAO Utility Score codified by the community with HIP 51, but defines minimum onboarding fees for subDAOs as $10 with a halving schedule matching the halving schedule of HNT emissions. This proposal seeks to solve the problem created by radios that have not paid an onboarding fee by giving manufacturers and/or the subDAO a grace period ending on August 1, 2023 to retroactively onboard devices on behalf of the radio owners.\n\nDAO Utility Score as proposed in HIP 81 is V × D × A, where\nV is veHNT delegated to a particular subDAO\nD is (DCs burned by a particular subDAO)^(½)\nA is (Active Hotspots in subDAO × Onboarding Fee)^(\¼)\n\nApproving HIP 81 implies that the community has reviewed the implementation. \n\nThe HIP 81 vote is running concurrently with HIP 80. Both proposals should be voted on independently.\n\nWe would consider this proposal as approved if it passes with 2/3 of the vote power by the deadline. If both fail to reach a super majority, the original DAO Utility Score specified in HIP 51 will be implemented.\n\nJoin the conversation on Discord and see the #hip-81-minimum-onboarding-fee channel for more details.",
+          "HIP 81 proposes to maintain the DAO Utility Score codified by the community with HIP 51, but defines minimum onboarding fees for subDAOs as $10 with a halving schedule matching the halving schedule of HNT emissions. This proposal seeks to solve the problem created by radios that have not paid an onboarding fee by giving manufacturers and/or the subDAO a grace period ending on August 1, 2023 to retroactively onboard devices on behalf of the radio owners. The specific updates to the formula can be seen in the HIP.\n\nApproving HIP 81 implies that the community has reviewed the implementation. \n\nThe HIP 81 vote is running concurrently with HIP 80. Both proposals should be voted on independently.\n\nWe would consider this proposal as approved if it passes with 2/3 of the vote power by the deadline. If both fail to reach a super majority, the original DAO Utility Score specified in HIP 51 will be implemented.\n\nJoin the conversation on Discord and see the #hip-81-minimum-onboarding-fee channel for more details.",
           outcomes: [
           {
             value: "For HIP 81",
