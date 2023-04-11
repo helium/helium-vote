@@ -947,7 +947,7 @@ module.exports = {
           outcomes: [
           {
             value: "For HIP 81",
-            address: "13JQNSJsGXf8iVZjkJdV4scxfjB4XgdMnkUwBMh36xPxYznkcX71",
+            address: "13JQNSJsGXf8iVZjkJdV4scxfjB4XgdMnkUwBMh36xPxYznkcX7",
           },
           {
             value: "Against HIP 81",
