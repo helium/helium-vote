@@ -1,32 +1,43 @@
-import client, { TAKE_MAX } from "./client";
-import { chain, maxBy } from "lodash";
+import getConfig from "next/config";
 
-const dev = process.env.NODE_ENV !== "production";
+const { serverRuntimeConfig } = getConfig();
+const votes = new Map(serverRuntimeConfig.votes.map(({
+    id,
+    deadline,
+    link,
+    name,
+    tags,
+    authors,
+    description,
+    outcomes,
+    filters,
+  }) => [id, {
+    id,
+    deadline,
+    link,
+    name,
+    tags,
+    authors,
+    description,
+    outcomes,
+    filters: (filters ? filters : []),
+  }]));
 
-export const server = dev
-  ? "http://localhost:3000"
-  : "https://www.heliumvote.com";
+const cachedData = require('./cache.json');
 
-export const fetchVotes = async () => {
-  const votes = await fetch(`${server}/api/votes`);
-  return await votes.json();
+export const fetchVotes = () => {
+  return Array.from(votes.values());
 };
 
-export const fetchVoteDetails = async (id) => {
-  const voteDetails = await fetch(`${server}/api/votes/${id}`);
-  return await voteDetails.json();
+export const fetchVoteDetails = (id) => {
+  return votes.has(id) ? votes.get(id) : null;
 };
 
-export const fetchCurrentHeight = async () => {
-  return (await fetch(`${server}/api/height`)).json();
-};
-
-export const fetchResults = async (id) => {
-  try {
-    const results = await fetch(`${server}/api/results/${id}`);
-    return await results.json();
-  } catch (e) {
-    console.error(e);
+export const fetchResults = (id) => {
+  if (!(votes.has(id)) || !(id in cachedData)) {
     return null;
   }
+
+  const { outcomes, timestamp: ts, deadline_ts } = cachedData[id];
+  return { outcomes, timestamp: ts*1000, deadline_ts };
 };

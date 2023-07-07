@@ -1,0 +1,550 @@
+{
+  "14MnuexopPfDg3bmq8JdCm7LMDkUBoqhqanD9QzLrUURLZxFHBx": {
+    "deadline": 1105440,
+    "deadline_ts": 1637456268,
+    "filters": [],
+    "timestamp": 1688686456,
+    "outcomes": [
+      {
+        "value": "Against Redenomination",
+        "address": "13pPtEyg3idu2GDeFCjbuU1uVLaZax9yBqDouPPdgsAYznq7982",
+        "hntVoted": 468519730093846,
+        "uniqueWallets": 3025
+      },
+      {
+        "value": "For Redenomination",
+        "address": "13qVx7MRzocyKZ4bW3oEkvnQrTK4DftKEcjHVYP1zhMtUhnqYye",
+        "hntVoted": 1138931807199291,
+        "uniqueWallets": 5589
+      }
+    ]
+  },
+  "13NyqFtVKsifrh6HQ7DjSBKXRDi7qLHDoATHogoSgvBh56oZJv8": {
+    "deadline": 1183225,
+    "deadline_ts": 1642302620,
+    "filters": [],
+    "timestamp": 1688686459,
+    "outcomes": [
+      {
+        "value": "Against Beacon/Witness Ratio",
+        "address": "134UcXhcGD1fxR3XrA3rgXXiQCjNFiB8MbnxsTX8z1iv3CQ52Zs",
+        "hntVoted": 23660492019104,
+        "uniqueWallets": 1123
+      },
+      {
+        "value": "For Beacon/Witness Ratio",
+        "address": "14WEui5BM83omUQ2VwXrd8dfx8wew18bdn66mc9Z14HC6DeL3xw",
+        "hntVoted": 67938427347403,
+        "uniqueWallets": 2959
+      }
+    ]
+  },
+  "14iwaexUYUe5taFgb5hx2BZw74z3TSyonRLYyZU1RbddV4bJest": {
+    "deadline": 1180295,
+    "deadline_ts": 1642136242,
+    "filters": [],
+    "timestamp": 1688686462,
+    "outcomes": [
+      {
+        "value": "Against Temporarily Maintaining Denylist",
+        "address": "13aRcLjXSjWdYCwihwGnJYiCP87BGniMN2g74Mm7rV6ZVXecDMQ",
+        "hntVoted": 5133823049108,
+        "uniqueWallets": 200
+      },
+      {
+        "value": "For Temporarily Maintaining Denylist",
+        "address": "14i2TpGTLB8SRGURXRumcGv7sDD1ABQJLbLphdyDaTTBQG4ZTCb",
+        "hntVoted": 229841362022029,
+        "uniqueWallets": 1910
+      }
+    ]
+  },
+  "13wCuq7XGnc4xgxPAc9n9ragKsRfmH9t9jB3c1smfKPZWSikZkd": {
+    "deadline": 1180295,
+    "deadline_ts": 1642136242,
+    "filters": [],
+    "timestamp": 1688686465,
+    "outcomes": [
+      {
+        "value": "For Publishing Hotspot Denylist",
+        "address": "13pk2QHtwZKYbZH9oAr9oajwzBERsZCNzNWF3uwud5TrisTywQN",
+        "hntVoted": 129138677910441,
+        "uniqueWallets": 1024
+      },
+      {
+        "value": "Against Publishing Hotspot Denylist",
+        "address": "14dtRgHykFreu2NSRqQvMprCXMSpA3Z9iW4i5Wf9FWfhKARH3iU",
+        "hntVoted": 28580199782068,
+        "uniqueWallets": 612
+      }
+    ]
+  },
+  "14me3X7jpEmn3eeFfnAkMvUoFU3cN6GAS3CDomqCikr7VQfHWrU": {
+    "deadline": 1237200,
+    "deadline_ts": 1645524796,
+    "filters": [],
+    "timestamp": 1688686467,
+    "outcomes": [
+      {
+        "value": "Against HIP 54",
+        "address": "1344XqCee51BkNzbjAjW1MyR17qvhc9952ygWbz5eMNn4nnPxHZ",
+        "hntVoted": 970897715183,
+        "uniqueWallets": 247
+      },
+      {
+        "value": "For HIP 54",
+        "address": "13Cq1jr9HTVZAxgrD9kXg3ytqjWZ4D2bEGJejPs2bb3vAZJz3sM",
+        "hntVoted": 146554990787528,
+        "uniqueWallets": 2646
+      }
+    ]
+  },
+  "14Rjhhz1DXLVmSRdzappqWgD6rfgu6XYxmdaSCvWLyLH8ZWbciK": {
+    "deadline": 1237200,
+    "deadline_ts": 1645524796,
+    "filters": [],
+    "timestamp": 1688686470,
+    "outcomes": [
+      {
+        "value": "For HIP 55",
+        "address": "13pshKABnfUBSAcXJrgDYxvwXxJ6UMD1LrXA2ZDXwCKGNu83hyY",
+        "hntVoted": 321391513842256,
+        "uniqueWallets": 2064
+      },
+      {
+        "value": "Against HIP 55",
+        "address": "13v6vkBUaHjoGx2daVCxXtyDkaKMP1Key4WphkkGsc3gpPpgTh4",
+        "hntVoted": 12355281431247,
+        "uniqueWallets": 1136
+      }
+    ]
+  },
+  "13UrtNApGd3NbeP3NyyTejqNEPAv3NGxkGjvtwTVdaRs24NT7Wy": {
+    "deadline": 1256800,
+    "deadline_ts": 1646667188,
+    "filters": [],
+    "timestamp": 1688686473,
+    "outcomes": [
+      {
+        "value": "For HIP 56",
+        "address": "14afviZLjBxH4neJEK3TxDuhhHJk9C7rnJe4AxcJKUNda435biL",
+        "hntVoted": 32486040978552,
+        "uniqueWallets": 122
+      },
+      {
+        "value": "Against HIP 56",
+        "address": "14ExX6eX6tw76f6pu7z3PinTMGcZ3D5mxHYB59u25pFyp2ZK8tw",
+        "hntVoted": 3117994825,
+        "uniqueWallets": 3
+      }
+    ]
+  },
+  "14KhDJUdvAXNVVP5m5cqEaLGNC859sXvpHtxWX9r999pZKC8xAs": {
+    "deadline": 1311000,
+    "deadline_ts": 1649920142,
+    "filters": [],
+    "timestamp": 1688686476,
+    "outcomes": [
+      {
+        "value": "Against HIP 58",
+        "address": "12zsif7QE9dhQyhzmbT1mLtTrinTFQdNyjJZkty6N4hRPYVoReB",
+        "hntVoted": 4885633155519,
+        "uniqueWallets": 723
+      },
+      {
+        "value": "For HIP 58",
+        "address": "13rz3LEqJyfiv6sTSb5rcLKUiDVUa5XgkYi9qtfhoNsziijEwQ5",
+        "hntVoted": 64462026849170,
+        "uniqueWallets": 5067
+      }
+    ]
+  },
+  "14cXnMdXYcS7WKNh33dYUaPeo8bZmRFn5AoPA78AZtAgfFXu9jf": {
+    "deadline": 1350360,
+    "deadline_ts": 1652266266,
+    "filters": [],
+    "timestamp": 1688686479,
+    "outcomes": [
+      {
+        "value": "For HIP 59",
+        "address": "14KKzNXWp9rgkNvASAq7LYRkxZuyWpe1NEfYkr1y4vjACb6skPh",
+        "hntVoted": 33273526952676,
+        "uniqueWallets": 2182
+      },
+      {
+        "value": "Against HIP 59",
+        "address": "14nP4TKN3Q7aMwNyBP1qTstV6mrrVvP5Sau3t1vaff7nyqyyigg",
+        "hntVoted": 385186486825,
+        "uniqueWallets": 143
+      }
+    ]
+  },
+  "14rifUhocpzdwsrWaG5PDbdREDkzyesKe1hXuWzibv8h9DdqKLe": {
+    "deadline": 1387090,
+    "deadline_ts": 1654654977,
+    "filters": [],
+    "timestamp": 1688686482,
+    "outcomes": [
+      {
+        "value": "Against HIP 51",
+        "address": "13BnnYVKUDbaRynWHe6JNj7tx55meLBAGmtoYLMUDK9cL3ZKd8T",
+        "hntVoted": 13070665530110,
+        "uniqueWallets": 1123
+      },
+      {
+        "value": "For HIP 51",
+        "address": "14kJVKqZ3Fh5FaqxW727yL3tKcdgWWA5oMKupCNwnZDRFPgixYY",
+        "hntVoted": 426478378922049,
+        "uniqueWallets": 4181
+      }
+    ]
+  },
+  "14XDEkg1t398kvqvgxMMKH8qzVGNBb1mgHhTjNmc5KkC3XJxu8p": {
+    "deadline": 1454400,
+    "deadline_ts": 1658805717,
+    "filters": [],
+    "timestamp": 1688686485,
+    "outcomes": [
+      {
+        "value": "For HIP 52",
+        "address": "14KTnuEofehSvwfrWcrURb3nXDe5NnbZN5G3GWeRNzTAUqsYPPj",
+        "hntVoted": 210068567232693,
+        "uniqueWallets": 1564
+      },
+      {
+        "value": "Against HIP 52",
+        "address": "14m8SxU8RGd5cLhyQbWQyNPzjYczUXY6n1opaXKyYYXZXUk82oD",
+        "hntVoted": 10925896301824,
+        "uniqueWallets": 344
+      }
+    ]
+  },
+  "14hfi6Vs9YmwYLwVHKygqyEqwTERRrx5kfQkVoX1uqMTxiE5EgJ": {
+    "deadline": 1454400,
+    "deadline_ts": 1658805717,
+    "filters": [],
+    "timestamp": 1688686488,
+    "outcomes": [
+      {
+        "value": "Against HIP 53",
+        "address": "14L1X3yHDN8wRgLs2k7cvxeTR7Xm62CVTRpYFFw1kpM9HFovCe3",
+        "hntVoted": 6769950002672,
+        "uniqueWallets": 283
+      },
+      {
+        "value": "For HIP 53",
+        "address": "14UbGr7ZVR544vadj4EW2bvGa9Dd78hnM3Ab7AgxmbNUbGDpH5v",
+        "hntVoted": 237113803593421,
+        "uniqueWallets": 1014
+      }
+    ]
+  },
+  "13rA4AXq5ME5s9FEyZrE4BMjxiAF9W3kU2tnmUH8FkFGsV97jEp": {
+    "deadline": 1462500,
+    "deadline_ts": 1659478101,
+    "filters": [],
+    "timestamp": 1688686491,
+    "outcomes": [
+      {
+        "value": "Against HIP 67 (Keep\u00a0Redenomination)",
+        "address": "13vac93ky5Wb4VhrWZT7gFgvEdotJBrUSMxfY7yVHY63Tb9N4mK",
+        "hntVoted": 6017807441447,
+        "uniqueWallets": 519
+      },
+      {
+        "value": "For HIP 67 (Do\u00a0Not\u00a0Redenominate)",
+        "address": "14LKcAKs413toCce7hsYNMywdDqUPEBpJLRn9bmbZMMUdpSVgxj",
+        "hntVoted": 127777561298053,
+        "uniqueWallets": 2872
+      }
+    ]
+  },
+  "13Y79HnMVt4Epug2rbLYivMPvrcpC2wYUNbZK5Dga3tw3VBpBjk": {
+    "deadline": 1537200,
+    "deadline_ts": 1663824539,
+    "filters": [
+      "14YeKFGXE23yAdACj6hu5NWEcYzzKxptYbm5jHgzw9A1P1UQfMv",
+      "13HPSdf8Ng8E2uKpLm8Ba3sQ6wdNimTcaKXYmMkHyTUUeUELPwJ",
+      "148W6v8vaS4npmQQ2PtPQhSLBhNWg6oYjvxne3VdsEAQq8r2GeT",
+      "13TFnZyGDy95neRAxnP5Y9FLHqW7Mu28U9VgmZz2hgNhi7qG3qF",
+      "13PBfQf1kaZPD3zN8LyoY5QtEDSZKJYZS5N7S5hZYaEz2Kh8znT",
+      "13d4ieU8x4n3v7XtkiLio1NmT9WzKJS4BFC7jDJNbGjB5xciQC8",
+      "133d47AMU6nQ7mZ1fF4dFJfoLhqCUnTSRhZAwmcahBoEtZPGF4U"
+    ],
+    "timestamp": 1688686494,
+    "outcomes": [
+      {
+        "value": "Against HIP 70",
+        "address": "13EUfEDbJVXtzrf3fn1mX1fj8NtYLiik56WdaZB5vEEjr66pRMm",
+        "hntVoted": 276003521859774,
+        "uniqueWallets": 1270
+      },
+      {
+        "value": "For HIP 70",
+        "address": "144FS4XwDfAS4QerhVPARGZuqjUvFDHti96peum6uzwETog7v7J",
+        "hntVoted": 1208890259533921,
+        "uniqueWallets": 6177
+      }
+    ]
+  },
+  "13Z3p82AX8H1EUQF74cP2qq7RmmhbKBAiGWWsyA7WLxQ9NENTVW": {
+    "deadline": 1580900,
+    "deadline_ts": 1666437749,
+    "filters": [
+      "14YeKFGXE23yAdACj6hu5NWEcYzzKxptYbm5jHgzw9A1P1UQfMv",
+      "13HPSdf8Ng8E2uKpLm8Ba3sQ6wdNimTcaKXYmMkHyTUUeUELPwJ",
+      "148W6v8vaS4npmQQ2PtPQhSLBhNWg6oYjvxne3VdsEAQq8r2GeT",
+      "13TFnZyGDy95neRAxnP5Y9FLHqW7Mu28U9VgmZz2hgNhi7qG3qF",
+      "13PBfQf1kaZPD3zN8LyoY5QtEDSZKJYZS5N7S5hZYaEz2Kh8znT",
+      "13d4ieU8x4n3v7XtkiLio1NmT9WzKJS4BFC7jDJNbGjB5xciQC8",
+      "133d47AMU6nQ7mZ1fF4dFJfoLhqCUnTSRhZAwmcahBoEtZPGF4U"
+    ],
+    "timestamp": 1688686497,
+    "outcomes": [
+      {
+        "value": "For HIP 73",
+        "address": "13wptC32h89s1K66uPTDiDe9XFbuZicyNuH2Di7NZyciKuLwvCT",
+        "hntVoted": 170957737222968,
+        "uniqueWallets": 2399
+      },
+      {
+        "value": "Against HIP 73",
+        "address": "143Vzv4Xr2mdF41Qy9HXt8wJU5KcHdv2pcyKRc9Z6RuKk4Mj5zX",
+        "hntVoted": 36327740533873,
+        "uniqueWallets": 183
+      }
+    ]
+  },
+  "14jH67zhctwb3B5NmwiAjaXQuyF7jZMZCAnfyBYhSpRS3L22sQE": {
+    "deadline": 1707000,
+    "deadline_ts": 1673894836,
+    "filters": [
+      "14YeKFGXE23yAdACj6hu5NWEcYzzKxptYbm5jHgzw9A1P1UQfMv",
+      "13HPSdf8Ng8E2uKpLm8Ba3sQ6wdNimTcaKXYmMkHyTUUeUELPwJ",
+      "148W6v8vaS4npmQQ2PtPQhSLBhNWg6oYjvxne3VdsEAQq8r2GeT",
+      "13TFnZyGDy95neRAxnP5Y9FLHqW7Mu28U9VgmZz2hgNhi7qG3qF",
+      "13PBfQf1kaZPD3zN8LyoY5QtEDSZKJYZS5N7S5hZYaEz2Kh8znT",
+      "13d4ieU8x4n3v7XtkiLio1NmT9WzKJS4BFC7jDJNbGjB5xciQC8",
+      "133d47AMU6nQ7mZ1fF4dFJfoLhqCUnTSRhZAwmcahBoEtZPGF4U"
+    ],
+    "timestamp": 1688686499,
+    "outcomes": [
+      {
+        "value": "For HIP 74",
+        "address": "13DBZ5penZZWUg93TxbHAgVaQnsNLewKkyxLZbsSEMcyyDNtMZW",
+        "hntVoted": 237924888342705,
+        "uniqueWallets": 1690
+      },
+      {
+        "value": "Against HIP 74",
+        "address": "146Pjwm49hmk8HHhCzAPK5mNAC7kXjVuuQJaVitXE4wBYnWhv3h",
+        "hntVoted": 42950849041466,
+        "uniqueWallets": 223
+      }
+    ]
+  },
+  "143vgVpLgC3LcXLZCyXYZiHCFcsH9UNz3vR8CL6SDxTLPL5tWtr": {
+    "deadline": 1729100,
+    "deadline_ts": 1675217454,
+    "filters": [
+      "14YeKFGXE23yAdACj6hu5NWEcYzzKxptYbm5jHgzw9A1P1UQfMv",
+      "13HPSdf8Ng8E2uKpLm8Ba3sQ6wdNimTcaKXYmMkHyTUUeUELPwJ",
+      "148W6v8vaS4npmQQ2PtPQhSLBhNWg6oYjvxne3VdsEAQq8r2GeT",
+      "13TFnZyGDy95neRAxnP5Y9FLHqW7Mu28U9VgmZz2hgNhi7qG3qF",
+      "13PBfQf1kaZPD3zN8LyoY5QtEDSZKJYZS5N7S5hZYaEz2Kh8znT",
+      "13d4ieU8x4n3v7XtkiLio1NmT9WzKJS4BFC7jDJNbGjB5xciQC8",
+      "133d47AMU6nQ7mZ1fF4dFJfoLhqCUnTSRhZAwmcahBoEtZPGF4U"
+    ],
+    "timestamp": 1688686502,
+    "outcomes": [
+      {
+        "value": "Against HIP 75",
+        "address": "13QeGddbx4Z65h1UDFzdAeDPdLoGhvhuVz1szN6UkcGjsy4Jocz",
+        "hntVoted": 1503949015274,
+        "uniqueWallets": 136
+      },
+      {
+        "value": "For HIP 75",
+        "address": "14EoGWxBjBGQootk1f9gE8CPJhSpSCUQ89Hk5nvHPruWjgQ2vnL",
+        "hntVoted": 70113304531270,
+        "uniqueWallets": 1127
+      }
+    ]
+  },
+  "13KaGoC2ED8kEh2sXLZ7eGWrqDUMyFH5k48VQ3LLjU5QoQidMV4": {
+    "deadline": 1740300,
+    "deadline_ts": 1675903450,
+    "filters": [
+      "14YeKFGXE23yAdACj6hu5NWEcYzzKxptYbm5jHgzw9A1P1UQfMv",
+      "13HPSdf8Ng8E2uKpLm8Ba3sQ6wdNimTcaKXYmMkHyTUUeUELPwJ",
+      "148W6v8vaS4npmQQ2PtPQhSLBhNWg6oYjvxne3VdsEAQq8r2GeT",
+      "13TFnZyGDy95neRAxnP5Y9FLHqW7Mu28U9VgmZz2hgNhi7qG3qF",
+      "13PBfQf1kaZPD3zN8LyoY5QtEDSZKJYZS5N7S5hZYaEz2Kh8znT",
+      "13d4ieU8x4n3v7XtkiLio1NmT9WzKJS4BFC7jDJNbGjB5xciQC8",
+      "133d47AMU6nQ7mZ1fF4dFJfoLhqCUnTSRhZAwmcahBoEtZPGF4U"
+    ],
+    "timestamp": 1688686505,
+    "outcomes": [
+      {
+        "value": "Against HIP 69",
+        "address": "13QJxjioAgQiLaNMXJE1CGXMj1786T39zGRNoojCchWzzqr5mig",
+        "hntVoted": 37932043905397,
+        "uniqueWallets": 490
+      },
+      {
+        "value": "For HIP 69",
+        "address": "139LARBfojBxAinZNfxEMbnx1Q7vRUv26Z2ZwP8wxDZV5grZ8Ae",
+        "hntVoted": 284021725749528,
+        "uniqueWallets": 4178
+      }
+    ]
+  },
+  "144wSVHr4cuVSjxEC62X1bHuLsc5Hcpq6XBhfSY8BQwiyMborFZ": {
+    "deadline": 1783450,
+    "deadline_ts": 1678406506,
+    "filters": [
+      "14YeKFGXE23yAdACj6hu5NWEcYzzKxptYbm5jHgzw9A1P1UQfMv",
+      "13HPSdf8Ng8E2uKpLm8Ba3sQ6wdNimTcaKXYmMkHyTUUeUELPwJ",
+      "148W6v8vaS4npmQQ2PtPQhSLBhNWg6oYjvxne3VdsEAQq8r2GeT",
+      "13TFnZyGDy95neRAxnP5Y9FLHqW7Mu28U9VgmZz2hgNhi7qG3qF",
+      "13PBfQf1kaZPD3zN8LyoY5QtEDSZKJYZS5N7S5hZYaEz2Kh8znT",
+      "13d4ieU8x4n3v7XtkiLio1NmT9WzKJS4BFC7jDJNbGjB5xciQC8",
+      "133d47AMU6nQ7mZ1fF4dFJfoLhqCUnTSRhZAwmcahBoEtZPGF4U"
+    ],
+    "timestamp": 1688686508,
+    "outcomes": [
+      {
+        "value": "Against HIP 76",
+        "address": "12xdsVwZxhm5KXupbcovapYiruyxJCCFroAebgZE1yj6ZioTdik",
+        "hntVoted": 7610416303168,
+        "uniqueWallets": 183
+      },
+      {
+        "value": "For HIP 76",
+        "address": "13Z46nMa5Su5p2h2FhAWADXcTimwADeXks8VB5tXwwsVuXuh3gF",
+        "hntVoted": 165610172224524,
+        "uniqueWallets": 2403
+      }
+    ]
+  },
+  "146pksPcH7C3Wz8hN5NxL544k1VVq6Z4W2iB14e1yJ1HFJ3Wtf3": {
+    "deadline": 1830000,
+    "deadline_ts": 1681195953,
+    "filters": [
+      "14YeKFGXE23yAdACj6hu5NWEcYzzKxptYbm5jHgzw9A1P1UQfMv",
+      "13HPSdf8Ng8E2uKpLm8Ba3sQ6wdNimTcaKXYmMkHyTUUeUELPwJ",
+      "148W6v8vaS4npmQQ2PtPQhSLBhNWg6oYjvxne3VdsEAQq8r2GeT",
+      "13TFnZyGDy95neRAxnP5Y9FLHqW7Mu28U9VgmZz2hgNhi7qG3qF",
+      "13PBfQf1kaZPD3zN8LyoY5QtEDSZKJYZS5N7S5hZYaEz2Kh8znT",
+      "148W6v8vaS4npmQQ2PtPQhSLBhNWg6oYjvxne3VdsEAQq8r2GeT",
+      "13d4ieU8x4n3v7XtkiLio1NmT9WzKJS4BFC7jDJNbGjB5xciQC8",
+      "13Nj4KCnuBruSYvbxCgTLdeoyTN6Q5cZsNnJw3rh8WLZt9wBYih",
+      "133d47AMU6nQ7mZ1fF4dFJfoLhqCUnTSRhZAwmcahBoEtZPGF4U"
+    ],
+    "timestamp": 1688686511,
+    "outcomes": [
+      {
+        "value": "For HIP 77",
+        "address": "13r8YY1MCkxsnMhzv6QrXiVhPwNoXuztSnpUBHMgUrvve7Cg7f9",
+        "hntVoted": 68971194175159,
+        "uniqueWallets": 1123
+      },
+      {
+        "value": "Against HIP 77",
+        "address": "14rSs88Ky4n3cL1JCbu2yJmNxa51wgSmm99erfKrfJtGFf2D3TN",
+        "hntVoted": 1029935538974,
+        "uniqueWallets": 57
+      }
+    ]
+  },
+  "13F5AWLhxwTjhDMnZ6ww4oJWgRkBoW9ji4JnDzwQXjsQhiT2kcX": {
+    "deadline": 1831250,
+    "deadline_ts": 1681272228,
+    "filters": [
+      "14YeKFGXE23yAdACj6hu5NWEcYzzKxptYbm5jHgzw9A1P1UQfMv",
+      "13HPSdf8Ng8E2uKpLm8Ba3sQ6wdNimTcaKXYmMkHyTUUeUELPwJ",
+      "148W6v8vaS4npmQQ2PtPQhSLBhNWg6oYjvxne3VdsEAQq8r2GeT",
+      "13TFnZyGDy95neRAxnP5Y9FLHqW7Mu28U9VgmZz2hgNhi7qG3qF",
+      "13PBfQf1kaZPD3zN8LyoY5QtEDSZKJYZS5N7S5hZYaEz2Kh8znT",
+      "148W6v8vaS4npmQQ2PtPQhSLBhNWg6oYjvxne3VdsEAQq8r2GeT",
+      "13d4ieU8x4n3v7XtkiLio1NmT9WzKJS4BFC7jDJNbGjB5xciQC8",
+      "13Nj4KCnuBruSYvbxCgTLdeoyTN6Q5cZsNnJw3rh8WLZt9wBYih",
+      "133d47AMU6nQ7mZ1fF4dFJfoLhqCUnTSRhZAwmcahBoEtZPGF4U"
+    ],
+    "timestamp": 1688686514,
+    "outcomes": [
+      {
+        "value": "Remain on AS923-1C Plan",
+        "address": "14jpcmeZU6JmL6YPhv26EwivZ3Bjse71UvdCsW7pwkSnfjYgVwg",
+        "hntVoted": 23206083938575,
+        "uniqueWallets": 351
+      },
+      {
+        "value": "Return to AU915 Plan",
+        "address": "14jqcPiL8BYLgivEFLEczHHkWmFEgG9YCKq6P15BHtrZw1fKjSq",
+        "hntVoted": 15882793517797,
+        "uniqueWallets": 457
+      }
+    ]
+  },
+  "14rmHKjpZhsnrA2j24KiGzg8teA1zAMRhVGcWVUdmTAomTrJJQf": {
+    "deadline": 1836950,
+    "deadline_ts": 1681614171,
+    "filters": [
+      "14YeKFGXE23yAdACj6hu5NWEcYzzKxptYbm5jHgzw9A1P1UQfMv",
+      "13HPSdf8Ng8E2uKpLm8Ba3sQ6wdNimTcaKXYmMkHyTUUeUELPwJ",
+      "148W6v8vaS4npmQQ2PtPQhSLBhNWg6oYjvxne3VdsEAQq8r2GeT",
+      "13TFnZyGDy95neRAxnP5Y9FLHqW7Mu28U9VgmZz2hgNhi7qG3qF",
+      "13PBfQf1kaZPD3zN8LyoY5QtEDSZKJYZS5N7S5hZYaEz2Kh8znT",
+      "148W6v8vaS4npmQQ2PtPQhSLBhNWg6oYjvxne3VdsEAQq8r2GeT",
+      "13d4ieU8x4n3v7XtkiLio1NmT9WzKJS4BFC7jDJNbGjB5xciQC8",
+      "13Nj4KCnuBruSYvbxCgTLdeoyTN6Q5cZsNnJw3rh8WLZt9wBYih",
+      "133d47AMU6nQ7mZ1fF4dFJfoLhqCUnTSRhZAwmcahBoEtZPGF4U"
+    ],
+    "timestamp": 1688686517,
+    "outcomes": [
+      {
+        "value": "For HIP 80",
+        "address": "13nJcKR3nFNYqrQyTfb3pjx7Eq1ThgcV22P94fviLVf5BypAYyc",
+        "hntVoted": 287404392000503,
+        "uniqueWallets": 505
+      },
+      {
+        "value": "Against HIP 80",
+        "address": "14d8wxarhR2uXG4PzqW7tutUJ6gMKNkZir4HMvW23jLoETM7juT",
+        "hntVoted": 176981011479436,
+        "uniqueWallets": 318
+      }
+    ]
+  },
+  "147pXvGVcLKU76D7Hdi7iTTLvLw9qX8jXsCgNkKSHqo3rnfzkby": {
+    "deadline": 1836950,
+    "deadline_ts": 1681614171,
+    "filters": [
+      "14YeKFGXE23yAdACj6hu5NWEcYzzKxptYbm5jHgzw9A1P1UQfMv",
+      "13HPSdf8Ng8E2uKpLm8Ba3sQ6wdNimTcaKXYmMkHyTUUeUELPwJ",
+      "148W6v8vaS4npmQQ2PtPQhSLBhNWg6oYjvxne3VdsEAQq8r2GeT",
+      "13TFnZyGDy95neRAxnP5Y9FLHqW7Mu28U9VgmZz2hgNhi7qG3qF",
+      "13PBfQf1kaZPD3zN8LyoY5QtEDSZKJYZS5N7S5hZYaEz2Kh8znT",
+      "148W6v8vaS4npmQQ2PtPQhSLBhNWg6oYjvxne3VdsEAQq8r2GeT",
+      "13d4ieU8x4n3v7XtkiLio1NmT9WzKJS4BFC7jDJNbGjB5xciQC8",
+      "13Nj4KCnuBruSYvbxCgTLdeoyTN6Q5cZsNnJw3rh8WLZt9wBYih",
+      "133d47AMU6nQ7mZ1fF4dFJfoLhqCUnTSRhZAwmcahBoEtZPGF4U"
+    ],
+    "timestamp": 1688686520,
+    "outcomes": [
+      {
+        "value": "For HIP 81",
+        "address": "13JQNSJsGXf8iVZjkJdV4scxfjB4XgdMnkUwBMh36xPxYznkcX7",
+        "hntVoted": 211679831549150,
+        "uniqueWallets": 670
+      },
+      {
+        "value": "Against HIP 81",
+        "address": "14akKMDWUmEvJoe2bojEkooBM6Sdfd1pWgpWXpCh94HxrrtGJGE",
+        "hntVoted": 152252752109330,
+        "uniqueWallets": 325
+      }
+    ]
+  }
+}

@@ -2,7 +2,6 @@ import { useRouter } from "next/router";
 import React, { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import {
-  fetchCurrentHeight,
   fetchResults,
   fetchVoteDetails,
   fetchVotes,
@@ -15,7 +14,6 @@ import useSWR from "swr";
 import CountdownTimer from "../components/CountdownTimer";
 import VoteOptionsSection from "../components/VoteOptionsSection";
 import VoteResults from "../components/VoteResults";
-import client from "../data/client";
 import classNames from "classnames";
 import CopyableText from "../components/CopyableText";
 import MetaTags from "../components/MetaTags";
@@ -461,11 +459,9 @@ const VoteDetailsPage = ({
 };
 
 export async function getStaticPaths() {
-  const votes = await fetchVotes();
-  const paths = votes.map(({ id }) => ({ params: { voteid: id } }));
+  const votes = fetchVotes();
 
   return {
-    // paths,
     paths: [],
     fallback: "blocking",
   };
@@ -474,20 +470,17 @@ export async function getStaticPaths() {
 export async function getStaticProps({ params }) {
   const { voteid } = params;
 
-  // const { height } = await fetchCurrentHeight();
-
-  const height = await client.blocks.getHeight();
-  const details = await fetchVoteDetails(voteid);
-
-  const results = await fetchResults(voteid);
+  const height = 1840583; // hardcoded max height of the old Helium L1
+  const details = fetchVoteDetails(voteid);
+  const results = fetchResults(voteid);
 
   const { deadline } = details;
   const completed = height > deadline;
   const blocksRemaining = deadline - height;
 
-  const { time: finalBlockTime } = completed
-    ? await client.blocks.get(deadline)
-    : { time: null };
+  const finalBlockTime = completed
+    ? results.deadline_ts
+    : null
 
   return {
     props: {
