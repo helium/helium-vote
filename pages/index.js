@@ -1,5 +1,5 @@
 import Page from "../components/Page";
-import { fetchCurrentHeight, fetchVotes } from "../data/votes";
+import { fetchVotes } from "../data/votes";
 import Link from "next/link";
 import ContentSection from "../components/ContentSection";
 import { useMemo, useState } from "react";
@@ -9,7 +9,6 @@ import MetaTags from "../components/MetaTags";
 import useSWR from "swr";
 import { Balance, CurrencyType } from "@helium/currency";
 import { getBackgroundColor } from "../utils/colors";
-import client from "../data/client";
 
 const fetcher = (url) => fetch(url).then((r) => r.json());
 
@@ -313,9 +312,8 @@ export default function Home({ height, activeVotes, completedVotes }) {
 }
 
 export async function getStaticProps() {
-  // const { height } = await fetchCurrentHeight();
-  const height = await client.blocks.getHeight();
-  const votes = await fetchVotes();
+  const height = 1840583; // hardcoded max height of the old Helium L1
+  const votes = fetchVotes();
 
   const activeVotes = votes.filter(({ deadline }) => height <= deadline);
   const completedVotes = votes.filter(({ deadline }) => height > deadline).reverse();
