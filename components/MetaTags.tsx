@@ -1,6 +1,11 @@
 import Head from "next/head";
 
-const MetaTags = ({ title, description, openGraphImageAbsoluteUrl, url }) => {
+const MetaTags: React.FC<{
+  title?: string;
+  description?: string;
+  openGraphImageAbsoluteUrl?: string;
+  url?: string;
+}> = ({ title, description, openGraphImageAbsoluteUrl, url }) => {
   const metaTitle = title ? `${title} — Helium Vote` : "Helium Vote";
   const metaDescription = description
     ? description

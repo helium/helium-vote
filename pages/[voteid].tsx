@@ -57,7 +57,7 @@ const VoteDetailsPage = ({
   const outcomes = outcomesInitial?.map((o, i) => ({ ...o, index: i }));
 
   const votingResults = useMemo(() => {
-    if (!results) return [];
+    if (!results) return {};
 
     const { outcomes } = results;
 

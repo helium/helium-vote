@@ -10,7 +10,7 @@ import useSWR from "swr";
 import { Balance, CurrencyType } from "@helium/currency";
 import { getBackgroundColor } from "../utils/colors";
 
-const fetcher = (url) => fetch(url).then((r) => r.json());
+const fetcher = (url: string): any => fetch(url).then((r) => r.json());
 
 const VoteCard = ({ vote, height }) => {
   const { name, description, id, deadline, tags } = vote;
@@ -20,7 +20,7 @@ const VoteCard = ({ vote, height }) => {
   const { data: results } = useSWR(`/api/results/${vote?.id}`, fetcher);
 
   const votingResults = useMemo(() => {
-    if (!results) return [];
+    if (!results) return { };
 
     const { outcomes } = results;
 
