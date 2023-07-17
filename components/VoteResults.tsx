@@ -1,11 +1,14 @@
 import classNames from "classnames";
 import { getBackgroundColor } from "../utils/colors";
+import { Outcome } from "./VoteOption";
+import { BN } from "@coral-xyz/anchor";
 
-const VoteResults = ({ votingResults, outcomes, completed }) => {
-  const { outcomesResults } = votingResults;
+const VoteResults: React.FC<{
+  outcomes: Outcome[];
+  completed: boolean;
+}> = ({ outcomes, completed }) => {
 
-  // the array has already been sorted by .hntVoted
-  const winner = outcomesResults[0];
+  // const winner = outcomesResults[0];
 
   return (
     <div className="pt-0">
@@ -24,20 +27,13 @@ const VoteResults = ({ votingResults, outcomes, completed }) => {
         )} */}
       </div>
       <div className="flex flex-col space-y-10">
-        {outcomesResults.map((r, i) => {
-          // find the initial index (the order it was in in the JSON for the vote) to keep the colour scheme consistent
-          const initial = outcomes.find((o) => o.address === r.address);
-          let outcomeInitialIndex = 2;
-          if (initial) {
-            outcomeInitialIndex = initial?.index;
-          }
+        {outcomes.map((r, i) => {
+          let index = r.index;
 
-          const bg = initial?.color
-            ? "custom"
-            : getBackgroundColor(outcomeInitialIndex);
+          const bg = getBackgroundColor(index);
 
           return (
-            <div key={r.value} className="w-full flex flex-col relative">
+            <div key={r.name} className="w-full flex flex-col relative">
               {completed && i === 0 && (
                 <div className="absolute -left-12 hidden xl:flex items-center justify-center h-full">
                   <img className="w-6 h-6 mr-1.5 mb-1" src="/images/star.svg" />
@@ -51,9 +47,6 @@ const VoteResults = ({ votingResults, outcomes, completed }) => {
                     "bg-hv-blue-500": bg === "blue",
                     "bg-hv-purple-500": bg === "purple",
                   })}
-                  style={
-                    bg === "custom" ? { backgroundColor: initial?.color } : {}
-                  }
                 />
                 <div
                   className={classNames("h-3 rounded-r-xl", {
@@ -61,23 +54,18 @@ const VoteResults = ({ votingResults, outcomes, completed }) => {
                     "bg-hv-blue-500": bg === "blue",
                     "bg-hv-purple-500": bg === "purple",
                   })}
-                  style={
-                    bg === "custom"
-                      ? {
-                          backgroundColor: initial?.color,
-                          width: `${r.hntPercent}%`,
-                        }
-                      : { width: `${r.hntPercent}%` }
-                  }
+                  style={{
+                    width: `${r.percent}%`
+                  }}
                 />
               </div>
               <div className="w-full flex flex-col items-start lg:flex-row lg:items-center justify-between pt-1.5">
                 <h3 className="font-sans text-lg text-white font-semibold tracking-tighter">
                   <span className="flex flex-row items-center justify-start space-x-2">
-                    <span>{r.value}</span>
+                    <span>{r.name}</span>
                     <span className="flex lg:hidden">
                       (
-                      {r.hntPercent.toLocaleString(undefined, {
+                      {r.percent.toLocaleString(undefined, {
                         maximumFractionDigits: 2,
                       })}
                       %)
@@ -92,13 +80,11 @@ const VoteResults = ({ votingResults, outcomes, completed }) => {
                 </h3>
                 <div className="space-x-2 flex flex-col lg:flex-row">
                   <div className="text-hv-gray-400 text-lg font-light font-sans flex flex-col lg:flex-row space-x-0 lg:space-x-2">
-                    <span>{r.hntVoted.toString(2)}</span>
-                    <div className="hidden lg:flex">|</div>
-                    <span>{r.uniqueWallets.toLocaleString()} Votes</span>
+                    <span>{r.weight.toString(2)}</span>
                   </div>
                   <span className="text-white text-lg font-sans">
                     <span className="text-white hidden lg:flex">
-                      {r.hntPercent.toLocaleString(undefined, {
+                      {r.percent.toLocaleString(undefined, {
                         maximumFractionDigits: 2,
                       })}
                       %

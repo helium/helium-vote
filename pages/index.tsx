@@ -1,185 +1,36 @@
-import Page from "../components/Page";
-import { fetchVotes } from "../data/votes";
-import Link from "next/link";
-import ContentSection from "../components/ContentSection";
-import { useMemo, useState } from "react";
+import { useOrganizationProposals } from "@helium/modular-governance-hooks";
+import { organizationKey } from "@helium/organization-sdk";
 import classNames from "classnames";
-import CountdownTimer from "../components/CountdownTimer";
+import { useEffect, useMemo, useState } from "react";
+import ContentSection from "../components/ContentSection";
 import MetaTags from "../components/MetaTags";
-import useSWR from "swr";
-import { Balance, CurrencyType } from "@helium/currency";
-import { getBackgroundColor } from "../utils/colors";
+import Page from "../components/Page";
+import { VoteCard } from "../components/VoteCard";
+import { LegacyVoteCard } from "../components/legacy/LegacyVoteCard";
+import { fetchVotes } from "../data/votes";
 
-const fetcher = (url: string): any => fetch(url).then((r) => r.json());
+const ORGANIZATION = organizationKey("Helium")[0];
 
-const VoteCard = ({ vote, height }) => {
-  const { name, description, id, deadline, tags } = vote;
-
-  const blocksRemaining = deadline - height;
-
-  const { data: results } = useSWR(`/api/results/${vote?.id}`, fetcher);
-
-  const votingResults = useMemo(() => {
-    if (!results) return { };
-
-    const { outcomes } = results;
-
-    const totalUniqueWallets = results?.outcomes?.reduce(
-      (acc, { uniqueWallets: votes }) => acc + votes,
-      0
-    );
-    const totalHntVoted = outcomes.reduce(
-      (acc, { hntVoted }) => acc + hntVoted,
-      0
-    );
-
-    const outcomesResults = outcomes
-      .map((r) => ({
-        ...r,
-        hntPercent:
-          r.uniqueWallets === 0 ? 0 : (r.hntVoted / totalHntVoted) * 100,
-        walletsPercent:
-          r.uniqueWallets === 0
-            ? 0
-            : (r.uniqueWallets / totalUniqueWallets) * 100,
-        hntVoted: new Balance(r.hntVoted, CurrencyType.networkToken),
-      }))
-      .sort((a, b) => b.hntVoted.floatBalance - a.hntVoted.floatBalance);
-    return { totalUniqueWallets, totalHntVoted, outcomesResults };
-  }, [results]);
-
-  const { outcomes: outcomesInitial } = vote;
-
-  // to give each one an index so the colour code stays consistent, but we can still sort by votes
-  const outcomes = outcomesInitial?.map((o, i) => ({ ...o, index: i }));
-
-  return (
-    <div className="flex-shrink-1 w-full basis-full mb-2 sm:mb-0 md:basis-6/12 lg:w-4/12 sm:p-5">
-      <Link href={`/${id}`}>
-        <a className="group h-full w-full flex flex-col transition-all duration-150 outline-none border border-solid border-opacity-0 focus:border-opacity-50 border-hv-green-500 rounded-3xl">
-          <span className="py-5 px-5 rounded-t-3xl bg-hv-gray-450 group-hover:bg-hv-gray-400 lg:min-h-[200px] transition-all duration-150">
-          {tags && (
-                <div className="flex flex-row items-center justify-end">
-                  {(tags?.primary || tags?.secondary) && (
-                    <div className="py-0.5 px-2 bg-hv-gray-500 group-hover:bg-hv-gray-550 transition-all duration-150 rounded-lg">
-                      <span className="text-xs sm:text-sm text-hv-gray-350 font-light whitespace-nowrap">
-                        {tags?.primary
-                          ? tags.primary
-                          : tags?.secondary && !tags?.primary
-                          ? tags.secondary
-                          : ""}
-                      </span>
-
-                    </div>
-
-)}
-
-{tags?.tertiary && (
-                      <div className="py-0.5 px-2 bg-yellow-400 rounded-lg ml-2">
-                        <span className="text-xs sm:text-sm text-black font-reg whitespace-nowrap">
-                          {tags.tertiary}
-                        </span>
-                      </div>
-                    )}
-
-
-                </div>
-              )}
-            <div className="flex items-start justify-between">
-              <p className="text-white text-xl tracking-tight leading-tight pb-2 pt-4">
-                {name}
-              </p>
-
-            </div>
-            <p className="text-hv-gray-300 h-6 lg:h-14 overflow-hidden text-sm leading-tight">
-              {description?.substring(0, 80)}...
-            </p>
-          </span>
-          <div className="rounded-b-3xl bg-hv-gray-500 group-hover:bg-hv-gray-550 transition-all duration-150 p-5">
-            <div className="flex flex-row items-center justify-between">
-              <div className="flex flex-col">
-                <span className="text-sm text-hv-gray-200">
-                  Est. Time Remaining
-                </span>
-                <span className="text-sm text-white">
-                  <CountdownTimer blocksRemaining={blocksRemaining} key={id} />
-                </span>
-              </div>
-              <div className="flex flex-col">
-                <span className="text-sm text-hv-gray-200 text-right">
-                  Votes
-                </span>
-                <span className="text-sm text-white text-right">
-                  {votingResults?.totalUniqueWallets?.toLocaleString()}
-                </span>
-              </div>
-            </div>
-            {votingResults && votingResults.totalHntVoted > 0 && (
-              <div className="flex flex-row items-center justify-center w-full pt-5 pb-2">
-                <div className="rounded-full w-full h-2.5 flex flex-row items-center">
-                  {votingResults?.outcomesResults?.map(
-                    (outcome, i, { length }) => {
-                      const initial = outcomes.find(
-                        (o) => o.address === outcome.address
-                      );
-                      let outcomeInitialIndex = 2;
-                      if (initial) {
-                        outcomeInitialIndex = initial?.index;
-                      }
-
-                      const bg = initial?.color
-                        ? "custom"
-                        : getBackgroundColor(outcomeInitialIndex);
-
-                      const sliceWidthString =
-                        i === 0 || i === length - 1
-                          ? // for the first and last, make them at least 5px to account for the rounding
-                            `calc(${outcome.hntPercent}% + 5px)`
-                          : `calc(${outcome.hntPercent}% - 10px)`;
-
-                      return (
-                        <div
-                          className={classNames("h-2.5", {
-                            "rounded-l-full": i === 0,
-                            "rounded-r-full": i === length - 1,
-                            "bg-hv-green-500": bg === "green",
-                            "bg-hv-blue-500": bg === "blue",
-                            "bg-hv-purple-500": bg === "purple",
-                          })}
-                          style={
-                            bg === "custom"
-                              ? {
-                                  backgroundColor: initial?.color,
-                                  width: sliceWidthString,
-                                }
-                              : {
-                                  width: sliceWidthString,
-                                }
-                          }
-                        />
-                      );
-                    }
-                  )}
-                </div>
-              </div>
-            )}
-          </div>
-        </a>
-      </Link>
-    </div>
-  );
-};
-
-export default function Home({ height, activeVotes, completedVotes }) {
+export default function Home({ legacyVotes }) {
   const [voteFilterTab, setVoteFilterTab] = useState(0);
-  const [filteredVotesList, setFilteredVotesList] = useState(activeVotes);
+  const { accounts: proposals, error } = useOrganizationProposals(ORGANIZATION);
+
+  useEffect(() => {
+    if (error) {
+      console.error(error)
+    }
+  }, [error])
+  const votes = useMemo(() => {
+    switch (voteFilterTab) {
+      case 0:
+        return proposals?.filter(p => typeof p.info?.state.voting !== "undefined");
+      case 1:
+        return proposals?.filter((p) => typeof p.info?.state.voting === "undefined");
+    }
+  }, [proposals, voteFilterTab])
 
   const handleVoteFilterChange = (e, id) => {
     e.preventDefault();
-
-    const newList = id === 0 ? activeVotes : completedVotes;
-
-    setFilteredVotesList(newList);
     setVoteFilterTab(id);
   };
 
@@ -267,59 +118,67 @@ export default function Home({ height, activeVotes, completedVotes }) {
               >
                 Closed Votes
               </button>
+              <button
+                className={classNames(
+                  "outline-none text-lg sm:text-3xl font-semibold tracking-tight border-b-2 border-solid border-opacity-0 focus:border-opacity-25 border-hv-green-500 rounded-sm transition-all duration-200",
+                  {
+                    "text-hv-green-500": voteFilterTab === 2,
+                    "text-hv-gray-400": voteFilterTab !== 2,
+                  }
+                )}
+                onClick={(e) => handleVoteFilterChange(e, 2)}
+              >
+                Helium L1 Votes
+              </button>
             </div>
           </div>
 
-          <div className="pt-4 lg:pl-10">
-            {filteredVotesList.length > 0 ? (
-              <div className="flex flex-col sm:flex-row w-full flex-wrap">
-                {filteredVotesList.map((v) => {
-                  return <VoteCard vote={v} height={height} />;
-                })}
-              </div>
-            ) : (
-              <p className="text-hv-gray-400 text-sm font-sans font-light sm:pl-5">
-                No votes
-              </p>
-            )}
-          </div>
+          {voteFilterTab === 2 && (
+            <div className="pt-4 lg:pl-10">
+              {legacyVotes.length > 0 ? (
+                <div className="flex flex-col sm:flex-row w-full flex-wrap">
+                  {legacyVotes.map((v) => {
+                    return <LegacyVoteCard key={v.id} vote={v} />;
+                  })}
+                </div>
+              ) : (
+                <p className="text-hv-gray-400 text-sm font-sans font-light sm:pl-5">
+                  No votes
+                </p>
+              )}
+            </div>
+          )}
+          {voteFilterTab === 0 && (
+            <div className="pt-4 lg:pl-10">
+              {votes && votes.length > 0 ? (
+                <div className="flex flex-col sm:flex-row w-full flex-wrap">
+                  {votes.filter(v => Boolean(v.info)).map((v) => {
+                    return (
+                      <VoteCard
+                        key={v.publicKey.toBase58()}
+                        proposalKey={v.publicKey}
+                        proposal={v.info! as any}
+                      />
+                    );
+                  })}
+                </div>
+              ) : (
+                <p className="text-hv-gray-400 text-sm font-sans font-light sm:pl-5">
+                  No votes
+                </p>
+              )}
+            </div>
+          )}
         </div>
       </div>
-      <ContentSection className="pt-10 sm:pt-20">
-        <p className="text-xl sm:text-3xl text-white font-semibold font-sans w-full pb-5">
-          How does it work?
-        </p>
-        <div className="flex flex-col sm:flex-row sm:space-x-10 space-y-4 sm:space-y-0">
-          <p className="font-light text-hv-gray-200 text-lg max-w-md leading-snug">
-            The number of votes going towards each voting choice is determined
-            by your HNT and staked HNT wallet balance - this is known as Voting
-            Power. To cast a vote, submit a burn transaction using the wallet of
-            your choosing. Total cost of a burn transaction is 35,000 DC or
-            approximately $0.35.
-          </p>
-          <p className="font-light text-hv-gray-200 text-lg max-w-md leading-snug">
-            Final votes will be tallied at the block deadline and data credits
-            burned to each vote choice will be purged from the Network. This is
-            our first attempt at an on-chain voting system and an exciting step
-            towards decentralized governance. The votes here are intended to
-            capture community sentiment and support the current rough consensus
-            mechanism.
-          </p>
-        </div>
-      </ContentSection>
     </Page>
   );
 }
 
 export async function getStaticProps() {
-  const height = 1840583; // hardcoded max height of the old Helium L1
   const votes = fetchVotes();
 
-  const activeVotes = votes.filter(({ deadline }) => height <= deadline);
-  const completedVotes = votes.filter(({ deadline }) => height > deadline).reverse();
-
   return {
-    props: { height, activeVotes, completedVotes },
-    revalidate: 60,
+    props: { legacyVotes: votes },
   };
 }

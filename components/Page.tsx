@@ -1,4 +1,4 @@
-const Page = ({ children }) => {
+const Page: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
   return (
     <>
       <main className="w-full min-h-screen">

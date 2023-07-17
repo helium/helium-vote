@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import classNames from "classnames";
 
-const CopyableText = ({
-  textToCopy,
-  className,
-  iconClasses,
-  children,
-  customIcon,
-}) => {
+const CopyableText: React.FC<
+  React.PropsWithChildren<{
+    textToCopy: string;
+    className?: string;
+    iconClasses?: string;
+    customIcon?: React.ReactNode;
+  }>
+> = ({ textToCopy, className, iconClasses, children, customIcon }) => {
   const [successStatus, setSuccessStatus] = useState(false);
 
   useEffect(() => {

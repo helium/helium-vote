@@ -4,6 +4,40 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
+      typography(theme) {
+        return {
+          dark: {
+            css: {
+              color: theme("colors.gray.300"),
+              '[class~="lead"]': { color: theme("colors.gray.400") },
+              a: { color: theme("colors.gray.100") },
+              strong: { color: theme("colors.gray.100") },
+              ul: { marginTop: "-10px", marginBottom: 0 },
+              "ul > li::before": { backgroundColor: theme("colors.gray.700") },
+              hr: { borderColor: theme("colors.gray.800") },
+              blockquote: {
+                color: theme("colors.gray.100"),
+                borderLeftColor: theme("colors.gray.800"),
+              },
+              h1: { color: theme("colors.gray.100"), margin: 0 },
+              h2: { color: theme("colors.gray.100"), margin: 0 },
+              h3: { color: theme("colors.gray.100"), margin: 0 },
+              h4: { color: theme("colors.gray.100"), margin: 0 },
+              code: { color: theme("colors.gray.100") },
+              "a code": { color: theme("colors.gray.100") },
+              pre: {
+                color: theme("colors.gray.200"),
+                backgroundColor: theme("colors.gray.800"),
+              },
+              thead: {
+                color: theme("colors.gray.100"),
+                borderBottomColor: theme("colors.gray.700"),
+              },
+              "tbody tr": { borderBottomColor: theme("colors.gray.800") },
+            },
+          },
+        };
+      },
       colors: {
         "hv-red": {
           500: "#FF625A",
@@ -62,7 +96,7 @@ module.exports = {
     },
   },
   variants: {
-    extend: {},
+    extend: { typography: ["dark"] }
   },
-  plugins: [],
+  plugins: [require("@tailwindcss/typography")],
 };

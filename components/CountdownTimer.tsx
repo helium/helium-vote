@@ -2,9 +2,14 @@ import { addMinutes } from "date-fns";
 import { useState } from "react";
 import Countdown from "react-countdown";
 
-const CountdownTimer: React.FC<{ blocksRemaining: number }> = ({ blocksRemaining }) => {
+const CountdownTimer: React.FC<{ endTs?: number; blocksRemaining?: number }> = ({ endTs, blocksRemaining }) => {
   const now = new Date(Date.now());
-  const deadlineDate = addMinutes(now, blocksRemaining);
+  let deadlineDate;
+  if (endTs) {
+    deadlineDate = new Date(endTs * 1000);
+  } else {
+    deadlineDate = addMinutes(now, blocksRemaining);
+  }
 
   const [countdownCompleted, setCountdownCompleted] = useState(false);
 

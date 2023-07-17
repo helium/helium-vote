@@ -5,19 +5,18 @@ import {
   fetchResults,
   fetchVoteDetails,
   fetchVotes,
-} from "../data/votes";
-import Page from "../components/Page";
-import ContentSection from "../components/ContentSection";
+} from "../../data/votes";
+import Page from "../../components/Page";
+import ContentSection from "../../components/ContentSection";
 import { format, formatDistanceToNow } from "date-fns";
 import { Balance, CurrencyType } from "@helium/currency";
 import useSWR from "swr";
-import CountdownTimer from "../components/CountdownTimer";
-import VoteOptionsSection from "../components/VoteOptionsSection";
-import VoteResults from "../components/VoteResults";
+import CountdownTimer from "../../components/CountdownTimer";
+import LegacyVoteResults from "../../components/legacy/LegacyVoteResults";
 import classNames from "classnames";
-import CopyableText from "../components/CopyableText";
-import MetaTags from "../components/MetaTags";
-import { getBackgroundColor } from "../utils/colors";
+import CopyableText from "../../components/CopyableText";
+import MetaTags from "../../components/MetaTags";
+import { getBackgroundColor } from "../../utils/colors";
 
 const fetcher = (url) => fetch(url).then((r) => r.json());
 
@@ -116,7 +115,7 @@ const VoteDetailsPage = ({
       <MetaTags
         title={name}
         description={description}
-        url={`https://heliumvote.com/${voteid}`}
+        url={`https://heliumvote.com/legacy/${voteid}`}
       />
       <div
         className={classNames(
@@ -131,10 +130,11 @@ const VoteDetailsPage = ({
       </div>
       <ContentSection className="pt-10 sm:pt-0">
         <div className="mb-5 sm:mb-10">
-          <Link href="/">
-            <a className="text-hv-gray-200 hover:text-hv-gray-300 outline-none border border-solid border-hv-green-500 border-opacity-0 focus:border-opacity-100 transition-all duration-200 rounded-sm">
-              {"<- "}Back to Votes
-            </a>
+          <Link
+            href="/"
+            className="text-hv-gray-200 hover:text-hv-gray-300 outline-none border border-solid border-hv-green-500 border-opacity-0 focus:border-opacity-100 transition-all duration-200 rounded-sm">
+
+            {"<- "}Back to Votes
           </Link>
         </div>
         <div className="flex flex-col">
@@ -243,7 +243,7 @@ const VoteDetailsPage = ({
                 <p className="text-white">Est. Time Remaining</p>
                 <p className="text-hv-gray-300">
                   <CountdownTimer
-                    blocksRemaining={blocksRemaining}
+                    endTs={blocksRemaining}
                     key={blocksRemaining}
                   />
                 </p>
@@ -308,12 +308,10 @@ const VoteDetailsPage = ({
       )}
       </ContentSection>
 
-      {!completed && <VoteOptionsSection outcomes={outcomes} />}
-
       {votingResults.outcomesResults?.length > 0 ? (
         <div className="flex flex-col space-y-2 max-w-5xl mx-auto mt-5 px-4 sm:px-10">
           <div className="flex-col space-y-2 mt-10 sm:mt-16">
-            <VoteResults
+            <LegacyVoteResults
               outcomes={outcomes}
               completed={completed}
               votingResults={votingResults}
@@ -403,7 +401,7 @@ const VoteDetailsPage = ({
             Share this Vote
           </p>
           <div className="flex flex-row items-center justify-center space-x-4">
-            <a href={twitterUrl} target="_blank" rel="noopener noreferrer">
+            <a href={twitterUrl.toString()} target="_blank" rel="noopener noreferrer">
               <svg
                 width="28"
                 height="23"

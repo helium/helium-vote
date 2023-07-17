@@ -1,13 +1,8 @@
-import { useState } from "react";
-import VoteOption from "./VoteOption";
+import VoteOption, { Outcome } from "./VoteOption";
 
-const VoteOptionsSection = ({ outcomes }) => {
-  const [expandedId, setExpandedId] = useState(null);
-
-  const handleExpandClick = (id) => {
-    setExpandedId(id);
-  };
-
+const VoteOptionsSection: React.FC<{
+  outcomes: Outcome[]
+}> = ({ outcomes }) => {
   return (
     <div className="w-full bg-hv-gray-750 py-5 sm:py-10 mt-10 sm:mt-20">
       <div className="flex flex-col space-y-2 max-w-5xl mx-auto px-0 sm:px-10">
@@ -20,10 +15,8 @@ const VoteOptionsSection = ({ outcomes }) => {
               <VoteOption
                 index={o.index}
                 length={length}
-                key={o.address}
+                key={o.name}
                 outcome={o}
-                expandedId={expandedId}
-                handleExpandClick={handleExpandClick}
               />
             ))}
           </div>

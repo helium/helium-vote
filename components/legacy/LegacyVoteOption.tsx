@@ -1,11 +1,11 @@
 import classNames from "classnames";
 import QRCode from "react-qr-code";
 import base64 from "base-64";
-import { getBackgroundColor, getTextColor } from "../utils/colors";
-import CopyableText from "./CopyableText";
+import { getBackgroundColor, getTextColor } from "../../utils/colors";
+import CopyableText from "../CopyableText";
 import { useState } from "react";
 
-const WarningBox = () => {
+const WarningBox: React.FC = () => {
   return (
     <div className="bg-hv-red-500 bg-opacity-10 rounded-xl w-full flex flex-col p-5 mt-8">
       <span className="text-red-500 font-semibold text-left text-sm sm:text-base leading-tight">
@@ -14,21 +14,28 @@ const WarningBox = () => {
       <span className="text-white text-left opacity-50 font-light text-sm sm:text-base leading-tight">
         If you vote for multiple options, only your most recent vote will be
         counted. Your Vote is weighted by Vote Power (your HNT balance and
-        staked HNT balance at the voting deadline). Payment transactions
-        will also be counted as votes but is limited to addresses that have
-        not been filtered in the vote configuration.
+        staked HNT balance at the voting deadline). Payment transactions will
+        also be counted as votes but is limited to addresses that have not been
+        filtered in the vote configuration.
       </span>
     </div>
   );
 };
 
-const VoteOption = ({
-  outcome,
-  expandedId,
-  handleExpandClick,
-  index,
-  length,
-}) => {
+export type Outcome = {
+  index: number;
+  address: string;
+  color: string;
+  value: string;
+};
+
+const LegacyVoteOption: React.FC<{
+  outcome: Outcome;
+  expandedId: string;
+  handleExpandClick: (address: string | null) => void;
+  index: number;
+  length: number;
+}> = ({ outcome, expandedId, handleExpandClick, index, length }) => {
   const expanded = expandedId === outcome.address;
 
   const encodedMemo = base64.encode(index);
@@ -164,9 +171,8 @@ const VoteOption = ({
                 >
                   <span
                     className={classNames("pr-1 font-sans", {
-                      "text-black": fg === "custom",
+                      "text-black": fg === "custom" || fg === "white",
                       "text-white": fg === "white",
-                      "text-black": fg === "black",
                     })}
                   >
                     Submit Vote in App
@@ -257,4 +263,4 @@ const VoteOption = ({
   );
 };
 
-export default VoteOption;
+export default LegacyVoteOption;
