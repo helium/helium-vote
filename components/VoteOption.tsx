@@ -1,6 +1,7 @@
-import { BN } from "bn.js";
+import BN from "bn.js";
 import classNames from "classnames";
 import { getBackgroundColor } from "../utils/colors";
+import Button from "./Button";
 
 export type Outcome = {
   percent: number;
@@ -13,7 +14,12 @@ const VoteOption: React.FC<{
   outcome: Outcome;
   index: number;
   length: number;
-}> = ({ outcome, index, length }) => {
+  myWeight?: BN;
+  canVote: boolean;
+  canRelinquishVote: boolean;
+  onVote: () => void;
+  onRelinquishVote: () => void;
+}> = ({ canVote, canRelinquishVote, myWeight, outcome, index, length, onVote, onRelinquishVote }) => {
   const bg = getBackgroundColor(index);
 
   return (
@@ -26,16 +32,20 @@ const VoteOption: React.FC<{
         }
       )}
     >
+      {myWeight?.toString()}
+      {canVote}
       <div
         className={classNames(
           "flex w-full cursor-pointer sm:hover:bg-opacity-10 p-4 space-y-2 rounded-none flex-col items-start justify-start bg-white bg-opacity-0 hover:bg-opacity-5 transition-all duration-100",
           {
             "sm:rounded-t-xl": index === 0,
-            "sm:rounded-b-xl": index === length - 1
+            "sm:rounded-b-xl": index === length - 1,
           }
         )}
       >
         <div className="flex flex-col sm:flex-row justify-between items-center w-full">
+          { canVote && <Button onClick={onVote}>Vote</Button> }
+          { canRelinquishVote && <Button onClick={onRelinquishVote}>Relinquish Vote</Button> }
           <div className="flex flex-row justify-between items-center w-full">
             <div className="flex flex-row items-center justify-start">
               <span

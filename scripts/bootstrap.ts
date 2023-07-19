@@ -20,7 +20,7 @@ export async function run(args: any = process.argv) {
     },
     voteController: {
       type: "string",
-      default: "BMnWRWZrWqb6JMKznaDqNxWaWAHoaTzVabM6Qwyh3WKz",
+      default: "9zHTyfGTJ5M7Qnv9KUx9P8fVE1L7zFxow6ZHs3Ju5wCH",
     },
   });
   const argv = await yarg.argv;

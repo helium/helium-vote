@@ -201,7 +201,12 @@ const VoteDetailsPage = ({
         )}
       </ContentSection>
 
-      {!completed && <VoteOptionsSection outcomes={votingResults?.results} />}
+      {!completed && (
+        <VoteOptionsSection
+          proposalKey={proposalK}
+          outcomes={votingResults?.results}
+        />
+      )}
 
       {votingResults.results?.length > 0 && (
         <div className="flex flex-col space-y-2 max-w-5xl mx-auto mt-5 px-4 sm:px-10">
@@ -293,7 +298,7 @@ export async function getStaticProps({ params }) {
   anchor.setProvider(anchor.AnchorProvider.env());
   const provider = anchor.getProvider() as anchor.AnchorProvider;
   const proposalSdk = await init(provider);
-  const proposal = await proposalSdk.account.proposalV0.fetch(proposalKey)
+  const proposal = await proposalSdk.account.proposalV0.fetch(new PublicKey(proposalKey))
 
   return {
     props: {

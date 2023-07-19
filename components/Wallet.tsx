@@ -1,13 +1,12 @@
-import React, { FC, useMemo } from "react";
 import {
   ConnectionProvider,
   WalletProvider,
 } from "@solana/wallet-adapter-react";
-import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
 import {
   WalletModalProvider,
 } from "@solana/wallet-adapter-react-ui";
-import { clusterApiUrl } from "@solana/web3.js";
+import { SolflareWalletAdapter } from "@solana/wallet-adapter-solflare"
+import React, { FC, useMemo } from "react";
 
 // Default styles that can be overridden by your app
 require("@solana/wallet-adapter-react-ui/styles.css");
@@ -17,7 +16,10 @@ export const Wallet: FC<React.PropsWithChildren> = ({ children }) => {
   const endpoint = useMemo(() => "http://127.0.0.1:8899", []);
 
   const wallets = useMemo(
-    () => [],
+    () => [
+      // Ledger and backpack use wallet standard
+      new SolflareWalletAdapter()
+    ],
     []
   );
 

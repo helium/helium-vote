@@ -933,7 +933,23 @@ module.exports = {
     }
     config.resolve.alias = {
       ...config.resolve.alias,
-      "@helium/account-fetch-cache-hooks": path.resolve(__dirname, "./node_modules/@helium/account-fetch-cache-hooks"),
+      // Anything with context needs to resolve to only one version
+      "@helium/account-fetch-cache-hooks": path.resolve(
+        __dirname,
+        "./node_modules/@helium/account-fetch-cache-hooks"
+      ),
+      "@helium/helium-react-hooks": path.resolve(
+        __dirname,
+        "./node_modules/@helium/helium-react-hooks"
+      ),
+      "@helium/voter-stake-registry-hooks": path.resolve(
+        __dirname,
+        "./node_modules/@helium/voter-stake-registry-hooks"
+      ),
+      "@solana/wallet-adapter-react": path.resolve(
+        __dirname,
+        "./node_modules/@solana/wallet-adapter-react"
+      ),
     };
     return config;
   },
