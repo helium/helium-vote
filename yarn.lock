@@ -606,6 +606,15 @@
     borsh "^0.7.0"
     bs58 "^5.0.0"
 
+"@helium/state-controller-sdk@^0.0.4":
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/@helium/state-controller-sdk/-/state-controller-sdk-0.0.4.tgz#559ac257cf381d01a45716eab440d3c834e84c9c"
+  integrity sha512-wn1SW3IEx2PvG9sL1Ee/nS0+/EbhmTtrUoSFaq2gEaE4WgFICijcbw6d0PK5pFzed6d7wHCobY4Lm/oIZMgwig==
+  dependencies:
+    "@coral-xyz/anchor" "^0.28.0"
+    "@helium/anchor-resolvers" "^0.2.17"
+    "@helium/modular-governance-idls" "^0.0.4"
+
 "@helium/treasury-management-sdk@^0.2.17":
   version "0.2.17"
   resolved "https://registry.yarnpkg.com/@helium/treasury-management-sdk/-/treasury-management-sdk-0.2.17.tgz#b5495352e948aa576ea2a24d68406d921c37079f"
