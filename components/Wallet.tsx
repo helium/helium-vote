@@ -13,7 +13,7 @@ require("@solana/wallet-adapter-react-ui/styles.css");
 
 export const Wallet: FC<React.PropsWithChildren> = ({ children }) => {
   // You can also provide a custom RPC endpoint.
-  const endpoint = useMemo(() => process.env.SOLANA_URL, []);
+  const endpoint = useMemo(() => process.env.NEXT_PUBLIC_SOLANA_URL, []);
 
   const wallets = useMemo(
     () => [
