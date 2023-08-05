@@ -2,12 +2,12 @@ import { IdlAccounts } from "@coral-xyz/anchor/dist/cjs/program/namespace/types"
 import { useProposalConfig, useResolutionSettings } from "@helium/modular-governance-hooks";
 import { Proposal } from "@helium/modular-governance-idls/lib/types/proposal";
 import { PublicKey } from "@solana/web3.js";
-import { BN } from "bn.js";
 import classNames from "classnames";
 import Link from "next/link";
 import { useMemo } from "react";
 import CountdownTimer from "../components/CountdownTimer";
 import { getBackgroundColor } from "../utils/colors";
+import BN from 'bn.js'
 
 const fetcher = (url: string): any => fetch(url).then((r) => r.json());
 
