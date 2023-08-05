@@ -1,7 +1,7 @@
 module.exports = {
   mode: "jit",
   purge: ["./pages/**/*.{js,ts,jsx,tsx}", "./components/**/*.{js,ts,jsx,tsx}"],
-  darkMode: "media", // or 'media' or 'class'
+  darkMode: "class", // or 'media' or 'class'
   theme: {
     extend: {
       typography(theme) {
@@ -52,6 +52,7 @@ module.exports = {
           900: "#162822",
         },
         "hv-blue": {
+          400: "#00AFF9",
           500: "#474DFF",
           700: "#009FF9",
         },
@@ -96,7 +97,7 @@ module.exports = {
     },
   },
   variants: {
-    extend: { typography: ["dark"] }
+    extend: { typography: ["dark"] },
   },
   plugins: [require("@tailwindcss/typography")],
 };

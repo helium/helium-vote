@@ -162,16 +162,17 @@ export const LockTokensModal: React.FC<{
   return (
     <Modal onClose={onClose} isOpen={isOpen}>
       <form onSubmit={handleOnSubmit}>
-        <h2 className="mb-4 flex flex-row items-center">
+        <h2 className="mb-4 flex flex-row items-center text-xl">
           {
             {
               lock: "Lock Tokens",
               extend: "Extend Lockup",
+              split: "Split Position"
             }[mode]
           }
         </h2>
         {hasMinLockup && !showLockupKindInfo ? (
-          <div className="bg-bkg-3 rounded-md w-full p-4 mb-4 font-normal text-xs">
+          <div className="bg-hv-gray-500 rounded-md w-full p-4 mb-4 font-normal text-xs">
             <div>
               Select a new lockup period longer than the existing{" "}
               <span className="bkg-font-bold text-primary-light">

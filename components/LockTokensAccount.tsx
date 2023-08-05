@@ -103,7 +103,7 @@ export const LockTokensAccount: React.FC = (props) => {
     : "0";
 
   const amountLockedDisplay =
-    amountLocked && mint ? humanReadable(amountLocked, mintAcc?.decimals) : "0";
+    amountLocked && mint && mintAcc ? humanReadable(amountLocked, mintAcc.decimals) : "0";
 
   const maxLockupAmount =
     hasTokensInWallet && mintAcc
@@ -153,14 +153,11 @@ export const LockTokensAccount: React.FC = (props) => {
   const isLoading = loading || loadingSubDaos;
 
   return (
-    <div className="grid grid-cols-12 gap-4 text-white">
+    <div className="grid grid-cols-12 gap-4 text-white pt-0">
       <div className="bg-bkg-2 rounded-lg p-4 md:p-6 col-span-12">
-        <div className="mb-4">
-          <PreviousRouteBtn />
-        </div>
         <div className="flex items-center justify-between mb-4">
-          <h1 className="leading-none flex flex-col mb-0">
-            My governance power
+          <h1 className="leading-none flex flex-col mb-0 text-lg sm:text-3xl font-semibold text-white">
+            My Voting Power
           </h1>
 
           <div className="ml-auto flex flex-row">
@@ -207,7 +204,9 @@ export const LockTokensAccount: React.FC = (props) => {
               )}
             </div>
             <div className="flex items-center justify-between mb-4">
-              <h2 className="mb-4">Locked Positions</h2>
+              <h2 className="leading-none flex flex-col mb-0 text-md sm:text-2xl font-semibold text-white">
+                Locked Positions
+              </h2>
               {canDelegate && (
                 <ClaimAllRewardsButton
                   onClick={handleClaimAllRewards}
@@ -222,7 +221,7 @@ export const LockTokensAccount: React.FC = (props) => {
                 sortedPositions?.map((pos, idx) => (
                   <PositionCard key={idx} position={pos} subDaos={subDaos} />
                 ))}
-              <div className="border border-fgd-4 flex flex-col items-center justify-center p-6 rounded-lg">
+              <div className="shadow-lg bg-hv-gray-750 flex flex-col items-center justify-center p-6 rounded-lg">
                 <BsFillLightningChargeFill className="h-8 mb-2 text-primary-light w-8" />
                 <p className="flex text-center pb-6">
                   Increase your voting power by locking your tokens.
@@ -246,7 +245,7 @@ export const LockTokensAccount: React.FC = (props) => {
             </div>
           </div>
         ) : (
-          <div className="border border-fgd-4 flex flex-col items-center justify-center p-6 rounded-lg">
+          <div className="shadow-lg bg-hv-gray-750 flex flex-col items-center justify-center p-6 rounded-lg">
             <BsLink45Deg className="h-6 mb-1 text-primary-light w-6" />
             <span className="text-fgd-1 text-sm">Connect your wallet</span>
           </div>

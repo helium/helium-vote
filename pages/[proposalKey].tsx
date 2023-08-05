@@ -17,6 +17,8 @@ import Page from "../components/Page";
 import VoteOptionsSection from "../components/VoteOptionsSection";
 import VoteResults from "../components/VoteResults";
 import { fetchVotes } from "../data/votes";
+import { useRegistrar } from "@helium/voter-stake-registry-hooks";
+import { useMint } from "@helium/helium-react-hooks";
 
 const VoteDetailsPage = ({
   name: initName,
@@ -34,6 +36,8 @@ const VoteDetailsPage = ({
   const name = proposal?.name || initName;
   const { info: proposalConfig } = useProposalConfig(proposalConfigKey);
   const { info: resolution } = useResolutionSettings(proposalConfig?.stateController);
+  const { info: registrar } = useRegistrar(proposalConfig?.voteController)
+  const decimals = useMint(registrar?.votingMints[0].mint)?.info?.decimals;
 
   const { result: content } = useAsync(async (uri: string) => {
     const res = await fetch(uri);
@@ -63,7 +67,6 @@ const VoteDetailsPage = ({
           ? 100 / choices.length
           : (r.weight.toNumber() / totalVotes.toNumber()) * 100,
       }))
-      .sort((a, b) => b.percent - a.percent);
     return { results, totalVotes };
   }, [choices]);
 
@@ -93,7 +96,7 @@ const VoteDetailsPage = ({
       />
       <div
         className={classNames(
-          "h-6 sm:h-8 top-0 fixed w-full flex items-center justify-center text-xs sm:text-sm font-sans font-normal z-30",
+          "h-6 sm:h-8 bottom-0 fixed w-full flex items-center justify-center text-xs sm:text-sm font-sans font-normal z-30",
           {
             "bg-hv-green-500 text-black": !completed,
             "bg-hv-blue-500 text-white": completed,
@@ -212,6 +215,7 @@ const VoteDetailsPage = ({
         <div className="flex flex-col space-y-2 max-w-5xl mx-auto mt-5 px-4 sm:px-10">
           <div className="flex-col space-y-2 mt-10 sm:mt-16">
             <VoteResults
+              decimals={decimals}
               completed={completed}
               outcomes={votingResults.results}
             />

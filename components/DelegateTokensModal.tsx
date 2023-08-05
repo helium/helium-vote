@@ -52,10 +52,12 @@ export const DelegateTokensModal: React.FC<DelegateTokensModalProps> = ({
 
   return (
     <Modal onClose={onClose} isOpen={isOpen}>
-      <h2 className="mb-4 flex flex-row items-center">Delegate Tokens</h2>
+      <h2 className="text-xl mb-4 flex flex-row items-center">
+        Delegate Tokens
+      </h2>
       {loading ? (
         <>
-          <div className="bg-bkg-3 rounded-md w-full p-4 mb-4 font-normal text-xs">
+          <div className="bg-hv-gray-500 rounded-md w-full p-4 mb-4 font-normal text-s">
             <div>Fetching Delegatable SubDaos</div>
           </div>
           <div className="p-4">
@@ -63,7 +65,7 @@ export const DelegateTokensModal: React.FC<DelegateTokensModalProps> = ({
           </div>
         </>
       ) : (
-        <div className="bg-bkg-3 rounded-md w-full p-4 mb-4 font-normal text-xs">
+        <div className="bg-hv-gray-500 rounded-md w-full p-4 mb-4 font-normal text-s">
           <div>Select an existing subdao to delegate to</div>
           <br />
           <div>
@@ -76,8 +78,8 @@ export const DelegateTokensModal: React.FC<DelegateTokensModalProps> = ({
 
               return (
                 <div
-                  className={`border rounded-md flex flex-row items-center gap-3 w-full p-4 hover:border-fgd-3 hover:bg-bkg-3 hover:cursor-pointer ${
-                    isSelected ? "bg-bkg-3 border-fgd-3" : "border-fgd-4"
+                  className={`border rounded-md flex flex-row items-center gap-3 w-full p-4 hover:border-fgd-3 hover:bg-hv-gray-500 hover:cursor-pointer ${
+                    isSelected ? "border border-hv-blue-700" : "border-hv-gray-200"
                   }`}
                   onClick={() => setSelectedSubDaoPk(subDao.pubkey)}
                   key={subDao.pubkey.toBase58()}

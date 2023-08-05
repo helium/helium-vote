@@ -1,12 +1,13 @@
 import classNames from "classnames";
 import { getBackgroundColor } from "../utils/colors";
 import { Outcome } from "./VoteOption";
-import { BN } from "@coral-xyz/anchor";
+import { humanReadable } from "@helium/spl-utils";
 
 const VoteResults: React.FC<{
   outcomes: Outcome[];
   completed: boolean;
-}> = ({ outcomes, completed }) => {
+  decimals?: number;
+}> = ({ decimals, outcomes, completed }) => {
 
   // const winner = outcomesResults[0];
 
@@ -79,9 +80,9 @@ const VoteResults: React.FC<{
                   </span>
                 </h3>
                 <div className="space-x-2 flex flex-col lg:flex-row">
-                  <div className="text-hv-gray-400 text-lg font-light font-sans flex flex-col lg:flex-row space-x-0 lg:space-x-2">
-                    <span>{r.weight.toString(2)}</span>
-                  </div>
+                  { decimals && <div className="text-hv-gray-400 text-lg font-light font-sans flex flex-col lg:flex-row space-x-0 lg:space-x-2">
+                    <span>{humanReadable(r.weight, decimals)}</span>
+                  </div> }
                   <span className="text-white text-lg font-sans">
                     <span className="text-white hidden lg:flex">
                       {r.percent.toLocaleString(undefined, {

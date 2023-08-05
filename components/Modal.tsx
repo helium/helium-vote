@@ -7,7 +7,7 @@ const Modal = ({
   children,
   hideClose = false,
   sizeClassName = "sm:max-w-md",
-  background = "bg-bkg-2",
+  background = "bg-hv-gray-750",
   zIndex = "z-30",
   wrapperStyle,
   bgBlack = true,
@@ -28,7 +28,7 @@ const Modal = ({
     <Portal>
       <div
         style={wrapperStyle}
-        className={`text-white fixed inset-0 ${zIndex} overflow-y-auto text-fgd-1`}
+        className={`text-white dark fixed inset-0 ${zIndex} overflow-y-auto text-fgd-1`}
         aria-labelledby="modal-title"
         role="dialog"
         aria-modal="true"

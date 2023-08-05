@@ -151,7 +151,7 @@ export const PositionCard: React.FC<PositionCardProps> = ({
   /// TODO:
   const tokenInfo = {
     symbol: "HNT",
-    logoURI: undefined
+    logoURI: "/images/logo.svg"
   }
 
   const { info: registrar } = useRegistrar(position.registrar);
@@ -315,7 +315,7 @@ export const PositionCard: React.FC<PositionCardProps> = ({
   const lockupKindDisplay = isConstant ? "Constant" : "Decaying";
   const hasActiveVotes = position.numActiveVotes > 0;
   return (
-    <div className="relative border overflow-hidden border-fgd-4 rounded-lg flex flex-col">
+    <div className="relative shadow-xl overflow-hidden bg-hv-gray-750 rounded-lg flex flex-col">
       {hasGenesisMultiplier && (
         <div
           className="absolute bg-primary-light px-8 transform rotate-45 text-bkg-2 text-xs font-bold"
@@ -334,12 +334,12 @@ export const PositionCard: React.FC<PositionCardProps> = ({
         <>
           <div className="bg-bkg-3 px-4 py-4 pr-16 rounded-md rounded-b-none flex items-center">
             {tokenInfo?.logoURI && (
-              <img className="w-8 h-8 mr-2" src={tokenInfo?.logoURI}></img>
+              <img className="w-6 h-6 mr-2" src={tokenInfo?.logoURI}></img>
             )}
-            <h3 className="hero-text mb-0">
+            <h3 className="text-xl mb-0">
               {lockedTokens}{" "}
               {!tokenInfo?.logoURI && position.votingMint.mint.toBase58()}
-              <span className="font-normal text-xs text-fgd-3">
+              <span className="font-normal text-fgd-3">
                 {tokenInfo?.symbol}
               </span>
             </h3>

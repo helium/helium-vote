@@ -83,8 +83,10 @@ export const TransferTokensModal: React.FC<TransferTokensModalProps> = ({
   const hasTransferablePositions = positions.length > 0;
   return (
     <Modal onClose={onClose} isOpen={isOpen}>
-      <h2 className="mb-4 flex flex-row items-center">Transfer Tokens</h2>
-      <div className="bg-bkg-3 rounded-md w-full p-4 mb-4 font-normal text-xs">
+      <h2 className="text-xl mb-4 flex flex-row items-center">
+        Transfer Tokens
+      </h2>
+      <div className="bg-hv-gray-500 rounded-md w-full p-4 mb-4 font-normal text-xs">
         {hasTransferablePositions ? (
           <>
             <div>Select an existing positon to transfer to</div>

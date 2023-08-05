@@ -6,7 +6,7 @@ const Page: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
     <>
       <main className="w-full min-h-screen">
         <Header />
-        <div className="min-h-screen w-full pb-20 pt-5 sm:py-20">
+        <div className="min-h-screen w-full pb-20 py-10">
           {children}
         </div>
       </main>

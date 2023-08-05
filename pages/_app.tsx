@@ -29,14 +29,16 @@ function VsrState({ children }) {
 
 function MyApp({ Component, pageProps }) {
   return (
-    <Wallet>
-      <Wrapper>
-        <VsrState>
-          <Component {...pageProps} />
-        </VsrState>
-      </Wrapper>
-      <ToastContainer />
-    </Wallet>
+    <div className="dark">
+      <Wallet>
+        <Wrapper>
+          <VsrState>
+            <Component {...pageProps} />
+          </VsrState>
+        </Wrapper>
+        <ToastContainer />
+      </Wallet>
+    </div>
   );
 }
 

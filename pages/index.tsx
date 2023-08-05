@@ -37,8 +37,8 @@ export default function Home({ legacyVotes }) {
   return (
     <Page>
       <MetaTags />
-      <ContentSection className="sm:pt-20">
-        <div className="flex flex-col space-y-2">
+      <ContentSection >
+        <div className="flex flex-col space-y-2 pt-12">
           <div className="flex flex-col">
             <div className="flex flex-col-reverse sm:flex-row sm:justify-between">
               <div className="flex flex-col">

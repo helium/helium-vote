@@ -26,12 +26,12 @@ const Button: FunctionComponent<React.PropsWithChildren<ButtonProps>> = ({
 }) => {
   return (
     <button
-      className={`${className} default-transition font-bold px-4 rounded-full ${
+      className={`${className} default-transition font-bold px-4 bg-hv-blue-700 rounded-lg ${
         small ? "py-1" : "py-2.5"
       } text-sm focus:outline-none ${
         disabled
-          ? "bg-fgd-4 cursor-not-allowed text-fgd-3"
-          : "bg-primary-light text-bkg-2 hover:bg-fgd-1"
+          ? "opacity-60 cursor-not-allowed"
+          : "hover:bg-hv-blue-400 text-bkg-2 hover:bg-fgd-1"
       }`}
       {...props}
       style={style}
@@ -63,7 +63,9 @@ export const SecondaryButton: FunctionComponent<React.PropsWithChildren<ButtonPr
       onClick={onClick}
       disabled={disabled}
       type={type}
-      className={`${className} border border-primary-light font-bold default-transition rounded-full px-4 ${
+      className={`${className} border border-hv-blue-700 ${
+        disabled ? "opacity-60" : "hover:bg-blue-400"
+      } font-bold default-transition rounded-lg px-4 ${
         small ? "py-1" : "py-2.5"
       } text-primary-light text-sm hover:border-fgd-1 hover:text-fgd-1 focus:outline-none disabled:border-fgd-4 disabled:text-fgd-3 disabled:cursor-not-allowed`}
       {...props}
