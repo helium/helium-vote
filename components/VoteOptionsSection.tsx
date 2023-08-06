@@ -1,4 +1,8 @@
-import { useRelinquishVote, useVote } from "@helium/voter-stake-registry-hooks";
+import {
+  useHeliumVsrState,
+  useRelinquishVote,
+  useVote,
+} from "@helium/voter-stake-registry-hooks";
 import { PublicKey } from "@solana/web3.js";
 import { useNotifyError } from "../hooks/useNotifyError";
 import VoteOption, { Outcome } from "./VoteOption";
@@ -29,6 +33,9 @@ const VoteOptionsSection: React.FC<{
   const [currVote, setCurrVote] = useState(0);
   const { connected } = useWallet();
 
+  const { amountLocked, loading } = useHeliumVsrState();
+  const noVotingPower = !loading && (!amountLocked || amountLocked.isZero());
+
   useNotifyError(voteErr, "Failed to vote");
   useNotifyError(relErr, "Failed to relinquish vote");
 
@@ -58,7 +65,19 @@ const VoteOptionsSection: React.FC<{
                 <span className="text-fgd-1 text-sm">Connect your wallet</span>
               </div>
             )}
-            {connected &&
+            {connected && noVotingPower && (
+              <Link
+                href="/staking"
+                className="text-white flex flex-col items-center justify-center"
+              >
+                <FiSettings className="h-6 mb-1 text-primary-light w-6" />
+                <span className="text-fgd-1 text-sm">
+                  No voting power. Click here to manage voting power.
+                </span>
+              </Link>
+            )}
+
+            {connected && !noVotingPower &&
               outcomes?.map((o, i, { length }) => (
                 <VoteOption
                   voting={currVote == o.index && (voting || relinquishing)}

@@ -20,8 +20,6 @@ export const VotingPowerBox: React.FC<VotingPowerBoxProps> = ({
   votingPower,
   mint,
   amountLocked,
-  className = "",
-  style,
 }) => {
   const { info: mintAcc } = useMint(mint);
   return (
