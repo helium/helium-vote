@@ -549,45 +549,45 @@
     borsh "^0.7.0"
     bs58 "^4.0.1"
 
-"@helium/modular-governance-hooks@^0.0.2", "@helium/modular-governance-hooks@^0.0.4":
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/@helium/modular-governance-hooks/-/modular-governance-hooks-0.0.4.tgz#0c39150a833a5996b44b5e48b2749ebbd33f877e"
-  integrity sha512-6jVv7kzyUwFN1dfS6pxfsaUXHsZgMN7lcS+CUSw0rGtW9/T/7Cxluu7GNm139qyqeR4VyGR6tFMmv21ScwzDBg==
+"@helium/modular-governance-hooks@^0.0.2", "@helium/modular-governance-hooks@^0.0.5":
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/@helium/modular-governance-hooks/-/modular-governance-hooks-0.0.5.tgz#91555874ae24d6679eaf2259f984dccc9cd4e278"
+  integrity sha512-oxwsUm9WQO855cxUPOWGcw0gzCbJjJGUxASj647KjyEN2akDvXqf0nusfGWjxamJA8jAJOyS/49QCTTS8jTv8w==
   dependencies:
     "@coral-xyz/anchor" "^0.26.0"
     "@helium/account-fetch-cache" "^0.2.17"
     "@helium/account-fetch-cache-hooks" "^0.2.17"
     "@helium/helium-react-hooks" "^0.2.17"
-    "@helium/modular-governance-idls" "^0.0.4"
-    "@helium/organization-sdk" "^0.0.4"
+    "@helium/modular-governance-idls" "^0.0.5"
+    "@helium/organization-sdk" "^0.0.5"
     "@solana/web3.js" "^1.66.2"
 
-"@helium/modular-governance-idls@^0.0.4":
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/@helium/modular-governance-idls/-/modular-governance-idls-0.0.4.tgz#d3f0dcc5b6d5b018f2675add9fd872ff4efd4d19"
-  integrity sha512-5Gk1sOdr4eMaftnYLwoN1kjDqtIpxoWcYKjMdG+K5MaSvXIVPmquGPTZTDhuwZkb9u8JMjtiY+RzIFAFFwXrGw==
+"@helium/modular-governance-idls@^0.0.5":
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/@helium/modular-governance-idls/-/modular-governance-idls-0.0.5.tgz#eedbed0a4975c1f14d5cfc218ed5d01117acc2b7"
+  integrity sha512-/pzNtQyKirVMz5VZAM23b0ajwSNJanrXIXHkUEBax2xC5oqoETOrblqODsHh8TOr0hKEaTRY8DRIAe+Qfv66BQ==
   dependencies:
     "@coral-xyz/anchor" "^0.28.0"
     "@solana/web3.js" "^1.43.4"
 
-"@helium/organization-sdk@^0.0.4":
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/@helium/organization-sdk/-/organization-sdk-0.0.4.tgz#1c771caf553717c82e4f1722f7c26a548b8be799"
-  integrity sha512-PsLr2QAvLOvExtEZBQRhbNzhxOqjzZ9k6bRUs40TGUzkI4wNQfWif8Np3wjNxjXXvPgnBcVQi+TKuHdlMtDvuA==
+"@helium/organization-sdk@^0.0.5":
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/@helium/organization-sdk/-/organization-sdk-0.0.5.tgz#c6eda3351a3681ed2c3d8f84639513ca2522ca1f"
+  integrity sha512-NYGTUVEB7dd6Ws8AtLYewXN53Ds4054lmc56ePQHPo2R9K0WAqGPpoa3CtMhn4a+9zyDiz9lP61QWaTHjQNnag==
   dependencies:
     "@coral-xyz/anchor" "^0.28.0"
     "@helium/anchor-resolvers" "^0.2.17"
-    "@helium/modular-governance-idls" "^0.0.4"
-    "@helium/proposal-sdk" "^0.0.4"
+    "@helium/modular-governance-idls" "^0.0.5"
+    "@helium/proposal-sdk" "^0.0.5"
 
-"@helium/proposal-sdk@^0.0.4":
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/@helium/proposal-sdk/-/proposal-sdk-0.0.4.tgz#d138af3e7e777b2876d5113ca564212324761ba0"
-  integrity sha512-aCCQGpSdgtyvIhu+gttSw5mYbjb9Uy/1nukv51KFvE/QTRLcaWSc/Tg130sU9Tzr6gebiUpWudShKucztpxM7g==
+"@helium/proposal-sdk@^0.0.5":
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/@helium/proposal-sdk/-/proposal-sdk-0.0.5.tgz#64c5a28a9b6643236f8742c99da24f23657a9117"
+  integrity sha512-h9IZd7C2fhp8pEivec/DWAV7pasav73UpFoW2wfXLdMa4TxaoYXnR5rXZ/Iu37SgfSPUYkV7sIymV+jZ7wwdfg==
   dependencies:
     "@coral-xyz/anchor" "^0.28.0"
     "@helium/anchor-resolvers" "^0.2.17"
-    "@helium/modular-governance-idls" "^0.0.4"
+    "@helium/modular-governance-idls" "^0.0.5"
 
 "@helium/spl-utils@^0.2.17":
   version "0.2.17"
@@ -606,14 +606,14 @@
     borsh "^0.7.0"
     bs58 "^5.0.0"
 
-"@helium/state-controller-sdk@^0.0.4":
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/@helium/state-controller-sdk/-/state-controller-sdk-0.0.4.tgz#559ac257cf381d01a45716eab440d3c834e84c9c"
-  integrity sha512-wn1SW3IEx2PvG9sL1Ee/nS0+/EbhmTtrUoSFaq2gEaE4WgFICijcbw6d0PK5pFzed6d7wHCobY4Lm/oIZMgwig==
+"@helium/state-controller-sdk@^0.0.5":
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/@helium/state-controller-sdk/-/state-controller-sdk-0.0.5.tgz#5cabfa4eb22ac630e2f52b21c7908c48585d9647"
+  integrity sha512-Y09sDl3oW6AO1YNCY8PzJ2Y0EDlZmLMd0byagD8dsx0nGZPlTgG1JK6DwHPTcQifICvWkM0kpYn6pP+G0JKWLQ==
   dependencies:
     "@coral-xyz/anchor" "^0.28.0"
     "@helium/anchor-resolvers" "^0.2.17"
-    "@helium/modular-governance-idls" "^0.0.4"
+    "@helium/modular-governance-idls" "^0.0.5"
 
 "@helium/treasury-management-sdk@^0.2.17":
   version "0.2.17"

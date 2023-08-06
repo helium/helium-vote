@@ -5,6 +5,8 @@ import yargs from "yargs";
 import { init as initOrg } from "@helium/organization-sdk"
 import { init as initProp } from "@helium/proposal-sdk";
 import { init as initState, settings } from "@helium/state-controller-sdk";
+import { HNT_MINT } from "@helium/spl-utils";
+import { registrarKey } from "@helium/voter-stake-registry-sdk";
 
 export async function run(args: any = process.argv) {
   const yarg = yargs(args).options({
@@ -18,16 +20,26 @@ export async function run(args: any = process.argv) {
       default: "http://127.0.0.1:8899",
       describe: "The solana url",
     },
-    voteController: {
+    realmName: {
       type: "string",
-      default: "9zHTyfGTJ5M7Qnv9KUx9P8fVE1L7zFxow6ZHs3Ju5wCH",
+      default: "Helium",
     },
   });
   const argv = await yarg.argv;
   process.env.ANCHOR_WALLET = argv.wallet;
   process.env.ANCHOR_PROVIDER_URL = argv.url;
   anchor.setProvider(anchor.AnchorProvider.local(argv.url));
-
+  
+  const registrarK = registrarKey(
+    PublicKey.findProgramAddressSync(
+      [
+        Buffer.from("governance", "utf-8"),
+        Buffer.from(argv.realmName, "utf-8"),
+      ],
+      new PublicKey("hgovkRU6Ghe1Qoyb54HdSLdqN7VtxaifBzRmh9jtd3S")
+    )[0],
+    HNT_MINT
+  )[0];
   const provider = anchor.getProvider() as anchor.AnchorProvider;
   const orgProgram = await initOrg(provider);
   const proposalProgram = await initProp(provider);
@@ -52,7 +64,7 @@ export async function run(args: any = process.argv) {
     })
     .rpcAndKeys({ skipPreflight: true });
 
-    const voteController = new PublicKey(argv.voteController);
+    const voteController = registrarK;
 
     const {
       pubkeys: { proposalConfig },

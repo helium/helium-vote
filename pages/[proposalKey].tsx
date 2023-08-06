@@ -1,7 +1,7 @@
 import * as anchor from "@coral-xyz/anchor";
 import { useProposal, useProposalConfig, useResolutionSettings } from "@helium/modular-governance-hooks";
 import { init } from "@helium/proposal-sdk";
-import { PublicKey } from "@solana/web3.js";
+import { Keypair, PublicKey } from "@solana/web3.js";
 import BN from "bn.js";
 import classNames from "classnames";
 import { format } from "date-fns";
@@ -19,6 +19,7 @@ import VoteResults from "../components/VoteResults";
 import { fetchVotes } from "../data/votes";
 import { useRegistrar } from "@helium/voter-stake-registry-hooks";
 import { useMint } from "@helium/helium-react-hooks";
+import fs from 'fs'
 
 const VoteDetailsPage = ({
   name: initName,
@@ -289,17 +290,24 @@ const VoteDetailsPage = ({
 };
 
 export async function getStaticPaths() {
-  const votes = fetchVotes();
-
   return {
     paths: [],
     fallback: "blocking",
   };
 }
 
+async function ensureWallet() {
+  if (!fs.existsSync('./wallet.json')) {
+    const wallet = Keypair.generate();
+    fs.writeFileSync('./wallet.json', JSON.stringify(Array.from(wallet.secretKey)));
+  }
+}
+
 export async function getStaticProps({ params }) {
   const { proposalKey } = params;
-  anchor.setProvider(anchor.AnchorProvider.env());
+  await ensureWallet();
+
+  anchor.setProvider(anchor.AnchorProvider.local(process.env.NODE_PUBLIC_SOLANA_URL));
   const provider = anchor.getProvider() as anchor.AnchorProvider;
   const proposalSdk = await init(provider);
   const proposal = await proposalSdk.account.proposalV0.fetch(new PublicKey(proposalKey))
