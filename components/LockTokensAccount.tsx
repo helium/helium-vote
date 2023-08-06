@@ -103,7 +103,9 @@ export const LockTokensAccount: React.FC = (props) => {
     : "0";
 
   const amountLockedDisplay =
-    amountLocked && mint && mintAcc ? humanReadable(amountLocked, mintAcc.decimals) : "0";
+    amountLocked && mint && mintAcc
+      ? humanReadable(amountLocked, mintAcc.decimals)
+      : "0";
 
   const maxLockupAmount =
     hasTokensInWallet && mintAcc
@@ -156,7 +158,7 @@ export const LockTokensAccount: React.FC = (props) => {
     <div className="grid grid-cols-12 gap-4 text-white pt-0">
       <div className="bg-bkg-2 rounded-lg p-4 md:p-6 col-span-12">
         <div className="flex items-center justify-between mb-4">
-          <h1 className="leading-none flex flex-col mb-0 text-lg sm:text-3xl font-semibold text-white">
+          <h1 className="leading-none flex flex-col mb-0 text-md sm:text-2xl font-semibold text-white">
             My Voting Power
           </h1>
 
@@ -178,7 +180,8 @@ export const LockTokensAccount: React.FC = (props) => {
                 </>
               ) : (
                 <>
-                  <div className="col-span-1">
+                  <div className={mainBoxesClasses}>
+                    <p className="text-fgd-3">Voting Power</p>
                     {mint && (
                       <VotingPowerBox
                         className={mainBoxesClasses}

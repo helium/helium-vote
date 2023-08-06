@@ -1,7 +1,11 @@
 import * as anchor from "@coral-xyz/anchor";
-import { useProposal, useProposalConfig, useResolutionSettings } from "@helium/modular-governance-hooks";
+import {
+  useProposal,
+  useProposalConfig,
+  useResolutionSettings,
+} from "@helium/modular-governance-hooks";
 import { init } from "@helium/proposal-sdk";
-import { Keypair, PublicKey } from "@solana/web3.js";
+import { Connection, Keypair, PublicKey } from "@solana/web3.js";
 import BN from "bn.js";
 import classNames from "classnames";
 import { format } from "date-fns";
@@ -19,31 +23,36 @@ import VoteResults from "../components/VoteResults";
 import { fetchVotes } from "../data/votes";
 import { useRegistrar } from "@helium/voter-stake-registry-hooks";
 import { useMint } from "@helium/helium-react-hooks";
-import fs from 'fs'
+import fs from "fs";
 
-const VoteDetailsPage = ({
-  name: initName,
-}: {
-  name: string,
-}) => {
+const VoteDetailsPage = ({ name: initName }: { name: string }) => {
   const router = useRouter();
   const { proposalKey } = router.query;
 
   const proposalK = useMemo(() => new PublicKey(proposalKey), [proposalKey]);
-  const { info: proposal } = useProposal(
-    proposalK,
-  );
-  const { tags, choices = [], state, uri, proposalConfig: proposalConfigKey } = proposal || {};
+  const { info: proposal } = useProposal(proposalK);
+  const {
+    tags,
+    choices = [],
+    state,
+    uri,
+    proposalConfig: proposalConfigKey,
+  } = proposal || {};
   const name = proposal?.name || initName;
   const { info: proposalConfig } = useProposalConfig(proposalConfigKey);
-  const { info: resolution } = useResolutionSettings(proposalConfig?.stateController);
-  const { info: registrar } = useRegistrar(proposalConfig?.voteController)
+  const { info: resolution } = useResolutionSettings(
+    proposalConfig?.stateController
+  );
+  const { info: registrar } = useRegistrar(proposalConfig?.voteController);
   const decimals = useMint(registrar?.votingMints[0].mint)?.info?.decimals;
 
-  const { result: content } = useAsync(async (uri: string) => {
-    const res = await fetch(uri);
-    return res.text();
-  }, [uri])
+  const { result: content } = useAsync(
+    async (uri: string) => {
+      const res = await fetch(uri);
+      return res.text();
+    },
+    [uri]
+  );
 
   const endTs =
     resolution &&
@@ -60,18 +69,17 @@ const VoteDetailsPage = ({
       new BN(0)
     );
 
-    const results = choices
-      .map((r, index) => ({
-        ...r,
-        index,
-        percent: totalVotes?.isZero()
-          ? 100 / choices.length
-          : (r.weight.toNumber() / totalVotes.toNumber()) * 100,
-      }))
+    const results = choices.map((r, index) => ({
+      ...r,
+      index,
+      percent: totalVotes?.isZero()
+        ? 100 / choices.length
+        : (r.weight.toNumber() / totalVotes.toNumber()) * 100,
+    }));
     return { results, totalVotes };
   }, [choices]);
 
-  const completed = endTs?.toNumber() <= (Date.now().valueOf() / 1000);
+  const completed = endTs?.toNumber() <= Date.now().valueOf() / 1000;
 
   const twitterUrl = useMemo(() => {
     const url = new URL("https://twitter.com/intent/tweet");
@@ -81,7 +89,9 @@ const VoteDetailsPage = ({
       "text",
       completed
         ? `Voting for ${name} is closed. What did The People's Network think?`
-        : `Share your thoughts on ${name}. Vote now, the deadline is ${new Date(endTs?.toNumber() * 1000)?.toLocaleString()}.`
+        : `Share your thoughts on ${name}. Vote now, the deadline is ${new Date(
+            endTs?.toNumber() * 1000
+          )?.toLocaleString()}.`
     );
     url.searchParams.append("url", voteURL);
 
@@ -296,21 +306,17 @@ export async function getStaticPaths() {
   };
 }
 
-async function ensureWallet() {
-  if (!fs.existsSync('./wallet.json')) {
-    const wallet = Keypair.generate();
-    fs.writeFileSync('./wallet.json', JSON.stringify(Array.from(wallet.secretKey)));
-  }
-}
-
 export async function getStaticProps({ params }) {
   const { proposalKey } = params;
-  await ensureWallet();
-
-  anchor.setProvider(anchor.AnchorProvider.local(process.env.NODE_PUBLIC_SOLANA_URL));
-  const provider = anchor.getProvider() as anchor.AnchorProvider;
+  const provider = new anchor.AnchorProvider(
+    new Connection(process.env.NEXT_PUBLIC_SOLANA_URL, "confirmed"),
+    {} as any,
+    {}
+  );
   const proposalSdk = await init(provider);
-  const proposal = await proposalSdk.account.proposalV0.fetch(new PublicKey(proposalKey))
+  const proposal = await proposalSdk.account.proposalV0.fetch(
+    new PublicKey(proposalKey)
+  );
 
   return {
     props: {
