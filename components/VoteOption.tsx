@@ -67,7 +67,7 @@ const VoteOption: React.FC<{
       >
         <div
           className={classNames(
-            "flex flex-col sm:flex-row justify-between items-center w-full"
+            "flex flex-row justify-between items-center w-full"
           )}
         >
           <div className="flex flex-row justify-between items-center w-full">
