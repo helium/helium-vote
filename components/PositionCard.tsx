@@ -2,7 +2,7 @@ import React, { useCallback, useState, useMemo } from "react";
 import { useMint, useSolanaUnixNow } from "@helium/helium-react-hooks";
 import { BN } from "@coral-xyz/anchor";
 import Button from "./Button";
-import { HNT_MINT, humanReadable, toNumber } from "@helium/spl-utils";
+import { HNT_MINT, toNumber } from "@helium/spl-utils";
 import { notify } from "../utils/notifications";
 import {
   daysToSecs,
@@ -29,6 +29,7 @@ import {
 } from "@helium/voter-stake-registry-hooks";
 import { DelegateTokensModal } from "./DelegateTokensModal";
 import { PromptModal } from "./PromptModal";
+import { humanReadable } from "../utils/formatting";
 
 interface PositionCardProps {
   subDaos?: SubDaoWithMeta[];
@@ -140,7 +141,7 @@ export const PositionCard: React.FC<PositionCardProps> = ({
 
   const lockedTokens = mintAcc && humanReadable(
     position.amountDepositedNative,
-    mintAcc
+    mintAcc.decimals
   );
 
   const maxActionableAmount = mintAcc

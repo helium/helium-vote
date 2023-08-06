@@ -6,6 +6,8 @@ import { ProvidedVotingPowerBox } from "./VotingPowerBox";
 import { useState } from "react";
 import Link from "next/link";
 import { FiSettings } from "react-icons/fi";
+import { useWallet } from "@solana/wallet-adapter-react";
+import { BsLink45Deg } from "react-icons/bs";
 
 const VoteOptionsSection: React.FC<{
   outcomes: Outcome[];
@@ -25,6 +27,7 @@ const VoteOptionsSection: React.FC<{
     error: relErr,
   } = useRelinquishVote(proposalKey);
   const [currVote, setCurrVote] = useState(0);
+  const { connected } = useWallet();
 
   useNotifyError(voteErr, "Failed to vote");
   useNotifyError(relErr, "Failed to relinquish vote");
@@ -49,34 +52,41 @@ const VoteOptionsSection: React.FC<{
           </div>
 
           <div className="w-full">
-            {outcomes?.map((o, i, { length }) => (
-              <VoteOption
-                voting={currVote == o.index && (voting || relinquishing)}
-                index={o.index}
-                length={length}
-                key={o.name}
-                outcome={o}
-                myWeight={voteWeights?.[o.index]}
-                canVote={canVote(o.index)}
-                canRelinquishVote={canRelinquishVote(o.index)}
-                onVote={
-                  canVote(o.index)
-                    ? () => {
-                        setCurrVote(o.index);
-                        vote({ choice: o.index });
-                      }
-                    : undefined
-                }
-                onRelinquishVote={
-                  canRelinquishVote(o.index)
-                    ? () => {
-                        setCurrVote(o.index);
-                        relinquishVote({ choice: o.index });
-                      }
-                    : undefined
-                }
-              />
-            ))}
+            {!connected && (
+              <div className="text-white flex flex-col items-center justify-center">
+                <BsLink45Deg className="h-6 mb-1 text-primary-light w-6" />
+                <span className="text-fgd-1 text-sm">Connect your wallet</span>
+              </div>
+            )}
+            {connected &&
+              outcomes?.map((o, i, { length }) => (
+                <VoteOption
+                  voting={currVote == o.index && (voting || relinquishing)}
+                  index={o.index}
+                  length={length}
+                  key={o.name}
+                  outcome={o}
+                  myWeight={voteWeights?.[o.index]}
+                  canVote={canVote(o.index)}
+                  canRelinquishVote={canRelinquishVote(o.index)}
+                  onVote={
+                    canVote(o.index)
+                      ? () => {
+                          setCurrVote(o.index);
+                          vote({ choice: o.index });
+                        }
+                      : undefined
+                  }
+                  onRelinquishVote={
+                    canRelinquishVote(o.index)
+                      ? () => {
+                          setCurrVote(o.index);
+                          relinquishVote({ choice: o.index });
+                        }
+                      : undefined
+                  }
+                />
+              ))}
           </div>
         </div>
       </div>

@@ -20,6 +20,39 @@ export const calculatePct = (c = new BN(0), total?: BN) => {
     .toNumber();
 };
 
+function getSeparator(separatorType) {
+  const numberWithGroupAndDecimalSeparator = 1000.1;
+  return Intl.NumberFormat()
+    .formatToParts(numberWithGroupAndDecimalSeparator)
+    .find((part) => part.type === separatorType).value;
+}
+
+export function humanReadable(
+  amount?: BN,
+  decimals?: number
+): string | undefined {
+  if (typeof decimals === "undefined" || typeof amount === "undefined") return;
+
+  const input = amount.toString();
+  const integerPart =
+    input.length > decimals ? input.slice(0, input.length - decimals) : "";
+  const formattedIntegerPart = integerPart.replace(
+    /\B(?=(\d{3})+(?!\d))/g,
+    getSeparator('group')
+  );
+  const decimalPart =
+    decimals !== 0
+      ? input
+          .slice(-decimals)
+          .padStart(decimals, "0") // Add prefix zeros
+          .replace(/0+$/, "") // Remove trailing zeros
+      : "";
+
+  return `${formattedIntegerPart.length > 0 ? formattedIntegerPart : "0"}${
+    Number(decimalPart) !== 0 ? `${getSeparator("decimal")}${decimalPart}` : ""
+  }`;
+}
+
 export const fmtTokenAmount = (c: BN, decimals?: number) =>
   c?.div(new BN(10).pow(new BN(decimals ?? 0))).toNumber() || 0;
 

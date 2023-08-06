@@ -1,6 +1,6 @@
 import { BN } from "@coral-xyz/anchor";
 import { useMint } from "@helium/helium-react-hooks";
-import { humanReadable } from "@helium/spl-utils";
+import { humanReadable } from "../utils/formatting";
 import { useHeliumVsrState } from "@helium/voter-stake-registry-hooks";
 import { PublicKey } from "@solana/web3.js";
 import Link from "next/link";
@@ -26,7 +26,7 @@ export const VotingPowerBox: React.FC<VotingPowerBoxProps> = ({
   const { info: mintAcc } = useMint(mint);
   return (
     <span className="mb-0 flex font-bold items-center hero-text">
-      {mintAcc && votingPower && humanReadable(votingPower, mintAcc)}{" "}
+      {mintAcc && votingPower && humanReadable(votingPower, mintAcc.decimals)}{" "}
       {amountLocked &&
         votingPower &&
         !amountLocked.isZero() &&

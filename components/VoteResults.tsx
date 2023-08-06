@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import { getBackgroundColor } from "../utils/colors";
 import { Outcome } from "./VoteOption";
-import { humanReadable } from "@helium/spl-utils";
+import { humanReadable } from "../utils/formatting";
 
 const VoteResults: React.FC<{
   outcomes: Outcome[];

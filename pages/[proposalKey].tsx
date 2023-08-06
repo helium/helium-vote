@@ -24,6 +24,7 @@ import { fetchVotes } from "../data/votes";
 import { useRegistrar } from "@helium/voter-stake-registry-hooks";
 import { useMint } from "@helium/helium-react-hooks";
 import fs from "fs";
+import { humanReadable } from "../utils/formatting";
 
 const VoteDetailsPage = ({ name: initName }: { name: string }) => {
   const router = useRouter();
@@ -176,7 +177,7 @@ const VoteDetailsPage = ({ name: initName }: { name: string }) => {
               <div className="sm:pr-20">
                 <p className="text-white">Total Weight</p>
                 <p className="text-hv-gray-300">
-                  {votingResults?.totalVotes?.toLocaleString()}
+                  {humanReadable(votingResults?.totalVotes, decimals)}
                 </p>
               </div>
             </>

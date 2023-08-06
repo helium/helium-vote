@@ -1,6 +1,6 @@
 import { BN } from "@coral-xyz/anchor";
 import { useAssociatedTokenAccount, useMint } from "@helium/helium-react-hooks";
-import { humanReadable, toBN, toNumber } from "@helium/spl-utils";
+import { toBN, toNumber } from "@helium/spl-utils";
 import {
   calcLockupMultiplier,
   getRegistrarKey,
@@ -22,6 +22,7 @@ import { LockTokensModal, LockTokensModalFormValues } from "./LockTokensModal";
 import { PositionCard } from "./PositionCard";
 import PreviousRouteBtn from "./PreviousRouteButton";
 import { VotingPowerBox } from "./VotingPowerBox";
+import { humanReadable } from "../utils/formatting";
 
 function daysToSecs(days: number): number {
   return days * 60 * 60 * 24;
