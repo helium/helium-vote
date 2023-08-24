@@ -14,11 +14,10 @@ import { useNetwork } from "../hooks/useNetwork";
 
 export default function Home({ legacyVotes }) {
   const [voteFilterTab, setVoteFilterTab] = useState(0);
-  const { network } = useNetwork();
+  const { network, mint } = useNetwork();
   const organization = useMemo(() => organizationKey(network)[0], [network])
 
   const { accounts: proposals, error } = useOrganizationProposals(organization);
-  const { mint } = useHeliumVsrState();
 
   useEffect(() => {
     if (error) {
