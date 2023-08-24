@@ -12,6 +12,7 @@ import Link from "next/link";
 import { FiSettings } from "react-icons/fi";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { BsLink45Deg } from "react-icons/bs";
+import { useNetwork } from "../hooks/useNetwork";
 
 const VoteOptionsSection: React.FC<{
   outcomes: Outcome[];
@@ -35,6 +36,7 @@ const VoteOptionsSection: React.FC<{
 
   const { amountLocked, loading } = useHeliumVsrState();
   const noVotingPower = !loading && (!amountLocked || amountLocked.isZero());
+  const { network } = useNetwork()
 
   useNotifyError(voteErr, "Failed to vote");
   useNotifyError(relErr, "Failed to relinquish vote");
@@ -48,7 +50,7 @@ const VoteOptionsSection: React.FC<{
               Vote Options
             </p>
             <Link
-              href="/staking"
+              href={`/staking?network=${network}`}
               className="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
             >
               <div className="flex flex-row items-center space-x-2">
@@ -67,7 +69,7 @@ const VoteOptionsSection: React.FC<{
             )}
             {connected && noVotingPower && (
               <Link
-                href="/staking"
+                href={`/staking?network=${network}`}
                 className="text-white flex flex-col items-center justify-center"
               >
                 <FiSettings className="h-6 mb-1 text-primary-light w-6" />

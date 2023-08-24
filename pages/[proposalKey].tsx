@@ -1,11 +1,13 @@
 import * as anchor from "@coral-xyz/anchor";
+import { useMint } from "@helium/helium-react-hooks";
 import {
   useProposal,
   useProposalConfig,
   useResolutionSettings,
 } from "@helium/modular-governance-hooks";
 import { init } from "@helium/proposal-sdk";
-import { Connection, Keypair, PublicKey } from "@solana/web3.js";
+import { useRegistrar } from "@helium/voter-stake-registry-hooks";
+import { Connection, PublicKey } from "@solana/web3.js";
 import BN from "bn.js";
 import classNames from "classnames";
 import { format } from "date-fns";
@@ -20,15 +22,13 @@ import MetaTags from "../components/MetaTags";
 import Page from "../components/Page";
 import VoteOptionsSection from "../components/VoteOptionsSection";
 import VoteResults from "../components/VoteResults";
-import { fetchVotes } from "../data/votes";
-import { useRegistrar } from "@helium/voter-stake-registry-hooks";
-import { useMint } from "@helium/helium-react-hooks";
-import fs from "fs";
+import { useNetwork } from "../hooks/useNetwork";
 import { humanReadable } from "../utils/formatting";
 
 const VoteDetailsPage = ({ name: initName }: { name: string }) => {
   const router = useRouter();
   const { proposalKey } = router.query;
+  const { network } = useNetwork()
 
   const proposalK = useMemo(() => new PublicKey(proposalKey), [proposalKey]);
   const { info: proposal } = useProposal(proposalK);
@@ -120,7 +120,7 @@ const VoteDetailsPage = ({ name: initName }: { name: string }) => {
       <ContentSection className="pt-10 sm:pt-0">
         <div className="mb-5 sm:mb-10">
           <Link
-            href="/"
+            href={`/?network=${network}`}
             className="text-hv-gray-200 hover:text-hv-gray-300 outline-none border border-solid border-hv-green-500 border-opacity-0 focus:border-opacity-100 transition-all duration-200 rounded-sm"
           >
             {"<- "}Back to Votes

@@ -4,6 +4,7 @@ import classNames from "classnames";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useState } from "react";
+import { useNetwork } from "../hooks/useNetwork";
 
 // add this
 const WalletMultiButton = dynamic(
@@ -27,6 +28,7 @@ export function Header({
 }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const { network } = useNetwork()
 
   return (
     <nav className="border-b border-gray-200 dark:border-gray-600">
@@ -71,7 +73,7 @@ export function Header({
           <ul className="items-center font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg md:flex-row space-y-4 md:space-y-0 md:space-x-8 md:mt-0 md:border-0 dark:border-gray-700">
             <li className="flex flex-row items-center">
               <Link
-                href="/staking"
+                href={`/staking?network=${network}`}
                 className="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
               >
                 My Voting Power
