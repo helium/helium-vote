@@ -14,15 +14,15 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { AiFillLock } from "react-icons/ai";
 import { BsFillLightningChargeFill, BsLink45Deg } from "react-icons/bs";
+import { useMetaplexMetadata } from "../hooks/useMetaplexMetadata";
+import { humanReadable } from "../utils/formatting";
 import { notify } from "../utils/notifications";
 import Button from "./Button";
 import { ClaimAllRewardsButton } from "./ClaimAllRewardsButton";
 import { LockCommunityTokensButton } from "./LockCommunityTokensButton";
 import { LockTokensModal, LockTokensModalFormValues } from "./LockTokensModal";
 import { PositionCard } from "./PositionCard";
-import PreviousRouteBtn from "./PreviousRouteButton";
 import { VotingPowerBox } from "./VotingPowerBox";
-import { humanReadable } from "../utils/formatting";
 
 function daysToSecs(days: number): number {
   return days * 60 * 60 * 24;
@@ -51,9 +51,7 @@ export const LockTokensAccount: React.FC = (props) => {
     refetch: refetchState,
     mint,
   } = useHeliumVsrState();
-
-  /// TODO: Change when generic
-  const tokenName = "HNT";
+  const { symbol: tokenName } = useMetaplexMetadata(mint)
   const canDelegate = true;
 
   const { info: registrar } = useRegistrar(getRegistrarKey(mint));
@@ -126,7 +124,6 @@ export const LockTokensAccount: React.FC = (props) => {
   const handleLockTokens = async (values: LockTokensModalFormValues) => {
     const { amount, lockupPeriodInDays, lockupKind } = values;
     const amountToLock = toBN(amount, mintAcc!.decimals);
-    console.log(mint.toBase58());
     await createPosition({
       amount: amountToLock,
       lockupPeriodsInDays: lockupPeriodInDays,

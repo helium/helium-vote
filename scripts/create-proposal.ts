@@ -34,6 +34,11 @@ export async function run(args: any = process.argv) {
     proposalConfig: {
       default: "Helium Single Choice Default",
     },
+    orgName: {
+      type: "string",
+      required: true,
+      description: "Organization name. Could be Helium, Helium Mobile, Helium IOT"
+    }
   });
   const argv = await yarg.argv;
   process.env.ANCHOR_WALLET = argv.wallet;
@@ -57,7 +62,7 @@ export async function run(args: any = process.argv) {
       })),
       tags: ["test", "tags"],
     })
-    .accounts({ organization: organizationKey("Helium")[0] })
+    .accounts({ organization: organizationKey(argv.orgName)[0] })
     .rpcAndKeys({ skipPreflight: true });
 
   await stateProgram.methods

@@ -193,7 +193,7 @@ const VoteDetailsPage = ({ name: initName }: { name: string }) => {
               <div className="sm:pr-20">
                 <p className="text-white">Total Votes</p>
                 <p className="text-hv-gray-300">
-                  {votingResults?.totalVotes?.toLocaleString()}
+                  {humanReadable(votingResults?.totalVotes, decimals)}
                 </p>
               </div>
             </>

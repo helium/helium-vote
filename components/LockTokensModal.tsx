@@ -152,6 +152,7 @@ export const LockTokensModal: React.FC<{
         notify({
           type: "error",
           message: e.message || "Unable to lock tokens",
+          error: e
         });
       }
     }

@@ -8,26 +8,35 @@ import Page from "../components/Page";
 import { VoteCard } from "../components/VoteCard";
 import { LegacyVoteCard } from "../components/legacy/LegacyVoteCard";
 import { fetchVotes } from "../data/votes";
-
-const ORGANIZATION = organizationKey("Helium")[0];
+import { useHeliumVsrState } from "@helium/voter-stake-registry-hooks";
+import { HNT_MINT } from "@helium/spl-utils";
+import { useNetwork } from "../hooks/useNetwork";
 
 export default function Home({ legacyVotes }) {
   const [voteFilterTab, setVoteFilterTab] = useState(0);
-  const { accounts: proposals, error } = useOrganizationProposals(ORGANIZATION);
+  const { network } = useNetwork();
+  const organization = useMemo(() => organizationKey(network)[0], [network])
+
+  const { accounts: proposals, error } = useOrganizationProposals(organization);
+  const { mint } = useHeliumVsrState();
 
   useEffect(() => {
     if (error) {
-      console.error(error)
+      console.error(error);
     }
-  }, [error])
+  }, [error]);
   const votes = useMemo(() => {
     switch (voteFilterTab) {
       case 0:
-        return proposals?.filter(p => typeof p.info?.state.voting !== "undefined");
+        return proposals?.filter(
+          (p) => typeof p.info?.state.voting !== "undefined"
+        );
       case 1:
-        return proposals?.filter((p) => typeof p.info?.state.voting === "undefined");
+        return proposals?.filter(
+          (p) => typeof p.info?.state.voting === "undefined"
+        );
     }
-  }, [proposals, voteFilterTab])
+  }, [proposals, voteFilterTab]);
 
   const handleVoteFilterChange = (e, id) => {
     e.preventDefault();
@@ -37,7 +46,7 @@ export default function Home({ legacyVotes }) {
   return (
     <Page>
       <MetaTags />
-      <ContentSection >
+      <ContentSection>
         <div className="flex flex-col space-y-2 pt-12">
           <div className="flex flex-col">
             <div className="flex flex-col-reverse sm:flex-row sm:justify-between">
@@ -118,18 +127,20 @@ export default function Home({ legacyVotes }) {
               >
                 Closed Votes
               </button>
-              <button
-                className={classNames(
-                  "outline-none text-lg sm:text-3xl font-semibold tracking-tight border-b-2 border-solid border-opacity-0 focus:border-opacity-25 border-hv-green-500 rounded-sm transition-all duration-200",
-                  {
-                    "text-hv-green-500": voteFilterTab === 2,
-                    "text-hv-gray-400": voteFilterTab !== 2,
-                  }
-                )}
-                onClick={(e) => handleVoteFilterChange(e, 2)}
-              >
-                Helium L1 Votes
-              </button>
+              {mint && mint.equals(HNT_MINT) && (
+                <button
+                  className={classNames(
+                    "outline-none text-lg sm:text-3xl font-semibold tracking-tight border-b-2 border-solid border-opacity-0 focus:border-opacity-25 border-hv-green-500 rounded-sm transition-all duration-200",
+                    {
+                      "text-hv-green-500": voteFilterTab === 2,
+                      "text-hv-gray-400": voteFilterTab !== 2,
+                    }
+                  )}
+                  onClick={(e) => handleVoteFilterChange(e, 2)}
+                >
+                  Helium L1 Votes
+                </button>
+              )}
             </div>
           </div>
 
@@ -152,15 +163,17 @@ export default function Home({ legacyVotes }) {
             <div className="pt-4 lg:pl-10">
               {votes && votes.length > 0 ? (
                 <div className="flex flex-col sm:flex-row w-full flex-wrap">
-                  {votes.filter(v => Boolean(v.info)).map((v) => {
-                    return (
-                      <VoteCard
-                        key={v.publicKey.toBase58()}
-                        proposalKey={v.publicKey}
-                        proposal={v.info! as any}
-                      />
-                    );
-                  })}
+                  {votes
+                    .filter((v) => Boolean(v.info))
+                    .map((v) => {
+                      return (
+                        <VoteCard
+                          key={v.publicKey.toBase58()}
+                          proposalKey={v.publicKey}
+                          proposal={v.info! as any}
+                        />
+                      );
+                    })}
                 </div>
               ) : (
                 <p className="text-hv-gray-400 text-sm font-sans font-light sm:pl-5">

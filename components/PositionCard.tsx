@@ -30,6 +30,7 @@ import {
 import { DelegateTokensModal } from "./DelegateTokensModal";
 import { PromptModal } from "./PromptModal";
 import { humanReadable } from "../utils/formatting";
+import { useMetaplexMetadata } from "../hooks/useMetaplexMetadata";
 
 interface PositionCardProps {
   subDaos?: SubDaoWithMeta[];
@@ -149,10 +150,11 @@ export const PositionCard: React.FC<PositionCardProps> = ({
     : 0;
   const canDelegate = mint.equals(HNT_MINT);
 
+  const { symbol, image } = useMetaplexMetadata(mint);
   /// TODO:
   const tokenInfo = {
-    symbol: "HNT",
-    logoURI: "/images/logo.svg"
+    symbol: symbol,
+    logoURI: image
   }
 
   const { info: registrar } = useRegistrar(position.registrar);
