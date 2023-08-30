@@ -1,5 +1,8 @@
 import { IdlAccounts } from "@coral-xyz/anchor/dist/cjs/program/namespace/types";
-import { useProposalConfig, useResolutionSettings } from "@helium/modular-governance-hooks";
+import {
+  useProposalConfig,
+  useResolutionSettings,
+} from "@helium/modular-governance-hooks";
 import { Proposal } from "@helium/modular-governance-idls/lib/types/proposal";
 import { PublicKey } from "@solana/web3.js";
 import classNames from "classnames";
@@ -7,7 +10,7 @@ import Link from "next/link";
 import { useMemo } from "react";
 import CountdownTimer from "../components/CountdownTimer";
 import { getBackgroundColor } from "../utils/colors";
-import BN from 'bn.js'
+import BN from "bn.js";
 import { useNetwork } from "../hooks/useNetwork";
 
 const fetcher = (url: string): any => fetch(url).then((r) => r.json());
@@ -23,17 +26,20 @@ export const VoteCard = ({
   const id = proposalKey;
   const { name, proposalConfig: proposalConfigKey } = proposal;
   const { info: proposalConfig } = useProposalConfig(proposalConfigKey);
-  const { info: resolution } = useResolutionSettings(proposalConfig?.stateController);
+  const { info: resolution } = useResolutionSettings(
+    proposalConfig?.stateController
+  );
   const { network } = useNetwork();
 
   const endTs =
-    resolution && proposal?.state.resolved
+    resolution &&
+    (proposal?.state.resolved
       ? proposal?.state.resolved.endTs
       : proposal?.state.voting?.startTs.add(
           resolution.settings.nodes.find(
             (node) => typeof node.offsetFromStartTs !== "undefined"
           ).offsetFromStartTs.offset
-        );
+        ));
 
   const votingResults = useMemo(() => {
     const totalVotes: BN = proposal?.choices.reduce(
@@ -45,7 +51,9 @@ export const VoteCard = ({
       .map((r, index) => ({
         ...r,
         index,
-        percent: totalVotes?.isZero() ? (100 / proposal?.choices.length) : (r.weight.toNumber() / totalVotes.toNumber()) * 100,
+        percent: totalVotes?.isZero()
+          ? 100 / proposal?.choices.length
+          : (r.weight.toNumber() / totalVotes.toNumber()) * 100,
       }))
       .sort((a, b) => b.percent - a.percent);
     return { results, totalVotes };

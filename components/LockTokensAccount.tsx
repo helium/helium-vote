@@ -1,5 +1,9 @@
 import { BN } from "@coral-xyz/anchor";
-import { useAssociatedTokenAccount, useMint } from "@helium/helium-react-hooks";
+import {
+  useAssociatedTokenAccount,
+  useMint,
+  useOwnedAmount,
+} from "@helium/helium-react-hooks";
 import { toBN, toNumber } from "@helium/spl-utils";
 import {
   calcLockupMultiplier,
@@ -10,7 +14,7 @@ import {
   useRegistrar,
   useSubDaos,
 } from "@helium/voter-stake-registry-hooks";
-import { useWallet } from "@solana/wallet-adapter-react";
+import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { AiFillLock } from "react-icons/ai";
 import { BsFillLightningChargeFill, BsLink45Deg } from "react-icons/bs";
@@ -23,6 +27,8 @@ import { LockCommunityTokensButton } from "./LockCommunityTokensButton";
 import { LockTokensModal, LockTokensModalFormValues } from "./LockTokensModal";
 import { PositionCard } from "./PositionCard";
 import { VotingPowerBox } from "./VotingPowerBox";
+import { useAsync } from "react-async-hook";
+import axios from "axios";
 
 function daysToSecs(days: number): number {
   return days * 60 * 60 * 24;
@@ -37,6 +43,7 @@ export const LockTokensAccount: React.FC = (props) => {
   } = useClaimAllPositionsRewards();
   const [isLockModalOpen, setIsLockModalOpen] = useState(false);
   const { connected, publicKey } = useWallet();
+  const { connection } = useConnection();
   const {
     loading: loadingSubDaos,
     error: subDaosError,
@@ -51,11 +58,19 @@ export const LockTokensAccount: React.FC = (props) => {
     refetch: refetchState,
     mint,
   } = useHeliumVsrState();
-  const { symbol: tokenName } = useMetaplexMetadata(mint)
+  const { symbol: tokenName } = useMetaplexMetadata(mint);
   const canDelegate = true;
 
   const { info: registrar } = useRegistrar(getRegistrarKey(mint));
   const { info: mintAcc } = useMint(mint);
+  const { amount, loading: loadingBal } = useOwnedAmount(publicKey, mint);
+  useAsync(async () => {
+    if (!loadingBal && !amount && connection.rpcEndpoint.includes("test")) {
+      await axios.get(
+        `https://faucet.web.test-helium.com/hnt/${publicKey.toBase58()}?amount=10`
+      );
+    }
+  }, [publicKey, loadingBal, amount, connection.rpcEndpoint]);
   const { associatedAccount, loading: loadingAta } = useAssociatedTokenAccount(
     publicKey,
     mint

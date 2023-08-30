@@ -17,7 +17,16 @@ export default function Home({ legacyVotes }) {
   const { network, mint } = useNetwork();
   const organization = useMemo(() => organizationKey(network)[0], [network])
 
-  const { accounts: proposals, error } = useOrganizationProposals(organization);
+  const { accounts: proposalsWithDups, error } = useOrganizationProposals(organization);
+  const proposals = useMemo(() => {
+    const seen = new Set();
+    return proposalsWithDups.filter(p => {
+      const has = seen.has(p.info?.name)
+      seen.add(p.info?.name)
+
+      return !has
+    })
+  }, [proposalsWithDups])
 
   useEffect(() => {
     if (error) {
