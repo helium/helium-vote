@@ -136,7 +136,6 @@ export const LegacyVoteCard = ({ vote }) => {
                           "bg-hv-purple-500": bg === "purple",
                           "bg-hv-orange-500": bg === "orange",
                         })}
-                        s
                         style={
                           bg === "custom"
                             ? {
