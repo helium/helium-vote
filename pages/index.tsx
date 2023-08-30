@@ -158,7 +158,7 @@ export default function Home({ legacyVotes }) {
               )}
             </div>
           )}
-          {voteFilterTab === 0 && (
+          {voteFilterTab < 2 && (
             <div className="pt-4 lg:pl-10">
               {votes && votes.length > 0 ? (
                 <div className="flex flex-col sm:flex-row w-full flex-wrap">

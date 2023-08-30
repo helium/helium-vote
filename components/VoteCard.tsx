@@ -27,12 +27,13 @@ export const VoteCard = ({
   const { network } = useNetwork();
 
   const endTs =
-    resolution &&
-    proposal?.state.voting.startTs.add(
-      resolution.settings.nodes.find(
-        (node) => typeof node.offsetFromStartTs !== "undefined"
-      ).offsetFromStartTs.offset
-    );
+    resolution && proposal?.state.resolved
+      ? proposal?.state.resolved.endTs
+      : proposal?.state.voting?.startTs.add(
+          resolution.settings.nodes.find(
+            (node) => typeof node.offsetFromStartTs !== "undefined"
+          ).offsetFromStartTs.offset
+        );
 
   const votingResults = useMemo(() => {
     const totalVotes: BN = proposal?.choices.reduce(
