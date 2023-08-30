@@ -25,9 +25,11 @@ export async function run(args: any = process.argv) {
     },
     name: {
       type: "string",
+      required: true,
     },
     mint: {
       type: "string",
+      required: true,
     },
   });
   const argv = await yarg.argv;

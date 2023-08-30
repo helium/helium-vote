@@ -58,7 +58,7 @@ const VoteOption: React.FC<{
           {
             "sm:hover:bg-opacity-10": canVote || canRelinquishVote,
             "hover:bg-opacity-5": canVote || canRelinquishVote,
-            'bg-opacity-10': !!myWeight,
+            "bg-opacity-10": !!myWeight,
             "cursor-pointer": canVote || canRelinquishVote,
             "sm:rounded-t-xl": index === 0,
             "sm:rounded-b-xl": index === length - 1,
@@ -77,6 +77,7 @@ const VoteOption: React.FC<{
                   "bg-hv-green-500": bg === "green",
                   "bg-hv-blue-500": bg === "blue",
                   "bg-hv-purple-500": bg === "purple",
+                  "bg-hv-orange-500": bg === "orange",
                 })}
               />
               <p className="text-white text-md font-semibold tracking-tight pr-2 sm:pr-1 sm:text-xl md:text-2xl">

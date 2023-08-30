@@ -47,6 +47,7 @@ const VoteResults: React.FC<{
                     "bg-hv-green-500": bg === "green",
                     "bg-hv-blue-500": bg === "blue",
                     "bg-hv-purple-500": bg === "purple",
+                    "bg-hv-orange-500": bg === "orange",
                   })}
                 />
                 <div
@@ -54,9 +55,10 @@ const VoteResults: React.FC<{
                     "bg-hv-green-500": bg === "green",
                     "bg-hv-blue-500": bg === "blue",
                     "bg-hv-purple-500": bg === "purple",
+                    "bg-hv-orange-500": bg === "orange",
                   })}
                   style={{
-                    width: `${r.percent}%`
+                    width: `${r.percent}%`,
                   }}
                 />
               </div>
@@ -80,9 +82,11 @@ const VoteResults: React.FC<{
                   </span>
                 </h3>
                 <div className="space-x-2 flex flex-col lg:flex-row">
-                  { decimals && <div className="text-hv-gray-400 text-lg font-light font-sans flex flex-col lg:flex-row space-x-0 lg:space-x-2">
-                    <span>{humanReadable(r.weight, decimals)}</span>
-                  </div> }
+                  {decimals && (
+                    <div className="text-hv-gray-400 text-lg font-light font-sans flex flex-col lg:flex-row space-x-0 lg:space-x-2">
+                      <span>{humanReadable(r.weight, decimals)}</span>
+                    </div>
+                  )}
                   <span className="text-white text-lg font-sans">
                     <span className="text-white hidden lg:flex">
                       {r.percent.toLocaleString(undefined, {

@@ -90,6 +90,7 @@ const LegacyVoteOption: React.FC<{
                   "bg-hv-green-500": bg === "green",
                   "bg-hv-blue-500": bg === "blue",
                   "bg-hv-purple-500": bg === "purple",
+                  "bg-hv-orange-500": bg === "orange",
                 })}
                 style={
                   bg === "custom" ? { backgroundColor: outcome.color } : {}
@@ -156,14 +157,7 @@ const LegacyVoteOption: React.FC<{
             <span className="w-full flex sm:hidden flex-col items-center justify-center text-center">
               <div className="max-w-xs px-14">
                 <a
-                  className={classNames(
-                    "px-4 py-3 rounded-lg flex flex-row items-center justify-center w-full mb-4",
-                    {
-                      "bg-hv-green-500": bg === "green",
-                      "bg-hv-blue-500": bg === "blue",
-                      "bg-hv-purple-500": bg === "purple",
-                    }
-                  )}
+                  className={`bg-hv-${bg}-500 px-4 py-3 rounded-lg flex flex-row items-center justify-center w-full mb-4`}
                   style={
                     bg === "custom" ? { backgroundColor: outcome.color } : {}
                   }
