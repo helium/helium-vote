@@ -29,6 +29,7 @@ import { PositionCard } from "./PositionCard";
 import { VotingPowerBox } from "./VotingPowerBox";
 import { useAsync } from "react-async-hook";
 import axios from "axios";
+import { LAMPORTS_PER_SOL } from "@solana/web3.js";
 
 function daysToSecs(days: number): number {
   return days * 60 * 60 * 24;
@@ -69,6 +70,7 @@ export const LockTokensAccount: React.FC = (props) => {
       await axios.get(
         `https://faucet.web.test-helium.com/hnt/${publicKey.toBase58()}?amount=10`
       );
+      await connection.requestAirdrop(publicKey, LAMPORTS_PER_SOL * 1);
     }
   }, [publicKey, loadingBal, amount, connection.rpcEndpoint]);
   const { associatedAccount, loading: loadingAta } = useAssociatedTokenAccount(
