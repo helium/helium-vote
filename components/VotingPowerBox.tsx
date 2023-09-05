@@ -36,7 +36,8 @@ export const VotingPowerBox: React.FC<VotingPowerBoxProps> = ({
                 votingPower &&
                 amountLocked &&
                 mintAcc &&
-                humanReadable(votingPower.div(amountLocked), 0)
+                // Add 2 decimals to the mulitiplier
+                humanReadable(votingPower.mul(new BN(100)).div(amountLocked), 2)
               }x`}
             </div>
           </Tooltip>
