@@ -358,9 +358,11 @@ export const PositionCard: React.FC<PositionCardProps> = ({
                 value={(
                   (position.votingPower.isZero()
                     ? 0
-                    : position.votingPower
+                    : // Mul by 100 to get 2 decimal places
+                      position.votingPower
+                        .mul(new BN(100))
                         .div(position.amountDepositedNative)
-                        .toNumber()) /
+                        .toNumber() / 100) /
                   (position.genesisEnd.gt(new BN(unixNow))
                     ? votingMint.genesisVotePowerMultiplier
                     : 1)

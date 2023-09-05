@@ -149,9 +149,10 @@ export const TransferTokensModal: React.FC<TransferTokensModalProps> = ({
                     value={(
                       (pos.votingPower.isZero()
                         ? 0
-                        : pos.votingPower
+                        // Mul by 100 to get 2 decimal places
+                        : pos.votingPower.mul(new BN(100))
                             .div(pos.amountDepositedNative)
-                            .toNumber()) /
+                            .toNumber() / 100) /
                       (pos.genesisEnd.gt(new BN(unixNow))
                         ? pos.votingMint.genesisVotePowerMultiplier
                         : 1)
