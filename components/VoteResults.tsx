@@ -35,7 +35,7 @@ const VoteResults: React.FC<{
 
           return (
             <div key={r.name} className="w-full flex flex-col relative">
-              {completed && i === 0 && (
+              {completed && r.percent > 66 && (
                 <div className="absolute -left-12 hidden xl:flex items-center justify-center h-full">
                   <img className="w-6 h-6 mr-1.5 mb-1" src="/images/star.svg" />
                   <div className="w-1 h-full bg-white" />
