@@ -73,7 +73,7 @@ const VoteResults: React.FC<{
                       })}
                       %)
                     </span>
-                    {completed && i === 0 && (
+                    {completed && r.percent > 66 && (
                       <img
                         className="w-5 h-5 flex xl:hidden mb-1"
                         src="/images/star.svg"
