@@ -28,7 +28,7 @@ import { humanReadable } from "../utils/formatting";
 const VoteDetailsPage = ({ name: initName }: { name: string }) => {
   const router = useRouter();
   const { proposalKey } = router.query;
-  const { network } = useNetwork()
+  const { network } = useNetwork();
 
   const proposalK = useMemo(() => new PublicKey(proposalKey), [proposalKey]);
   const { info: proposal } = useProposal(proposalK);
@@ -57,12 +57,15 @@ const VoteDetailsPage = ({ name: initName }: { name: string }) => {
 
   const endTs =
     resolution &&
-    // @ts-ignore
-    state.voting.startTs.add(
-      resolution.settings.nodes.find(
-        (node) => typeof node.offsetFromStartTs !== "undefined"
-      ).offsetFromStartTs.offset
-    );
+    (proposal?.state.resolved
+      ? // @ts-ignore
+        proposal?.state.resolved.endTs
+      : // @ts-ignore
+        proposal?.state.voting?.startTs.add(
+          resolution.settings.nodes.find(
+            (node) => typeof node.offsetFromStartTs !== "undefined"
+          ).offsetFromStartTs.offset
+        ));
 
   const votingResults = useMemo(() => {
     const totalVotes: BN = choices.reduce(
