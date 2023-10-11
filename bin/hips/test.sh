@@ -10,4 +10,5 @@
   --choices "Location CO2/Air Quality" \
   --choices "Movement/Presence detection" \
   --choices "Soil quality/environment" \
+  --multisig FftLLJWbQQhRDv72ihR4Q7259VdPa4AZ3zxJcsB3wjE9 \
   --maxChoicesPerVoter 3
