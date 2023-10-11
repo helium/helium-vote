@@ -31,6 +31,11 @@ export async function run(args: any = process.argv) {
       type: "string",
       required: true,
     },
+    authority: {
+      type: "string",
+      required: true,
+      describe: "The authority of the organization"
+    }
   });
   const argv = await yarg.argv;
   process.env.ANCHOR_WALLET = argv.wallet;
@@ -52,11 +57,18 @@ export async function run(args: any = process.argv) {
   const proposalProgram = await initProp(provider);
   const stateProgram = await initState(provider);
 
+  const authority = new PublicKey(argv.authority)
+
+  // Must have 100,000,000 veHNT, 67% of the vote. Choose the top one as the winner.
   const nodes = settings()
     .and(
       settings().and(
         settings().top(1),
-        settings().choiceVoteWeight(new anchor.BN(1000))
+        settings().and(
+          settings().choicePercentage(67),
+          //  100,000,000 veHNT
+          settings().choiceVoteWeight(new anchor.BN("10000000000000000"))
+        )
       ),
       settings().offsetFromStartTs(new anchor.BN(60 * 60 * 24 * 7))
     )
@@ -95,7 +107,7 @@ export async function run(args: any = process.argv) {
   const initOrganization = orgProgram.methods.initializeOrganizationV0({
     name: argv.name,
     defaultProposalConfig: proposalConfig,
-    authority: provider.wallet.publicKey,
+    authority,
     proposalProgram: proposalProgram.programId,
     uri: "https://helium.com",
   });
@@ -110,7 +122,7 @@ export async function run(args: any = process.argv) {
         defaultProposalConfig: proposalConfig,
         proposalProgram: null,
         uri: null,
-        authority: new PublicKey("devXCnFPU71StPEFNnGRf4iqXoRpYkNsGEg9m757ktP"),
+        authority,
       })
       .accounts({ organization })
       .rpc({ skipPreflight: true });
