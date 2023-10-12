@@ -1,7 +1,7 @@
 import BN from "bn.js";
 import classNames from "classnames";
 import { getBackgroundColor } from "../utils/colors";
-import { AiOutlineCloseCircle } from "react-icons/ai";
+import { AiOutlineCloseCircle, AiOutlineCheckCircle } from "react-icons/ai";
 import { useState } from "react";
 import Loading, { LoadingIcon } from "./Loading";
 
@@ -38,6 +38,7 @@ const VoteOption: React.FC<{
 
   return (
     <div
+      title={canVote ? (myWeight ? "Remove Vote" : "Vote") : "Max Choices Reached"}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
       onClick={() =>
@@ -58,7 +59,6 @@ const VoteOption: React.FC<{
           {
             "sm:hover:bg-opacity-10": canVote || canRelinquishVote,
             "hover:bg-opacity-5": canVote || canRelinquishVote,
-            "bg-opacity-10": !!myWeight,
             "cursor-pointer": canVote || canRelinquishVote,
             "sm:rounded-t-xl": index === 0,
             "sm:rounded-b-xl": index === length - 1,
@@ -78,7 +78,7 @@ const VoteOption: React.FC<{
                   "bg-hv-blue-500": bg === "blue",
                   "bg-hv-purple-500": bg === "purple",
                   "bg-hv-orange-500": bg === "orange",
-"bg-hv-turquoise-500": bg === "turquoise",
+                  "bg-hv-turquoise-500": bg === "turquoise",
                 })}
               />
               <p className="text-white text-md font-semibold tracking-tight pr-2 sm:pr-1 sm:text-xl md:text-2xl">
@@ -87,11 +87,17 @@ const VoteOption: React.FC<{
             </div>
           </div>
           {!!myWeight && !voting && (
-            <AiOutlineCloseCircle
-              className={classNames("text-gray-500 w-6 h-6", {
-                "text-red-700": hover,
-              })}
-            />
+            <>
+              {hover ? (
+                <AiOutlineCloseCircle
+                  className={"text-gray-500 w-6 h-6 text-red-700"}
+                />
+              ) : (
+                <AiOutlineCheckCircle
+                  className={"text-green-500 w-6 h-6 text-green-500"}
+                />
+              )}
+            </>
           )}
           {voting && <LoadingIcon h={6} w={6} className="text-gray-500" />}
         </div>
