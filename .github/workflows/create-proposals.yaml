@@ -36,12 +36,9 @@ jobs:
         env:
           DEPLOY_KEYPAIR: ${{ secrets.DEPLOYER_KEYPAIR }}
 
-      - run: PATH=$PATH:./node_modules/.bin/ts-node
-        shell: bash
-
       - name: Run Bulk Create Helium Proposals
         run: |
-          ./bin/helium-vote.ts bulk-create-proposal \
+          PATH=$PATH:./node_modules/.bin/ts-node ./bin/helium-vote.ts bulk-create-proposal \
             -u "https://solana-rpc.test-helium.com?session-key=Pluto" \
             --file helium-proposals.json \
             --wallet ./deploy-keypair.json \
