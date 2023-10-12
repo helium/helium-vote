@@ -40,7 +40,7 @@ jobs:
         run: |
           ./node_modules/.bin/ts-node ./bin/helium-vote.ts bulk-create-proposal \
             -u "https://solana-rpc.test-helium.com?session-key=Pluto" \
-            --file helium-proposals.json \
+            --file ./helium-proposals.json \
             --wallet ./deploy-keypair.json \
             --orgName Helium \
             --multisig ${{ secrets.MULTISIG }}
