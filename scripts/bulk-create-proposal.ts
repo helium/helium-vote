@@ -97,6 +97,7 @@ export async function run(args: any = process.argv) {
           organization: organizationK,
           owner: authority,
           authority,
+          payer: authority,
         })
         .prepare();
 
