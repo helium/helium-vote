@@ -4,8 +4,22 @@ import os from "os";
 import yargs from "yargs/yargs";
 import { init as initState } from "@helium/state-controller-sdk";
 import Squads from "@sqds/sdk";
-import { PublicKey } from "@solana/web3.js";
+import { PublicKey, TransactionInstruction } from "@solana/web3.js";
 import { loadKeypair, sendInstructionsOrSquads } from "./utils";
+import fs from "fs";
+
+interface Choice {
+  uri: string;
+  name: string;
+}
+interface Proposal {
+  name: string;
+  uri: string;
+  maxChoicesPerVoter: number;
+  choices: Choice[];
+  proposalConfig?: string;
+  tags: string[]
+}
 
 export async function run(args: any = process.argv) {
   const yarg = yargs(args).options({
@@ -19,28 +33,11 @@ export async function run(args: any = process.argv) {
       default: "http://127.0.0.1:8899",
       describe: "The solana url",
     },
-    name: {
+    file: {
+      alias: "f",
       required: true,
-      alias: "n",
-      describe: "The name of the proposal",
+      describe: "Path to the JSON file containing proposal details",
       type: "string",
-    },
-    proposalUri: {
-      required: true,
-      type: "string",
-      describe: "The uri of the proposal",
-    },
-    maxChoicesPerVoter: {
-      type: "number",
-      describe: "The number of choices a voter can select at the same time",
-      default: 1
-    },
-    choices: {
-      alias: "c",
-      default: ["Yes", "No"],
-    },
-    proposalConfig: {
-      default: "Helium Single Choice Default",
     },
     orgName: {
       type: "string",
@@ -69,10 +66,6 @@ export async function run(args: any = process.argv) {
   const wallet = new anchor.Wallet(walletKP);
   const orgProgram = await initOrg(provider);
   const stateProgram = await initState(provider);
-  const organizationK = organizationKey(argv.orgName)[0];
-  const organization = await orgProgram.account.organizationV0.fetch(
-    organizationK
-  );
 
   const squads = Squads.endpoint(process.env.ANCHOR_PROVIDER_URL, wallet, {
     commitmentOrConfig: "finalized",
@@ -83,53 +76,58 @@ export async function run(args: any = process.argv) {
     authority = squads.getAuthorityPDA(multisig, argv.authorityIndex);
   }
 
-  const {
-    instruction,
-    pubkeys: { proposal },
-  } = await orgProgram.methods
-    .initializeProposalV0({
-      maxChoicesPerVoter: argv.maxChoicesPerVoter,
-      name: argv.name,
-      uri: argv.proposalUri,
-      choices: argv.choices.map((c) => ({
-        name: c,
-        uri: null,
-      })),
-      tags: ["test", "tags"],
-    })
-    .accounts({
-      authority,
-      organization: organizationK,
-      owner: authority,
-    })
-    .prepare();
+  const fileData = fs.readFileSync(argv.file, "utf8");
+  const proposals: Proposal[] = JSON.parse(fileData);
 
-  const { instruction: setState } = await stateProgram.methods
-    .updateStateV0({
-      newState: { voting: {} },
-    })
-    .accounts({
-      proposal,
-      owner: authority,
-      proposalConfig: argv.proposalConfig
-        ? new PublicKey(argv.proposalConfig)
-        : organization.defaultProposalConfig,
-      proposalProgram: organization.proposalProgram,
-    })
-    .prepare();
+  const instructions: TransactionInstruction[] = [];
+  const organizationK = organizationKey(argv.orgName)[0];
+  const organization = await orgProgram.account.organizationV0.fetch(
+    organizationK
+  );
+
+  let i = 0;
+  for (const proposalData of proposals) {
+    if (i >= organization.numProposals) {
+      const {
+        instruction,
+        pubkeys: { proposal },
+      } = await orgProgram.methods
+        .initializeProposalV0(proposalData)
+        .accounts({
+          organization: organizationK,
+          owner: authority,
+          authority,
+        })
+        .prepare();
+
+      const { instruction: setState } = await stateProgram.methods
+        .updateStateV0({
+          newState: { voting: {} },
+        })
+        .accounts({
+          proposal,
+          owner: authority,
+          proposalConfig: proposalData.proposalConfig
+            ? new PublicKey(proposalData.proposalConfig)
+            : organization.defaultProposalConfig,
+          proposalProgram: organization.proposalProgram,
+        })
+        .prepare();
+
+      instructions.push(instruction, setState);
+    }
+    i++;
+  }
 
   await sendInstructionsOrSquads({
     provider,
-    instructions: [
-      instruction,
-      setState,
-    ],
-    executeTransaction: true,
+    instructions,
+    executeTransaction: false,
     squads,
     multisig: argv.multisig ? new PublicKey(argv.multisig) : undefined,
     authorityIndex: argv.authorityIndex,
     signers: [],
   });
 
-  console.log(`Proposal created: ${proposal.toBase58()}`);
+  console.log(`Proposals created.`);
 }

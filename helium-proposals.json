@@ -1,0 +1,15 @@
+[
+  {
+    "name": "Test Vote: Top IOT Sensor Solutions",
+    "uri": "https://gist.githubusercontent.com/hiptron/9a017901a42c91bdb7e38a8ff9544600/raw/5dfe487568d0817d3e1e992c2c498d670639ebe2/Test%2520Vote:%2520Top%2520IOT%2520Sensor%2520Solutions.md",
+    "maxChoicesPerVoter": 3,
+    "tags": ["test"],
+    "choices": [
+      { "uri": null, "name": "Tracking devices or people" },
+      { "uri": null, "name": "Location Temp/Humidity" },
+      { "uri": null, "name": "Location CO2/Air Quality" },
+      { "uri": null, "name": "Movement/Presence detection" },
+      { "uri": null, "name": "Soil quality/environment" }
+    ]
+  }
+]
