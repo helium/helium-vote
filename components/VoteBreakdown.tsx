@@ -72,7 +72,7 @@ export function VoteBreakdown({ proposalKey }: { proposalKey: PublicKey }) {
       rows.push([owner, choices, voteWeight, percentage]);
     });
 
-    const csvContent = rows.map((row) => row.join(",")).join("\n");
+    const csvContent = rows.map((row) => row.map(r => `"${r.toString()}"`).join(",")).join("\n");
     return csvContent;
   }, [groupedSortedMarkers]);
   const displayedMarkers = useMemo(
