@@ -13,7 +13,7 @@ import classNames from "classnames";
 import { format } from "date-fns";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useAsync } from "react-async-hook";
 import ReactMarkdown from "react-markdown";
 import ContentSection from "../components/ContentSection";
@@ -24,6 +24,9 @@ import VoteOptionsSection from "../components/VoteOptionsSection";
 import VoteResults from "../components/VoteResults";
 import { useNetwork } from "../hooks/useNetwork";
 import { humanReadable } from "../utils/formatting";
+import { AiFillCaretDown, AiFillCaretUp } from "react-icons/ai";
+import { VoteBreakdown } from "../components/VoteBreakdown";
+import Button, { LinkButton, SecondaryButton } from "../components/Button";
 
 const VoteDetailsPage = ({ name: initName, content }: { name: string, content: string }) => {
   const router = useRouter();
@@ -45,6 +48,7 @@ const VoteDetailsPage = ({ name: initName, content }: { name: string, content: s
   );
   const { info: registrar } = useRegistrar(proposalConfig?.voteController);
   const decimals = useMint(registrar?.votingMints[0].mint)?.info?.decimals;
+  const [showBreakdown, setshowBreakdown] = useState(false);
 
   const endTs =
     resolution &&
@@ -228,6 +232,20 @@ const VoteDetailsPage = ({ name: initName, content }: { name: string, content: s
           </div>
         </div>
       )}
+      <ContentSection className="mt-10 sm:mt-14">
+        <p className="mb-4 text-xl sm:text-3xl text-white font-semibold tracking-tighter">
+          Voter Breakdown
+        </p>
+        {!showBreakdown && (
+          <button
+            className="px-6 py-3 hover:bg-hv-gray-500 transition-all duration-200 rounded-lg text-lg text-hv-green-500 whitespace-nowrap outline-none border border-solid border-transparent focus:border-hv-green-500 mx-auto mt-4 block text-center"
+            onClick={() => setshowBreakdown(!showBreakdown)}
+          >
+            Load Breakdown
+          </button>
+        )}
+        {showBreakdown && <VoteBreakdown proposalKey={proposalK} />}
+      </ContentSection>
 
       <ContentSection className="mt-10 sm:mt-14">
         <div className="bg-hv-gray-775 rounded-xl px-4 sm:px-7 py-4 sm:py-7 flex flex-row justify-between align-center w-full">
