@@ -8,23 +8,12 @@ const VoteResults: React.FC<{
   completed: boolean;
   decimals?: number;
 }> = ({ decimals, outcomes, completed }) => {
-  // const winner = outcomesResults[0];
-
   return (
     <div className="pt-0">
       <div className="w-full flex flex-col lg:flex-row justify-between mb-5 sm:mb-10">
         <p className="text-xl sm:text-3xl text-white font-semibold tracking-tighter">
           {completed ? "Final Results" : "Preliminary Results"}
         </p>
-        {/* {completed && (
-          <p className="text-lg sm:text-3xl text-hv-gray-400 font-semibold tracking-tighter pt-4 lg:pt-0">
-            <span className="text-white">{winner.value}</span> wins with{" "}
-            {winner.hntPercent.toLocaleString(undefined, {
-              maximumFractionDigits: 2,
-            })}
-            % of Vote
-          </p>
-        )} */}
       </div>
       <div className="flex flex-col space-y-10">
         {outcomes.map((r, i) => {
