@@ -119,7 +119,9 @@ export async function run(args: any = process.argv) {
   const squads = Squads.endpoint(process.env.ANCHOR_PROVIDER_URL, wallet, {
     commitmentOrConfig: "finalized",
   });
-  let authority = argv.authority ? new PublicKey(argv.authority) : provider.wallet.publicKey;
+  let authority = argv.authority
+    ? new PublicKey(argv.authority)
+    : provider.wallet.publicKey;
   const multisig = argv.multisig ? new PublicKey(argv.multisig) : null;
   if (multisig) {
     authority = squads.getAuthorityPDA(multisig, argv.authorityIndex);
@@ -146,17 +148,17 @@ export async function run(args: any = process.argv) {
         authority,
       })
       .accounts({ organization, authority })
-      .instruction()
+      .instruction();
 
-      await sendInstructionsOrSquads({
-        provider,
-        instructions: [instruction],
-        executeTransaction: false,
-        squads,
-        multisig: argv.multisig ? new PublicKey(argv.multisig) : undefined,
-        authorityIndex: argv.authorityIndex,
-        signers: [],
-      });
+    await sendInstructionsOrSquads({
+      provider,
+      instructions: [instruction],
+      executeTransaction: false,
+      squads,
+      multisig: argv.multisig ? new PublicKey(argv.multisig) : undefined,
+      authorityIndex: argv.authorityIndex,
+      signers: [],
+    });
   }
 }
 
