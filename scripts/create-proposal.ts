@@ -98,6 +98,7 @@ export async function run(args: any = process.argv) {
       tags: ["test", "tags"],
     })
     .accounts({
+      authority,
       organization: organizationK,
       owner: authority,
     })
