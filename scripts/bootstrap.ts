@@ -104,7 +104,7 @@ export async function run(args: any = process.argv) {
   const voteController = registrarK;
   const initProposalConfig = proposalProgram.methods.initializeProposalConfigV0(
     {
-      name: `${argv.name} Default V2`,
+      name: `${argv.name} Default V1`,
       voteController,
       stateController: resolutionSettings!,
       onVoteHook: stateProgram.programId,
