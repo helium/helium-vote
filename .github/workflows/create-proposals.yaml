@@ -31,9 +31,6 @@ jobs:
       - run: yarn install
         shell: bash
 
-      - run: export PATH=$PATH:$(pwd)/node_modules/.bin
-        shell: bash
-
       - run: echo "$DEPLOY_KEYPAIR" > ./deploy-keypair.json && chmod 600 ./deploy-keypair.json
         shell: bash
         env:
