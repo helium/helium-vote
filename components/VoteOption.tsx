@@ -38,7 +38,7 @@ const VoteOption: React.FC<{
 
   return (
     <div
-      title={canVote ? (myWeight ? "Remove Vote" : "Vote") : undefined}
+      title={canVote ? (myWeight ? "Remove Vote" : "Vote") : "Max Choices Reached"}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
       onClick={() =>
