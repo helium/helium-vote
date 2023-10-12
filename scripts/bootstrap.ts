@@ -1,11 +1,13 @@
 import * as anchor from "@coral-xyz/anchor";
-import { init as initOrg } from "@helium/organization-sdk";
+import { init as initOrg, organizationKey } from "@helium/organization-sdk";
 import { init as initProp } from "@helium/proposal-sdk";
 import { init as initState, settings } from "@helium/state-controller-sdk";
 import { registrarKey } from "@helium/voter-stake-registry-sdk";
 import { Connection, PublicKey } from "@solana/web3.js";
 import os from "os";
 import yargs from "yargs";
+import Squads from "@sqds/sdk";
+import { loadKeypair, sendInstructionsOrSquads } from "./utils";
 
 export async function run(args: any = process.argv) {
   const yarg = yargs(args).options({
@@ -34,8 +36,18 @@ export async function run(args: any = process.argv) {
     authority: {
       type: "string",
       required: true,
-      describe: "The authority of the organization"
-    }
+      describe: "The authority of the organization",
+    },
+    multisig: {
+      type: "string",
+      describe:
+        "Address of the squads multisig for subdao authority. If not provided, your wallet will be the authority",
+    },
+    authorityIndex: {
+      type: "number",
+      describe: "Authority index for squads. Defaults to 1",
+      default: 1,
+    },
   });
   const argv = await yarg.argv;
   process.env.ANCHOR_WALLET = argv.wallet;
@@ -53,11 +65,11 @@ export async function run(args: any = process.argv) {
     new PublicKey(argv.mint)
   )[0];
   const provider = anchor.getProvider() as anchor.AnchorProvider;
+  const walletKP = loadKeypair(argv.wallet);
+  const wallet = new anchor.Wallet(walletKP);
   const orgProgram = await initOrg(provider);
   const proposalProgram = await initProp(provider);
   const stateProgram = await initState(provider);
-
-  const authority = new PublicKey(argv.authority)
 
   // Must have 100,000,000 veHNT, 67% of the vote. Choose the top one as the winner.
   const nodes = settings()
@@ -104,6 +116,17 @@ export async function run(args: any = process.argv) {
     await initProposalConfig.rpc({ skipPreflight: true });
   }
 
+  const squads = Squads.endpoint(process.env.ANCHOR_PROVIDER_URL, wallet, {
+    commitmentOrConfig: "finalized",
+  });
+  let authority = argv.authority
+    ? new PublicKey(argv.authority)
+    : provider.wallet.publicKey;
+  const multisig = argv.multisig ? new PublicKey(argv.multisig) : null;
+  if (multisig) {
+    authority = squads.getAuthorityPDA(multisig, argv.authorityIndex);
+  }
+
   const initOrganization = orgProgram.methods.initializeOrganizationV0({
     name: argv.name,
     defaultProposalConfig: proposalConfig,
@@ -117,15 +140,25 @@ export async function run(args: any = process.argv) {
     await initOrganization.rpc({ skipPreflight: true });
     console.log(`Created org ${organization.toBase58()}`);
   } else {
-    await orgProgram.methods
+    const instruction = await orgProgram.methods
       .updateOrganizationV0({
         defaultProposalConfig: proposalConfig,
         proposalProgram: null,
         uri: null,
         authority,
       })
-      .accounts({ organization })
-      .rpc({ skipPreflight: true });
+      .accounts({ organization, authority })
+      .instruction();
+
+    await sendInstructionsOrSquads({
+      provider,
+      instructions: [instruction],
+      executeTransaction: false,
+      squads,
+      multisig: argv.multisig ? new PublicKey(argv.multisig) : undefined,
+      authorityIndex: argv.authorityIndex,
+      signers: [],
+    });
   }
 }
 
