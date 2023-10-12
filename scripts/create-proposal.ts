@@ -69,6 +69,10 @@ export async function run(args: any = process.argv) {
   const wallet = new anchor.Wallet(walletKP);
   const orgProgram = await initOrg(provider);
   const stateProgram = await initState(provider);
+  const organizationK = organizationKey(argv.orgName)[0];
+  const organization = await orgProgram.account.organizationV0.fetch(
+    organizationK
+  );
 
   const squads = Squads.endpoint(process.env.ANCHOR_PROVIDER_URL, wallet, {
     commitmentOrConfig: "finalized",
@@ -94,7 +98,7 @@ export async function run(args: any = process.argv) {
       tags: ["test", "tags"],
     })
     .accounts({
-      organization: organizationKey(argv.orgName)[0],
+      organization: organizationK,
       owner: authority,
     })
     .prepare();
@@ -103,7 +107,14 @@ export async function run(args: any = process.argv) {
     .updateStateV0({
       newState: { voting: {} },
     })
-    .accounts({ proposal, owner: authority })
+    .accounts({
+      proposal,
+      owner: authority,
+      proposalConfig: argv.proposalConfig
+        ? new PublicKey(argv.proposalConfig)
+        : organization.defaultProposalConfig,
+      proposalProgram: organization.proposalProgram,
+    })
     .prepare();
 
   await sendInstructionsOrSquads({

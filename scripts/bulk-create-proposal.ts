@@ -109,6 +109,7 @@ export async function run(args: any = process.argv) {
           proposalConfig: proposalData.proposalConfig
             ? new PublicKey(proposalData.proposalConfig)
             : organization.defaultProposalConfig,
+          proposalProgram: organization.proposalProgram,
         })
         .prepare();
 
