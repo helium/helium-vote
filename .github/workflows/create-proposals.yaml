@@ -31,6 +31,9 @@ jobs:
       - run: yarn install
         shell: bash
 
+      - run: yarn add -g ts-node
+        shell: bash
+
       - run: echo "$DEPLOY_KEYPAIR" > ./deploy-keypair.json && chmod 600 ./deploy-keypair.json
         shell: bash
         env:
@@ -38,7 +41,7 @@ jobs:
 
       - name: Run Bulk Create Helium Proposals
         run: |
-          npx ./bin/helium-vote.ts bulk-create-proposal \
+          ./bin/helium-vote.ts bulk-create-proposal \
             -u "https://solana-rpc.test-helium.com?session-key=Pluto" \
             --file helium-proposals.json \
             --wallet ./deploy-keypair.json \
