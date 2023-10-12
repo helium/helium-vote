@@ -11,13 +11,14 @@ import { fetchVotes } from "../data/votes";
 import { useHeliumVsrState } from "@helium/voter-stake-registry-hooks";
 import { HNT_MINT } from "@helium/spl-utils";
 import { useNetwork } from "../hooks/useNetwork";
+import Loading from "../components/Loading";
 
 export default function Home({ legacyVotes }) {
   const [voteFilterTab, setVoteFilterTab] = useState(0);
   const { network, mint } = useNetwork();
   const organization = useMemo(() => organizationKey(network)[0], [network])
 
-  const { accounts: proposalsWithDups, error } = useOrganizationProposals(organization);
+  const { accounts: proposalsWithDups, error, loading } = useOrganizationProposals(organization);
   const proposals = useMemo(() => {
     const seen = new Set();
     return proposalsWithDups.filter(p => {
@@ -160,6 +161,8 @@ export default function Home({ legacyVotes }) {
                     return <LegacyVoteCard key={v.id} vote={v} />;
                   })}
                 </div>
+              ) : loading || typeof votes === 'undefined' ? (
+                <Loading />
               ) : (
                 <p className="text-hv-gray-400 text-sm font-sans font-light sm:pl-5">
                   No votes
@@ -183,6 +186,8 @@ export default function Home({ legacyVotes }) {
                       );
                     })}
                 </div>
+              ) : loading || typeof votes === 'undefined' ? (
+                <Loading />
               ) : (
                 <p className="text-hv-gray-400 text-sm font-sans font-light sm:pl-5">
                   No votes

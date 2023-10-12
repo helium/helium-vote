@@ -25,7 +25,7 @@ import VoteResults from "../components/VoteResults";
 import { useNetwork } from "../hooks/useNetwork";
 import { humanReadable } from "../utils/formatting";
 
-const VoteDetailsPage = ({ name: initName }: { name: string }) => {
+const VoteDetailsPage = ({ name: initName, content }: { name: string, content: string }) => {
   const router = useRouter();
   const { proposalKey } = router.query;
   const { network } = useNetwork();
@@ -35,7 +35,6 @@ const VoteDetailsPage = ({ name: initName }: { name: string }) => {
   const {
     tags,
     choices = [],
-    state,
     uri,
     proposalConfig: proposalConfigKey,
   } = proposal || {};
@@ -46,14 +45,6 @@ const VoteDetailsPage = ({ name: initName }: { name: string }) => {
   );
   const { info: registrar } = useRegistrar(proposalConfig?.voteController);
   const decimals = useMint(registrar?.votingMints[0].mint)?.info?.decimals;
-
-  const { result: content } = useAsync(
-    async (uri: string) => {
-      const res = await fetch(uri);
-      return res.text();
-    },
-    [uri]
-  );
 
   const endTs =
     resolution &&
@@ -321,10 +312,13 @@ export async function getStaticProps({ params }) {
   const proposal = await proposalSdk.account.proposalV0.fetch(
     new PublicKey(proposalKey)
   );
+  const res = await fetch(proposal.uri);
+  const content = await res.text();
 
   return {
     props: {
       name: proposal.name,
+      content,
     },
     revalidate: 10 * 60,
   };
