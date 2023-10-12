@@ -1,49 +1,4 @@
-// Use this example as a placeholder you can copy and paste into the array below when submitting a PR to create a new community vote
-const templateExample = {
-  // The ID should be a unique ID for each vote. This will also be what populates the URL (e.g. heliumvote.com/1234)
-  id: "135xR8htbqTHCkWVPJEeqJuDVtyZJB852WuAzL7XwSVaVhdtH8q",
-  // The deadline is the block at which all voting wallets' balances will be counted toward a vote
-  deadline: 1059000,
-  // This is the link where the "More details" button goes
-  link: "https://github.com/helium/HIP",
-  // The title of the vote. If it's for a HIP, put a descriptive title like "HIP 39: Redenomination"
-  name: "Test Vote: Ice Cream",
-  tags: {
-    // If it's a HIP, put "HIP [#]" as the primary tag
-    primary: "HIP 31",
-    // Use the optional secondary tag for a general descriptive term, such as "Economics"
-    secondary: "Ice Cream",
-  },
-  // An array of the person(s) calling for the vote
-  authors: [
-    {
-      // How this person is generally known in the community
-      nickname: "@cokes",
-      // A link to their profile (GitHub is probably the most useful, maybe Twitter?)
-      link: "https://github.com/user",
-    },
-  ],
-  // A brief description of what the vote is for. It doesn't have to be comprehensive.
-  description:
-    "Vote for your favorite ice cream flavor. This voting mechanism will be used for future Helium Improvement Proposal voting.",
-  // If this is a "For" vs "Against" vote, put the "For" option first, to keep the colour scheme consistent
-  outcomes: [
-    {
-      // This is the title of each option. Try to keep it to a couple words at most to make the interface as readable as possible
-      value: "Chocolate",
-      // The wallet address associated with each option
-      address: "13uWWxgbqa5i9W7SFme6NZ2Brr1jDiga4JP7JdQyBRNer9RGoii",
-    },
-    {
-      value: "Vanilla",
-      address: "13yWhaorHn8Es6jujCw9HCFAjDyecCv5HMwzoa4gp26awSw7z3b",
-      // an optional color field that will override the default vote option colors
-      color: "#EEEEEE",
-    },
-  ],
-  // any addresses you want to filter for voting. for example, an exchange wallet address
-  filters: [],
-};
+const path = require("path");
 
 module.exports = {
   serverRuntimeConfig: {
@@ -976,6 +931,26 @@ module.exports = {
       config.resolve.fallback.net = false;
       config.resolve.fallback.tls = false;
     }
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      // Anything with context needs to resolve to only one version
+      "@helium/account-fetch-cache-hooks": path.resolve(
+        __dirname,
+        "./node_modules/@helium/account-fetch-cache-hooks"
+      ),
+      "@helium/helium-react-hooks": path.resolve(
+        __dirname,
+        "./node_modules/@helium/helium-react-hooks"
+      ),
+      "@helium/voter-stake-registry-hooks": path.resolve(
+        __dirname,
+        "./node_modules/@helium/voter-stake-registry-hooks"
+      ),
+      "@solana/wallet-adapter-react": path.resolve(
+        __dirname,
+        "./node_modules/@solana/wallet-adapter-react"
+      ),
+    };
     return config;
   },
 };

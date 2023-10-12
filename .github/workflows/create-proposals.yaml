@@ -1,0 +1,46 @@
+name: Create Proposals
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  NODE_VERSION: 16
+
+jobs:
+  create:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - uses: actions/cache@v2
+        name: Cache Typescript node_modules
+        id: cache-typescript-node-modules
+        with:
+          path: |
+            ./node_modules/
+          key: node-modules-${{ runner.os }}-v0000-${{ env.NODE_VERSION }}-${{ hashFiles('./yarn.lock') }}
+      - run: yarn install
+        shell: bash
+
+      - run: echo "$DEPLOY_KEYPAIR" > ./deploy-keypair.json && chmod 600 ./deploy-keypair.json
+        shell: bash
+        env:
+          DEPLOY_KEYPAIR: ${{ secrets.DEPLOYER_KEYPAIR }}
+
+      - name: Run Bulk Create Helium Proposals
+        run: |
+          ./node_modules/.bin/ts-node ./bin/helium-vote.ts bulk-create-proposal \
+            -u "https://solana-rpc.web.helium.io?session-key=Pluto" \
+            --file ./helium-proposals.json \
+            --wallet ./deploy-keypair.json \
+            --orgName Helium \
+            --multisig ${{ secrets.MULTISIG }}

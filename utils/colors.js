@@ -2,6 +2,7 @@ export const COLORS = [
   { background: "green", text: "black" },
   { background: "blue", text: "white" },
   { background: "purple", text: "white" },
+  { background: "orange", text: "white" },
 ];
 
 export const getBackgroundColor = (i) => {
