@@ -38,7 +38,7 @@ const VoteOption: React.FC<{
 
   return (
     <div
-      title={myWeight ? "Remove Vote" : "Vote"}
+      title={canVote ? (myWeight ? "Remove Vote" : "Vote") : undefined}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
       onClick={() =>
