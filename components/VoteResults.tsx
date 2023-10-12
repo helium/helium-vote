@@ -2,13 +2,14 @@ import classNames from "classnames";
 import { getBackgroundColor } from "../utils/colors";
 import { Outcome } from "./VoteOption";
 import { humanReadable } from "../utils/formatting";
+import { useState } from "react";
 
 const VoteResults: React.FC<{
   outcomes: Outcome[];
   completed: boolean;
   decimals?: number;
 }> = ({ decimals, outcomes, completed }) => {
-
+  const [showBreakdown, setshowBreakdown] = useState(false);
   // const winner = outcomesResults[0];
 
   return (
@@ -48,7 +49,7 @@ const VoteResults: React.FC<{
                     "bg-hv-blue-500": bg === "blue",
                     "bg-hv-purple-500": bg === "purple",
                     "bg-hv-orange-500": bg === "orange",
-"bg-hv-turquoise-500": bg === "turquoise",
+                    "bg-hv-turquoise-500": bg === "turquoise",
                   })}
                 />
                 <div
@@ -57,7 +58,7 @@ const VoteResults: React.FC<{
                     "bg-hv-blue-500": bg === "blue",
                     "bg-hv-purple-500": bg === "purple",
                     "bg-hv-orange-500": bg === "orange",
-"bg-hv-turquoise-500": bg === "turquoise",
+                    "bg-hv-turquoise-500": bg === "turquoise",
                   })}
                   style={{
                     width: `${r.percent}%`,
@@ -102,6 +103,15 @@ const VoteResults: React.FC<{
             </div>
           );
         })}
+      </div>
+      <div className="w-full flex flex-col relative">
+        <h3
+          className="font-sans text-lg text-white font-semibold tracking-tighter cursor-pointer"
+          onClick={() => setshowBreakdown(!showBreakdown)}
+        >
+          Voter Breakdown
+        </h3>
+        {showBreakdown && <NewComponent />}
       </div>
     </div>
   );
