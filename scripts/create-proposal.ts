@@ -103,7 +103,7 @@ export async function run(args: any = process.argv) {
     .updateStateV0({
       newState: { voting: {} },
     })
-    .accounts({ proposal })
+    .accounts({ proposal, owner: authority })
     .prepare();
 
   await sendInstructionsOrSquads({

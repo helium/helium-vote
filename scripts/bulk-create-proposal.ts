@@ -17,7 +17,7 @@ interface Proposal {
   uri: string;
   maxChoicesPerVoter: number;
   choices: Choice[];
-  proposalConfig: string;
+  proposalConfig?: string;
   tags: string[]
 }
 
@@ -80,9 +80,10 @@ export async function run(args: any = process.argv) {
   const proposals: Proposal[] = JSON.parse(fileData);
 
   const instructions: TransactionInstruction[] = [];
+  const organizationK = organizationKey(argv.orgName)[0];
   const organization = await orgProgram.account.organizationV0.fetch(
-    organizationKey(argv.orgName)[0]
-  )
+    organizationK
+  );
 
   let i = 0;
   for (const proposalData of proposals) {
@@ -93,7 +94,7 @@ export async function run(args: any = process.argv) {
       } = await orgProgram.methods
         .initializeProposalV0(proposalData)
         .accounts({
-          organization: organizationKey(argv.orgName)[0],
+          organization: organizationK,
           owner: authority,
         })
         .prepare();
@@ -102,7 +103,13 @@ export async function run(args: any = process.argv) {
         .updateStateV0({
           newState: { voting: {} },
         })
-        .accounts({ proposal })
+        .accounts({
+          proposal,
+          owner: authority,
+          proposalConfig: proposalData.proposalConfig
+            ? new PublicKey(proposalData.proposalConfig)
+            : organization.defaultProposalConfig,
+        })
         .prepare();
 
       instructions.push(instruction, setState);
