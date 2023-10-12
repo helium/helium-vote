@@ -63,6 +63,7 @@ module.exports = {
           700: "#009FF9",
         },
         "hv-turquoise": {
+          500: "#00CED1",
           700: "#124b4b",
         },
         "hv-purple": {

@@ -118,6 +118,7 @@ export const VoteCard = ({
                         "bg-hv-blue-500": bg === "blue",
                         "bg-hv-purple-500": bg === "purple",
                         "bg-hv-orange-500": bg === "orange",
+"bg-hv-turquoise-500": bg === "turquoise",
                       })}
                       style={{
                         width: sliceWidthString,
