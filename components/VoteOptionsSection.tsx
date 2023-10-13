@@ -14,6 +14,7 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import { BsLink45Deg } from "react-icons/bs";
 import { useNetwork } from "../hooks/useNetwork";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
+import { useProposal } from "@helium/modular-governance-hooks";
 
 const VoteOptionsSection: React.FC<{
   outcomes: Outcome[];
@@ -26,6 +27,7 @@ const VoteOptionsSection: React.FC<{
     loading: voting,
     error: voteErr,
   } = useVote(proposalKey);
+  const { info: proposal } = useProposal(proposalKey)
   const {
     canRelinquishVote,
     relinquishVote,
@@ -86,7 +88,7 @@ const VoteOptionsSection: React.FC<{
             {connected && !noVotingPower && (
               <p className="text-white mb-2">
                 To vote, click on any option. To remove your vote, click the
-                option again.
+                option again. Vote for up to {proposal?.maxChoicesPerVoter} of {proposal?.choices.length} options.
               </p>
             )}
 
