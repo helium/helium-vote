@@ -30,6 +30,7 @@ import { VotingPowerBox } from "./VotingPowerBox";
 import { useAsync } from "react-async-hook";
 import axios from "axios";
 import { LAMPORTS_PER_SOL } from "@solana/web3.js";
+import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 
 function daysToSecs(days: number): number {
   return days * 60 * 60 * 24;
@@ -59,6 +60,7 @@ export const LockTokensAccount: React.FC = (props) => {
     refetch: refetchState,
     mint,
   } = useHeliumVsrState();
+  const { setVisible } = useWalletModal();
   const { symbol: tokenName } = useMetaplexMetadata(mint);
   const canDelegate = true;
 
@@ -263,7 +265,10 @@ export const LockTokensAccount: React.FC = (props) => {
             </div>
           </div>
         ) : (
-          <div className="shadow-lg bg-hv-gray-750 flex flex-col items-center justify-center p-6 rounded-lg">
+          <div
+            onClick={() => setVisible(true)}
+            className="cursor-pointer shadow-lg bg-hv-gray-750 flex flex-col items-center justify-center p-6 rounded-lg"
+          >
             <BsLink45Deg className="h-6 mb-1 text-primary-light w-6" />
             <span className="text-fgd-1 text-sm">Connect your wallet</span>
           </div>

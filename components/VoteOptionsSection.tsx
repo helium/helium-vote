@@ -13,6 +13,7 @@ import { FiSettings } from "react-icons/fi";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { BsLink45Deg } from "react-icons/bs";
 import { useNetwork } from "../hooks/useNetwork";
+import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 
 const VoteOptionsSection: React.FC<{
   outcomes: Outcome[];
@@ -36,7 +37,8 @@ const VoteOptionsSection: React.FC<{
 
   const { amountLocked, loading } = useHeliumVsrState();
   const noVotingPower = !loading && (!amountLocked || amountLocked.isZero());
-  const { network } = useNetwork()
+  const { network } = useNetwork();
+  const { setVisible } = useWalletModal();
 
   useNotifyError(voteErr, "Failed to vote");
   useNotifyError(relErr, "Failed to relinquish vote");
@@ -62,7 +64,10 @@ const VoteOptionsSection: React.FC<{
 
           <div className="w-full">
             {!connected && (
-              <div className="text-white flex flex-col items-center justify-center">
+              <div
+                onClick={() => setVisible(true)}
+                className="cursor-pointer text-white flex flex-col items-center justify-center"
+              >
                 <BsLink45Deg className="h-6 mb-1 text-primary-light w-6" />
                 <span className="text-fgd-1 text-sm">Connect your wallet</span>
               </div>
@@ -78,8 +83,15 @@ const VoteOptionsSection: React.FC<{
                 </span>
               </Link>
             )}
+            {connected && !noVotingPower && (
+              <p className="text-white mb-2">
+                To vote, click on any option. To remove your vote, click the
+                option again.
+              </p>
+            )}
 
-            {connected && !noVotingPower &&
+            {connected &&
+              !noVotingPower &&
               outcomes?.map((o, i, { length }) => (
                 <VoteOption
                   voting={currVote == o.index && (voting || relinquishing)}

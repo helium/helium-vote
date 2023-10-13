@@ -4,7 +4,7 @@ import { useCallback } from "react";
 
 const networksToMint = {
   Helium: HNT_MINT,
-  'Helium Mobile': MOBILE_MINT,
+  'Helium MOBILE': MOBILE_MINT,
   'Helium IOT': IOT_MINT,
 };
 
