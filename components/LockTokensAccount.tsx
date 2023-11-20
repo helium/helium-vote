@@ -13,24 +13,27 @@ import {
   useHeliumVsrState,
   useRegistrar,
   useSubDaos,
+  useVotingDelegatePositions,
 } from "@helium/voter-stake-registry-hooks";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
+import { useWalletModal } from "@solana/wallet-adapter-react-ui";
+import { LAMPORTS_PER_SOL } from "@solana/web3.js";
+import axios from "axios";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useAsync } from "react-async-hook";
 import { AiFillLock } from "react-icons/ai";
 import { BsFillLightningChargeFill, BsLink45Deg } from "react-icons/bs";
 import { useMetaplexMetadata } from "../hooks/useMetaplexMetadata";
 import { humanReadable } from "../utils/formatting";
 import { notify } from "../utils/notifications";
+import { AssignProxyModal } from "./AssignProxyModal";
 import Button from "./Button";
 import { ClaimAllRewardsButton } from "./ClaimAllRewardsButton";
 import { LockCommunityTokensButton } from "./LockCommunityTokensButton";
 import { LockTokensModal, LockTokensModalFormValues } from "./LockTokensModal";
 import { PositionCard } from "./PositionCard";
+import { ProxyButton } from "./ProxyButton";
 import { VotingPowerBox } from "./VotingPowerBox";
-import { useAsync } from "react-async-hook";
-import axios from "axios";
-import { LAMPORTS_PER_SOL } from "@solana/web3.js";
-import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 
 function daysToSecs(days: number): number {
   return days * 60 * 60 * 24;
@@ -57,6 +60,7 @@ export const LockTokensAccount: React.FC = (props) => {
     positions,
     votingPower,
     amountLocked,
+    amountVotingDelegationLocked,
     refetch: refetchState,
     mint,
   } = useHeliumVsrState();
@@ -92,6 +96,15 @@ export const LockTokensAccount: React.FC = (props) => {
 
         return a.amountDepositedNative.gt(b.amountDepositedNative) ? -1 : 0;
       }),
+    [positions]
+  );
+
+  const myPositions = useMemo(
+    () => positions?.filter((p) => !p.isVotingDelegatedToMe),
+    [positions]
+  );
+  const myProxyPositions = useMemo(
+    () => positions?.filter((p) => p.isVotingDelegatedToMe),
     [positions]
   );
 
@@ -168,6 +181,12 @@ export const LockTokensAccount: React.FC = (props) => {
     }
   };
 
+  const [proxyModalVisible, setProxyModalVisible] = useState(false);
+  const handleSetProxy = () => {
+    setProxyModalVisible(true);
+  };
+  const { votingDelegatePositions } = useVotingDelegatePositions();
+
   const mainBoxesClasses = "bg-bkg-1 col-span-1 p-4 rounded-md";
   const isLoading = loading || loadingSubDaos;
 
@@ -204,7 +223,9 @@ export const LockTokensAccount: React.FC = (props) => {
                         className={mainBoxesClasses}
                         mint={mint}
                         votingPower={votingPower}
-                        amountLocked={amountLocked}
+                        amountLocked={amountLocked?.add(
+                          amountVotingDelegationLocked
+                        )}
                       />
                     )}
                   </div>
@@ -227,18 +248,22 @@ export const LockTokensAccount: React.FC = (props) => {
               <h2 className="leading-none flex flex-col mb-0 text-md sm:text-2xl font-semibold text-white">
                 Locked Positions
               </h2>
-              {canDelegate && (
-                <ClaimAllRewardsButton
-                  onClick={handleClaimAllRewards}
-                  isLoading={claimingAllRewards}
-                />
-              )}
+              <div>
+                <ProxyButton onClick={handleSetProxy} isLoading={false} />
+                {canDelegate && (
+                  <ClaimAllRewardsButton
+                    className="ml-4 mt-4"
+                    onClick={handleClaimAllRewards}
+                    isLoading={claimingAllRewards}
+                  />
+                )}
+              </div>
             </div>
             <div
               className={`grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-8`}
             >
               {!loading &&
-                sortedPositions?.map((pos, idx) => (
+                myPositions?.map((pos, idx) => (
                   <PositionCard key={idx} position={pos} subDaos={subDaos} />
                 ))}
               <div className="shadow-lg bg-hv-gray-750 flex flex-col items-center justify-center p-6 rounded-lg">
@@ -263,6 +288,19 @@ export const LockTokensAccount: React.FC = (props) => {
                 </Button>
               </div>
             </div>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="leading-none flex flex-col mb-0 text-md sm:text-2xl font-semibold text-white">
+                Proxy Positions
+              </h2>
+            </div>
+            <div
+              className={`grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-8`}
+            >
+              {!loading &&
+                myProxyPositions?.map((pos, idx) => (
+                  <PositionCard key={idx} position={pos} subDaos={subDaos} />
+                ))}
+            </div>
           </div>
         ) : (
           <div
@@ -281,6 +319,13 @@ export const LockTokensAccount: React.FC = (props) => {
             calcMultiplierFn={handleCalcLockupMultiplier}
             onClose={() => setIsLockModalOpen(false)}
             onSubmit={handleLockTokens}
+          />
+        )}
+        {proxyModalVisible && (
+          <AssignProxyModal
+            isOpen={proxyModalVisible}
+            onClose={() => setProxyModalVisible(false)}
+            onSubmit={votingDelegatePositions}
           />
         )}
       </div>

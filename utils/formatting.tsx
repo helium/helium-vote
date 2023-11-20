@@ -53,6 +53,15 @@ export function humanReadable(
   }`;
 }
 
+export function ellipsisMiddle(wallet: string): string {
+  const length = wallet.length;
+  const start = wallet.slice(0, 5);
+  const end = wallet.slice(length - 5, length);
+  const middle = "...";
+  return start + middle + end;
+}
+
+
 export const fmtTokenAmount = (c: BN, decimals?: number) =>
   c?.div(new BN(10).pow(new BN(decimals ?? 0))).toNumber() || 0;
 

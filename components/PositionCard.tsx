@@ -10,7 +10,12 @@ import {
   getMinDurationFmt,
   getTimeLeftFromNowFmt,
 } from "../utils/dateTools";
-import { PositionWithMeta, SubDaoWithMeta, useHeliumVsrState, useRegistrar } from "@helium/voter-stake-registry-hooks";
+import {
+  PositionWithMeta,
+  SubDaoWithMeta,
+  useHeliumVsrState,
+  useRegistrar,
+} from "@helium/voter-stake-registry-hooks";
 import {
   LockTokensModal,
   LockTokensModalFormValues,
@@ -29,7 +34,7 @@ import {
 } from "@helium/voter-stake-registry-hooks";
 import { DelegateTokensModal } from "./DelegateTokensModal";
 import { PromptModal } from "./PromptModal";
-import { humanReadable } from "../utils/formatting";
+import { ellipsisMiddle, humanReadable } from "../utils/formatting";
 import { useMetaplexMetadata } from "../hooks/useMetaplexMetadata";
 
 interface PositionCardProps {
@@ -47,8 +52,8 @@ export const PositionCard: React.FC<PositionCardProps> = ({
   const [isExtendModalOpen, setIsExtendModalOpen] = useState(false);
   const [isSplitModalOpen, setIsSplitModalOpen] = useState(false);
   const [isDelegateModalOpen, setIsDelegateModalOpen] = useState(false);
-  const { loading: isLoading, positions, refetch} = useHeliumVsrState();
-  
+  const { loading: isLoading, positions, refetch } = useHeliumVsrState();
+
   const transferablePositions: PositionWithMeta[] = useMemo(() => {
     if (!unixNow || !positions.length) {
       return [];
@@ -131,19 +136,15 @@ export const PositionCard: React.FC<PositionCardProps> = ({
     claimPositionRewards,
   } = useClaimPositionRewards();
 
-
   const { lockup, hasGenesisMultiplier, votingMint } = position;
   const lockupKind = Object.keys(lockup.kind)[0] as string;
   const isConstant = lockupKind === "constant";
   const lockupExpired =
     !isConstant && lockup.endTs.sub(new BN(unixNow)).lt(new BN(0));
-  const { info: mintAcc } = useMint(position.votingMint.mint)
-  
+  const { info: mintAcc } = useMint(position.votingMint.mint);
 
-  const lockedTokens = mintAcc && humanReadable(
-    position.amountDepositedNative,
-    mintAcc.decimals
-  );
+  const lockedTokens =
+    mintAcc && humanReadable(position.amountDepositedNative, mintAcc.decimals);
 
   const maxActionableAmount = mintAcc
     ? toNumber(position.amountDepositedNative, mintAcc)
@@ -154,8 +155,8 @@ export const PositionCard: React.FC<PositionCardProps> = ({
   /// TODO:
   const tokenInfo = {
     symbol: symbol,
-    logoURI: image
-  }
+    logoURI: image,
+  };
 
   const { info: registrar } = useRegistrar(position.registrar);
   const handleCalcLockupMultiplier = useCallback(
@@ -169,7 +170,7 @@ export const PositionCard: React.FC<PositionCardProps> = ({
   );
 
   const refetchState = async () => {
-    refetch()
+    refetch();
   };
 
   const handleFlipPositionLockupKind = async () => {
@@ -186,7 +187,7 @@ export const PositionCard: React.FC<PositionCardProps> = ({
           e.message || isConstant
             ? "Unable to unlock position"
             : "Unable to pause unlock",
-        error: e
+        error: e,
       });
     }
   };
@@ -252,7 +253,7 @@ export const PositionCard: React.FC<PositionCardProps> = ({
       notify({
         type: "error",
         message: e.message || "Unable to undelegate tokens",
-        error: e
+        error: e,
       });
     }
   };
@@ -268,7 +269,7 @@ export const PositionCard: React.FC<PositionCardProps> = ({
       notify({
         type: "error",
         message: e.message || "Unable to claim rewards",
-        error: e
+        error: e,
       });
     }
   };
@@ -286,7 +287,7 @@ export const PositionCard: React.FC<PositionCardProps> = ({
       notify({
         type: "error",
         message: e.message || "Unable to close position",
-        error: e
+        error: e,
       });
     }
   };
@@ -387,21 +388,32 @@ export const PositionCard: React.FC<PositionCardProps> = ({
                   }x (${getTimeLeftFromNowFmt(position.genesisEnd)})`}
                 />
               )}
+              {position.votingDelegation && (
+                <div className="flex flex-col w-1/2 py-2">
+                  <p className="text-xs text-fgd-2">Voting Proxy</p>
+                  <p className="font-bold text-xs">
+                    {ellipsisMiddle(
+                      // @ts-ignore
+                      position.votingDelegation.nextOwner.toBase58()
+                    )}
+                  </p>
+                </div>
+              )}
             </div>
             <div style={{ marginTop: "auto" }}>
-              {position.isDelegated ? (
+              {!position.isVotingDelegatedToMe && position.isDelegated ? (
                 <div className="flex flex-col gap-2 items-center">
                   {delegatedSubDaoMetadata ? (
-                    <span
-                      className="text-fgd-2 flex-row gap-2"
+                    <div
+                      className="text-fgd-2 flex flex-row items-center gap-2"
                       style={{ fontSize: "9px" }}
                     >
                       <img
                         className="w-4 h-4"
                         src={delegatedSubDaoMetadata.json?.image || ""}
                       />
-                      {delegatedSubDaoMetadata.name}
-                    </span>
+                      <div>{delegatedSubDaoMetadata.name}</div>
+                    </div>
                   ) : null}
                   <Button
                     className="w-full"
@@ -422,71 +434,75 @@ export const PositionCard: React.FC<PositionCardProps> = ({
                 </div>
               ) : (
                 <>
-                  {lockupExpired ? (
-                    <Button
-                      className="w-full"
-                      isLoading={isSubmitting}
-                      disabled={isClosing}
-                      onClick={handleClose}
-                    >
-                      Close
-                    </Button>
-                  ) : (
-                    <div className="flex flex-col gap-2">
-                      <div className="flex flex-row gap-2 justify-center">
-                        <Button
-                          className="w-full"
-                          onClick={() => setIsSplitModalOpen(true)}
-                          disabled={isSubmitting}
-                          isLoading={isSpliting}
-                        >
-                          Split
-                        </Button>
-                        <Button
-                          className="w-full"
-                          onClick={() => setIsTransferModalOpen(true)}
-                          disabled={isSubmitting}
-                          isLoading={isTransfering}
-                        >
-                          Transfer
-                        </Button>
-                      </div>
+                  {!position.isVotingDelegatedToMe ? (
+                    lockupExpired ? (
                       <Button
                         className="w-full"
-                        onClick={() => setIsExtendModalOpen(true)}
-                        disabled={isSubmitting}
-                        isLoading={isExtending}
+                        isLoading={isSubmitting}
+                        disabled={isClosing}
+                        onClick={handleClose}
                       >
-                        Extend
+                        Close
                       </Button>
-                      {isConstant ? (
-                        <Button
-                          onClick={handleFlipPositionLockupKind}
-                          disabled={isSubmitting}
-                          isLoading={isFlipping}
-                        >
-                          Start Unlock
-                        </Button>
-                      ) : (
-                        <Button
-                          onClick={handleFlipPositionLockupKind}
-                          disabled={isSubmitting}
-                          isLoading={isFlipping}
-                        >
-                          Pause Unlock
-                        </Button>
-                      )}
-                      {canDelegate && (
+                    ) : (
+                      <div className="flex flex-col gap-2">
+                        <div className="flex flex-row gap-2 justify-center">
+                          <Button
+                            className="w-full"
+                            onClick={() => setIsSplitModalOpen(true)}
+                            disabled={isSubmitting}
+                            isLoading={isSpliting}
+                          >
+                            Split
+                          </Button>
+                          <Button
+                            className="w-full"
+                            onClick={() => setIsTransferModalOpen(true)}
+                            disabled={isSubmitting}
+                            isLoading={isTransfering}
+                          >
+                            Transfer
+                          </Button>
+                        </div>
                         <Button
                           className="w-full"
-                          onClick={() => setIsDelegateModalOpen(true)}
+                          onClick={() => setIsExtendModalOpen(true)}
                           disabled={isSubmitting}
-                          isLoading={isDelegating}
+                          isLoading={isExtending}
                         >
-                          Delegate
+                          Extend
                         </Button>
-                      )}
-                    </div>
+                        {isConstant ? (
+                          <Button
+                            onClick={handleFlipPositionLockupKind}
+                            disabled={isSubmitting}
+                            isLoading={isFlipping}
+                          >
+                            Start Unlock
+                          </Button>
+                        ) : (
+                          <Button
+                            onClick={handleFlipPositionLockupKind}
+                            disabled={isSubmitting}
+                            isLoading={isFlipping}
+                          >
+                            Pause Unlock
+                          </Button>
+                        )}
+                        {canDelegate && (
+                          <Button
+                            className="w-full"
+                            onClick={() => setIsDelegateModalOpen(true)}
+                            disabled={isSubmitting}
+                            isLoading={isDelegating}
+                          >
+                            Delegate
+                          </Button>
+                        )}
+                      </div>
+                    )
+                  ) : (
+                    <div />
                   )}
                 </>
               )}

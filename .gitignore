@@ -34,3 +34,10 @@ yarn-error.log*
 # vercel
 .vercel
 .yalc
+
+.yarn/*
+!.yarn/patches
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions

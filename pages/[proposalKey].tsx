@@ -14,19 +14,16 @@ import { format } from "date-fns";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useMemo, useState } from "react";
-import { useAsync } from "react-async-hook";
 import ReactMarkdown from "react-markdown";
 import ContentSection from "../components/ContentSection";
 import CopyableText from "../components/CopyableText";
 import MetaTags from "../components/MetaTags";
 import Page from "../components/Page";
+import { VoteBreakdown } from "../components/VoteBreakdown";
 import VoteOptionsSection from "../components/VoteOptionsSection";
 import VoteResults from "../components/VoteResults";
 import { useNetwork } from "../hooks/useNetwork";
 import { humanReadable } from "../utils/formatting";
-import { AiFillCaretDown, AiFillCaretUp } from "react-icons/ai";
-import { VoteBreakdown } from "../components/VoteBreakdown";
-import Button, { LinkButton, SecondaryButton } from "../components/Button";
 
 const VoteDetailsPage = ({ name: initName, content }: { name: string, content: string }) => {
   const router = useRouter();

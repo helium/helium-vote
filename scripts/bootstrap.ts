@@ -104,7 +104,7 @@ export async function run(args: any = process.argv) {
   const voteController = registrarK;
   const initProposalConfig = proposalProgram.methods.initializeProposalConfigV0(
     {
-      name: `${argv.name} Default V1`,
+      name: `${argv.name} Default V2`,
       voteController,
       stateController: resolutionSettings!,
       onVoteHook: stateProgram.programId,
@@ -140,6 +140,7 @@ export async function run(args: any = process.argv) {
     await initOrganization.rpc({ skipPreflight: true });
     console.log(`Created org ${organization.toBase58()}`);
   } else {
+    const org = await orgProgram.account.organizationV0.fetch(organization)
     const instruction = await orgProgram.methods
       .updateOrganizationV0({
         defaultProposalConfig: proposalConfig,
@@ -147,7 +148,7 @@ export async function run(args: any = process.argv) {
         uri: null,
         authority,
       })
-      .accounts({ organization, authority })
+      .accounts({ organization, authority: org.authority })
       .instruction();
 
     await sendInstructionsOrSquads({

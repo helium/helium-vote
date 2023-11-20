@@ -50,12 +50,13 @@ export const ProvidedVotingPowerBox: React.FC<{
   className?: string;
   style?: any;
 }> = ({ className, style }) => {
-  const { amountLocked, mint, votingPower } = useHeliumVsrState();
+  const { amountLocked, mint, votingPower, amountVotingDelegationLocked } =
+    useHeliumVsrState();
   return (
     <VotingPowerBox
       className={className}
       style={style}
-      amountLocked={amountLocked}
+      amountLocked={amountLocked?.add(amountVotingDelegationLocked)}
       mint={mint}
       votingPower={votingPower}
     />

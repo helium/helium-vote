@@ -7,7 +7,7 @@ import {
 import { useMemo, useState } from "react";
 import { useRegistrar } from "@helium/voter-stake-registry-hooks";
 import { useMint } from "@helium/helium-react-hooks";
-import { humanReadable } from "../utils/formatting";
+import { ellipsisMiddle, humanReadable } from "../utils/formatting";
 import BN from "bn.js";
 import Loading from "./Loading";
 
@@ -158,12 +158,4 @@ export function VoteBreakdown({ proposalKey }: { proposalKey: PublicKey }) {
       </div>
     </div>
   );
-}
-
-function ellipsisMiddle(wallet: string): string {
-  const length = wallet.length;
-  const start = wallet.slice(0, 5);
-  const end = wallet.slice(length - 5, length);
-  const middle = "...";
-  return start + middle + end;
 }

@@ -40,7 +40,7 @@ export async function run(args: any = process.argv) {
       default: ["Yes", "No"],
     },
     proposalConfig: {
-      default: "Helium Single Choice Default",
+      type: "string"
     },
     orgName: {
       type: "string",
@@ -98,6 +98,7 @@ export async function run(args: any = process.argv) {
       tags: ["test", "tags"],
     })
     .accounts({
+      payer: authority,
       authority,
       organization: organizationK,
       owner: authority,
@@ -124,7 +125,7 @@ export async function run(args: any = process.argv) {
       instruction,
       setState,
     ],
-    executeTransaction: true,
+    executeTransaction: false,
     squads,
     multisig: argv.multisig ? new PublicKey(argv.multisig) : undefined,
     authorityIndex: argv.authorityIndex,

@@ -86,7 +86,8 @@ const VoteOption: React.FC<{
               </p>
             </div>
           </div>
-          {!!myWeight && !voting && (
+          {/* Only show votes I can relinquish. If I can't, it's likely an overridden delegate vote */}
+          {!!myWeight && !voting && canRelinquishVote && (
             <>
               {hover ? (
                 <AiOutlineCloseCircle
