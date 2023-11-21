@@ -4,7 +4,7 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import { useHeliumVsrState } from "@helium/voter-stake-registry-hooks";
 import { PublicKey } from "@solana/web3.js";
 
-export const ProxyButton: React.FC<{
+export const RevokeProxyButton: React.FC<{
   className?: string;
   onClick: () => void;
   isLoading?: boolean;
@@ -12,32 +12,34 @@ export const ProxyButton: React.FC<{
   const { connected } = useWallet();
   const { loading, positions } = useHeliumVsrState();
 
-  const undelegatedPositions = useMemo(
+  const delegatedPositions = useMemo(
     () =>
       positions?.filter(
         (p) =>
-          !p.votingDelegation ||
-          p.votingDelegation.nextOwner.equals(PublicKey.default)
+          p.votingDelegation &&
+          !p.votingDelegation.nextOwner.equals(PublicKey.default)
       ),
     [positions]
   );
 
   const tooltipContent = !connected
     ? "Connect your wallet to claim"
-    : !undelegatedPositions?.length
-    ? "You don't have any positions available to proxy."
+    : !delegatedPositions?.length
+    ? "You don't have any positions available to revoke proxy."
     : "";
+
+  const disabled = !connected || loading || !delegatedPositions?.length
 
   return (
     <SecondaryButton
       tooltipMessage={tooltipContent}
-      className={className}
-      disabled={!connected || loading || !undelegatedPositions?.length}
+      className={className + ` ${disabled ? "hidden" : ""}`}
+      disabled={disabled}
       isLoading={isLoading}
       onClick={onClick}
     >
       <div className="flex items-center">
-        <span>Assign Voting Proxies</span>
+        <span>Revoke Voting Proxies</span>
       </div>
     </SecondaryButton>
   );

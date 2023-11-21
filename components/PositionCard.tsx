@@ -36,6 +36,7 @@ import { DelegateTokensModal } from "./DelegateTokensModal";
 import { PromptModal } from "./PromptModal";
 import { ellipsisMiddle, humanReadable } from "../utils/formatting";
 import { useMetaplexMetadata } from "../hooks/useMetaplexMetadata";
+import { PublicKey } from "@solana/web3.js";
 
 interface PositionCardProps {
   subDaos?: SubDaoWithMeta[];
@@ -388,17 +389,20 @@ export const PositionCard: React.FC<PositionCardProps> = ({
                   }x (${getTimeLeftFromNowFmt(position.genesisEnd)})`}
                 />
               )}
-              {position.votingDelegation && (
-                <div className="flex flex-col w-1/2 py-2">
-                  <p className="text-xs text-fgd-2">Voting Proxy</p>
-                  <p className="font-bold text-xs">
-                    {ellipsisMiddle(
-                      // @ts-ignore
-                      position.votingDelegation.nextOwner.toBase58()
-                    )}
-                  </p>
-                </div>
-              )}
+              {position.votingDelegation &&
+                !position.votingDelegation.nextOwner.equals(
+                  PublicKey.default
+                ) && (
+                  <div className="flex flex-col w-1/2 py-2">
+                    <p className="text-xs text-fgd-2">Voting Proxy</p>
+                    <p className="font-bold text-xs">
+                      {ellipsisMiddle(
+                        // @ts-ignore
+                        position.votingDelegation.nextOwner.toBase58()
+                      )}
+                    </p>
+                  </div>
+                )}
             </div>
             <div style={{ marginTop: "auto" }}>
               {!position.isVotingDelegatedToMe && position.isDelegated ? (

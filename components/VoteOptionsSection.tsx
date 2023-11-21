@@ -27,7 +27,7 @@ const VoteOptionsSection: React.FC<{
     loading: voting,
     error: voteErr,
   } = useVote(proposalKey);
-  const { info: proposal } = useProposal(proposalKey)
+  const { info: proposal } = useProposal(proposalKey);
   const {
     canRelinquishVote,
     relinquishVote,
@@ -37,8 +37,12 @@ const VoteOptionsSection: React.FC<{
   const [currVote, setCurrVote] = useState(0);
   const { connected } = useWallet();
 
-  const { amountLocked, loading } = useHeliumVsrState();
-  const noVotingPower = !loading && (!amountLocked || amountLocked.isZero());
+  const { amountLocked, amountVotingDelegationLocked, loading } =
+    useHeliumVsrState();
+  const noVotingPower =
+    !loading &&
+    ((!amountLocked && !amountVotingDelegationLocked) ||
+      (amountLocked.isZero() && amountVotingDelegationLocked.isZero()));
   const { network } = useNetwork();
   const { setVisible } = useWalletModal();
 
@@ -88,7 +92,8 @@ const VoteOptionsSection: React.FC<{
             {connected && !noVotingPower && (
               <p className="text-white mb-2">
                 To vote, click on any option. To remove your vote, click the
-                option again. Vote for up to {proposal?.maxChoicesPerVoter} of {proposal?.choices.length} options.
+                option again. Vote for up to {proposal?.maxChoicesPerVoter} of{" "}
+                {proposal?.choices.length} options.
               </p>
             )}
 

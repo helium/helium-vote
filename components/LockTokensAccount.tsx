@@ -14,6 +14,7 @@ import {
   useRegistrar,
   useSubDaos,
   useVotingDelegatePositions,
+  useVotingUndelegatePositions,
 } from "@helium/voter-stake-registry-hooks";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
@@ -34,6 +35,8 @@ import { LockTokensModal, LockTokensModalFormValues } from "./LockTokensModal";
 import { PositionCard } from "./PositionCard";
 import { ProxyButton } from "./ProxyButton";
 import { VotingPowerBox } from "./VotingPowerBox";
+import { RevokeProxyButton } from "./RevokeProxyButton";
+import { RevokeProxyModal } from "./RevokeProxyModal";
 
 function daysToSecs(days: number): number {
   return days * 60 * 60 * 24;
@@ -82,21 +85,6 @@ export const LockTokensAccount: React.FC = (props) => {
   const { associatedAccount, loading: loadingAta } = useAssociatedTokenAccount(
     publicKey,
     mint
-  );
-
-  const sortedPositions = useMemo(
-    () =>
-      positions?.sort((a, b) => {
-        if (a.hasGenesisMultiplier || b.hasGenesisMultiplier) {
-          if (b.hasGenesisMultiplier) {
-            return a.amountDepositedNative.gt(b.amountDepositedNative) ? 0 : -1;
-          }
-          return -1;
-        }
-
-        return a.amountDepositedNative.gt(b.amountDepositedNative) ? -1 : 0;
-      }),
-    [positions]
   );
 
   const myPositions = useMemo(
@@ -185,7 +173,12 @@ export const LockTokensAccount: React.FC = (props) => {
   const handleSetProxy = () => {
     setProxyModalVisible(true);
   };
+  const [revokeProxyModalVisible, setRevokeProxyModalVisible] = useState(false);
+  const handleSetRevokeProxy = () => {
+    setRevokeProxyModalVisible(true);
+  };
   const { votingDelegatePositions } = useVotingDelegatePositions();
+  const { votingUndelegatePositions } = useVotingUndelegatePositions();
 
   const mainBoxesClasses = "bg-bkg-1 col-span-1 p-4 rounded-md";
   const isLoading = loading || loadingSubDaos;
@@ -249,7 +242,15 @@ export const LockTokensAccount: React.FC = (props) => {
                 Locked Positions
               </h2>
               <div>
-                <ProxyButton onClick={handleSetProxy} isLoading={false} />
+                <RevokeProxyButton
+                  onClick={handleSetRevokeProxy}
+                  isLoading={false}
+                />
+                <ProxyButton
+                  className="ml-4 mt-4"
+                  onClick={handleSetProxy}
+                  isLoading={false}
+                />
                 {canDelegate && (
                   <ClaimAllRewardsButton
                     className="ml-4 mt-4"
@@ -288,10 +289,10 @@ export const LockTokensAccount: React.FC = (props) => {
                 </Button>
               </div>
             </div>
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="leading-none flex flex-col mb-0 text-md sm:text-2xl font-semibold text-white">
-                Proxy Positions
-              </h2>
+            <div className="flex items-center mb-8">
+              <hr className="flex-grow border-t-2 border-gray-600" />
+              <span className="mx-4 text-gray-600">Proxy Positions</span>
+              <hr className="flex-grow border-t-2 border-gray-600" />
             </div>
             <div
               className={`grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-8`}
@@ -326,6 +327,13 @@ export const LockTokensAccount: React.FC = (props) => {
             isOpen={proxyModalVisible}
             onClose={() => setProxyModalVisible(false)}
             onSubmit={votingDelegatePositions}
+          />
+        )}
+        {revokeProxyModalVisible && (
+          <RevokeProxyModal
+            isOpen={revokeProxyModalVisible}
+            onClose={() => setRevokeProxyModalVisible(false)}
+            onSubmit={votingUndelegatePositions}
           />
         )}
       </div>

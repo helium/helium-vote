@@ -30,8 +30,6 @@ export const AssignProxyModal: React.FC<AssignProxyModalProps> = ({
   onSubmit,
 }) => {
   const { loading, positions, mint } = useHeliumVsrState();
-  const { info: mintAcc } = useMint(mint);
-  const { symbol } = useMetaplexMetadata(mint);
   const [selectedPositions, setSelectedPositions] = useState<Set<string>>(
     new Set<string>()
   );
@@ -41,34 +39,44 @@ export const AssignProxyModal: React.FC<AssignProxyModalProps> = ({
       positions?.filter(
         (p) =>
           !p.votingDelegation ||
-          // @ts-ignore
           p.votingDelegation.nextOwner.equals(PublicKey.default)
       ),
     [positions]
   );
-  const [selectedDays, setSelectedDays] = useState(0);
   const today = new Date();
-  const augustFirst = new Date(
+  const augustFirst = Date.UTC(
     today.getMonth() > 7 ? today.getFullYear() + 1 : today.getFullYear(),
     7,
     1
-  ).getTime();
-  const maxDate = Math.min(
-    augustFirst,
-    ...undelegatedPositions
-      .filter((p) => selectedPositions.has(p.pubkey.toBase58()) && p.votingDelegation)
-      // @ts-ignore
-      .map((p) => p.votingDelegation.expirationTime.toNumber() * 1000)
   );
+  const maxDate =
+    Math.min(
+      augustFirst - 1000,
+      ...undelegatedPositions
+        .filter(
+          (p) =>
+            selectedPositions.has(p.pubkey.toBase58()) && p.votingDelegation
+        )
+        // @ts-ignore
+        .map((p) => p.votingDelegation.expirationTime.toNumber() * 1000)
+    );
   const maxDays = Math.floor(
     (maxDate - today.getTime()) / (1000 * 60 * 60 * 24)
   );
+  const [selectedDays, setSelectedDays] = useState(maxDays);
   const [recipient, setRecipient] = useState("");
+  const expirationTime = useMemo(
+    () =>
+      selectedDays === maxDays
+        ? maxDate.valueOf() / 1000
+        : new Date().valueOf() / 1000 + selectedDays * (24 * 60 * 60),
+    [selectedDays, maxDays, maxDate]
+  );
   useEffect(() => {
     if (selectedDays > maxDays) {
-      setSelectedDays(maxDays)
+      setSelectedDays(maxDays);
     }
-  }, [maxDays])
+  }, [maxDays]);
 
   const changeRecipient = (e) => {
     setRecipient(e.target.value);
@@ -81,11 +89,12 @@ export const AssignProxyModal: React.FC<AssignProxyModalProps> = ({
         return acc;
       }, {} as Record<string, PositionWithMeta>);
       setIsSubmitting(true);
+
       await onSubmit({
         positions: Array.from(selectedPositions).map((p) => positionsByKey[p]),
         recipient: new PublicKey(recipient),
         expirationTime: new BN(
-          new Date().valueOf() / 1000 + selectedDays * (24 * 60 * 60)
+          Math.min(expirationTime, maxDate.valueOf() / 1000)
         ),
       });
       onClose();
@@ -131,7 +140,7 @@ export const AssignProxyModal: React.FC<AssignProxyModalProps> = ({
             <h2 className="text-lg mt-4 mb-2">Expiration Time</h2>
             <input
               type="range"
-              min="0"
+              min="1"
               step="1"
               className="transparent h-1.5 w-full cursor-pointer appearance-none rounded-lg border-transparent bg-neutral-200"
               max={maxDays}
@@ -140,38 +149,20 @@ export const AssignProxyModal: React.FC<AssignProxyModalProps> = ({
                 setSelectedDays(parseInt(e.target.value));
               }}
             />
-            <div className="text-sm text-right">{selectedDays} days</div>
+            <div className="text-sm text-right">{selectedDays} days ({new Date(expirationTime * 1000).toLocaleString()})</div>
           </div>
           <div className="w-full flex flex-col gap-2 pt-4">
             <h2 className="text-lg mb-2">Positions to Assign</h2>
 
             {undelegatedPositions?.map((position) => {
-              const isSelected = selectedPositions?.has(
-                position.pubkey.toBase58()
-              );
-              const { lockup } = position;
-              const lockupKind = Object.keys(lockup.kind)[0] as string;
-              const isConstant = lockupKind === "constant";
-              const lockedTokens =
-                mintAcc &&
-                humanReadable(position.amountDepositedNative, mintAcc.decimals);
-              const lockupTime = isConstant
-                ? getMinDurationFmt(
-                    position.lockup.startTs,
-                    position.lockup.endTs
-                  )
-                : getTimeLeftFromNowFmt(position.lockup.endTs);
-              const lockupLabel = isConstant ? "duration" : "time left";
-              const fullLabel = `${lockedTokens} ${symbol} locked with ${lockupTime} ${lockupLabel}`;
-
               return (
-                <div
-                  className={`border rounded-md flex flex-row items-center gap-3 w-full p-4 hover:border-fgd-3 hover:bg-hv-gray-500 hover:cursor-pointer ${
-                    isSelected
-                      ? "border border-hv-blue-700"
-                      : "border-hv-gray-200"
-                  }`}
-                  onClick={() =>
+                <PositionItem
+                  isSelected={selectedPositions?.has(
+                    position.pubkey.toBase58()
+                  )}
+                  position={position}
+                  mint={mint}
+                  onClick={() => {
                     setSelectedPositions((sel) => {
                       const key = position.pubkey.toBase58();
                       const newS = new Set(sel);
@@ -182,12 +173,9 @@ export const AssignProxyModal: React.FC<AssignProxyModalProps> = ({
                         newS.add(key);
                         return newS;
                       }
-                    })
-                  }
-                  key={position.pubkey.toBase58()}
-                >
-                  {fullLabel}
-                </div>
+                    });
+                  }}
+                />
               );
             })}
           </div>
@@ -215,5 +203,42 @@ export const AssignProxyModal: React.FC<AssignProxyModalProps> = ({
         <SecondaryButton onClick={onClose}>Cancel</SecondaryButton>
       </div>
     </Modal>
+  );
+};
+
+export const PositionItem = ({
+  position,
+  isSelected,
+  onClick,
+  mint,
+}: {
+  position: PositionWithMeta;
+  isSelected: boolean;
+  mint: PublicKey;
+  onClick: () => void;
+}) => {
+  const { info: mintAcc } = useMint(mint);
+  const { symbol } = useMetaplexMetadata(mint);
+  const { lockup } = position;
+  const lockupKind = Object.keys(lockup.kind)[0] as string;
+  const isConstant = lockupKind === "constant";
+  const lockedTokens =
+    mintAcc && humanReadable(position.amountDepositedNative, mintAcc.decimals);
+  const lockupTime = isConstant
+    ? getMinDurationFmt(position.lockup.startTs, position.lockup.endTs)
+    : getTimeLeftFromNowFmt(position.lockup.endTs);
+  const lockupLabel = isConstant ? "duration" : "time left";
+  const fullLabel = `${lockedTokens} ${symbol} locked with ${lockupTime} ${lockupLabel}`;
+
+  return (
+    <div
+      className={`border rounded-md flex flex-row items-center gap-3 w-full p-4 hover:border-fgd-3 hover:bg-hv-gray-500 hover:cursor-pointer ${
+        isSelected ? "border border-hv-blue-700" : "border-hv-gray-200"
+      }`}
+      onClick={onClick}
+      key={position.pubkey.toBase58()}
+    >
+      {fullLabel}
+    </div>
   );
 };
