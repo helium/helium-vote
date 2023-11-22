@@ -16,7 +16,7 @@ const WalletMultiButton = dynamic(
 export const DAOS = {
   [HNT_MINT.toBase58()]: "Helium",
   [IOT_MINT.toBase58()]: "Helium IOT",
-  [MOBILE_MINT.toBase58()]: "Helium Mobile",
+  [MOBILE_MINT.toBase58()]: "Helium MOBILE",
 };
 
 export function Header({

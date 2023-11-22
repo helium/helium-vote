@@ -14,6 +14,8 @@ const Page: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
         <Header votingMint={mint} setVotingMint={setMint} />
         <div className="min-h-screen w-full pb-20 py-10">
           <HeliumVsrStateProvider
+            heliumVoteUri="http://localhost:8081"
+            // @ts-ignore
             wallet={wallet?.adapter}
             mint={mint}
             connection={connection}

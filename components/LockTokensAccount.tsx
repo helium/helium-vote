@@ -7,7 +7,6 @@ import {
 import { toBN, toNumber } from "@helium/spl-utils";
 import {
   calcLockupMultiplier,
-  getRegistrarKey,
   useClaimAllPositionsRewards,
   useCreatePosition,
   useHeliumVsrState,
@@ -16,6 +15,7 @@ import {
   useVotingDelegatePositions,
   useVotingUndelegatePositions,
 } from "@helium/voter-stake-registry-hooks";
+import { getRegistrarKey } from "@helium/voter-stake-registry-sdk";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 import { LAMPORTS_PER_SOL } from "@solana/web3.js";
