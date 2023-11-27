@@ -19,12 +19,14 @@ interface RevokeProxyModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (args: { positions: PositionWithMeta[] }) => Promise<void>;
+  wallet?: PublicKey;
 }
 
 export const RevokeProxyModal: React.FC<RevokeProxyModalProps> = ({
   isOpen,
   onClose,
   onSubmit,
+  wallet,
 }) => {
   const { loading, positions, mint } = useHeliumVsrState();
   const [selectedPositions, setSelectedPositions] = useState<Set<string>>(
@@ -36,7 +38,8 @@ export const RevokeProxyModal: React.FC<RevokeProxyModalProps> = ({
       positions?.filter(
         (p) =>
           p.votingDelegation &&
-          !p.votingDelegation.nextOwner.equals(PublicKey.default)
+          !p.votingDelegation.nextOwner.equals(PublicKey.default) &&
+          (!wallet || p.votingDelegation.nextOwner.equals(wallet))
       ),
     [positions]
   );

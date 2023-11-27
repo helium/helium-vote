@@ -2,21 +2,26 @@ import { useOrganizationProposals } from "@helium/modular-governance-hooks";
 import { organizationKey } from "@helium/organization-sdk";
 import classNames from "classnames";
 import { useEffect, useMemo, useState } from "react";
-import ContentSection from "../components/ContentSection";
-import MetaTags from "../components/MetaTags";
-import Page from "../components/Page";
-import { VoteCard } from "../components/VoteCard";
-import { LegacyVoteCard } from "../components/legacy/LegacyVoteCard";
-import { fetchVotes } from "../data/votes";
+import ContentSection from "../../components/ContentSection";
+import MetaTags from "../../components/MetaTags";
+import Page from "../../components/Page";
+import { VoteCard } from "../../components/VoteCard";
+import { LegacyVoteCard } from "../../components/legacy/LegacyVoteCard";
+import { fetchVotes } from "../../data/votes";
 import { useHeliumVsrState } from "@helium/voter-stake-registry-hooks";
 import { HNT_MINT } from "@helium/spl-utils";
-import { useNetwork } from "../hooks/useNetwork";
-import Loading from "../components/Loading";
+import { useNetwork } from "../../hooks/useNetwork";
+import Loading from "../../components/Loading";
 
+const toOrgKey = {
+  helium: 'Helium',
+  mobile: 'Helium MOBILE',
+  iot: 'Helium IOT'
+}
 export default function Home({ legacyVotes }) {
   const [voteFilterTab, setVoteFilterTab] = useState(0);
   const { network, mint } = useNetwork();
-  const organization = useMemo(() => organizationKey(network)[0], [network])
+  const organization = useMemo(() => organizationKey(toOrgKey[network])[0], [network])
 
   const { accounts: proposalsWithDups, error, loading } = useOrganizationProposals(organization);
   const proposals = useMemo(() => {
@@ -199,6 +204,13 @@ export default function Home({ legacyVotes }) {
       </div>
     </Page>
   );
+}
+
+export async function getStaticPaths() {
+  return {
+    paths: [],
+    fallback: "blocking",
+  };
 }
 
 export async function getStaticProps() {

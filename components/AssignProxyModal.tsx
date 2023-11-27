@@ -22,12 +22,14 @@ interface AssignProxyModalProps {
     recipient: PublicKey;
     expirationTime: BN;
   }) => Promise<void>;
+  wallet?: PublicKey;
 }
 
 export const AssignProxyModal: React.FC<AssignProxyModalProps> = ({
   isOpen,
   onClose,
   onSubmit,
+  wallet,
 }) => {
   const { loading, positions, mint } = useHeliumVsrState();
   const [selectedPositions, setSelectedPositions] = useState<Set<string>>(
@@ -49,22 +51,20 @@ export const AssignProxyModal: React.FC<AssignProxyModalProps> = ({
     7,
     1
   );
-  const maxDate =
-    Math.min(
-      augustFirst - 1000,
-      ...undelegatedPositions
-        .filter(
-          (p) =>
-            selectedPositions.has(p.pubkey.toBase58()) && p.votingDelegation
-        )
-        // @ts-ignore
-        .map((p) => p.votingDelegation.expirationTime.toNumber() * 1000)
-    );
+  const maxDate = Math.min(
+    augustFirst - 1000,
+    ...undelegatedPositions
+      .filter(
+        (p) => selectedPositions.has(p.pubkey.toBase58()) && p.votingDelegation
+      )
+      // @ts-ignore
+      .map((p) => p.votingDelegation.expirationTime.toNumber() * 1000)
+  );
   const maxDays = Math.floor(
     (maxDate - today.getTime()) / (1000 * 60 * 60 * 24)
   );
   const [selectedDays, setSelectedDays] = useState(maxDays);
-  const [recipient, setRecipient] = useState("");
+  const [recipient, setRecipient] = useState(wallet?.toBase58() || "");
   const expirationTime = useMemo(
     () =>
       selectedDays === maxDays
@@ -149,7 +149,10 @@ export const AssignProxyModal: React.FC<AssignProxyModalProps> = ({
                 setSelectedDays(parseInt(e.target.value));
               }}
             />
-            <div className="text-sm text-right">{selectedDays} days ({new Date(expirationTime * 1000).toLocaleString()})</div>
+            <div className="text-sm text-right">
+              {selectedDays} days (
+              {new Date(expirationTime * 1000).toLocaleString()})
+            </div>
           </div>
           <div className="w-full flex flex-col gap-2 pt-4">
             <h2 className="text-lg mb-2">Positions to Assign</h2>
@@ -179,16 +182,18 @@ export const AssignProxyModal: React.FC<AssignProxyModalProps> = ({
               );
             })}
           </div>
-          <div className="w-full flex flex-col gap-2 pt-4">
-            <h2 className="text-lg mb-2">Wallet to Assign</h2>
-            <input
-              value={recipient}
-              onChange={changeRecipient}
-              className="text-black border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:border-blue-300"
-              type="text"
-              placeholder="Wallet Address"
-            />
-          </div>
+          {!wallet && (
+            <div className="w-full flex flex-col gap-2 pt-4">
+              <h2 className="text-lg mb-2">Wallet to Assign</h2>
+              <input
+                value={recipient}
+                onChange={changeRecipient}
+                className="text-black border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:border-blue-300"
+                type="text"
+                placeholder="Wallet Address"
+              />
+            </div>
+          )}
         </div>
       )}
       <div className="flex flex-col pt-4">

@@ -45,6 +45,7 @@
     "react-dom": "^18.0.0",
     "react-hook-form": "^7.45.2",
     "react-icons": "^4.10.1",
+    "react-infinite-scroll-component": "^6.1.0",
     "react-markdown": "^8.0.7",
     "react-portal": "^4.2.2",
     "react-qr-code": "^2.0.2",

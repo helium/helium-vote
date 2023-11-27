@@ -773,25 +773,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@helium/modular-governance-idls@npm:^0.0.8-next.10+84cdd0e, @helium/modular-governance-idls@npm:^0.0.8-next.12+f1b0c8c":
+"@helium/modular-governance-idls@npm:^0.0.8-next.12+f1b0c8c":
   version: 0.0.8
   resolution: "@helium/modular-governance-idls@npm:0.0.8"
   dependencies:
     "@coral-xyz/anchor": ^0.28.0
     "@solana/web3.js": ^1.78.4
   checksum: 3bd1bbbdc88cc154f27717e8830b117004608a7ab91a0d43c90ad6cd9cec607071b48c25626e2e15195f4c7f45585d7d0df426ad50eb63acb2bd018897cc8919
-  languageName: node
-  linkType: hard
-
-"@helium/nft-delegation-sdk@npm:0.0.8-next.10+84cdd0e":
-  version: 0.0.8-next.10
-  resolution: "@helium/nft-delegation-sdk@npm:0.0.8-next.10"
-  dependencies:
-    "@coral-xyz/anchor": ^0.28.0
-    "@helium/anchor-resolvers": ^0.2.17
-    "@helium/modular-governance-idls": ^0.0.8-next.10+84cdd0e
-    "@solana/spl-token": ^0.3.8
-  checksum: 98d3ac4622bd05d69216f70357adc66dba605058e469ae904130a51c9da5f7c2a896ff2d8ae5063734bdf3bfdc3fea2620facdd2e4ad962b7b0fdc090da794ea
   languageName: node
   linkType: hard
 
@@ -832,7 +820,7 @@ __metadata:
 
 "@helium/spl-utils@file:.yalc/@helium/spl-utils::locator=root-workspace-0b6124%40workspace%3A.":
   version: 0.6.2
-  resolution: "@helium/spl-utils@file:.yalc/@helium/spl-utils#.yalc/@helium/spl-utils::hash=96e078&locator=root-workspace-0b6124%40workspace%3A."
+  resolution: "@helium/spl-utils@file:.yalc/@helium/spl-utils#.yalc/@helium/spl-utils::hash=639924&locator=root-workspace-0b6124%40workspace%3A."
   dependencies:
     "@coral-xyz/anchor": ^0.28.0
     "@helium/account-fetch-cache": ^0.6.2
@@ -846,7 +834,7 @@ __metadata:
     bn.js: ^5.2.0
     borsh: ^0.7.0
     bs58: ^4.0.1
-  checksum: 948143b3cfc920bc83ff2e47f963e778c554080e002f8f11331c9cabd4f80bc03a818736c50f71fd6561df887fb42fedb40756a65005bc3c09431b79b5f95ef2
+  checksum: bd151d213cb4ff4967f93fdc1ec2f0b16bcefa9c6dc75f6379fd5e3e535a6a2d8886b7c41770a0933d6c5db4fbe4100e8f3009f590d2670ee58bc76a8815f368
   languageName: node
   linkType: hard
 
@@ -877,7 +865,7 @@ __metadata:
 
 "@helium/voter-stake-registry-hooks@file:.yalc/@helium/voter-stake-registry-hooks::locator=root-workspace-0b6124%40workspace%3A.":
   version: 0.6.2
-  resolution: "@helium/voter-stake-registry-hooks@file:.yalc/@helium/voter-stake-registry-hooks#.yalc/@helium/voter-stake-registry-hooks::hash=41ad21&locator=root-workspace-0b6124%40workspace%3A."
+  resolution: "@helium/voter-stake-registry-hooks@file:.yalc/@helium/voter-stake-registry-hooks#.yalc/@helium/voter-stake-registry-hooks::hash=3dc87d&locator=root-workspace-0b6124%40workspace%3A."
   dependencies:
     "@coral-xyz/anchor": ^0.28.0
     "@helium/account-fetch-cache": ^0.6.2
@@ -898,23 +886,23 @@ __metadata:
   peerDependencies:
     react: ^16.8 || ^17 || ^18
     react-dom: ^16.8 || ^17 || ^18
-  checksum: 6c8af1b9257ac43fbee40c82a2a9866ec56b1c183be5ea5aa8e18a8349a0f8ffcaa45092f2d08929c873ec74e01655484e1144f3bd296295be184a603315ab0f
+  checksum: 4797790897100cfa10a62de21e53fd5bdfceaf7c2e2db907e035a8923e88d756cb8619528eae12cf7afc5323b63f95e52dbe87b2ba6c7255cb3591d170e50103
   languageName: node
   linkType: hard
 
 "@helium/voter-stake-registry-sdk@file:.yalc/@helium/voter-stake-registry-sdk::locator=root-workspace-0b6124%40workspace%3A.":
   version: 0.6.2
-  resolution: "@helium/voter-stake-registry-sdk@file:.yalc/@helium/voter-stake-registry-sdk#.yalc/@helium/voter-stake-registry-sdk::hash=801532&locator=root-workspace-0b6124%40workspace%3A."
+  resolution: "@helium/voter-stake-registry-sdk@file:.yalc/@helium/voter-stake-registry-sdk#.yalc/@helium/voter-stake-registry-sdk::hash=68f8c5&locator=root-workspace-0b6124%40workspace%3A."
   dependencies:
     "@coral-xyz/anchor": ^0.28.0
     "@helium/anchor-resolvers": ^0.6.2
     "@helium/idls": ^0.6.2
-    "@helium/nft-delegation-sdk": 0.0.8-next.10+84cdd0e
+    "@helium/nft-delegation-sdk": 0.0.8-next.12+f1b0c8c
     "@metaplex-foundation/mpl-token-metadata": ^2.10.0
     "@solana/spl-token": ^0.3.8
     bn.js: ^5.2.0
     bs58: ^4.0.1
-  checksum: ae92e0f5ae62659a822dc3df5bb215dc819995134386cb7702964de13a760f5223837837044045edd0e9ec3ba02a1a29391c38fbfcb3524d377e0e70f42b5589
+  checksum: a3a53f312faaf44e1cbe6933afa82ee3af619e47380121df12a25c9de626b9805c13f5e64064acd56e17e489cc9e55ed8e1d475789e6a4e5e7fdcbe4748815bb
   languageName: node
   linkType: hard
 
@@ -5356,6 +5344,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-infinite-scroll-component@npm:^6.1.0":
+  version: 6.1.0
+  resolution: "react-infinite-scroll-component@npm:6.1.0"
+  dependencies:
+    throttle-debounce: ^2.1.0
+  peerDependencies:
+    react: ">=16.0.0"
+  checksum: 3708398934366df907dbad215247ebc1033221957ce7e32289ea31750cce70aa16513e2d03743e06c8b868ac7c542d12d5dbb6c830fd408433a4762f3cb5ecfb
+  languageName: node
+  linkType: hard
+
 "react-is@npm:^16.13.1":
   version: 16.13.1
   resolution: "react-is@npm:16.13.1"
@@ -5652,6 +5651,7 @@ __metadata:
     react-dom: ^18.0.0
     react-hook-form: ^7.45.2
     react-icons: ^4.10.1
+    react-infinite-scroll-component: ^6.1.0
     react-markdown: ^8.0.7
     react-portal: ^4.2.2
     react-qr-code: ^2.0.2
@@ -6118,6 +6118,13 @@ __metadata:
   dependencies:
     any-promise: ^1.0.0
   checksum: 84e1b804bfec49f3531215f17b4a6e50fd4397b5f7c1bccc427b9c656e1ecfb13ea79d899930184f78bc2f57285c54d9a50a590c8868f4f0cef5c1d9f898b05e
+  languageName: node
+  linkType: hard
+
+"throttle-debounce@npm:^2.1.0":
+  version: 2.3.0
+  resolution: "throttle-debounce@npm:2.3.0"
+  checksum: 6d90aa2ddb294f8dad13d854a1cfcd88fdb757469669a096a7da10f515ee466857ac1e750649cb9da931165c6f36feb448318e7cb92570f0a3679d20e860a925
   languageName: node
   linkType: hard
 

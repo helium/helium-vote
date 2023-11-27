@@ -8,7 +8,8 @@ export const RevokeProxyButton: React.FC<{
   className?: string;
   onClick: () => void;
   isLoading?: boolean;
-}> = ({ className = "", onClick, isLoading = false }) => {
+  wallet?: PublicKey;
+}> = ({ wallet, className = "", onClick, isLoading = false }) => {
   const { connected } = useWallet();
   const { loading, positions } = useHeliumVsrState();
 
@@ -17,7 +18,8 @@ export const RevokeProxyButton: React.FC<{
       positions?.filter(
         (p) =>
           p.votingDelegation &&
-          !p.votingDelegation.nextOwner.equals(PublicKey.default)
+          !p.votingDelegation.nextOwner.equals(PublicKey.default) &&
+          (!wallet || p.votingDelegation.nextOwner.equals(wallet))
       ),
     [positions]
   );

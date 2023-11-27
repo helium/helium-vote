@@ -15,15 +15,15 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useMemo, useState } from "react";
 import ReactMarkdown from "react-markdown";
-import ContentSection from "../components/ContentSection";
-import CopyableText from "../components/CopyableText";
-import MetaTags from "../components/MetaTags";
-import Page from "../components/Page";
-import { VoteBreakdown } from "../components/VoteBreakdown";
-import VoteOptionsSection from "../components/VoteOptionsSection";
-import VoteResults from "../components/VoteResults";
-import { useNetwork } from "../hooks/useNetwork";
-import { humanReadable } from "../utils/formatting";
+import ContentSection from "../../components/ContentSection";
+import CopyableText from "../../components/CopyableText";
+import MetaTags from "../../components/MetaTags";
+import Page from "../../components/Page";
+import { VoteBreakdown } from "../../components/VoteBreakdown";
+import VoteOptionsSection from "../../components/VoteOptionsSection";
+import VoteResults from "../../components/VoteResults";
+import { useNetwork } from "../../hooks/useNetwork";
+import { humanReadable } from "../../utils/formatting";
 
 const VoteDetailsPage = ({ name: initName, content }: { name: string, content: string }) => {
   const router = useRouter();
@@ -115,7 +115,7 @@ const VoteDetailsPage = ({ name: initName, content }: { name: string, content: s
       <ContentSection className="pt-10 sm:pt-0">
         <div className="mb-5 sm:mb-10">
           <Link
-            href={`/?network=${network}`}
+            href={`/${network}`}
             className="text-hv-gray-200 hover:text-hv-gray-300 outline-none border border-solid border-hv-green-500 border-opacity-0 focus:border-opacity-100 transition-all duration-200 rounded-sm"
           >
             {"<- "}Back to Votes

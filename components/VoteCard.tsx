@@ -62,7 +62,7 @@ export const VoteCard = ({
   return (
     <div className="flex-shrink-1 w-full basis-full mb-2 sm:mb-0 md:basis-6/12 lg:w-4/12 sm:p-5">
       <Link
-        href={`/${id.toBase58()}?network=${network}`}
+        href={`/${network}/${id.toBase58()}`}
         className="group h-full w-full flex flex-col transition-all duration-150 outline-none border border-solid border-opacity-0 focus:border-opacity-50 border-hv-green-500 rounded-3xl"
       >
         <span className="py-5 px-5 rounded-t-3xl bg-hv-gray-450 group-hover:bg-hv-gray-400 lg:min-h-[200px] transition-all duration-150">
