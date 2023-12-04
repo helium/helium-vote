@@ -44,3 +44,12 @@ jobs:
             --wallet ./deploy-keypair.json \
             --orgName Helium \
             --multisig ${{ secrets.MULTISIG }}
+
+      - name: Run Bulk Create Mobile Proposals
+        run: |
+          ./node_modules/.bin/ts-node ./bin/helium-vote.ts bulk-create-proposal \
+            -u "https://solana-rpc.web.helium.io?session-key=Pluto" \
+            --file ./mobile-proposals.json \
+            --wallet ./deploy-keypair.json \
+            --orgName "Helium MOBILE" \
+            --multisig ${{ secrets.MULTISIG }}

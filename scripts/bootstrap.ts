@@ -48,22 +48,22 @@ export async function run(args: any = process.argv) {
       describe: "Authority index for squads. Defaults to 1",
       default: 1,
     },
+    threshold: {
+      type: "number",
+      default: "10000000000000000",
+    },
   });
   const argv = await yarg.argv;
   process.env.ANCHOR_WALLET = argv.wallet;
   process.env.ANCHOR_PROVIDER_URL = argv.url;
   anchor.setProvider(anchor.AnchorProvider.local(argv.url));
 
-  const registrarK = registrarKey(
-    PublicKey.findProgramAddressSync(
-      [
-        Buffer.from("governance", "utf-8"),
-        Buffer.from(argv.realmName, "utf-8"),
-      ],
-      new PublicKey("hgovkRU6Ghe1Qoyb54HdSLdqN7VtxaifBzRmh9jtd3S")
-    )[0],
-    new PublicKey(argv.mint)
+  const realmKey = PublicKey.findProgramAddressSync(
+    [Buffer.from("governance", "utf-8"), Buffer.from(argv.realmName, "utf-8")],
+    new PublicKey("hgovkRU6Ghe1Qoyb54HdSLdqN7VtxaifBzRmh9jtd3S")
   )[0];
+  console.log("Realm is", realmKey.toBase58())
+  const registrarK = registrarKey(realmKey, new PublicKey(argv.mint))[0];
   const provider = anchor.getProvider() as anchor.AnchorProvider;
   const walletKP = loadKeypair(argv.wallet);
   const wallet = new anchor.Wallet(walletKP);
@@ -79,7 +79,7 @@ export async function run(args: any = process.argv) {
         settings().and(
           settings().choicePercentage(67),
           //  100,000,000 veHNT
-          settings().choiceVoteWeight(new anchor.BN("10000000000000000"))
+          settings().choiceVoteWeight(new anchor.BN(argv.threshold))
         )
       ),
       settings().offsetFromStartTs(new anchor.BN(60 * 60 * 24 * 7))
