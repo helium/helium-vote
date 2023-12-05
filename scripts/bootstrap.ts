@@ -52,6 +52,10 @@ export async function run(args: any = process.argv) {
       type: "number",
       default: "10000000000000000",
     },
+    version: {
+      type: "string",
+      default: "V1"
+    }
   });
   const argv = await yarg.argv;
   process.env.ANCHOR_WALLET = argv.wallet;
@@ -64,6 +68,7 @@ export async function run(args: any = process.argv) {
   )[0];
   console.log("Realm is", realmKey.toBase58())
   const registrarK = registrarKey(realmKey, new PublicKey(argv.mint))[0];
+  console.log("Registrar is", registrarK.toBase58());
   const provider = anchor.getProvider() as anchor.AnchorProvider;
   const walletKP = loadKeypair(argv.wallet);
   const wallet = new anchor.Wallet(walletKP);
@@ -88,7 +93,7 @@ export async function run(args: any = process.argv) {
 
   const initResolutionSettings =
     stateProgram.methods.initializeResolutionSettingsV0({
-      name: `${argv.name} Single Choice V1`,
+      name: `${argv.name} Single ${argv.version}`,
       settings: {
         nodes,
       },
@@ -104,7 +109,7 @@ export async function run(args: any = process.argv) {
   const voteController = registrarK;
   const initProposalConfig = proposalProgram.methods.initializeProposalConfigV0(
     {
-      name: `${argv.name} Default V1`,
+      name: `${argv.name} Default ${argv.version}`,
       voteController,
       stateController: resolutionSettings!,
       onVoteHook: stateProgram.programId,
