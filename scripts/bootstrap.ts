@@ -52,7 +52,7 @@ export async function run(args: any = process.argv) {
       type: "number",
       default: "10000000000000000",
     },
-    version: {
+    ver: {
       type: "string",
       default: "V1"
     }
@@ -93,7 +93,7 @@ export async function run(args: any = process.argv) {
 
   const initResolutionSettings =
     stateProgram.methods.initializeResolutionSettingsV0({
-      name: `${argv.name} Single ${argv.version}`,
+      name: `${argv.name} Single ${argv.ver}`,
       settings: {
         nodes,
       },
@@ -109,7 +109,7 @@ export async function run(args: any = process.argv) {
   const voteController = registrarK;
   const initProposalConfig = proposalProgram.methods.initializeProposalConfigV0(
     {
-      name: `${argv.name} Default ${argv.version}`,
+      name: `${argv.name} Default ${argv.ver}`,
       voteController,
       stateController: resolutionSettings!,
       onVoteHook: stateProgram.programId,
