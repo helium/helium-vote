@@ -16,5 +16,23 @@
       { "uri": null, "name": "KΞ7IN" },
       { "uri": null, "name": "greenz" }
     ]
+  },
+  {
+    "name": "MOBILE Working Group (Even Class) Elections - Q4 2023",
+    "uri": "https://gist.githubusercontent.com/hiptron/036867431eb2153a52babe30fb5dbdf3/raw/50f037e807ad844e87e0ff335ffe605bedb48d57/2023Q4__MOBILE__00__Summary.md",
+    "maxChoicesPerVoter": 5,
+    "tags": ["working-group"],
+    "choices": [
+      { "uri": null, "name": "Heated Lime" },
+      { "uri": null, "name": "Keith Rettig" },
+      { "uri": null, "name": "Max Gold" },
+      { "uri": null, "name": "Kennyy" },
+      { "uri": null, "name": "cheflifeworld" },
+      { "uri": null, "name": "Erfanjhan" },
+      { "uri": null, "name": "Unikt39" },
+      { "uri": null, "name": "Brainstormer" },
+      { "uri": null, "name": "KΞ7IN" },
+      { "uri": null, "name": "greenz" }
+    ]
   }
 ]
