@@ -236,6 +236,10 @@ const VoteDetailsPage = ({ name: initName, content }: { name: string, content: s
         <p className="mb-4 text-xl sm:text-3xl text-white font-semibold tracking-tighter">
           Voter Breakdown
         </p>
+        <p className="text-white mb-s">
+          NOTE: For MOBILE / IOT Subnetworks this is shown as 1/10 of your vote weight because the underlying contracts
+          in spl-governance only support 64-bits of precision.
+        </p>
         {!showBreakdown && (
           <button
             className="px-6 py-3 hover:bg-hv-gray-500 transition-all duration-200 rounded-lg text-lg text-hv-green-500 whitespace-nowrap outline-none border border-solid border-transparent focus:border-hv-green-500 mx-auto mt-4 block text-center"
