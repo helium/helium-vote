@@ -237,8 +237,8 @@ const VoteDetailsPage = ({ name: initName, content }: { name: string, content: s
           Voter Breakdown
         </p>
         <p className="text-white mb-s">
-          NOTE: For MOBILE/IOT Sub Networks this is shown as 1/10 of your vote weight because the underlying contracts
-          in spl-governance that we are currently migrating from only support 64-bits of precision.
+          NOTE: For MOBILE / IOT Subnetworks this is shown as 1/10 of your vote weight because the underlying contracts
+          in spl-governance only support 64-bits of precision.
         </p>
         {!showBreakdown && (
           <button
