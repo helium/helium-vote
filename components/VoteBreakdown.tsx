@@ -64,6 +64,7 @@ export function VoteBreakdown({ proposalKey }: { proposalKey: PublicKey }) {
       const choices = marker.choices
         .map((c) => proposal.choices[c].name)
         .join(", ");
+
       const voteWeight = humanReadable(marker.totalWeight, decimals);
       const percentage = (
         marker.totalWeight.mul(new BN(100000)).div(totalVotes).toNumber() / 1000
@@ -72,7 +73,9 @@ export function VoteBreakdown({ proposalKey }: { proposalKey: PublicKey }) {
       rows.push([owner, choices, voteWeight, percentage]);
     });
 
-    const csvContent = rows.map((row) => row.map(r => `"${r.toString()}"`).join(",")).join("\n");
+    const csvContent = rows
+      .map((row) => row.map((r) => `"${r.toString()}"`).join(","))
+      .join("\n");
     return csvContent;
   }, [groupedSortedMarkers]);
   const displayedMarkers = useMemo(
