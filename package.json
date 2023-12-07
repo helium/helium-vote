@@ -12,17 +12,17 @@
     "node": ">=16.0.0 <17.0.0"
   },
   "dependencies": {
-    "@coral-xyz/anchor": "^0.28.1-beta.1",
-    "@helium/account-fetch-cache": "^0.4.1",
-    "@helium/account-fetch-cache-hooks": "^0.4.1",
+    "@coral-xyz/anchor": "^0.28.0",
+    "@helium/account-fetch-cache": "^0.6.4",
+    "@helium/account-fetch-cache-hooks": "^0.6.4",
     "@helium/currency": "^4.10.1",
-    "@helium/helium-react-hooks": "^0.4.1",
-    "@helium/modular-governance-hooks": "^0.0.5",
-    "@helium/organization-sdk": "^0.0.5",
-    "@helium/spl-utils": "^0.4.1",
-    "@helium/state-controller-sdk": "^0.0.5",
-    "@helium/voter-stake-registry-hooks": "^0.4.1",
-    "@helium/voter-stake-registry-sdk": "^0.4.1",
+    "@helium/helium-react-hooks": "^0.6.4",
+    "@helium/modular-governance-hooks": "^0.0.8",
+    "@helium/organization-sdk": "^0.0.8",
+    "@helium/spl-utils": "^0.6.4",
+    "@helium/state-controller-sdk": "^0.0.8",
+    "@helium/voter-stake-registry-hooks": "^0.6.4",
+    "@helium/voter-stake-registry-sdk": "^0.6.4",
     "@project-serum/anchor": "^0.25.0",
     "@solana/spl-token": "^0.3.8",
     "@solana/wallet-adapter-base": "^0.9.22",
@@ -52,11 +52,12 @@
     "yargs": "^17.7.2"
   },
   "resolutions": {
-    "@helium/account-fetch-cache-hooks": "^0.4.1",
-    "@helium/helium-react-hooks": "^0.4.1",
-    "@helium/voter-stake-registry-hooks": "^0.4.1",
-    "@solana/wallet-adapter-react": "^0.15.32",
-    "@helium/modular-governance-hooks": "^0.0.5"
+    "@helium/account-fetch-cache": "^0.6.4",
+    "@helium/account-fetch-cache-hooks": "^0.6.4",
+    "@helium/helium-react-hooks": "^0.6.4",
+    "@helium/voter-stake-registry-hooks": "^0.6.4",
+    "@helium/modular-governance-hooks": "^0.0.8",
+    "@solana/wallet-adapter-react": "^0.15.32"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.9",
