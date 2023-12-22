@@ -1,5 +1,6 @@
 import getConfig from "next/config";
 
+const cachedData = require('./cache.json');
 const { serverRuntimeConfig } = getConfig();
 const votes = new Map(serverRuntimeConfig.votes.map(({
     id,
@@ -9,7 +10,6 @@ const votes = new Map(serverRuntimeConfig.votes.map(({
     tags,
     authors,
     description,
-    outcomes,
     filters,
   }) => [id, {
     id,
@@ -19,11 +19,11 @@ const votes = new Map(serverRuntimeConfig.votes.map(({
     tags,
     authors,
     description,
-    outcomes,
+    deadlineTs: cachedData[id].deadline_ts,
+    outcomes: cachedData[id].outcomes,
     filters: (filters ? filters : []),
   }]));
 
-const cachedData = require('./cache.json');
 
 export const fetchVotes = () => {
   return Array.from(votes.values());

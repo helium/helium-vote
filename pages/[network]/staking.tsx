@@ -1,9 +1,9 @@
 import classNames from "classnames";
-import { LockTokensAccount } from "../components/LockTokensAccount";
-import MetaTags from "../components/MetaTags";
-import Page from "../components/Page";
+import { LockTokensAccount } from "../../components/LockTokensAccount";
+import MetaTags from "../../components/MetaTags";
+import Page from "../../components/Page";
 import { useState } from "react";
-import ContentSection from "../components/ContentSection";
+import ContentSection from "../../components/ContentSection";
 
 const Staking = () => {
   const [currentTab, setCurrentTab] = useState(0);

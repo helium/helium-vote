@@ -53,6 +53,52 @@ export function humanReadable(
   }`;
 }
 
+export function truncatedHumanReadable(
+  amount?: BN,
+  decimals?: number,
+  maxDecimals?: number
+): string | undefined {
+  if (typeof decimals === "undefined" || typeof amount === "undefined") return;
+  if (amount.isZero()) {
+    return "0";
+  }
+
+  const suffixes = ["", "K", "M", "B", "T", "Q", "Qu", "Sx", "Sp", "Oc"]; // Add more suffixes as needed
+  const input = amount.toString();
+  const integerPart =
+    input.length > decimals ? input.slice(0, input.length - decimals) : "";
+  const formattedIntegerPart = integerPart.replace(
+    /\B(?=(\d{3})+(?!\d))/g,
+    getSeparator("group")
+  );
+  const decimalPart =
+    decimals !== 0
+      ? input
+          .slice(-decimals)
+          .padStart(decimals, "0") // Add prefix zeros
+          .replace(/0+$/, "") // Remove trailing zeros
+      : "";
+
+  const displayDecimals =
+    typeof maxDecimals === "undefined"
+      ? decimals
+      : input.length > decimals
+      ? maxDecimals
+      : decimals;
+  const num =
+    formattedIntegerPart +
+    (displayDecimals > 0 && Number(decimalPart) !== 0 ? `.${decimalPart.slice(0, displayDecimals)}` : "");
+  const tier = (Math.log10(Number(integerPart)) / 3) | 0;
+
+  if (tier === 0) return num.toString();
+
+  const suffix = suffixes[tier];
+  const scale = Math.pow(10, tier * 3);
+
+  const scaled = Number(integerPart) / scale;
+  return scaled.toFixed(displayDecimals) + suffix;
+}
+
 export const fmtTokenAmount = (c: BN, decimals?: number) =>
   c?.div(new BN(10).pow(new BN(decimals ?? 0))).toNumber() || 0;
 

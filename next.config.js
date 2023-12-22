@@ -248,8 +248,8 @@ module.exports = {
             link: "https://github.com/abhay",
           },
           {
-            nickname: "et al."
-          }
+            nickname: "et al.",
+          },
         ],
         description:
           "HIP 56 describes an update to the dispute mechanism for State Channels that will enable better accounting of State Channel activity and more accurate rewards for Data Transfer while improving blockchain scaling. It specifically protects against an edge case that could cause blockchain halts due to the dispute mechanism. This vote is for the new dispute mechanism to be enabled by a chain variable.\n\nApproving this HIP implies that the community has reviewed the implementation and the relevant Chain Variables. We will consider this proposal as approved if it passes with 2/3 of the vote power by the deadline.\n\nJoin the conversation on Discord and see the #hip‑56‑improved‑state‑channel‑disputes channel for more details.",
@@ -283,8 +283,8 @@ module.exports = {
             link: "https://github.com/mrpatrick1991",
           },
           {
-            nickname: "et al."
-          }
+            nickname: "et al.",
+          },
         ],
         description:
           "HIP 58 seeks to nullify a certain gaming vector of Proof of Coverage rewards by aligning the expected range of PoC with the range of LoRaWAN devices.\n\nThe current PoC mechanics allow manipulation of witness RF data at long distances and thus, we find evidence of gaming at the edges. This improvement implements a sanity check filter on Proof of Coverage and reduces the maximum range of PoC activity to 100km. The distance is based on the notion that typical devices are able to be heard 30-50km away. The distance is doubled to 100km in order to incentivize new Hotspot placements. The impact on a few legitimate witness events that are > 100km is limited as described in the dataset in the HIP.\n\nApproving this HIP implies that the community has reviewed the implementation and relevant Chain Variable. We will consider this proposal as approved if it passed with 2/3 of the vote power by the deadline.\n\nJoin the conversation on Discord and see the #hip‑58‑poc‑distance‑limit channel for more details.",
@@ -316,7 +316,7 @@ module.exports = {
           {
             nickname: "@jdgemm",
             link: "https://github.com/jdgemm",
-          }
+          },
         ],
         description:
           "HIP 59 proposes a change for how fees are calculated when doing a XOR filter update with the goal of reducing these fees and enabling more updates to XOR filters. \n\nOn the Helium blockchain, fees are calculated based on the byte_size of the transaction. XOR filter fees are operational costs related to maintaining OUIs on the blockchain. With the current implementation as more devices get added to the filter, it grows. Meaning that any update is calculated based on the full size of the filter. This can increase the cost of an XOR filter update to tens of thousands of Data Credits (DC). This is not sustainable as the network grows.\n\nHIP 59 proposes to not account for the full size of the XOR filter every time but only the difference compared to the previous update. For example: if the previous XOR had a size of 100 bytes and the update is 110 bytes then fees would be calculated on the difference: (110 - 100 = 10) 10 bytes. \n\nIf approved this approach increases the commercial viability for community members to host a Console/Router instance, since only the difference of the XOR filter will be calculated vs paying for the entire amount each time.",
@@ -356,7 +356,7 @@ module.exports = {
           {
             nickname: "@abhay",
             link: "https://github.com/abhay",
-          }
+          },
         ],
         description:
           "HIP 51 seeks to allow Helium and its token HNT to become a ‘Network of Networks’, opening the door for multiple network protocols and multiple tokens to exist in the ecosystem. \n\nFor the IoT network, Hotspots would start earning a new token called $IOT, while 5G Hotspots would earn a token called $MOBILE. All new tokens are backed by HNT and can always be converted to HNT. Existing holdings of HNT remain unaffected.\n\nThis HIP provides a general structure for onboarding new network protocols, of which HIP 52: LoRaWAN DAO and HIP 53: 5G DAO exist as two current proposals. HIP 51 aims to create an economy where the underlying HNT-Data Credit burn-and-mint equilibrium continues to power the Helium Flywheel, while Proof-of-Coverage rules and earnings are dictated by each corresponding subDAO.\n\nApproving this HIP implies that the community has reviewed the implementation. We will consider this proposal as approved if it passes with 2/3 of the vote power by the deadline.\n\nJoin the conversation on Discord and see the #hip‑51‑helium-dao channel for more details.",
@@ -396,7 +396,7 @@ module.exports = {
           {
             nickname: "@abhay",
             link: "https://github.com/abhay",
-          }
+          },
         ],
         description:
           "HIP 52 establishes the Helium IoT subDAO and subtoken under the framework established by HIP 51. This subDAO will manage the Helium LoRaWAN network, the IOT token, and governance operations for IoT networks. Oracles in the IoT subDAO will confirm Proof of Coverage, data transfer activity, and add blocks to the IoT subnetwork.\n\nIoT subDAO participants may lock and delegate IOT tokens as veIOT to gain voting power in IoT governance and/or run oracles. HNT tokens will be emitted to the subDAO treasury as required by HIP 51 and will back the IOT token. The IOT token will be redeemable for HNT through a programmatic treasury controlled by the IoT subDAO.\n\nApproving this HIP implies that the community has reviewed the implementation. We will consider this proposal as approved if it passes with 2/3 of the vote power by the deadline.\n\nJoin the conversation on Discord and see the #hip-52-lorawan-dao channel for community discussion.",
@@ -423,7 +423,7 @@ module.exports = {
         authors: [
           {
             nickname: "@zer0tweets",
-            link: "https://github.com/zer0tweets"
+            link: "https://github.com/zer0tweets",
           },
           {
             nickname: "@tjain-mcc",
@@ -438,8 +438,8 @@ module.exports = {
             link: "https://github.com/abhay",
           },
           {
-            nickname: "Joey Padden"
-          }
+            nickname: "Joey Padden",
+          },
         ],
         description:
           "HIP 53 establishes the MOBILE token and subDAO under the framework established by HIP 51: Helium DAO. In summary, the Helium MOBILE subDAO handles all MOBILE emissions, mining rewards, programmatic treasury, and governance operations for mobile device networks.\n\nHNT tokens will be emitted to the MOBILE subDAO treasury as required by HIP 51 and will be used to back the MOBILE token. The MOBILE token will thus always be redeemable for HNT within the Helium ecosystem upon demand through a programmatic treasury controlled by the MOBILE subDAO. Oracles in the MOBILE subDAO will confirm Proof of Coverage, data transfer, and add blocks to the MOBILE subnetwork.\n\nApproving this HIP implies that the community has reviewed the implementation. We will consider this proposal as approved if it passes with 2/3 of the vote power by the deadline.\n\nJoin the conversation on Discord and see the #hip‑53‑5g‑subdao channel for more details.",
@@ -466,8 +466,8 @@ module.exports = {
         authors: [
           {
             nickname: "@EdBallou",
-            link: "https://github.com/EdBallou"
-          }
+            link: "https://github.com/EdBallou",
+          },
         ],
         description:
           "HIP 67 proposes to rescind the community vote for HIP 39 - Redenomination. This HIP was previously approved November 21, 2021 by the Helium community.\n\nOne of the core motivations of HIP 39 was to bring back ‘whole value HNT mining’, which is an objective now solved by the Network of Networks HIPs 51, 52, and 53.\n\nHIP 39 was one of the last votes to come without an implementation plan. Complexities not accounted for in the HIP meant the immediate implementation of HIP39 would come at the cost of significantly higher engineering time than initially allotted. The initial proposal would have introduced a HNT token arbitrage, putting network integrity at risk – among other concerns.\n\nA vote for HIP 67 means no implementation of HIP 39 should take place.\nA vote against HIP 67 means HIP 39 should be implemented.\n\nWe will consider this proposal as approved if it passes with 2/3 of the vote power by the deadline.\n\nJoin the conversation on Discord and see the existing #hip‑39‑hnt‑redenomination channel for more details.",
@@ -493,8 +493,8 @@ module.exports = {
         },
         authors: [
           {
-            nickname: "Helium Core Developers"
-          }
+            nickname: "Helium Core Developers",
+          },
         ],
         description:
           "HIP 70 proposes to move Proof-of-Coverage and Data Transfer Accounting to Helium Oracles. It also migrates Helium's tokens and governance to the Solana blockchain. The team selected the Solana blockchain over maintaining their own L1 for reasons including Solana's ecosystem of developers, wallet compatibility, applications, Solana Mobile Stack, etc.\n\nThe proposed changes in HIP 70 do not change the fundamentals of the Helium Network or HNT, but provide several benefits to the Helium Network including more HNT available to subDAO reward pools, more consistent mining, more reliable data transfer, more utility for HNT and subDAO tokens, and more ecosystem support.\n\nThe Validator unstaking cooldown period is reduced from 5 months to 3 months to support the transition to Solana. Any Validators that remain staked or new stakers of veHNT in the first 7 days after the Solana transition get a 3x bonus of veHNT value.\n\nAll active Helium wallets will be seeded with enough SOL for 100 transactions to ensure a smooth transition to Solana.\n\nApproving this HIP implies that the community has reviewed the implementation. We would consider this proposal as approved if it passes with 2/3 of the vote power by the deadline.\n\nJoin the conversation on Discord and see the #hip‑70‑scaling‑the‑helium‑network channel for more details.",
@@ -516,7 +516,7 @@ module.exports = {
           "13TFnZyGDy95neRAxnP5Y9FLHqW7Mu28U9VgmZz2hgNhi7qG3qF", // binance.us (?)
           "13PBfQf1kaZPD3zN8LyoY5QtEDSZKJYZS5N7S5hZYaEz2Kh8znT", // crypto.com
           "13d4ieU8x4n3v7XtkiLio1NmT9WzKJS4BFC7jDJNbGjB5xciQC8", // kucoin
-          "133d47AMU6nQ7mZ1fF4dFJfoLhqCUnTSRhZAwmcahBoEtZPGF4U", // gate.io 
+          "133d47AMU6nQ7mZ1fF4dFJfoLhqCUnTSRhZAwmcahBoEtZPGF4U", // gate.io
         ],
       },
       {
@@ -531,12 +531,12 @@ module.exports = {
         authors: [
           {
             nickname: "@PaulVMo",
-            link: "https://github.com/paulvmo"
-          }
+            link: "https://github.com/paulvmo",
+          },
         ],
         description:
           "HIP 73 proposes a new chain variable to improve the performance of the current Helium L1 and enable quick removal of low-performing Validators from the Consensus Group (CG). Specific details on how this would work are in the HIP but the outcome of this change would enable better performance of the chain when underperforming validators are elected into Consensus, thereby improving block production, Proof-of-Coverage activity, and overall stability of transaction processing.\n\nCode for this change is available for review by the community and has been reviewed by the Helium Core Developers. The chain variable gating this change will be activated shortly after HIP approval.\n\nWe will consider this proposal as approved if it passes with 2/3 of the vote power by the deadline.\n\nJoin the conversation on Discord and see the existing #hip‑73‑consensus‑deselection‑weighting channel for more details.",
-          outcomes: [
+        outcomes: [
           {
             value: "For HIP 73",
             address: "13wptC32h89s1K66uPTDiDe9XFbuZicyNuH2Di7NZyciKuLwvCT",
@@ -569,24 +569,24 @@ module.exports = {
         authors: [
           {
             nickname: "@thehardbits",
-            link: "https://github.com/thehardbits"
+            link: "https://github.com/thehardbits",
           },
           {
             nickname: "@zer0tweets",
-            link: "https://github.com/zer0tweets"
+            link: "https://github.com/zer0tweets",
           },
           {
             nickname: "@jpad-freedomfi",
-            link: "https://github.com/jpad-freedomfi"
+            link: "https://github.com/jpad-freedomfi",
           },
           {
             nickname: "@meowshka",
-            link: "https://github.com/meowshka"
-          }
+            link: "https://github.com/meowshka",
+          },
         ],
         description:
           "HIP-74 proposes an implementation of MOBILE Proof-of-Coverage called Modeled Coverage. Modeled Coverage replaces the current algorithm for MOBILE rewards initially introduced based on radio type multipliers. The new algorithm uses the location of the radio to calculate MOBILE rewards based on the hexes the radio covers. Modeled Coverage aims to improve the current method by considering the directionality of radios and environmental obstructions that prevent the propagation of the signals they generate. Modeled Coverage, combined with other parameters like uptime (Heartbeats) and backhaul (Speed Test), aims to allow for more fair rewards and incentivizes the deployment of radios at optimal locations.\n\nThis HIP affects only the Helium 5G network and has no impact on IoT rewards. \n\nApproving HIP-74 implies that the community has reviewed the implementation. We would consider this proposal as approved if it passes with 2/3 of the vote power by the deadline. \n\nJoin the conversation on Discord and see the #hip-74-mobile-poc-modeled-coverage-rewards channel for more details.",
-          outcomes: [
+        outcomes: [
           {
             value: "For HIP 74",
             address: "13DBZ5penZZWUg93TxbHAgVaQnsNLewKkyxLZbsSEMcyyDNtMZW",
@@ -604,7 +604,7 @@ module.exports = {
           "13TFnZyGDy95neRAxnP5Y9FLHqW7Mu28U9VgmZz2hgNhi7qG3qF", // binance.us (?)
           "13PBfQf1kaZPD3zN8LyoY5QtEDSZKJYZS5N7S5hZYaEz2Kh8znT", // crypto.com
           "13d4ieU8x4n3v7XtkiLio1NmT9WzKJS4BFC7jDJNbGjB5xciQC8", // kucoin
-          "133d47AMU6nQ7mZ1fF4dFJfoLhqCUnTSRhZAwmcahBoEtZPGF4U", // gate.io 
+          "133d47AMU6nQ7mZ1fF4dFJfoLhqCUnTSRhZAwmcahBoEtZPGF4U", // gate.io
         ],
       },
       {
@@ -619,16 +619,16 @@ module.exports = {
         authors: [
           {
             nickname: "@zer0tweets",
-            link: "https://github.com/zer0tweets"
+            link: "https://github.com/zer0tweets",
           },
           {
             nickname: "@meowshka",
-            link: "https://github.com/meowshka"
-          }
+            link: "https://github.com/meowshka",
+          },
         ],
         description:
-          "HIP-75 proposes to begin MOBILE minting on the Helium L1 alongside a revised MOBILE emissions curve. These proposed changes do not affect the monthly rewards that current MOBILE Hotspot deployers earn, which will continue to be 3 Billion MOBILE tokens per month. The proposed solution maintains rewards continuity for Hotspot owners between the premine and the permanent solution of L1 minting. The proposed new curve maintains rewards distributions as they are today to match the development pace of Mobile Proof-of-Coverage more closely. Under the current emissions schedule, and without this new curve, a large number of tokens would be minted in a shorter period, front-loading MOBILE rewards while decreasing later MOBILE rewards.\n\nThis HIP affects only the Helium 5G network and has no impact on HNT rewards. \n\nApproving HIP-75 implies that the community has reviewed the implementation. We would consider this proposal as approved if it passes with 2/3 of the vote power by the deadline. \n\nJoin the conversation on Discord and see the #hip-75-programmatic-minting-and-updated-curve channel for more details.",         
-          outcomes: [
+          "HIP-75 proposes to begin MOBILE minting on the Helium L1 alongside a revised MOBILE emissions curve. These proposed changes do not affect the monthly rewards that current MOBILE Hotspot deployers earn, which will continue to be 3 Billion MOBILE tokens per month. The proposed solution maintains rewards continuity for Hotspot owners between the premine and the permanent solution of L1 minting. The proposed new curve maintains rewards distributions as they are today to match the development pace of Mobile Proof-of-Coverage more closely. Under the current emissions schedule, and without this new curve, a large number of tokens would be minted in a shorter period, front-loading MOBILE rewards while decreasing later MOBILE rewards.\n\nThis HIP affects only the Helium 5G network and has no impact on HNT rewards. \n\nApproving HIP-75 implies that the community has reviewed the implementation. We would consider this proposal as approved if it passes with 2/3 of the vote power by the deadline. \n\nJoin the conversation on Discord and see the #hip-75-programmatic-minting-and-updated-curve channel for more details.",
+        outcomes: [
           {
             value: "For HIP 75",
             address: "14EoGWxBjBGQootk1f9gE8CPJhSpSCUQ89Hk5nvHPruWjgQ2vnL",
@@ -646,7 +646,7 @@ module.exports = {
           "13TFnZyGDy95neRAxnP5Y9FLHqW7Mu28U9VgmZz2hgNhi7qG3qF", // binance.us (?)
           "13PBfQf1kaZPD3zN8LyoY5QtEDSZKJYZS5N7S5hZYaEz2Kh8znT", // crypto.com
           "13d4ieU8x4n3v7XtkiLio1NmT9WzKJS4BFC7jDJNbGjB5xciQC8", // kucoin
-          "133d47AMU6nQ7mZ1fF4dFJfoLhqCUnTSRhZAwmcahBoEtZPGF4U", // gate.io 
+          "133d47AMU6nQ7mZ1fF4dFJfoLhqCUnTSRhZAwmcahBoEtZPGF4U", // gate.io
         ],
       },
       {
@@ -661,12 +661,12 @@ module.exports = {
         authors: [
           {
             nickname: "@TheRealJohnMac50",
-            link: "https://github.com/TheRealJohnMac50"
+            link: "https://github.com/TheRealJohnMac50",
           },
         ],
         description:
           "HIP 69 proposes reducing re-assertion fees by half (from 1,000,000 DC to 500,000 DC) on the IOT/LoRaWAN network for a total of three months. If this HIP passes, the fee reduction will begin upon the Solana migration. The intended purpose of the reduced fee is to incentivize honest hotspot owners to reassert in less dense hexes and correct any inaccurately asserted hotspots. \n\nApproving HIP 69 implies that the community has reviewed the implementation. We would consider this proposal as approved if it passes with 2/3 of the vote power by the deadline. \n\nJoin the conversation on Discord and see the #hip-69-re-assertion-fee-reduction channel for more details.",
-          outcomes: [
+        outcomes: [
           {
             value: "For HIP 69",
             address: "139LARBfojBxAinZNfxEMbnx1Q7vRUv26Z2ZwP8wxDZV5grZ8Ae",
@@ -684,7 +684,7 @@ module.exports = {
           "13TFnZyGDy95neRAxnP5Y9FLHqW7Mu28U9VgmZz2hgNhi7qG3qF", // binance.us (?)
           "13PBfQf1kaZPD3zN8LyoY5QtEDSZKJYZS5N7S5hZYaEz2Kh8znT", // crypto.com
           "13d4ieU8x4n3v7XtkiLio1NmT9WzKJS4BFC7jDJNbGjB5xciQC8", // kucoin
-          "133d47AMU6nQ7mZ1fF4dFJfoLhqCUnTSRhZAwmcahBoEtZPGF4U", // gate.io 
+          "133d47AMU6nQ7mZ1fF4dFJfoLhqCUnTSRhZAwmcahBoEtZPGF4U", // gate.io
         ],
       },
       {
@@ -699,12 +699,12 @@ module.exports = {
         authors: [
           {
             nickname: "@Ferebee",
-            link: "https://github.com/ferebee" 
+            link: "https://github.com/ferebee",
           },
         ],
         description:
           "HIP 76 proposes key technical and economic changes to the veHNT smart contracts for implementation upon the Solana Migration. HIP 76 proposes to: \n1) Simplify the lockup curve for veHNT and subDAO (veDNT) tokens. \n2) Eliminate the 6-month minimum lockup period, excluding Validators. \n3) Introduce a minimum of 1 HNT lockup position to prevent spam. \n4) Specify the 3x Landrush Rules that are unclearly defined in HIP 70.\n\nApproving HIP 76 implies that the community has reviewed the implementation. We would consider this proposal as approved if it passes with 2/3 of the vote power by the deadline.\n\nJoin the conversation on Discord and see the #hip-76-linear-lockup-curve channel for more details.",
-          outcomes: [
+        outcomes: [
           {
             value: "For HIP 76",
             address: "13Z46nMa5Su5p2h2FhAWADXcTimwADeXks8VB5tXwwsVuXuh3gF",
@@ -722,7 +722,7 @@ module.exports = {
           "13TFnZyGDy95neRAxnP5Y9FLHqW7Mu28U9VgmZz2hgNhi7qG3qF", // binance.us (?)
           "13PBfQf1kaZPD3zN8LyoY5QtEDSZKJYZS5N7S5hZYaEz2Kh8znT", // crypto.com
           "13d4ieU8x4n3v7XtkiLio1NmT9WzKJS4BFC7jDJNbGjB5xciQC8", // kucoin
-          "133d47AMU6nQ7mZ1fF4dFJfoLhqCUnTSRhZAwmcahBoEtZPGF4U", // gate.io 
+          "133d47AMU6nQ7mZ1fF4dFJfoLhqCUnTSRhZAwmcahBoEtZPGF4U", // gate.io
         ],
       },
       {
@@ -737,16 +737,16 @@ module.exports = {
         authors: [
           {
             nickname: "@abhay",
-            link: "https://github.com/abhay" 
+            link: "https://github.com/abhay",
           },
           {
             nickname: "@ChewingGlass",
-            link: "https://github.com/ChewingGlass" 
+            link: "https://github.com/ChewingGlass",
           },
         ],
         description:
           "HIP 77 proposes essential parameters for initiating a Mainnet launch on Solana, addressing aspects such as governance, circuit breakers, and the decimal precision for HNT, IOT, and MOBILE, to eliminate overflow risks. Additionally, HIP 77 recommends establishing a multisig, initially managed by the Helium Foundation. \n\nApproving HIP 77 implies that the community has reviewed the implementation. We would consider this proposal as approved if it passes with 2/3 of the vote power by the deadline. \n\nJoin the conversation on Discord and see the #hip-77-solana-parameters channel for more details.",
-          outcomes: [
+        outcomes: [
           {
             value: "For HIP 77",
             address: "13r8YY1MCkxsnMhzv6QrXiVhPwNoXuztSnpUBHMgUrvve7Cg7f9",
@@ -766,7 +766,7 @@ module.exports = {
           "148W6v8vaS4npmQQ2PtPQhSLBhNWg6oYjvxne3VdsEAQq8r2GeT", // crypto.com
           "13d4ieU8x4n3v7XtkiLio1NmT9WzKJS4BFC7jDJNbGjB5xciQC8", // kucoin
           "13Nj4KCnuBruSYvbxCgTLdeoyTN6Q5cZsNnJw3rh8WLZt9wBYih", // kucoin
-          "133d47AMU6nQ7mZ1fF4dFJfoLhqCUnTSRhZAwmcahBoEtZPGF4U", // gate.io 
+          "133d47AMU6nQ7mZ1fF4dFJfoLhqCUnTSRhZAwmcahBoEtZPGF4U", // gate.io
         ],
       },
       {
@@ -774,10 +774,11 @@ module.exports = {
         deadline: 1831250,
         link: "https://github.com/leogaggl/HIP/blob/d1c9b208410fe5e51c2504d92927b3e4bf411d7b/00YZ-au-frequency-plan-choice.md",
         name: "Guidance on Australian Frequency Plan",
-        temperatureCheck: "Voting for this temperature check will provide guidance to the Helium Foundation on a regional frequency plan for Hotspots asserted in Australia.\n\nThis temperature check does not affect Hotspots asserted outside of Australia.",
+        temperatureCheck:
+          "Voting for this temperature check will provide guidance to the Helium Foundation on a regional frequency plan for Hotspots asserted in Australia.\n\nThis temperature check does not affect Hotspots asserted outside of Australia.",
         tags: {
           secondary: "Governance",
-          tertiary: "Temp Check"
+          tertiary: "Temp Check",
         },
         authors: [
           {
@@ -802,8 +803,8 @@ module.exports = {
           },
         ],
         description:
-          "Two different channel plans are authorized for use in Australia, AU915 and AS923-1. The Helium network operated on AU915 sub-band 2 (SB2) until November 2022, when it was switched to an AS923-1 variant with support for AU915 sensors on SB6.\n\nA breakdown of the two options presented are as follows:\n\n➤ Return to AU915 plan with support for AU915 sensors on SB2\n\nThis option will re-enable support for all AU915 SB2 sensors as was the case prior to the chain variable change in November 2022. This option is currently supported by all known manufacturers but the Helium Foundation will confirm before pushing this configuration change.\n\n1. AU915 sensors will work on the network at 22dBm, some possibly higher.\n2. AU915 sensors on SB2 join the network faster vs sometimes not at all on AS923-1C\n3. Full support by Chirpstack and other LNS options (rather than having to split LNS for AU915 vs AS923 sensors).\n4. Helium continues to be part of the Australian public LoRaWAN network ecosystem. Private, commercial and public operators can roam the network.\n\nThis proposal has been presented by existing members of the AU community as a draft HIP which is linked as More Details on this page.\n\n➤ Remain on AS923-1C Plan with a power adjustment to 27 dBm\n\nThis option retains the existing \"dual plan\" for AS923 sensors and limited support for some AU915 sensors on SB6. Assuming hardware/firmware support from manufacturers, this option also allows for a power increase that should match prior expectations on power for Proof-of-Coverage. Specific additional details:\n\n1. AS923 sensors will work on the network at 16dBm, some possibly higher.\n2. AS923 is a dynamic frequency plan and can take advantage of upcoming spectrum changes in the region.\n3. Due to only two join channels AS923 sensors join the network faster.\n4. Commercial operators have expressed interest in roaming on AS923 but we are not aware of existing roaming activity at scale.\n\nIt should be noted that Proof-of-Coverage will be the same from a power perspective for both channel plan options and only operators using the specific frequency plan can roam on Helium Hotspots regardless of choice.\n\nPrevious discussions can be found on Discord: https://discord.gg/helium\n\nVoting on this temperature check implies that the community has reviewed the two options and is providing guidance to the Helium Foundation on a path forward of implementation in the IoT Configuration Service.\n\nJoin the conversation on Discord in the #hip-discussion channel for more details.",
-          outcomes: [
+          'Two different channel plans are authorized for use in Australia, AU915 and AS923-1. The Helium network operated on AU915 sub-band 2 (SB2) until November 2022, when it was switched to an AS923-1 variant with support for AU915 sensors on SB6.\n\nA breakdown of the two options presented are as follows:\n\n➤ Return to AU915 plan with support for AU915 sensors on SB2\n\nThis option will re-enable support for all AU915 SB2 sensors as was the case prior to the chain variable change in November 2022. This option is currently supported by all known manufacturers but the Helium Foundation will confirm before pushing this configuration change.\n\n1. AU915 sensors will work on the network at 22dBm, some possibly higher.\n2. AU915 sensors on SB2 join the network faster vs sometimes not at all on AS923-1C\n3. Full support by Chirpstack and other LNS options (rather than having to split LNS for AU915 vs AS923 sensors).\n4. Helium continues to be part of the Australian public LoRaWAN network ecosystem. Private, commercial and public operators can roam the network.\n\nThis proposal has been presented by existing members of the AU community as a draft HIP which is linked as More Details on this page.\n\n➤ Remain on AS923-1C Plan with a power adjustment to 27 dBm\n\nThis option retains the existing "dual plan" for AS923 sensors and limited support for some AU915 sensors on SB6. Assuming hardware/firmware support from manufacturers, this option also allows for a power increase that should match prior expectations on power for Proof-of-Coverage. Specific additional details:\n\n1. AS923 sensors will work on the network at 16dBm, some possibly higher.\n2. AS923 is a dynamic frequency plan and can take advantage of upcoming spectrum changes in the region.\n3. Due to only two join channels AS923 sensors join the network faster.\n4. Commercial operators have expressed interest in roaming on AS923 but we are not aware of existing roaming activity at scale.\n\nIt should be noted that Proof-of-Coverage will be the same from a power perspective for both channel plan options and only operators using the specific frequency plan can roam on Helium Hotspots regardless of choice.\n\nPrevious discussions can be found on Discord: https://discord.gg/helium\n\nVoting on this temperature check implies that the community has reviewed the two options and is providing guidance to the Helium Foundation on a path forward of implementation in the IoT Configuration Service.\n\nJoin the conversation on Discord in the #hip-discussion channel for more details.',
+        outcomes: [
           {
             value: "Return to AU915 Plan",
             address: "14jqcPiL8BYLgivEFLEczHHkWmFEgG9YCKq6P15BHtrZw1fKjSq",
@@ -823,7 +824,7 @@ module.exports = {
           "148W6v8vaS4npmQQ2PtPQhSLBhNWg6oYjvxne3VdsEAQq8r2GeT", // crypto.com
           "13d4ieU8x4n3v7XtkiLio1NmT9WzKJS4BFC7jDJNbGjB5xciQC8", // kucoin
           "13Nj4KCnuBruSYvbxCgTLdeoyTN6Q5cZsNnJw3rh8WLZt9wBYih", // kucoin
-          "133d47AMU6nQ7mZ1fF4dFJfoLhqCUnTSRhZAwmcahBoEtZPGF4U", // gate.io 
+          "133d47AMU6nQ7mZ1fF4dFJfoLhqCUnTSRhZAwmcahBoEtZPGF4U", // gate.io
         ],
       },
       {
@@ -832,8 +833,8 @@ module.exports = {
         link: "https://github.com/helium/HIP/blob/main/0080-simplifying-dao-utility-score.md",
         name: "Simplifying the DAO Utility Score",
         tags: {
-          primary: 'HIP 80',
-          secondary: "Economic"
+          primary: "HIP 80",
+          secondary: "Economic",
         },
         authors: [
           {
@@ -855,7 +856,7 @@ module.exports = {
         ],
         description:
           "HIP 80 proposes a new DAO Utility Score formula, removing the number of Hotspots and their onboarding fees and instead using only the square root of the product of DC Burn and delegated veHNT. Additionally, a DC Burn Floor is added for all subDAOs with a 5x higher floor for the IOT subDAO. Although the onboarding fee is no longer relevant to the DAO Utility Score, the HIP proposes to maintain a $5 onboarding fee as revenue and spam resistance for the subDAO. As a one-time exception, all MOBILE Hotspots onboarded prior to the implementation of HIP 70 shall be considered onboarded to both the MOBILE and the IOT subDAOs. The specific updates to the formula can be seen in the HIP.\n\nApproving HIP 80 implies that the community has reviewed the implementation. \n\nThe HIP 80 vote is running concurrently with HIP 81. Both proposals should be voted on independently.\n\nWe would consider this proposal as approved if it passes with 2/3 of the vote power by the deadline. If both fail to reach a super majority, the original DAO Utility Score specified in HIP 51 will be implemented.\n\nJoin the conversation on Discord and see the #hip-80-simplifying-dao-utility-score channel for more details.",
-          outcomes: [
+        outcomes: [
           {
             value: "For HIP 80",
             address: "13nJcKR3nFNYqrQyTfb3pjx7Eq1ThgcV22P94fviLVf5BypAYyc",
@@ -875,7 +876,7 @@ module.exports = {
           "148W6v8vaS4npmQQ2PtPQhSLBhNWg6oYjvxne3VdsEAQq8r2GeT", // crypto.com
           "13d4ieU8x4n3v7XtkiLio1NmT9WzKJS4BFC7jDJNbGjB5xciQC8", // kucoin
           "13Nj4KCnuBruSYvbxCgTLdeoyTN6Q5cZsNnJw3rh8WLZt9wBYih", // kucoin
-          "133d47AMU6nQ7mZ1fF4dFJfoLhqCUnTSRhZAwmcahBoEtZPGF4U", // gate.io 
+          "133d47AMU6nQ7mZ1fF4dFJfoLhqCUnTSRhZAwmcahBoEtZPGF4U", // gate.io
         ],
       },
       {
@@ -884,8 +885,8 @@ module.exports = {
         link: "https://github.com/helium/HIP/blob/main/0081-minimum-onboarding-fee.md",
         name: "Minimum Onboarding Fee",
         tags: {
-          primary: 'HIP 81',
-          secondary: "Economic"
+          primary: "HIP 81",
+          secondary: "Economic",
         },
         authors: [
           {
@@ -899,7 +900,7 @@ module.exports = {
         ],
         description:
           "HIP 81 proposes to maintain the DAO Utility Score codified by the community with HIP 51, but defines minimum onboarding fees for subDAOs as $10 with a halving schedule matching the halving schedule of HNT emissions. This proposal seeks to solve the problem created by radios that have not paid an onboarding fee by giving manufacturers and/or the subDAO a grace period ending on August 1, 2023 to retroactively onboard devices on behalf of the radio owners. The specific updates to the formula can be seen in the HIP.\n\nApproving HIP 81 implies that the community has reviewed the implementation. \n\nThe HIP 81 vote is running concurrently with HIP 80. Both proposals should be voted on independently.\n\nWe would consider this proposal as approved if it passes with 2/3 of the vote power by the deadline. If both fail to reach a super majority, the original DAO Utility Score specified in HIP 51 will be implemented.\n\nJoin the conversation on Discord and see the #hip-81-minimum-onboarding-fee channel for more details.",
-          outcomes: [
+        outcomes: [
           {
             value: "For HIP 81",
             address: "13JQNSJsGXf8iVZjkJdV4scxfjB4XgdMnkUwBMh36xPxYznkcX7",
@@ -919,7 +920,7 @@ module.exports = {
           "148W6v8vaS4npmQQ2PtPQhSLBhNWg6oYjvxne3VdsEAQq8r2GeT", // crypto.com
           "13d4ieU8x4n3v7XtkiLio1NmT9WzKJS4BFC7jDJNbGjB5xciQC8", // kucoin
           "13Nj4KCnuBruSYvbxCgTLdeoyTN6Q5cZsNnJw3rh8WLZt9wBYih", // kucoin
-          "133d47AMU6nQ7mZ1fF4dFJfoLhqCUnTSRhZAwmcahBoEtZPGF4U", // gate.io 
+          "133d47AMU6nQ7mZ1fF4dFJfoLhqCUnTSRhZAwmcahBoEtZPGF4U", // gate.io
         ],
       },
     ],
@@ -952,6 +953,15 @@ module.exports = {
       ),
     };
     return config;
+  },
+  async redirects() {
+    return [
+      {
+        source: "/",
+        destination: "/hnt",
+        permanent: false,
+      },
+    ];
   },
 };
 

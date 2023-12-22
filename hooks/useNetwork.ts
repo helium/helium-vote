@@ -1,25 +1,56 @@
 import { HNT_MINT, IOT_MINT, MOBILE_MINT } from "@helium/spl-utils";
-import { useQueryString } from "./useQueryString";
-import { useCallback } from "react";
+import { GetServerSidePropsContext } from "next";
+import { useCallback, useEffect, useState } from "react";
+import { useRouter } from "next/router";
 
 const networksToMint = {
-  Helium: HNT_MINT,
-  'Helium MOBILE': MOBILE_MINT,
-  'Helium IOT': IOT_MINT,
+  hnt: HNT_MINT,
+  mobile: MOBILE_MINT,
+  iot: IOT_MINT,
 };
 
 export const useNetwork = () => {
-  const [network, setNetwork] = useQueryString("network", "Helium");
-  const mint = networksToMint[network];
-  const setMint = useCallback((mint) => {
-    setNetwork(
-      Object.entries(networksToMint).find(([_, m]) => mint.equals(m))[0]
-    );
-  }, []);
+  const router = useRouter();
+  const network = (router.query.network as string) || "hnt";
+  const mint = networksToMint[network || ""];
+
+  const setMint = useCallback(
+    (mint) => {
+      const newNetwork = Object.entries(networksToMint).find(([_, m]) =>
+        mint.equals(m)
+      )[0];
+      // Construct new path
+      const newPath = router.asPath.replace(
+        router.query.network as string,
+        newNetwork
+      );
+
+      router.push(newPath);
+    },
+    [router.query.network]
+  );
+
   return {
     network,
-    setNetwork,
     mint,
-    setMint
+    setMint,
+  };
+};
+
+export async function getServerSideNetwork(context: GetServerSidePropsContext) {
+  const network: string = (context.params.network as string) || "helium";
+  const mint = networksToMint[network];
+
+  // If mint is not found, you can handle it here, for example, return a 404 page
+  if (!mint) {
+    return {
+      mint: HNT_MINT,
+      network: "hnt",
+    };
   }
+
+  return {
+    network,
+    mint,
+  };
 }
