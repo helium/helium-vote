@@ -1,14 +1,11 @@
 import ContentSection from "../../components/ContentSection";
 import MetaTags from "../../components/MetaTags";
+import { NetworkSelector } from "../../components/NetworkSelector";
 import Page from "../../components/Page";
 import { Proposals } from "../../components/Proposals";
-import { TabPill } from "../../components/TabPill";
 import { fetchVotes } from "../../data/votes";
-import { useNetwork } from "../../hooks/useNetwork";
 
 export default function Home({ legacyVotes }) {
-  const { network } = useNetwork();
-
   return (
     <Page className="bg-gray-800">
       <MetaTags />
@@ -64,32 +61,11 @@ export default function Home({ legacyVotes }) {
           </div>
         </div>
       </ContentSection>
-      <ContentSection>
-        <div className="flex flex-col w-full mt-8">
-          <div className="flex flex-row justify-stretch space-x-2 md:space-x-6">
-            <TabPill
-              active={network == "hnt"}
-              name="Helium"
-              href="/hnt"
-              icon="/helium.svg"
-            />
-            <TabPill
-              active={network == "mobile"}
-              name="MOBILE"
-              href="/mobile"
-              icon="/mobile.svg"
-            />
-            <TabPill
-              active={network == "iot"}
-              name="IOT"
-              href="/iot"
-              icon="iot.svg"
-            />
-          </div>
-        </div>
+      <ContentSection className="mt-8">
+        <NetworkSelector />
       </ContentSection>
       <ContentSection className="pt-6 md:pt-4">
-        <Proposals legacyVotes={legacyVotes}/>
+        <Proposals legacyVotes={legacyVotes} />
       </ContentSection>
     </Page>
   );

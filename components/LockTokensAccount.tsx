@@ -168,11 +168,11 @@ export const LockTokensAccount: React.FC = (props) => {
     }
   };
 
-  const mainBoxesClasses = "bg-bkg-1 col-span-1 p-4 rounded-md";
+  const mainBoxesClasses = "bg-bkg-1 col-span-1 rounded-md";
   const isLoading = loading || loadingSubDaos;
 
   return (
-    <div className="grid grid-cols-12 gap-4 text-white pt-0">
+    <div className="grid grid-cols-12 gap-4 text-white pt-0 rounded-lg bg-opacity-25 bg-gray-600">
       <div className="bg-bkg-2 rounded-lg p-4 md:p-6 col-span-12">
         <div className="flex items-center justify-between mb-4">
           <h1 className="leading-none flex flex-col mb-0 text-md sm:text-2xl font-semibold text-white">
@@ -235,18 +235,19 @@ export const LockTokensAccount: React.FC = (props) => {
               )}
             </div>
             <div
-              className={`grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-8`}
+              className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8`}
             >
               {!loading &&
                 sortedPositions?.map((pos, idx) => (
                   <PositionCard key={idx} position={pos} subDaos={subDaos} />
                 ))}
-              <div className="shadow-lg bg-hv-gray-750 flex flex-col items-center justify-center p-6 rounded-lg">
+              <div className="shadow-lg bg-gray-600 flex flex-col items-center justify-center p-6 rounded-lg">
                 <BsFillLightningChargeFill className="h-8 mb-2 text-primary-light w-8" />
                 <p className="flex text-center pb-6">
                   Increase your voting power by locking your tokens.
                 </p>
                 <Button
+                  className="h-8 justify-center items-center inline-flex w-full text-xs font-bold"
                   onClick={() => setIsLockModalOpen(true)}
                   disabled={!hasTokensInWallet}
                   {...(hasTokensInWallet
@@ -256,7 +257,7 @@ export const LockTokensAccount: React.FC = (props) => {
                           "You don't have any governance tokens in your wallet to lock.",
                       })}
                 >
-                  <div className="flex items-center">
+                  <div className="flex flex-row items-center justify-center">
                     <AiFillLock className="h-5 mr-1.5 w-5" />
                     <span>Lock Tokens</span>
                   </div>

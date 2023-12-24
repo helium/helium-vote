@@ -21,7 +21,13 @@ export const ProposalVoteCard = ({
 }) => {
   const id = proposalKey;
   const { mint } = useHeliumVsrState();
-  const { tags, choices, name, proposalConfig: proposalConfigKey } = proposal;
+  const {
+    tags,
+    choices,
+    name,
+    proposalConfig: proposalConfigKey,
+    state,
+  } = proposal;
   const { info: proposalConfig } = useProposalConfig(proposalConfigKey);
   const decimals = useMint(mint)?.info.decimals;
   const { info: resolution } = useResolutionSettings(
@@ -70,7 +76,10 @@ export const ProposalVoteCard = ({
       tags={tags || []}
       endTs={endTs?.toNumber()}
       id={id.toBase58()}
-      results={votingResults?.results}
+      results={
+        // Hide results while voting in progress
+        Object.keys(state)[0] === "voting" ? undefined : votingResults?.results
+      }
       totalVotes={totalVotes}
       decimals={decimals}
     />

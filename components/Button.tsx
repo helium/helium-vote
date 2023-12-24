@@ -1,6 +1,7 @@
 import { FunctionComponent } from "react";
 import Loading, { LoadingDots } from "./Loading";
 import Tooltip from "./Tooltip";
+import classNames from "classnames";
 
 interface ButtonProps {
   className?: string;
@@ -26,12 +27,12 @@ const Button: FunctionComponent<React.PropsWithChildren<ButtonProps>> = ({
 }) => {
   return (
     <button
-      className={`${className} default-transition font-bold px-4 bg-hv-blue-700 rounded-lg ${
+      className={`${className} default-transition font-bold px-4 bg-blue-600 rounded-lg ${
         small ? "py-1" : "py-2.5"
       } text-sm focus:outline-none ${
         disabled
           ? "opacity-60 cursor-not-allowed"
-          : "hover:bg-hv-blue-400 text-bkg-2 hover:bg-fgd-1"
+          : "hover:bg-blue-500 text-bkg-2 hover:bg-fgd-1"
       }`}
       {...props}
       style={style}
@@ -63,11 +64,14 @@ export const SecondaryButton: FunctionComponent<React.PropsWithChildren<ButtonPr
       onClick={onClick}
       disabled={disabled}
       type={type}
-      className={`${className} border border-hv-blue-700 ${
-        disabled ? "opacity-60" : "hover:bg-blue-400"
-      } font-bold default-transition rounded-lg px-4 ${
-        small ? "py-1" : "py-2.5"
-      } text-primary-light text-sm hover:border-fgd-1 hover:text-fgd-1 focus:outline-none disabled:border-fgd-4 disabled:text-fgd-3 disabled:cursor-not-allowed`}
+      className={classNames(
+        className,
+        `border border-white ${
+          disabled ? "opacity-60" : "hover:bg-gray-700"
+        } font-bold default-transition rounded-lg ${className?.includes("px") ? '' : 'px-4'} ${
+          small ? "py-1" : "py-2.5"
+        } text-primary-light text-sm hover:border-fgd-1 hover:text-fgd-1 focus:outline-none disabled:border-fgd-4 disabled:text-fgd-3 disabled:cursor-not-allowed`,
+      )}
       {...props}
     >
       <Tooltip content={tooltipMessage}>

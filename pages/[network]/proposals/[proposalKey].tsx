@@ -13,7 +13,7 @@ import classNames from "classnames";
 import { format } from "date-fns";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useAsync } from "react-async-hook";
 import ReactMarkdown from "react-markdown";
 import ContentSection from "../../../components/ContentSection";
@@ -26,9 +26,26 @@ import { useNetwork } from "../../../hooks/useNetwork";
 import { humanReadable } from "../../../utils/formatting";
 import { AiFillCaretDown, AiFillCaretUp } from "react-icons/ai";
 import { VoteBreakdown } from "../../../components/VoteBreakdown";
-import Button, { LinkButton, SecondaryButton } from "../../../components/Button";
+import Button, {
+  LinkButton,
+  SecondaryButton,
+} from "../../../components/Button";
+import { FaArrowLeft } from "react-icons/fa6";
+import { FaGithub } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
+import { FaRegCopy } from "react-icons/fa";
+import { notify } from "../../../utils/notifications";
+import { FaChevronDown } from "react-icons/fa";
 
-const VoteDetailsPage = ({ name: initName, content }: { name: string, content: string }) => {
+const MARKDOWN_MAX = 500;
+
+const VoteDetailsPage = ({
+  name: initName,
+  content,
+}: {
+  name: string;
+  content: string;
+}) => {
   const router = useRouter();
   const { proposalKey } = router.query;
   const { network } = useNetwork();
@@ -97,8 +114,72 @@ const VoteDetailsPage = ({ name: initName, content }: { name: string, content: s
     return url;
   }, [proposalKey]);
 
+  const copyLinkToClipboard = useCallback(() => {
+    const text = `https://heliumvote.com/${network}/${proposalKey}`;
+    const fallbackCopyTextToClipboard = (text) => {
+      if (!document) return;
+      let textArea = document.createElement("textarea");
+      textArea.value = text;
+
+      // Avoid scrolling to bottom
+      textArea.style.top = "0";
+      textArea.style.left = "0";
+      textArea.style.position = "fixed";
+
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+
+      try {
+        document.execCommand("copy");
+        notify({
+          type: "success",
+          message: "Link copied to clipboard",
+        });
+      } catch (err) {
+        notify({
+          type: "error",
+          message: "Unable to copy",
+        });
+      }
+
+      document.body.removeChild(textArea);
+    };
+    if (!navigator.clipboard) {
+      // if navigator.clipboard API isn't available
+      fallbackCopyTextToClipboard(text);
+      return;
+    }
+    navigator.clipboard.writeText(text).then(
+      function () {
+        notify({
+          type: "success",
+          message: "Link copied to clipboard",
+        });
+      },
+      function (err) {
+        notify({
+          type: "error",
+          message: "Unable to copy",
+        });
+        console.error("Unable to copy", err);
+      }
+    );
+  }, [network, proposalKey]);
+
+  const markdownRef = useRef(null);
+  const [markdownHeight, setMarkdownHeight] = useState(0);
+  useEffect(() => {
+    if (markdownRef.current) {
+      setTimeout(() => {
+        setMarkdownHeight(markdownRef.current.clientHeight);
+      }, 1000);
+    }
+  }, [setMarkdownHeight, markdownRef]);
+  const [markdownExpanded, setMarkdownExpanded] = useState(false);
+
   return (
-    <Page>
+    <Page className="bg-gray-800">
       <MetaTags
         title={name}
         description={"Vote on " + name}
@@ -108,8 +189,8 @@ const VoteDetailsPage = ({ name: initName, content }: { name: string, content: s
         className={classNames(
           "h-6 sm:h-8 bottom-0 fixed w-full flex items-center justify-center text-xs sm:text-sm font-sans font-normal z-30",
           {
-            "bg-hv-green-500 text-black": !completed,
-            "bg-hv-blue-500 text-white": completed,
+            " text-black": !completed,
+            "bg-blue-500 text-white": completed,
           }
         )}
       >
@@ -117,199 +198,184 @@ const VoteDetailsPage = ({ name: initName, content }: { name: string, content: s
       </div>
       <ContentSection className="pt-10 sm:pt-0">
         <div className="mb-5 sm:mb-10">
-          <Link
-            href={`/${network}`}
-            className="text-hv-gray-200 hover:text-hv-gray-300 outline-none border border-solid border-hv-green-500 border-opacity-0 focus:border-opacity-100 transition-all duration-200 rounded-sm"
-          >
-            {"<- "}Back to Votes
+          <Link href={`/${network}`}>
+            <SecondaryButton>
+              <div className="text-white flex flex-row items-center justify-center">
+                <div className="text-md mr-2">
+                  <FaArrowLeft />
+                </div>
+                Back to Votes
+              </div>
+            </SecondaryButton>
           </Link>
         </div>
-        <div className="flex flex-col">
-          <div className="flex-col space-y-2">
-            {tags && (
-              <div className="flex flex-row items-center justify-start space-x-2 pb-2">
-                {tags.map((tag) => (
-                  <div
-                    key={tag}
-                    className="py-0.5 px-2 mx-1 bg-white rounded-lg"
-                  >
-                    <span className="text-xs sm:text-sm text-hv-gray-1100 font-reg">
-                      {tag}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            )}
-            <div className="flex flex-col sm:flex-row mt-5">
-              <ReactMarkdown className="prose grow prose-dark whitespace-pre-wrap leading-snug">
-                {content}
-              </ReactMarkdown>
+        <div className="rounded-lg bg-opacity-25 bg-gray-600 p-4">
+          <div className="flex flex-col">
+            <div className="flex-col space-y-2 relative">
+              {tags && (
+                <div className="flex flex-row items-center justify-start space-x-1">
+                  {tags.map((tag) => (
+                    <div
+                      key={tag}
+                      className="border border-gray-600 flex-col justify-center items-start px-2 mx-1 rounded-lg h-7"
+                    >
+                      <span className="text-gray-50 text-xs font-medium">
+                        {tag}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
 
-              <div className="flex-none mt-4 sm:mt-0">
-                {uri && (
-                  <a
-                    href={uri}
-                    rel="noopener noreferrer"
-                    target="_blank"
-                    className="flex items-center justify-between px-3 py-2 bg-hv-gray-475 hover:bg-hv-gray-500 transition-all duration-100 rounded-lg w-min outline-none border border-solid border-transparent focus:border-hv-green-500"
+              <div className="w-full flex flex-col mt-5 pb-5" ref={markdownRef}>
+                <div
+                  style={{
+                    maxHeight: markdownExpanded
+                      ? undefined
+                      : MARKDOWN_MAX + "px",
+                    overflow: "hidden",
+                  }}
+                >
+                  <ReactMarkdown className="prose grow prose-dark whitespace-pre-wrap leading-snug clear-both">
+                    {content}
+                  </ReactMarkdown>
+                </div>
+
+                {markdownHeight > MARKDOWN_MAX && !markdownExpanded && (
+                  <div
+                    style={{ marginTop: "-8px" }}
+                    className="w-full flex flex-row justify-center items-center"
                   >
-                    <span className="text-sm text-hv-green-500 whitespace-nowrap pr-10">
-                      More Details
-                    </span>
-                    <img
-                      className="w-4 h-4 mr-4"
-                      src="/images/external-link.svg"
-                    />
-                  </a>
+                    <SecondaryButton
+                      onClick={() => setMarkdownExpanded(true)}
+                      className="h-8 bg-gray-800 text-xs font-bold flex flex-row items-center justify-center"
+                    >
+                      <div className="text-white flex flex-row items-center justify-center">
+                        Show More
+                        <div className="text-md ml-1">
+                          <FaChevronDown />
+                        </div>
+                      </div>
+                    </SecondaryButton>
+                  </div>
                 )}
               </div>
-            </div>
-          </div>
-        </div>
-      </ContentSection>
-
-      <ContentSection className="mt-4 sm:mt-14">
-        <div className="bg-hv-gray-775 rounded-xl p-5 flex flex-col lg:flex-row justify-between space-y-2 lg:space-y-0 align-center w-full">
-          {!completed ? (
-            <>
-              <div className="sm:pr-20">
-                <p className="text-white">Total Weight</p>
-                <p className="text-hv-gray-300">
-                  {humanReadable(votingResults?.totalVotes, decimals)}
-                </p>
-              </div>
-            </>
-          ) : (
-            <>
-              <div>
-                <p className="text-white">Vote Closed</p>
-                <p className="text-hv-gray-300">{`${format(
-                  endTs?.toNumber() * 1000,
-                  "MMM d, y"
-                )} at ${format(endTs?.toNumber() * 1000, "h:mm:ss aaa")}`}</p>
-              </div>
-              <div className="sm:pr-20">
-                <p className="text-white">Total Votes</p>
-                <p className="text-hv-gray-300">
-                  {humanReadable(votingResults?.totalVotes, decimals)}
-                </p>
-              </div>
-            </>
-          )}
-        </div>
-      </ContentSection>
-      <ContentSection>
-        {tags && tags.includes("Temp Check") && (
-          <div className="border-solid border-2 border-yellow-400 bg-yellow-400 rounded-lg mt-10 leading-none">
-            <div className="py-2 px-4">
-              <span className="text-xs sm:text-sm text-black font-bold">
-                Temperature Check
-              </span>
-              <span className="text-xs sm:text-sm text-black font-light">
-                {" "}
-                This vote acts as a check in order to gauge community sentiment.
-              </span>
-            </div>
-          </div>
-        )}
-      </ContentSection>
-
-      {!completed && (
-        <VoteOptionsSection
-          proposalKey={proposalK}
-          outcomes={votingResults?.results}
-        />
-      )}
-
-      {votingResults.results?.length > 0 && (
-        <div className="flex flex-col space-y-2 max-w-5xl mx-auto mt-5 px-4 sm:px-10">
-          <div className="flex-col space-y-2 mt-10 sm:mt-16">
-            <VoteResults
-              decimals={decimals}
-              completed={completed}
-              outcomes={votingResults.results}
-            />
-          </div>
-        </div>
-      )}
-      <ContentSection className="mt-10 sm:mt-14">
-        <p className="mb-4 text-xl sm:text-3xl text-white font-semibold tracking-tighter">
-          Voter Breakdown
-        </p>
-        <p className="text-white mb-s">
-          NOTE: For MOBILE / IOT Subnetworks this is shown as 1/10 of your vote weight because the underlying contracts
-          in spl-governance only support 64-bits of precision.
-        </p>
-        {!showBreakdown && (
-          <button
-            className="px-6 py-3 hover:bg-hv-gray-500 transition-all duration-200 rounded-lg text-lg text-hv-green-500 whitespace-nowrap outline-none border border-solid border-transparent focus:border-hv-green-500 mx-auto mt-4 block text-center"
-            onClick={() => setshowBreakdown(!showBreakdown)}
-          >
-            Load Breakdown
-          </button>
-        )}
-        {showBreakdown && <VoteBreakdown proposalKey={proposalK} />}
-      </ContentSection>
-
-      <ContentSection className="mt-10 sm:mt-14">
-        <div className="bg-hv-gray-775 rounded-xl px-4 sm:px-7 py-4 sm:py-7 flex flex-row justify-between align-center w-full">
-          <p className="text-lg sm:text-2xl text-white font-semibold tracking-tighter">
-            Share this Vote
-          </p>
-          <div className="flex flex-row items-center justify-center space-x-4">
-            <a
-              href={twitterUrl.toString()}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <svg
-                width="28"
-                height="23"
-                viewBox="0 0 28 23"
-                fill="currentColor"
-                xmlns="http://www.w3.org/2000/svg"
-                className="w-4 h-4 sm:w-5 sm:h-5 text-hv-gray-375 transition-all duration-100 hover:text-white"
-              >
-                <g clipPath="url(#clip0_7:320)">
-                  <path
-                    d="M8.84047 22.5781C19.3368 22.5781 25.0764 14.1842 25.0764 6.90554C25.0764 6.66713 25.0714 6.42979 25.0603 6.19352C26.1745 5.41598 27.143 4.44568 27.9067 3.34113C26.8843 3.77983 25.784 4.07517 24.6297 4.20834C25.8079 3.52639 26.7124 2.44761 27.1391 1.16156C26.0365 1.7925 24.8155 2.25108 23.5155 2.49862C22.4742 1.4279 20.9917 0.758301 19.3501 0.758301C16.1989 0.758301 13.6433 3.22515 13.6433 6.26601C13.6433 6.69827 13.6934 7.11872 13.7913 7.52198C9.04854 7.29162 4.84312 5.09971 2.02894 1.76673C1.53886 2.58078 1.25628 3.52638 1.25628 4.53535C1.25628 6.44643 2.26369 8.13359 3.79566 9.12055C2.85945 9.09262 1.97999 8.84454 1.21122 8.43161C1.21038 8.45473 1.21038 8.47726 1.21038 8.50196C1.21038 11.1696 3.17736 13.397 5.7885 13.9017C5.30899 14.0279 4.80445 14.0956 4.28378 14.0956C3.91664 14.0956 3.55896 14.0607 3.21129 13.9962C3.93778 16.1849 6.04439 17.7776 8.54205 17.8222C6.58898 19.2999 4.12858 20.18 1.45458 20.18C0.994546 20.18 0.540071 20.1547 0.0933838 20.1037C2.61886 21.6663 5.61772 22.5781 8.84076 22.5781"
-                    fill="currentColor"
-                  />
-                </g>
-                <defs>
-                  <clipPath id="clip0_7:320">
-                    <rect
-                      width="28"
-                      height="22"
-                      fill="currentColor"
-                      transform="translate(0 0.668213)"
-                    />
-                  </clipPath>
-                </defs>
-              </svg>
-            </a>
-            <div className="cursor-pointer flex items-center justify-center">
-              <CopyableText
-                iconClasses="w-4 h-4 sm:w-5 sm:h-5"
-                customIcon={
-                  <svg
-                    width="20"
-                    height="23"
-                    viewBox="0 0 20 23"
-                    fill="currentColor"
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-4 h-4 sm:w-5 sm:h-5 text-hv-gray-375 transition-all duration-100 hover:text-white"
+              <div className="md:absolute md:right-0 md:top-0 md:mt-1">
+                <div className="mb-4 flex flex-row justify-stretch space-x-2 md:space-x-0 md:flex-col md:space-y-2">
+                  {uri && (
+                    <Link href={uri} rel="noopener noreferrer" target="_blank">
+                      <SecondaryButton className="w-full h-8 bg-gray-800 text-xs font-bold flex flex-row items-center px-1">
+                        <div className="text-white flex flex-row items-center justify-center">
+                          <div className="text-lg mr-1">
+                            <FaGithub />
+                          </div>
+                          View on Github
+                        </div>
+                      </SecondaryButton>
+                    </Link>
+                  )}
+                  <Link
+                    className="flex-grow"
+                    href={twitterUrl.toString()}
+                    rel="noopener noreferrer"
+                    target="_blank"
                   >
-                    <path
-                      d="M14.1199 0.0947266H2.11987C1.01987 0.0947266 0.119873 0.994727 0.119873 2.09473V16.0947H2.11987V2.09473H14.1199V0.0947266ZM17.1199 4.09473H6.11987C5.01987 4.09473 4.11987 4.99473 4.11987 6.09473V20.0947C4.11987 21.1947 5.01987 22.0947 6.11987 22.0947H17.1199C18.2199 22.0947 19.1199 21.1947 19.1199 20.0947V6.09473C19.1199 4.99473 18.2199 4.09473 17.1199 4.09473ZM17.1199 20.0947H6.11987V6.09473H17.1199V20.0947Z"
-                      fill="currentColor"
-                    />
-                  </svg>
-                }
-                textToCopy={`https://heliumvote.com/${proposalKey}`}
-              ></CopyableText>
+                    <SecondaryButton className="w-full h-8 bg-gray-800 text-xs font-bold flex flex-row items-center justify-center px-1">
+                      <div className="text-white flex flex-row items-center justify-center">
+                        Share
+                        <div className="text-md ml-1">
+                          <FaXTwitter />
+                        </div>
+                      </div>
+                    </SecondaryButton>
+                  </Link>
+                  <SecondaryButton
+                    onClick={copyLinkToClipboard}
+                    className="h-8 flex-grow bg-gray-800 text-xs font-bold flex flex-row items-center justify-center px-1"
+                  >
+                    <div className="text-white flex flex-row items-center justify-center">
+                      Copy
+                      <div className="text-md ml-1">
+                        <FaRegCopy />
+                      </div>
+                    </div>
+                  </SecondaryButton>
+                </div>
+              </div>
             </div>
           </div>
+          <div className="w-full flex flex-col lg:flex-row justify-between mb-2 mt-8">
+            <p className="text-whtie text-lg font-bold text-white tracking-tighter">
+              {completed ? "Final Results" : "Preliminary Results"}
+            </p>
+          </div>
+
+          <div className="bg-gray-800 p-5 flex flex-col lg:flex-row justify-between space-y-2 lg:space-y-0 align-center w-full">
+            {!completed ? (
+              <>
+                <div className="sm:pr-20">
+                  <p className="text-white">Total Weight</p>
+                  <p className="text-hv-gray-300">
+                    {humanReadable(votingResults?.totalVotes, decimals)}
+                  </p>
+                </div>
+              </>
+            ) : (
+              <>
+                <div>
+                  <p className="text-white">Vote Closed</p>
+                  <p className="text-hv-gray-300">{`${format(
+                    endTs?.toNumber() * 1000,
+                    "MMM d, y"
+                  )} at ${format(endTs?.toNumber() * 1000, "h:mm:ss aaa")}`}</p>
+                </div>
+                <div className="sm:pr-20">
+                  <p className="text-white">Total Votes</p>
+                  <p className="text-hv-gray-300">
+                    {humanReadable(votingResults?.totalVotes, decimals)}
+                  </p>
+                </div>
+              </>
+            )}
+          </div>
+          {completed && votingResults.results?.length > 0 && (
+            <div className="flex flex-col space-y-2 mt-3">
+              <VoteResults
+                decimals={decimals}
+                completed={completed}
+                outcomes={votingResults.results}
+              />
+            </div>
+          )}
+
+          {!completed && (
+            <VoteOptionsSection
+              proposalKey={proposalK}
+              outcomes={votingResults?.results}
+            />
+          )}
+
+          {completed && (
+            <div className="mt-12">
+              <p className="mb-2 text-whtie text-lg font-bold text-white tracking-tighter tracking-tighter">
+                Voter Breakdown
+              </p>
+              <p className="text-white mb-s">
+                NOTE: For MOBILE / IOT Subnetworks this is shown as 1/10 of your
+                vote weight because the underlying contracts in spl-governance
+                only support 64-bits of precision.
+              </p>
+              {!showBreakdown && (
+                <button
+                  className="px-6 py-3 hover:bg-hv-gray-500 transition-all duration-200 rounded-lg text-lg text-hv-green-500 whitespace-nowrap outline-none border border-solid border-transparent focus:border-hv-green-500 mx-auto mt-4 block text-center"
+                  onClick={() => setshowBreakdown(!showBreakdown)}
+                >
+                  Load Breakdown
+                </button>
+              )}
+              {showBreakdown && <VoteBreakdown proposalKey={proposalK} />}
+            </div>
+          )}
         </div>
       </ContentSection>
     </Page>

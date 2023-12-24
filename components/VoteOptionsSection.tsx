@@ -46,7 +46,7 @@ const VoteOptionsSection: React.FC<{
   useNotifyError(relErr, "Failed to relinquish vote");
 
   return (
-    <div className="w-full bg-hv-gray-750 py-5 sm:py-10 mt-10 sm:mt-20">
+    <div className="w-full bg-gray-600 py-5 sm:py-10 mt-10 sm:mt-20">
       <div className="flex flex-col space-y-2 max-w-5xl mx-auto px-0 sm:px-10">
         <div>
           <div className="ml-4 sm:ml-0 pb-4 flex flex-col sm:flex-row items-center justify-between">

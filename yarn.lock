@@ -3587,10 +3587,15 @@ react-hook-form@^7.45.2:
   resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-7.45.2.tgz#c757f3d5e633ccb186443d57c10fc511df35721a"
   integrity sha512-9s45OdTaKN+4NSTbXVqeDITd/nwIg++nxJGL8+OD5uf1DxvhsXQ641kaYHk5K28cpIOTYm71O/fYk7rFaygb3A==
 
-react-icons@*, react-icons@^4.10.1:
+react-icons@*:
   version "4.10.1"
   resolved "https://registry.yarnpkg.com/react-icons/-/react-icons-4.10.1.tgz#3f3b5eec1f63c1796f6a26174a1091ca6437a500"
   integrity sha512-/ngzDP/77tlCfqthiiGNZeYFACw85fUjZtLbedmJ5DTlNDIwETxhwBzdOJ21zj4iJdvc0J3y7yOsX3PpxAJzrw==
+
+react-icons@^4.12.0:
+  version "4.12.0"
+  resolved "https://registry.yarnpkg.com/react-icons/-/react-icons-4.12.0.tgz#54806159a966961bfd5cdb26e492f4dafd6a8d78"
+  integrity sha512-IBaDuHiShdZqmfc/TwHu6+d6k2ltNCf3AszxNmjJc1KUfXdEeRJOKyNvLmAHaarhzGmTSVygNdyu8/opXv2gaw==
 
 react-is@^16.13.1:
   version "16.13.1"
