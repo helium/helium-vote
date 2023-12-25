@@ -75,7 +75,7 @@ export const SecondaryButton: FunctionComponent<React.PropsWithChildren<ButtonPr
       {...props}
     >
       <Tooltip content={tooltipMessage}>
-        <div>{isLoading ? <Loading /> : children}</div>
+        {isLoading ? <Loading /> : children}
       </Tooltip>
     </button>
   );

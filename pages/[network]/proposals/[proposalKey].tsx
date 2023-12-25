@@ -36,6 +36,7 @@ import { FaXTwitter } from "react-icons/fa6";
 import { FaRegCopy } from "react-icons/fa";
 import { notify } from "../../../utils/notifications";
 import { FaChevronDown } from "react-icons/fa";
+import CountdownTimer from "../../../components/CountdownTimer";
 
 const MARKDOWN_MAX = 500;
 
@@ -99,7 +100,7 @@ const VoteDetailsPage = ({
 
   const twitterUrl = useMemo(() => {
     const url = new URL("https://twitter.com/intent/tweet");
-    const voteURL = `https://heliumvote.com/${proposalKey}`;
+    const voteURL = `https://heliumvote.com/${network}/proposals/${proposalKey}`;
 
     url.searchParams.append(
       "text",
@@ -112,7 +113,7 @@ const VoteDetailsPage = ({
     url.searchParams.append("url", voteURL);
 
     return url;
-  }, [proposalKey]);
+  }, [proposalKey, endTs, network]);
 
   const copyLinkToClipboard = useCallback(() => {
     const text = `https://heliumvote.com/${network}/${proposalKey}`;
@@ -261,21 +262,24 @@ const VoteDetailsPage = ({
                 )}
               </div>
               <div className="md:absolute md:right-0 md:top-0 md:mt-1">
-                <div className="mb-4 flex flex-row justify-stretch space-x-2 md:space-x-0 md:flex-col md:space-y-2">
+                <div className="mb-4 flex flex-row space-x-2 md:space-x-0 md:flex-col md:space-y-2">
                   {uri && (
-                    <Link href={uri} rel="noopener noreferrer" target="_blank">
-                      <SecondaryButton className="w-full h-8 bg-gray-800 text-xs font-bold flex flex-row items-center px-1">
-                        <div className="text-white flex flex-row items-center justify-center">
-                          <div className="text-lg mr-1">
-                            <FaGithub />
-                          </div>
-                          View on Github
+                    <Link
+                      className="flex-grow basis-0 shrink-0"
+                      href={uri}
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      <SecondaryButton className="text-white w-full h-8 bg-gray-800 text-xs font-bold flex flex-row justify-center items-center px-1">
+                        <div className="text-lg mr-2">
+                          <FaGithub />
                         </div>
+                        View on Github
                       </SecondaryButton>
                     </Link>
                   )}
                   <Link
-                    className="flex-grow"
+                    className="flex-grow basis-0 shrink-0"
                     href={twitterUrl.toString()}
                     rel="noopener noreferrer"
                     target="_blank"
@@ -291,7 +295,7 @@ const VoteDetailsPage = ({
                   </Link>
                   <SecondaryButton
                     onClick={copyLinkToClipboard}
-                    className="h-8 flex-grow bg-gray-800 text-xs font-bold flex flex-row items-center justify-center px-1"
+                    className="flex-grow basis-0 shrink-0 h-8 bg-gray-800 text-xs font-bold flex flex-row items-center justify-center px-1"
                   >
                     <div className="text-white flex flex-row items-center justify-center">
                       Copy
@@ -304,40 +308,56 @@ const VoteDetailsPage = ({
               </div>
             </div>
           </div>
-          <div className="w-full flex flex-col lg:flex-row justify-between mb-2 mt-8">
-            <p className="text-whtie text-lg font-bold text-white tracking-tighter">
-              {completed ? "Final Results" : "Preliminary Results"}
-            </p>
-          </div>
+          {completed && (
+            <div className="w-full flex flex-col lg:flex-row justify-between mb-2 mt-8">
+              <p className="text-whtie text-lg font-bold text-white tracking-tighter">
+                Final Results
+              </p>
+            </div>
+          )}
 
-          <div className="bg-gray-800 p-5 flex flex-col lg:flex-row justify-between space-y-2 lg:space-y-0 align-center w-full">
-            {!completed ? (
-              <>
-                <div className="sm:pr-20">
-                  <p className="text-white">Total Weight</p>
-                  <p className="text-hv-gray-300">
+          {completed && (
+            <div className="bg-gray-800 p-5 flex flex-col lg:flex-row justify-between space-y-2 lg:space-y-0 align-center w-full">
+              <div>
+                <p className="text-white">Vote Closed</p>
+                <p className="text-hv-gray-300">{`${format(
+                  endTs?.toNumber() * 1000,
+                  "MMM d, y"
+                )} at ${format(endTs?.toNumber() * 1000, "h:mm:ss aaa")}`}</p>
+              </div>
+              <div className="sm:pr-20">
+                <p className="text-white">Total Votes</p>
+                <p className="text-hv-gray-300">
+                  {humanReadable(votingResults?.totalVotes, decimals)}
+                </p>
+              </div>
+            </div>
+          )}
+          {!completed && (
+            <div>
+              <div className="text-white bg-gray-800 p-5 flex flex-row justify-start space-x-8 md:space-x-12 align-center w-fit">
+                <div className="flex flex-col space-y-2">
+                  <p className="text-gray-50 text-xs font-medium">
+                    TOTAL WEIGHT
+                  </p>
+                  <p className="font-bold">
                     {humanReadable(votingResults?.totalVotes, decimals)}
                   </p>
                 </div>
-              </>
-            ) : (
-              <>
-                <div>
-                  <p className="text-white">Vote Closed</p>
-                  <p className="text-hv-gray-300">{`${format(
-                    endTs?.toNumber() * 1000,
-                    "MMM d, y"
-                  )} at ${format(endTs?.toNumber() * 1000, "h:mm:ss aaa")}`}</p>
+                <div className="flex flex-col space-y-2">
+                  <p className="text-gray-50 text-xs font-medium">TIME LEFT</p>
+                  <div className="font-bold">
+                    {endTs && (
+                      <CountdownTimer
+                        endTs={endTs?.toNumber()}
+                        key={proposalK.toBase58()}
+                      />
+                    )}
+                  </div>
                 </div>
-                <div className="sm:pr-20">
-                  <p className="text-white">Total Votes</p>
-                  <p className="text-hv-gray-300">
-                    {humanReadable(votingResults?.totalVotes, decimals)}
-                  </p>
-                </div>
-              </>
-            )}
-          </div>
+              </div>
+            </div>
+          )}
           {completed && votingResults.results?.length > 0 && (
             <div className="flex flex-col space-y-2 mt-3">
               <VoteResults
