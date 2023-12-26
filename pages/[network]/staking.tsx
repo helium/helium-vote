@@ -14,7 +14,7 @@ const Staking = () => {
       />
 
       <ContentSection>
-        <NetworkSelector />
+        <NetworkSelector route="/$network/staking" />
       </ContentSection>
       <ContentSection className="mt-4">
         <LockTokensAccount />
