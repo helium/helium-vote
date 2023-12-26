@@ -45,7 +45,7 @@ export const VoteCard = ({
 
         <div className="h-full flex-col grow justify-between md:items-end inline-flex">
           <div className="text-white text-base font-normal leading-normal">
-            <CountdownTimer endTs={endTs} key={id} />
+            {endTs && <CountdownTimer endTs={endTs} key={id} />}
           </div>
           <div className="mt-2 md:mt-0 flex flex-row items-center justify-center w-full pb-1">
             {!results ? (
