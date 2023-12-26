@@ -271,7 +271,7 @@ const VoteDetailsPage = ({
                       target="_blank"
                     >
                       <SecondaryButton className="text-white w-full h-8 bg-gray-800 text-xs font-bold flex flex-row justify-center items-center px-1">
-                        <div className="text-lg mr-2">
+                        <div className="text-lg mr-2 md:mr-1">
                           <FaGithub />
                         </div>
                         View on Github
