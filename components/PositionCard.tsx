@@ -211,7 +211,8 @@ export const PositionCard: React.FC<PositionCardProps> = ({
       sourcePosition: position,
       amount: values.amount,
       lockupKind: values.lockupKind.value,
-      lockupPeriodsInDays: values.lockupPeriodInDays,j
+      lockupPeriodsInDays: values.lockupPeriodInDays,
+      j,
     });
 
     if (!splitingError) {
@@ -309,6 +310,7 @@ export const PositionCard: React.FC<PositionCardProps> = ({
         ?.dntMetadata
     : null;
 
+  const isVoting = position.numActiveVotes > 0;
   const isSubmitting =
     isExtending ||
     isSpliting ||
@@ -392,6 +394,17 @@ export const PositionCard: React.FC<PositionCardProps> = ({
                 />
               )}
             </div>
+            {isVoting && (
+              <div
+                title="Positions participating in active votes cannot be extended, transferred, or split"
+                style={{ marginTop: "-6px" }}
+                className="w-fit h-6 mb-6 px-2 py-1 bg-pink-500 rounded-lg flex-col justify-center items-start gap-2.5 inline-flex"
+              >
+                <div className="text-center text-gray-50 text-xs font-medium leading-none">
+                  Active in {position.numActiveVotes} votes
+                </div>
+              </div>
+            )}
             <div style={{ marginTop: "auto" }}>
               {position.isDelegated ? (
                 <div className="flex flex-col gap-2 items-center">
@@ -441,28 +454,24 @@ export const PositionCard: React.FC<PositionCardProps> = ({
                         <SecondaryButton
                           className="h-8 justify-center items-center inline-flex w-full text-xs font-bold"
                           onClick={() => setIsSplitModalOpen(true)}
-                          disabled={isSubmitting}
+                          disabled={isSubmitting || isVoting}
                           isLoading={isSpliting}
                         >
-                          <div className="flex flex-row items-center justify-center">
-                            <div className="text-md mr-2">
-                              <FaCodeBranch />
-                            </div>
-                            Split
+                          <div className="text-md mr-2">
+                            <FaCodeBranch />
                           </div>
+                          Split
                         </SecondaryButton>
                         <SecondaryButton
                           className="h-8 justify-center items-center inline-flex w-full text-xs font-bold"
                           onClick={() => setIsTransferModalOpen(true)}
-                          disabled={isSubmitting}
+                          disabled={isSubmitting || isVoting}
                           isLoading={isTransfering}
                         >
-                          <div className="flex flex-row items-center justify-center">
-                            <div className="text-lg mr-2">
-                              <BiTransfer />
-                            </div>
-                            Transfer
+                          <div className="text-lg mr-2">
+                            <BiTransfer />
                           </div>
+                          Transfer
                         </SecondaryButton>
                       </div>
                       <div className="flex flex-row gap-2 justify-center">
@@ -470,43 +479,37 @@ export const PositionCard: React.FC<PositionCardProps> = ({
                           <SecondaryButton
                             className="h-8 justify-center items-center inline-flex w-full text-xs font-bold"
                             onClick={handleFlipPositionLockupKind}
-                            disabled={isSubmitting}
+                            disabled={isSubmitting || isVoting}
                             isLoading={isFlipping}
                           >
-                            <div className="flex flex-row items-center justify-center">
-                              <div className="text-md mr-2">
-                                <FaPlayCircle />
-                              </div>
-                              Start Decay
+                            <div className="text-md mr-2">
+                              <FaPlayCircle />
                             </div>
+                            Start Decay
                           </SecondaryButton>
                         ) : (
                           <SecondaryButton
                             className="h-8 justify-center items-center inline-flex w-full text-xs font-bold"
                             onClick={handleFlipPositionLockupKind}
-                            disabled={isSubmitting}
+                            disabled={isSubmitting || isVoting}
                             isLoading={isFlipping}
                           >
-                            <div className="flex flex-row items-center justify-center">
-                              <div className="text-md mr-2">
-                                <FaPauseCircle />
-                              </div>
-                              Pause Unlock
+                            <div className="text-md mr-2">
+                              <FaPauseCircle />
                             </div>
+                            Pause Unlock
                           </SecondaryButton>
                         )}
                         <SecondaryButton
                           className="h-8 justify-center items-center inline-flex w-full text-xs font-bold"
                           onClick={() => setIsExtendModalOpen(true)}
-                          disabled={isSubmitting}
+                          disabled={isSubmitting || isVoting}
                           isLoading={isExtending}
                         >
-                          <div className="flex flex-row items-center justify-center">
-                            <div className="text-md mr-2">
-                              <FaCalendarPlus />
-                            </div>
-                            Extend
+                          <div className="text-md mr-2">
+                            <FaCalendarPlus />
                           </div>
+                          Extend
                         </SecondaryButton>
                       </div>
                       {canDelegate && (
