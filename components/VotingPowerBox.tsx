@@ -23,7 +23,7 @@ export const VotingPowerBox: React.FC<VotingPowerBoxProps> = ({
 }) => {
   const { info: mintAcc } = useMint(mint);
   return (
-    <span className="mb-0 flex font-bold items-center hero-text">
+    <span className="mb-0 flex text-base font-bold items-center">
       {mintAcc && votingPower && humanReadable(votingPower, mintAcc.decimals)}{" "}
       {amountLocked &&
         votingPower &&

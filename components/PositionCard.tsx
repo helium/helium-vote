@@ -1,7 +1,7 @@
 import React, { useCallback, useState, useMemo } from "react";
 import { useMint, useSolanaUnixNow } from "@helium/helium-react-hooks";
 import { BN } from "@coral-xyz/anchor";
-import Button from "./Button";
+import Button, { SecondaryButton } from "./Button";
 import { HNT_MINT, toNumber } from "@helium/spl-utils";
 import { notify } from "../utils/notifications";
 import {
@@ -10,7 +10,12 @@ import {
   getMinDurationFmt,
   getTimeLeftFromNowFmt,
 } from "../utils/dateTools";
-import { PositionWithMeta, SubDaoWithMeta, useHeliumVsrState, useRegistrar } from "@helium/voter-stake-registry-hooks";
+import {
+  PositionWithMeta,
+  SubDaoWithMeta,
+  useHeliumVsrState,
+  useRegistrar,
+} from "@helium/voter-stake-registry-hooks";
 import {
   LockTokensModal,
   LockTokensModalFormValues,
@@ -31,6 +36,9 @@ import { DelegateTokensModal } from "./DelegateTokensModal";
 import { PromptModal } from "./PromptModal";
 import { humanReadable } from "../utils/formatting";
 import { useMetaplexMetadata } from "../hooks/useMetaplexMetadata";
+import { FaCodeBranch } from "react-icons/fa6";
+import { FaPauseCircle, FaPlayCircle, FaCalendarPlus } from "react-icons/fa";
+import { BiTransfer } from "react-icons/bi";
 
 interface PositionCardProps {
   subDaos?: SubDaoWithMeta[];
@@ -47,8 +55,8 @@ export const PositionCard: React.FC<PositionCardProps> = ({
   const [isExtendModalOpen, setIsExtendModalOpen] = useState(false);
   const [isSplitModalOpen, setIsSplitModalOpen] = useState(false);
   const [isDelegateModalOpen, setIsDelegateModalOpen] = useState(false);
-  const { loading: isLoading, positions, refetch} = useHeliumVsrState();
-  
+  const { loading: isLoading, positions, refetch } = useHeliumVsrState();
+
   const transferablePositions: PositionWithMeta[] = useMemo(() => {
     if (!unixNow || !positions.length) {
       return [];
@@ -131,19 +139,15 @@ export const PositionCard: React.FC<PositionCardProps> = ({
     claimPositionRewards,
   } = useClaimPositionRewards();
 
-
   const { lockup, hasGenesisMultiplier, votingMint } = position;
   const lockupKind = Object.keys(lockup.kind)[0] as string;
   const isConstant = lockupKind === "constant";
   const lockupExpired =
     !isConstant && lockup.endTs.sub(new BN(unixNow)).lt(new BN(0));
-  const { info: mintAcc } = useMint(position.votingMint.mint)
-  
+  const { info: mintAcc } = useMint(position.votingMint.mint);
 
-  const lockedTokens = mintAcc && humanReadable(
-    position.amountDepositedNative,
-    mintAcc.decimals
-  );
+  const lockedTokens =
+    mintAcc && humanReadable(position.amountDepositedNative, mintAcc.decimals);
 
   const maxActionableAmount = mintAcc
     ? toNumber(position.amountDepositedNative, mintAcc)
@@ -154,8 +158,8 @@ export const PositionCard: React.FC<PositionCardProps> = ({
   /// TODO:
   const tokenInfo = {
     symbol: symbol,
-    logoURI: image
-  }
+    logoURI: image,
+  };
 
   const { info: registrar } = useRegistrar(position.registrar);
   const handleCalcLockupMultiplier = useCallback(
@@ -169,7 +173,7 @@ export const PositionCard: React.FC<PositionCardProps> = ({
   );
 
   const refetchState = async () => {
-    refetch()
+    refetch();
   };
 
   const handleFlipPositionLockupKind = async () => {
@@ -186,7 +190,7 @@ export const PositionCard: React.FC<PositionCardProps> = ({
           e.message || isConstant
             ? "Unable to unlock position"
             : "Unable to pause unlock",
-        error: e
+        error: e,
       });
     }
   };
@@ -208,6 +212,7 @@ export const PositionCard: React.FC<PositionCardProps> = ({
       amount: values.amount,
       lockupKind: values.lockupKind.value,
       lockupPeriodsInDays: values.lockupPeriodInDays,
+      j,
     });
 
     if (!splitingError) {
@@ -252,7 +257,7 @@ export const PositionCard: React.FC<PositionCardProps> = ({
       notify({
         type: "error",
         message: e.message || "Unable to undelegate tokens",
-        error: e
+        error: e,
       });
     }
   };
@@ -268,7 +273,7 @@ export const PositionCard: React.FC<PositionCardProps> = ({
       notify({
         type: "error",
         message: e.message || "Unable to claim rewards",
-        error: e
+        error: e,
       });
     }
   };
@@ -286,7 +291,7 @@ export const PositionCard: React.FC<PositionCardProps> = ({
       notify({
         type: "error",
         message: e.message || "Unable to close position",
-        error: e
+        error: e,
       });
     }
   };
@@ -305,6 +310,7 @@ export const PositionCard: React.FC<PositionCardProps> = ({
         ?.dntMetadata
     : null;
 
+  const isVoting = position.numActiveVotes > 0;
   const isSubmitting =
     isExtending ||
     isSpliting ||
@@ -318,7 +324,7 @@ export const PositionCard: React.FC<PositionCardProps> = ({
   const lockupKindDisplay = isConstant ? "Constant" : "Decaying";
   const hasActiveVotes = position.numActiveVotes > 0;
   return (
-    <div className="relative shadow-xl overflow-hidden bg-hv-gray-750 rounded-lg flex flex-col">
+    <div className="relative shadow-xl overflow-hidden bg-gray-600 rounded-lg flex flex-col">
       {hasGenesisMultiplier && (
         <div
           className="absolute bg-primary-light px-8 transform rotate-45 text-bkg-2 text-xs font-bold"
@@ -388,103 +394,133 @@ export const PositionCard: React.FC<PositionCardProps> = ({
                 />
               )}
             </div>
+            {isVoting && (
+              <div
+                title="Positions participating in active votes cannot be extended, transferred, or split"
+                style={{ marginTop: "-6px" }}
+                className="w-fit h-6 mb-6 px-2 py-1 bg-pink-500 rounded-lg flex-col justify-center items-start gap-2.5 inline-flex"
+              >
+                <div className="text-center text-gray-50 text-xs font-medium leading-none">
+                  Active in {position.numActiveVotes} votes
+                </div>
+              </div>
+            )}
             <div style={{ marginTop: "auto" }}>
               {position.isDelegated ? (
                 <div className="flex flex-col gap-2 items-center">
                   {delegatedSubDaoMetadata ? (
-                    <span
-                      className="text-fgd-2 flex-row gap-2"
+                    <div
+                      className="text-fgd-2 flex flex-row w-full gap-2 justify-center items-center"
                       style={{ fontSize: "9px" }}
                     >
                       <img
                         className="w-4 h-4"
                         src={delegatedSubDaoMetadata.json?.image || ""}
                       />
-                      {delegatedSubDaoMetadata.name}
-                    </span>
+                      <span>{delegatedSubDaoMetadata.name}</span>
+                    </div>
                   ) : null}
                   <Button
-                    className="w-full"
+                    className="h-8 justify-center items-center inline-flex w-full text-xs font-bold"
                     onClick={handleClaimRewards}
                     disabled={isSubmitting || !position.hasRewards}
                     isLoading={isClaimingRewards}
                   >
                     Claim Rewards
                   </Button>
-                  <Button
-                    className="w-full"
+                  <SecondaryButton
+                    className="h-8 justify-center items-center inline-flex w-full text-xs font-bold"
                     onClick={handleUndelegateTokens}
                     disabled={isSubmitting || position.hasRewards}
                     isLoading={isUndelegating}
                   >
-                    UnDelegate
-                  </Button>
+                    Undelegate
+                  </SecondaryButton>
                 </div>
               ) : (
                 <>
                   {lockupExpired ? (
-                    <Button
-                      className="w-full"
+                    <SecondaryButton
+                      className="h-8 justify-center items-center inline-flex w-full text-xs font-bold"
                       isLoading={isSubmitting}
                       disabled={isClosing}
                       onClick={handleClose}
                     >
                       Close
-                    </Button>
+                    </SecondaryButton>
                   ) : (
                     <div className="flex flex-col gap-2">
                       <div className="flex flex-row gap-2 justify-center">
-                        <Button
-                          className="w-full"
+                        <SecondaryButton
+                          className="h-8 justify-center items-center inline-flex w-full text-xs font-bold"
                           onClick={() => setIsSplitModalOpen(true)}
-                          disabled={isSubmitting}
+                          disabled={isSubmitting || isVoting}
                           isLoading={isSpliting}
                         >
+                          <div className="text-md mr-2">
+                            <FaCodeBranch />
+                          </div>
                           Split
-                        </Button>
-                        <Button
-                          className="w-full"
+                        </SecondaryButton>
+                        <SecondaryButton
+                          className="h-8 justify-center items-center inline-flex w-full text-xs font-bold"
                           onClick={() => setIsTransferModalOpen(true)}
-                          disabled={isSubmitting}
+                          disabled={isSubmitting || isVoting}
                           isLoading={isTransfering}
                         >
+                          <div className="text-lg mr-2">
+                            <BiTransfer />
+                          </div>
                           Transfer
-                        </Button>
+                        </SecondaryButton>
                       </div>
-                      <Button
-                        className="w-full"
-                        onClick={() => setIsExtendModalOpen(true)}
-                        disabled={isSubmitting}
-                        isLoading={isExtending}
-                      >
-                        Extend
-                      </Button>
-                      {isConstant ? (
-                        <Button
-                          onClick={handleFlipPositionLockupKind}
-                          disabled={isSubmitting}
-                          isLoading={isFlipping}
+                      <div className="flex flex-row gap-2 justify-center">
+                        {isConstant ? (
+                          <SecondaryButton
+                            className="h-8 justify-center items-center inline-flex w-full text-xs font-bold"
+                            onClick={handleFlipPositionLockupKind}
+                            disabled={isSubmitting || isVoting}
+                            isLoading={isFlipping}
+                          >
+                            <div className="text-md mr-2">
+                              <FaPlayCircle />
+                            </div>
+                            Start Decay
+                          </SecondaryButton>
+                        ) : (
+                          <SecondaryButton
+                            className="h-8 justify-center items-center inline-flex w-full text-xs font-bold"
+                            onClick={handleFlipPositionLockupKind}
+                            disabled={isSubmitting || isVoting}
+                            isLoading={isFlipping}
+                          >
+                            <div className="text-md mr-2">
+                              <FaPauseCircle />
+                            </div>
+                            Pause Unlock
+                          </SecondaryButton>
+                        )}
+                        <SecondaryButton
+                          className="h-8 justify-center items-center inline-flex w-full text-xs font-bold"
+                          onClick={() => setIsExtendModalOpen(true)}
+                          disabled={isSubmitting || isVoting}
+                          isLoading={isExtending}
                         >
-                          Start Unlock
-                        </Button>
-                      ) : (
-                        <Button
-                          onClick={handleFlipPositionLockupKind}
-                          disabled={isSubmitting}
-                          isLoading={isFlipping}
-                        >
-                          Pause Unlock
-                        </Button>
-                      )}
+                          <div className="text-md mr-2">
+                            <FaCalendarPlus />
+                          </div>
+                          Extend
+                        </SecondaryButton>
+                      </div>
                       {canDelegate && (
-                        <Button
-                          className="w-full"
+                        <SecondaryButton
+                          className="h-8 justify-center items-center inline-flex w-full text-xs font-bold"
                           onClick={() => setIsDelegateModalOpen(true)}
                           disabled={isSubmitting}
                           isLoading={isDelegating}
                         >
                           Delegate
-                        </Button>
+                        </SecondaryButton>
                       )}
                     </div>
                   )}

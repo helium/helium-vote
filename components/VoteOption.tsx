@@ -47,8 +47,6 @@ const VoteOption: React.FC<{
       className={classNames(
         "flex flex-col mb-1 bg-white bg-opacity-5 rounded-none",
         {
-          "sm:rounded-t-xl": index === 0,
-          "sm:rounded-b-xl": index === length - 1,
           "border-none": hover,
         }
       )}
@@ -60,8 +58,6 @@ const VoteOption: React.FC<{
             "sm:hover:bg-opacity-10": canVote || canRelinquishVote,
             "hover:bg-opacity-5": canVote || canRelinquishVote,
             "cursor-pointer": canVote || canRelinquishVote,
-            "sm:rounded-t-xl": index === 0,
-            "sm:rounded-b-xl": index === length - 1,
           }
         )}
       >

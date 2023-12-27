@@ -15,7 +15,7 @@ module.exports = {
               ul: { marginTop: "-10px", marginBottom: 0 },
               li: { margin: 0 },
               "ul > li::before": { backgroundColor: theme("colors.gray.700") },
-              hr: { borderColor: theme("colors.gray.800"),  },
+              hr: { borderColor: theme("colors.gray.800") },
               blockquote: {
                 color: theme("colors.gray.100"),
                 borderLeftColor: theme("colors.gray.800"),
@@ -25,7 +25,7 @@ module.exports = {
               h3: { color: theme("colors.gray.100"), margin: 0 },
               h4: { color: theme("colors.gray.100"), margin: 0 },
               p: { margin: 0 },
-              hr: { margin: 0},
+              hr: { margin: 0 },
               code: { color: theme("colors.gray.100") },
               "a code": { color: theme("colors.gray.100") },
               pre: {
@@ -42,6 +42,9 @@ module.exports = {
         };
       },
       colors: {
+        coolgray: {
+          600: "#4B5563",
+        },
         "hv-red": {
           500: "#FF625A",
           600: "#401c2b",

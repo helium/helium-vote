@@ -40,7 +40,7 @@ export async function run(args: any = process.argv) {
       default: ["Yes", "No"],
     },
     proposalConfig: {
-      default: "Helium Single Choice Default",
+      type: "string"
     },
     orgName: {
       type: "string",

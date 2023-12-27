@@ -10,6 +10,7 @@ import { useMint } from "@helium/helium-react-hooks";
 import { humanReadable } from "../utils/formatting";
 import BN from "bn.js";
 import Loading from "./Loading";
+import { SecondaryButton } from "./Button";
 
 export function VoteBreakdown({ proposalKey }: { proposalKey: PublicKey }) {
   const { markers, loading: loadingMarkers } = useVotes(proposalKey);
@@ -84,14 +85,14 @@ export function VoteBreakdown({ proposalKey }: { proposalKey: PublicKey }) {
   );
 
   return (
-    <div className="flex flex-col">
-      <table className="table-auto text-white">
+    <div className="flex flex-col mt-2">
+      <table className="table-auto text-white border border-gray-600">
         <thead>
           <tr>
-            <th className="px-4 py-2">Owner</th>
-            <th className="px-4 py-2">Choices</th>
-            <th className="px-4 py-2">Vote Weight</th>
-            <th className="px-4 py-2">Percentage</th>
+            <th className="px-4 py-2 text-left">Owner</th>
+            <th className="px-4 py-2 text-left">Choices</th>
+            <th className="px-4 py-2 text-left">Vote Weight</th>
+            <th className="px-4 py-2 text-left">Percentage</th>
           </tr>
         </thead>
         <tbody>
@@ -99,7 +100,7 @@ export function VoteBreakdown({ proposalKey }: { proposalKey: PublicKey }) {
           {(displayedMarkers || []).map((marker, index) => (
             <tr
               key={marker.voter.toBase58()}
-              className={index % 2 === 0 ? "bg-hv-gray-500" : "bg-hv-gray-600"}
+              className={index % 2 === 0 ? "bg-gray-600" : "bg-gray-800"}
             >
               <td className="px-4 py-2">
                 <a
@@ -131,33 +132,37 @@ export function VoteBreakdown({ proposalKey }: { proposalKey: PublicKey }) {
       </table>
       <div className="flex flex-col justify-center w-full">
         {displayCount < groupedSortedMarkers.length && (
-          <button
-            className="px-6 py-3 hover:bg-hv-gray-500 transition-all duration-200 rounded-lg text-lg text-hv-green-500 whitespace-nowrap outline-none border border-solid border-transparent focus:border-hv-green-500 block text-center"
-            onClick={() => setDisplayCount((c) => c + 20)}
-          >
-            Load More
-          </button>
+          <div className="flex flex-col items-center mt-2">
+            <SecondaryButton
+              className="px-6 py-3 hover:bg-hv-gray-500 transition-all duration-200 rounded-lg text-lg text-hv-green-500 whitespace-nowrap outline-none border border-solid border-transparent focus:border-hv-green-500 block text-center"
+              onClick={() => setDisplayCount((c) => c + 20)}
+            >
+              Load More
+            </SecondaryButton>
+          </div>
         )}
-        <button
-          className="px-6 py-3 hover:bg-hv-gray-500 transition-all duration-200 rounded-lg text-lg text-hv-green-500 whitespace-nowrap outline-none border border-solid border-transparent focus:border-hv-green-500 block text-center"
-          onClick={() => {
-            const blob = new Blob([csvData], {
-              type: "text/csv;charset=utf-8;",
-            });
-            const link = document.createElement("a");
-            if (link.download !== undefined) {
-              const url = URL.createObjectURL(blob);
-              link.setAttribute("href", url);
-              link.setAttribute("download", "vote_breakdown.csv");
-              link.style.visibility = "hidden";
-              document.body.appendChild(link);
-              link.click();
-              document.body.removeChild(link);
-            }
-          }}
-        >
-          Download CSV
-        </button>
+        <div className="flex flex-col items-center mt-2">
+          <SecondaryButton
+            className="text-white"
+            onClick={() => {
+              const blob = new Blob([csvData], {
+                type: "text/csv;charset=utf-8;",
+              });
+              const link = document.createElement("a");
+              if (link.download !== undefined) {
+                const url = URL.createObjectURL(blob);
+                link.setAttribute("href", url);
+                link.setAttribute("download", "vote_breakdown.csv");
+                link.style.visibility = "hidden";
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+              }
+            }}
+          >
+            Download CSV
+          </SecondaryButton>
+        </div>
       </div>
     </div>
   );

@@ -4,14 +4,17 @@ import { Wallet } from "@coral-xyz/anchor";
 import { useAnchorProvider } from "@helium/helium-react-hooks";
 import { useNetwork } from "../hooks/useNetwork";
 
-const Page: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
+const Page: React.FC<React.PropsWithChildren<{ className?: string }>> = ({
+  children,
+  className,
+}) => {
   const anchorProvider = useAnchorProvider();
-  const { mint, setMint } = useNetwork();
+  const { mint } = useNetwork();
 
   return (
     <>
-      <main className="w-full min-h-screen">
-        <Header votingMint={mint} setVotingMint={setMint} />
+      <main className={`${className} w-full min-h-screen`}>
+        <Header />
         <div className="min-h-screen w-full pb-20 py-10">
           <HeliumVsrStateProvider
             connection={anchorProvider?.connection}

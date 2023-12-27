@@ -46,16 +46,16 @@ const VoteOptionsSection: React.FC<{
   useNotifyError(relErr, "Failed to relinquish vote");
 
   return (
-    <div className="w-full bg-hv-gray-750 py-5 sm:py-10 mt-10 sm:mt-20">
-      <div className="flex flex-col space-y-2 max-w-5xl mx-auto px-0 sm:px-10">
+    <div className="w-full mt-10">
+      <div className="flex flex-col space-y-2">
         <div>
-          <div className="ml-4 sm:ml-0 pb-4 flex flex-col sm:flex-row items-center justify-between">
-            <p className="text-xl tracking-tight sm:text-3xl font-semibold text-white font-sans">
+          <div className="pb-4 flex md:flex-row flex-col items-start md:items-center justify-between">
+            <p className="text-white text-lg font-bold leading-relaxed">
               Vote Options
             </p>
             <Link
-              href={`/staking?network=${network}`}
-              className="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+              href={`/${network}/staking`}
+              className="block py-2 pl-0 md:pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
             >
               <div className="flex flex-row items-center space-x-2">
                 <FiSettings />
@@ -76,7 +76,7 @@ const VoteOptionsSection: React.FC<{
             )}
             {connected && noVotingPower && (
               <Link
-                href={`/staking?network=${network}`}
+                href={`/${network}/staking`}
                 className="text-white flex flex-col items-center justify-center"
               >
                 <FiSettings className="h-6 mb-1 text-primary-light w-6" />
@@ -88,7 +88,8 @@ const VoteOptionsSection: React.FC<{
             {connected && !noVotingPower && (
               <p className="text-white mb-2">
                 To vote, click on any option. To remove your vote, click the
-                option again. Vote for up to {proposal?.maxChoicesPerVoter} of {proposal?.choices.length} options.
+                option again. Vote for up to {proposal?.maxChoicesPerVoter} of{" "}
+                {proposal?.choices.length} options.
               </p>
             )}
 
