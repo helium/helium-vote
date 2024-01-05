@@ -212,7 +212,6 @@ export const PositionCard: React.FC<PositionCardProps> = ({
       amount: values.amount,
       lockupKind: values.lockupKind.value,
       lockupPeriodsInDays: values.lockupPeriodInDays,
-      j,
     });
 
     if (!splitingError) {
