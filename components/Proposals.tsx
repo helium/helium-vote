@@ -2,7 +2,6 @@ import { useMint, useOwnedAmount } from "@helium/helium-react-hooks";
 import { useOrganizationProposals } from "@helium/modular-governance-hooks";
 import { organizationKey } from "@helium/organization-sdk";
 import { useHeliumVsrState } from "@helium/voter-stake-registry-hooks";
-import { Proposal } from "@helium/voter-stake-registry-sdk/lib/types/src/voteService";
 import { useWallet } from "@solana/wallet-adapter-react";
 import BN from "bn.js";
 import Link from "next/link";
@@ -15,6 +14,10 @@ import { ProposalVoteCard } from "./ProposalVoteCard";
 import Dropdown from "./inputs/Dropdown";
 import { VoteCard } from "./VoteCard";
 import { HNT_MINT, IOT_MINT, MOBILE_MINT } from "@helium/spl-utils";
+import { IdlAccounts } from "@coral-xyz/anchor/dist/cjs/program/namespace/types";
+import { Proposal as ProposalIdl } from "@helium/modular-governance-idls/lib/types/proposal";
+
+type Proposal = IdlAccounts<ProposalIdl>["proposalV0"];
 
 export type ProposalFilter =
   | "all"
