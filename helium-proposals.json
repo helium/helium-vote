@@ -24,5 +24,17 @@
       { "uri": null, "name": "Movement/Presence detection" },
       { "uri": null, "name": "Soil quality/environment" }
     ]
+  },
+  {
+    "name": "Test Vote: Ice Cream",
+    "uri": "https://gist.githubusercontent.com/hiptron/805fad6ae91c4681a5d0d1eadf3277ba/raw/7feb18b939a1ee824c732ed4f80d67cd9f2ccbce/gistfile1.txt",
+    "maxChoicesPerVoter": 1,
+    "tags": ["test"],
+    "choices": [
+      { "uri": null, "name": "Vanilla" },
+      { "uri": null, "name": "Chocolate" },
+      { "uri": null, "name": "Cookies and cream" },
+      { "uri": null, "name": "Strawberry" }
+    ]
   }
 ]
