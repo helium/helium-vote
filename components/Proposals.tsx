@@ -383,6 +383,8 @@ export const Proposals = ({
                       {`${
                         votingPower &&
                         amountLocked &&
+                        !amountLocked.isZero() &&
+                        !votingPower.isZero() &&
                         // Add 2 decimals to the mulitiplier
                         humanReadable(
                           votingPower.mul(new BN(100)).div(amountLocked),
