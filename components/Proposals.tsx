@@ -378,20 +378,18 @@ export const Proposals = ({
                         ? humanReadable(votingPower, decimals)
                         : "0"
                       : "N/A"}{" "}
-                    <div className="flex flex-row items-center text-xs">
-                      <BsFillLightningChargeFill className="h-3 mr-1 text-primary-light w-3" />
-                      {`${
-                        votingPower &&
-                        amountLocked &&
-                        !amountLocked.isZero() &&
-                        !votingPower.isZero() &&
-                        // Add 2 decimals to the mulitiplier
-                        humanReadable(
-                          votingPower.mul(new BN(100)).div(amountLocked),
-                          2
-                        )
-                      }x`}
-                    </div>
+                    {votingPower &&
+                      amountLocked &&
+                      !amountLocked.isZero() &&
+                      !votingPower.isZero() && (
+                        <div className="flex flex-row items-center text-xs">
+                          <BsFillLightningChargeFill className="h-3 mr-1 text-primary-light w-3" />
+                          {`${humanReadable(
+                            votingPower.mul(new BN(100)).div(amountLocked),
+                            2
+                          )}x`}
+                        </div>
+                      )}
                   </div>
                 </div>
                 <div className="flex flex-1 flex-col mt-2 bg-gray-600 rounded-lg p-4 text-white">
