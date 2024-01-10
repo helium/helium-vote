@@ -18,6 +18,8 @@ import { IdlAccounts } from "@coral-xyz/anchor/dist/cjs/program/namespace/types"
 import { Proposal as ProposalIdl } from "@helium/modular-governance-idls/lib/types/proposal";
 
 type Proposal = IdlAccounts<ProposalIdl>["proposalV0"];
+import { useMetaplexMetadata } from "../hooks/useMetaplexMetadata";
+import { BsFillLightningChargeFill } from "react-icons/bs";
 
 export type ProposalFilter =
   | "all"
@@ -82,11 +84,11 @@ type LegacyProposal = {
 };
 
 function getLegacyProposalState(p: LegacyProposal): ProposalFilter {
-  const passed = p.outcomes[0].hntVoted > p.outcomes[1].hntVoted
+  const passed = p.outcomes[0].hntVoted > p.outcomes[1].hntVoted;
   if (passed) {
-    return 'passed'
+    return "passed";
   } else {
-    return 'failed'
+    return "failed";
   }
 }
 
@@ -257,12 +259,12 @@ const REALMS_VOTES = {
       href: "https://realms.heliumvote.com/dao/iot/proposal/4TZE7E3KvRgZiaSMF8h4s7F9UhWDJUgNdNuBz8y1dGzq",
       outcomes: [
         {
-          votes: 3651135780
+          votes: 3651135780,
         },
         {
-          votes: 5307502230
-        }
-      ]
+          votes: 5307502230,
+        },
+      ],
     },
     {
       name: "HIP 72: Secure Concentrators",
@@ -293,7 +295,8 @@ export const Proposals = ({
     [network]
   );
   const [filter, setFilter] = useState<ProposalFilter>("all");
-  const { votingPower, positions, mint, loading } = useHeliumVsrState();
+  const { votingPower, positions, amountLocked, mint, loading } =
+    useHeliumVsrState();
   const decimals = useMint(mint)?.info?.decimals;
 
   const {
@@ -312,6 +315,7 @@ export const Proposals = ({
   }, [proposalsWithDups]);
   const { publicKey } = useWallet();
   const { amount, loading: loadingBalance } = useOwnedAmount(publicKey, mint);
+  const { symbol: tokenName } = useMetaplexMetadata(mint);
 
   useEffect(() => {
     if (error) {
@@ -341,124 +345,158 @@ export const Proposals = ({
   }, [legacyVotes, filter]);
 
   return (
-    <div className="p-4 bg-gray-600 bg-opacity-25 rounded-lg">
-      <div className="flex flex-col md:flex-row justify-between items-stretch md:items-center">
-        <div className="flex flex-col space-y-0 mb-0 bg-gray-600 rounded-lg p-4 md:bg-transparent md:p-0 ">
-          <div className="text-white text-2xl font-bold leading-loose">
+    <>
+      <Link
+        href={`/${network}/staking`}
+        className="flex flex-col p-4 bg-gray-600 bg-opacity-25 rounded-lg mb-4 hover:bg-opacity-50"
+      >
+        <div className="flex flex-row justify-items-center justify-between">
+          <div className="flex flex-row text-white text-2xl font-bold">
             Voting Rights
           </div>
-          <Link href={`/${network}/staking`}>
-            <div className="flex flex-col space-y-2 md:flex-row md:space-y-0 md:space-x-4 md:items-center cursor-pointer">
-              {loading ? (
-                <div className="text-white text-xs font-normal">
-                  Loading voting power...
-                </div>
-              ) : (
-                <div className="flex flex-row items-center space-x-1 text-white text-xs font-normal">
-                  <span className="text-base font-medium leading-none">
+          <div className="flex flex-row space-x-1 items-center text-white">
+            <div className="text-lg">View</div>
+            <IoChevronForward />
+          </div>
+        </div>
+        <div className="flex flex-col space-y-2 cursor-pointer">
+          {loading ? (
+            <div className="text-white text-md font-normal">
+              Loading voting power...
+            </div>
+          ) : (
+            <div className="flex flex-col gap-2">
+              <div className="flex flex-row flex-1 rounded-lg text-white items-center">
+                Increase your voting power by locking tokens
+              </div>
+              <div className="flex flex-1 flex-col md:flex-row md:gap-4">
+                <div className="flex flex-1 flex-col mt-2 bg-gray-600 rounded-lg p-4 text-white">
+                  <div className="flex flex-row text-md font-bold">Votes</div>
+                  <div className="flex flex-row text-xl font-bold items-center gap-4">
                     {publicKey
                       ? votingPower && decimals
                         ? humanReadable(votingPower, decimals)
                         : "0"
                       : "N/A"}{" "}
-                  </span>
-                  <span>
-                    voting power from{" "}
-                    {publicKey ? (positions ? positions.length : "0") : "N/A"}{" "}
-                    positions
-                  </span>
+                    {votingPower &&
+                      amountLocked &&
+                      !amountLocked.isZero() &&
+                      !votingPower.isZero() && (
+                        <div className="flex flex-row items-center text-xs">
+                          <BsFillLightningChargeFill className="h-3 mr-1 text-primary-light w-3" />
+                          {`${humanReadable(
+                            votingPower.mul(new BN(100)).div(amountLocked),
+                            2
+                          )}x`}
+                        </div>
+                      )}
+                  </div>
                 </div>
-              )}
-              <div className="py-2 md:hidden">
-                <hr className="border-black" />
-              </div>
-              <div className="flex flex-row space-x-1 md:items-center text-gray-50 text-xs font-normal">
-                <span>Available to lock:</span>
-                <span className="font-medium">
-                  {loadingBalance || !decimals
-                    ? "..."
-                    : publicKey
-                    ? humanReadable(new BN(amount?.toString() || "0"), decimals)
-                    : "N/A"}{" "}
-                  more HNT
-                </span>
-                <IoChevronForward />
+                <div className="flex flex-1 flex-col mt-2 bg-gray-600 rounded-lg p-4 text-white">
+                  <div className="flex flex-row text-md font-bold">
+                    {tokenName || network} Locked
+                  </div>
+                  <div className="flex flex-col text-xl font-bold">
+                    {publicKey
+                      ? amountLocked && decimals
+                        ? humanReadable(amountLocked, decimals)
+                        : "0"
+                      : "N/A"}{" "}
+                  </div>
+                </div>
+                <div className="flex flex-1 flex-col mt-2 bg-gray-600 rounded-lg p-4 text-white">
+                  <div className="flex flex-row text-md font-bold">
+                    {tokenName || network} Available to lock
+                  </div>
+                  <div className="flex flex-col text-xl font-bold">
+                    {loadingBalance || !decimals
+                      ? "..."
+                      : publicKey
+                      ? humanReadable(
+                          new BN(amount?.toString() || "0"),
+                          decimals
+                        )
+                      : "N/A"}{" "}
+                  </div>
+                </div>
               </div>
             </div>
-          </Link>
+          )}
         </div>
+      </Link>
+      <div className="p-4 bg-gray-600 bg-opacity-25 rounded-lg">
         <Dropdown
           className="border border-white w-full mt-4 md:mt-0 md:w-auto flex-row justify-between"
           value={filter}
           values={FILTERS}
           onSelect={(v) => setFilter(v as ProposalFilter)}
         />
-      </div>
-      {filteredProposals.length +
-        filteredRealmsProposals.length +
-        filteredLegacyProposals.length ==
-        0 && (
-        <div className="flex flex-row justify-center h-60 items-center mt-4">
-          {loadingProposals ? (
-            <Loading />
-          ) : (
-            <div className="text-center text-gray-50 text-base font-normal">
-              No Votes
-            </div>
-          )}
+        {filteredProposals.length +
+          filteredRealmsProposals.length +
+          filteredLegacyProposals.length ==
+          0 && (
+          <div className="flex flex-row justify-center h-60 items-center mt-4">
+            {loadingProposals ? (
+              <Loading />
+            ) : (
+              <div className="text-center text-gray-50 text-base font-normal">
+                No Votes
+              </div>
+            )}
+          </div>
+        )}
+        <div className="flex flex-col space-y-2 mt-4">
+          {filteredProposals.map((proposal) => (
+            <ProposalVoteCard
+              proposal={proposal.info as any}
+              proposalKey={proposal.publicKey}
+              key={proposal.publicKey.toBase58()}
+            />
+          ))}
+          {filteredRealmsProposals.map((proposal) => {
+            const total = proposal.outcomes.reduce(
+              (acc, o) => acc + o.votes,
+              0
+            );
+            return (
+              <VoteCard
+                id={proposal.name}
+                href={proposal.href}
+                name={proposal.name}
+                endTs={proposal.endTs}
+                results={proposal.outcomes.map((o, index) => ({
+                  index,
+                  percent: (o.votes / total) * 100,
+                }))}
+                totalVotes={new BN(total)}
+                decimals={decimals}
+                tags={["realms"]}
+              />
+            );
+          })}
+          {filteredLegacyProposals.map((proposal) => {
+            const total = proposal.outcomes.reduce(
+              (acc, o) => acc + o.hntVoted,
+              0
+            );
+            return (
+              <VoteCard
+                id={proposal.id}
+                href={`/legacy/${proposal.id}`}
+                name={proposal.name}
+                endTs={proposal.deadlineTs}
+                results={proposal.outcomes.map((o, index) => ({
+                  index,
+                  percent: (o.hntVoted / total) * 100,
+                }))}
+                totalVotes={new BN(total)}
+                decimals={8}
+                tags={Object.values(proposal.tags)}
+              />
+            );
+          })}
         </div>
-      )}
-      <div className="flex flex-col space-y-2 mt-4">
-        {filteredProposals.map((proposal) => (
-          <ProposalVoteCard
-            proposal={proposal.info as any}
-            proposalKey={proposal.publicKey}
-            key={proposal.publicKey.toBase58()}
-          />
-        ))}
-        {filteredRealmsProposals.map((proposal) => {
-          const total = proposal.outcomes.reduce(
-            (acc, o) => acc + o.votes,
-            0
-          );
-          return (
-            <VoteCard
-              id={proposal.name}
-              href={proposal.href}
-              name={proposal.name}
-              endTs={proposal.endTs}
-              results={proposal.outcomes.map((o, index) => ({
-                index,
-                percent: (o.votes / total) * 100,
-              }))}
-              totalVotes={new BN(total)}
-              decimals={decimals}
-              tags={["realms"]}
-            />
-          );
-        })}
-        {filteredLegacyProposals.map((proposal) => {
-          const total = proposal.outcomes.reduce(
-            (acc, o) => acc + o.hntVoted,
-            0
-          );
-          return (
-            <VoteCard
-              id={proposal.id}
-              href={`/legacy/${proposal.id}`}
-              name={proposal.name}
-              endTs={proposal.deadlineTs}
-              results={proposal.outcomes.map((o, index) => ({
-                index,
-                percent: (o.hntVoted / total) * 100,
-              }))}
-              totalVotes={new BN(total)}
-              decimals={8}
-              tags={Object.values(proposal.tags)}
-            />
-          );
-        })}
       </div>
-    </div>
+    </>
   );
 };
