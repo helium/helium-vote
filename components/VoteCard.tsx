@@ -13,20 +13,20 @@ export const VoteCard = ({
   results,
   totalVotes,
   decimals,
-  tags,
+  tags
 }: {
-  id: string;
-  href: string;
-  name: string;
-  endTs?: number;
-  results: { index: number; percent: number }[];
-  totalVotes?: BN;
-  decimals?: number;
-  tags: string[];
+  id: string
+  href: string
+  name: string
+  endTs?: number
+  results: { index: number; percent: number; }[]
+  totalVotes?: BN
+  decimals?: number
+  tags: string[]
 }) => {
   return (
     <Link href={href} className="w-full flex flex-row cursor-pointer">
-      <div className="flex flex-col items-stretch md:flex-row p-4 grow bg-gray-600 hover:bg-gray-500 rounded-lg justify-start md:items-center gap-4">
+      <div className="flex flex-col items-stretch md:flex-row p-4 grow bg-gray-600 hover:bg-gray-500 rounded-lg justify-start md:items-center gap-4 inline-flex">
         <div className="md:w-1/2 flex-col justify-center items-start inline-flex">
           <div className="text-white text-xl font-bold leading-7">{name}</div>
           <div className="flex-row justify-start pr-16 items-start gap-1 inline-flex">
