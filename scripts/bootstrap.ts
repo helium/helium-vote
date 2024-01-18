@@ -8,6 +8,7 @@ import os from "os";
 import yargs from "yargs";
 import Squads from "@sqds/sdk";
 import { loadKeypair, sendInstructionsOrSquads } from "./utils";
+import { sendInstructions, withPriorityFees } from "@helium/spl-utils";
 
 export async function run(args: any = process.argv) {
   const yarg = yargs(args).options({
@@ -103,7 +104,14 @@ export async function run(args: any = process.argv) {
     .resolutionSettings!;
   if (!(await exists(provider.connection, resolutionSettings))) {
     console.log("Creating resolution settings");
-    await initResolutionSettings.rpc({ skipPreflight: true });
+    await sendInstructions(
+      provider,
+      await withPriorityFees({
+        connection: provider.connection,
+        computeUnits: 200000,
+        instructions: [await initResolutionSettings.instruction()]
+      })
+    )
   }
 
   const voteController = registrarK;
@@ -118,7 +126,14 @@ export async function run(args: any = process.argv) {
   const proposalConfig = (await initProposalConfig.pubkeys()).proposalConfig!;
   if (!(await exists(provider.connection, proposalConfig))) {
     console.log("Creating proposal config");
-    await initProposalConfig.rpc({ skipPreflight: true });
+    await sendInstructions(
+      provider,
+      await withPriorityFees({
+        connection: provider.connection,
+        computeUnits: 200000,
+        instructions: [await initProposalConfig.instruction()],
+      })
+    );
   }
 
   const squads = Squads.endpoint(process.env.ANCHOR_PROVIDER_URL, wallet, {
@@ -142,7 +157,14 @@ export async function run(args: any = process.argv) {
   const organization = (await initOrganization.pubkeys()).organization;
   if (!(await exists(provider.connection, organization))) {
     console.log("Creating organization");
-    await initOrganization.rpc({ skipPreflight: true });
+    await sendInstructions(
+      provider,
+      await withPriorityFees({
+        connection: provider.connection,
+        computeUnits: 200000,
+        instructions: [await initOrganization.instruction()],
+      })
+    );
     console.log(`Created org ${organization.toBase58()}`);
   } else {
     const instruction = await orgProgram.methods

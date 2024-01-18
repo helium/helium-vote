@@ -29,7 +29,7 @@
     "@solana/wallet-adapter-react": "^0.15.32",
     "@solana/wallet-adapter-react-ui": "^0.9.31",
     "@solana/wallet-adapter-solflare": "^0.6.24",
-    "@solana/web3.js": "^1.78.0",
+    "@solana/web3.js": "^1.78.4",
     "@sqds/sdk": "^2.0.4",
     "@tippyjs/react": "^4.2.6",
     "base-64": "^1.0.0",
@@ -52,6 +52,7 @@
     "yargs": "^17.7.2"
   },
   "resolutions": {
+    "@solana/web3.js": "^1.78.4",
     "@helium/account-fetch-cache": "^0.6.16",
     "@helium/account-fetch-cache-hooks": "^0.6.16",
     "@helium/helium-react-hooks": "^0.6.16",
