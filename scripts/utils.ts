@@ -1,8 +1,9 @@
 import fs from "fs";
 import * as anchor from "@coral-xyz/anchor"
 import { Commitment, ComputeBudgetProgram, Keypair, PublicKey, Signer, TransactionInstruction } from "@solana/web3.js";
-import Squads from "@sqds/sdk";
-import { sendInstructions } from "@helium/spl-utils";
+import Squads, { getTxPDA } from "@sqds/sdk";
+import { sendInstructions, withPriorityFees } from "@helium/spl-utils";
+import { BN } from "bn.js";
 
 export function loadKeypair(keypair: string): Keypair {
   return Keypair.fromSecretKey(
@@ -36,7 +37,11 @@ export async function sendInstructionsOrSquads({
   if (!multisig) {
     return await sendInstructions(
       provider,
-      instructions,
+      await withPriorityFees({
+        connection: provider.connection,
+        computeUnits: 1000000,
+        instructions,
+      }),
       signers,
       payer,
       commitment,
@@ -68,7 +73,11 @@ export async function sendInstructionsOrSquads({
   if (squadsSignatures.length == 0) {
     return await sendInstructions(
       provider,
-      nonMissingSignerIxs,
+      await withPriorityFees({
+        connection: provider.connection,
+        computeUnits: 1000000,
+        instructions: nonMissingSignerIxs,
+      }),
       signers,
       payer,
       commitment,
@@ -80,47 +89,59 @@ export async function sendInstructionsOrSquads({
     throw new Error("Too many missing signatures");
   }
 
-  const tx = await squads.createTransaction(multisig, authorityIndex!);
+  const txIndex = await squads.getNextTransactionIndex(multisig);
+  const ix = await squads.buildCreateTransaction(
+    multisig,
+    authorityIndex!,
+    txIndex
+  );
+  await sendInstructions(
+    provider,
+    await withPriorityFees({
+      connection: provider.connection,
+      instructions: [ix],
+      computeUnits: 200000,
+    })
+  );
+  const [txKey] = await getTxPDA(
+    multisig,
+    new BN(txIndex),
+    squads.multisigProgramId
+  );
+  let index = 1;
   for (const ix of instructions.filter(
     (ix) => !ix.programId.equals(ComputeBudgetProgram.programId)
   )) {
-    await withRetries(
-      3,
-      async () => await squads.addInstruction(tx.publicKey, ix)
-    );
-  }
-
-  await withRetries(
-    3,
-    async () => await squads.activateTransaction(tx.publicKey)
-  );
-  await withRetries(
-    3,
-    async () => await squads.approveTransaction(tx.publicKey)
-  );
-  if (executeTransaction) {
-    const ix = await squads.buildExecuteTransaction(
-      tx.publicKey,
-      provider.wallet.publicKey
-    );
     await sendInstructions(
       provider,
-      [ComputeBudgetProgram.setComputeUnitLimit({ units: 800000 }), ix],
-      signers
+      await withPriorityFees({
+        connection: provider.connection,
+        instructions: [
+          await squads.buildAddInstruction(multisig, txKey, ix, index),
+        ],
+        computeUnits: 200000,
+      })
+    );
+    index++;
+  }
+
+  const ixs: TransactionInstruction[] = [];
+  ixs.push(await squads.buildActivateTransaction(multisig, txKey));
+  ixs.push(await squads.buildApproveTransaction(multisig, txKey));
+
+  if (executeTransaction) {
+    ixs.push(
+      await squads.buildExecuteTransaction(txKey, provider.wallet.publicKey)
     );
   }
-}
 
-async function withRetries<A>(
-  tries: number,
-  input: () => Promise<A>
-): Promise<A> {
-  for (let i = 0; i < tries; i++) {
-    try {
-      return await input();
-    } catch (e) {
-      console.log(`Retrying ${i}...`, e);
-    }
-  }
-  throw new Error("Failed after retries");
+  await sendInstructions(
+    provider,
+    await withPriorityFees({
+      connection: provider.connection,
+      computeUnits: 1000000,
+      instructions: ixs,
+    }),
+    signers
+  );
 }
