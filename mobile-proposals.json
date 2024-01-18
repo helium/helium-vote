@@ -52,5 +52,15 @@
       { "uri": null, "name": "KΞ7IN" },
       { "uri": null, "name": "greenz" }
     ]
+  },
+  {
+    "name": "HIP 101: Equalizing POC Rewards Across Wi-Fi and CBRS",
+    "uri": "https://gist.githubusercontent.com/hiptron/76282421adf03eeaa1d48d2bf3cb9656/raw/1b169fc7dcf68d9f117b63ccc74d0c00ae623a3e/HIP-101-Vote-Summary.md",
+    "maxChoicesPerVoter": 5,
+    "tags": ["HIP", "Economic", "Technical"],
+    "choices": [
+      { "uri": null, "name": "For HIP 101" },
+      { "uri": null, "name": "Against HIP 101" }
+    ]
   }
 ]
