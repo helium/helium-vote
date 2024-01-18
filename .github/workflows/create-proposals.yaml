@@ -53,3 +53,12 @@ jobs:
             --wallet ./deploy-keypair.json \
             --orgName "Helium MOBILE" \
             --multisig ${{ secrets.MULTISIG }}
+
+      - name: Run Bulk Create Iot Proposals
+        run: |
+          ./node_modules/.bin/ts-node ./bin/helium-vote.ts bulk-create-proposal \
+            -u "https://solana-rpc.web.helium.io?session-key=Pluto" \
+            --file ./iot-proposals.json \
+            --wallet ./deploy-keypair.json \
+            --orgName "Helium IOT" \
+            --multisig ${{ secrets.MULTISIG }}
