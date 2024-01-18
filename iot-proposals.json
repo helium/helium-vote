@@ -1,0 +1,22 @@
+[
+  {
+    "name": "HIP 102: Helium Educational LNS - Unrewarded Trial Network",
+    "uri": "https://gist.githubusercontent.com/hiptron/674e35caa54d0f7782b60c752b885050/raw/0acbc4559ee56f335d85a8833fb904c9a88901c8/HIP-102-Vote-Summary.md",
+    "maxChoicesPerVoter": 1,
+    "tags": ["HIP 102"],
+    "choices": [
+      { "uri": null, "name": "For HIP 102" },
+      { "uri": null, "name": "Against HIP 102" }
+    ]
+  },
+  {
+    "name": "HIP 104: Finetune HIP-17 Parameters to Tackle Density",
+    "uri": "https://gist.githubusercontent.com/hiptron/271e6f63bb09abddcfd7fb8e7328207e/raw/3012775fbc37257918f8b3c9493788eadac0f0ed/HIP-104-Vote-Summary.md",
+    "maxChoicesPerVoter": 1,
+    "tags": ["HIP 104"],
+    "choices": [
+      { "uri": null, "name": "For HIP 104" },
+      { "uri": null, "name": "Against HIP 104" }
+    ]
+  }
+]
