@@ -100,6 +100,8 @@ export function useMetaplexMetadata(mint: PublicKey | undefined): {
     return {
       metadata: undefined,
       loading: false,
+      image:
+        "https://github.com/solana-labs/token-list/blob/main/assets/mainnet/So11111111111111111111111111111111111111112/logo.png?raw=true",
       json: {
         name: "SOL",
         symbol: "SOL",
@@ -114,6 +116,8 @@ export function useMetaplexMetadata(mint: PublicKey | undefined): {
   if (mint?.equals(USDC)) {
     return {
       metadata: undefined,
+      image:
+        "https://github.com/solana-labs/token-list/blob/main/assets/mainnet/EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v/logo.png?raw=true",
       loading: false,
       json: {
         name: "USDC",
