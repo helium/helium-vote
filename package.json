@@ -23,6 +23,7 @@
     "@helium/state-controller-sdk": "^0.0.8",
     "@helium/voter-stake-registry-hooks": "^0.6.21",
     "@helium/voter-stake-registry-sdk": "^0.6.21",
+    "@metaplex-foundation/mpl-token-metadata": "2.10.0",
     "@project-serum/anchor": "^0.25.0",
     "@solana/spl-token": "^0.3.8",
     "@solana/wallet-adapter-base": "^0.9.22",

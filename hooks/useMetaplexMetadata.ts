@@ -1,31 +1,32 @@
 import { TypedAccountParser } from "@helium/account-fetch-cache";
-import { useAccount } from "@helium/account-fetch-cache-hooks";
 import {
-  JsonMetadata,
+  PROGRAM_ID as MPL_PID,
   Metadata,
-  parseMetadataAccount,
-  sol,
-  toMetadata,
-} from "@metaplex-foundation/js";
+} from "@metaplex-foundation/mpl-token-metadata";
 import { NATIVE_MINT } from "@solana/spl-token";
 import { AccountInfo, PublicKey } from "@solana/web3.js";
 import axios from "axios";
 import { useMemo } from "react";
 import { useAsync } from "react-async-hook";
-
-const MPL_PID = new PublicKey("metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s");
+import { useAccount } from "@helium/account-fetch-cache-hooks";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const cache: Record<string, Promise<any>> = {};
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function getMetadata(uri: string | undefined): Promise<any | undefined> {
+export function getMetadata(
+  uriIn: string | undefined
+): Promise<any | undefined> {
+  const uri = uriIn?.replace(/\0/g, "");
   if (uri) {
     if (!cache[uri]) {
       cache[uri] = axios
-        .get(uri, {
+        .get(uri.replace(/\0/g, ""), {
           timeout: 3000,
         })
-        .then((res) => res);
+        .then((res) => res.data)
+        .catch((err: any) => {
+          console.error(`Error at uri ${uri}`, err);
+        });
     }
     return cache[uri];
   }
@@ -33,17 +34,10 @@ export function getMetadata(uri: string | undefined): Promise<any | undefined> {
 }
 
 export const METADATA_PARSER: TypedAccountParser<Metadata> = (
-  publicKey: PublicKey,
+  _: PublicKey,
   account: AccountInfo<Buffer>
 ) => {
-  return toMetadata(
-    parseMetadataAccount({
-      ...account,
-      lamports: sol(account.lamports),
-      data: account.data,
-      publicKey,
-    })
-  );
+  return Metadata.fromAccountInfo(account)[0];
 };
 
 export function getMetadataId(mint: PublicKey): PublicKey {
@@ -53,6 +47,30 @@ export function getMetadataId(mint: PublicKey): PublicKey {
   )[0];
 }
 
+type TokenInfo = {
+  name: string;
+  symbol: string;
+  logoURI: string;
+};
+
+export const tokenInfoToMetadata = (
+  tokenInfo: TokenInfo | null | undefined
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+): any | undefined => {
+  if (!tokenInfo) return undefined;
+
+  return {
+    json: {
+      name: tokenInfo.name,
+      symbol: tokenInfo.symbol,
+      image: tokenInfo.logoURI,
+    },
+    symbol: tokenInfo.symbol,
+    name: tokenInfo.name,
+  };
+};
+
+const USDC = new PublicKey("EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v");
 export function useMetaplexMetadata(mint: PublicKey | undefined): {
   loading: boolean;
   metadata: Metadata | undefined;
@@ -60,7 +78,6 @@ export function useMetaplexMetadata(mint: PublicKey | undefined): {
   json: any | undefined;
   symbol: string | undefined;
   name: string | undefined;
-  image: string | undefined;
 } {
   const metadataAddr = useMemo(() => {
     if (mint) {
@@ -71,12 +88,11 @@ export function useMetaplexMetadata(mint: PublicKey | undefined): {
 
   const { info: metadataAcc, loading } = useAccount(
     metadataAddr,
-    METADATA_PARSER,
-    true
+    METADATA_PARSER
   );
 
   const { result: json, loading: jsonLoading } = useAsync(getMetadata, [
-    metadataAcc?.uri,
+    metadataAcc?.data.uri.trim(),
   ]);
 
   if (mint?.equals(NATIVE_MINT)) {
@@ -89,18 +105,31 @@ export function useMetaplexMetadata(mint: PublicKey | undefined): {
         image:
           "https://github.com/solana-labs/token-list/blob/main/assets/mainnet/So11111111111111111111111111111111111111112/logo.png?raw=true",
       },
-      image: "https://github.com/solana-labs/token-list/blob/main/assets/mainnet/So11111111111111111111111111111111111111112/logo.png?raw=true",
       symbol: "SOL",
       name: "SOL",
     };
   }
 
+  if (mint?.equals(USDC)) {
+    return {
+      metadata: undefined,
+      loading: false,
+      json: {
+        name: "USDC",
+        symbol: "USDC",
+        image:
+          "https://github.com/solana-labs/token-list/blob/main/assets/mainnet/EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v/logo.png?raw=true",
+      },
+      symbol: "USDC",
+      name: "USDC",
+    };
+  }
+
   return {
     loading: jsonLoading || loading,
-    json: json?.data,
+    json,
     metadata: metadataAcc,
-    symbol: json?.data.symbol || metadataAcc?.symbol,
-    name: json?.data.name || metadataAcc?.name,
-    image: json?.data.image,
+    symbol: json?.symbol || metadataAcc?.data?.symbol,
+    name: json?.name || metadataAcc?.data?.name,
   };
 }
