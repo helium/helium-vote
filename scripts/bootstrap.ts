@@ -167,6 +167,7 @@ export async function run(args: any = process.argv) {
     );
     console.log(`Created org ${organization.toBase58()}`);
   } else {
+    const organizationAcc = await orgProgram.account.organizationV0.fetch(organization)
     const instruction = await orgProgram.methods
       .updateOrganizationV0({
         defaultProposalConfig: proposalConfig,
@@ -174,7 +175,7 @@ export async function run(args: any = process.argv) {
         uri: null,
         authority,
       })
-      .accounts({ organization, authority })
+      .accounts({ organization, authority: organizationAcc.authority })
       .instruction();
 
     await sendInstructionsOrSquads({

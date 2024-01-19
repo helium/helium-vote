@@ -124,7 +124,7 @@ export async function run(args: any = process.argv) {
       instruction,
       setState,
     ],
-    executeTransaction: true,
+    executeTransaction: false,
     squads,
     multisig: argv.multisig ? new PublicKey(argv.multisig) : undefined,
     authorityIndex: argv.authorityIndex,
