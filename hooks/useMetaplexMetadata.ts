@@ -78,6 +78,7 @@ export function useMetaplexMetadata(mint: PublicKey | undefined): {
   json: any | undefined;
   symbol: string | undefined;
   name: string | undefined;
+  image: string | undefined;
 } {
   const metadataAddr = useMemo(() => {
     if (mint) {
@@ -128,6 +129,7 @@ export function useMetaplexMetadata(mint: PublicKey | undefined): {
   return {
     loading: jsonLoading || loading,
     json,
+    image: json?.image,
     metadata: metadataAcc,
     symbol: json?.symbol || metadataAcc?.data?.symbol,
     name: json?.name || metadataAcc?.data?.name,

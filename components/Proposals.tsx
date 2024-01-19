@@ -291,7 +291,9 @@ export const Proposals = ({
   const { network } = useNetwork();
   const organization = useMemo(
     () =>
-      organizationKey(network == "hnt" ? "Helium" : network.toUpperCase())[0],
+      organizationKey(
+        network == "hnt" ? "Helium" : `Helium ${network.toUpperCase()}`
+      )[0],
     [network]
   );
   const [filter, setFilter] = useState<ProposalFilter>("all");
