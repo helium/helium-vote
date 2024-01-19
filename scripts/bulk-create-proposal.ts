@@ -1,5 +1,5 @@
 import * as anchor from "@coral-xyz/anchor";
-import { init as initOrg, organizationKey } from "@helium/organization-sdk";
+import { init as initOrg, organizationKey, proposalKey } from "@helium/organization-sdk";
 import os from "os";
 import yargs from "yargs/yargs";
 import { init as initState } from "@helium/state-controller-sdk";
@@ -18,7 +18,7 @@ interface Proposal {
   maxChoicesPerVoter: number;
   choices: Choice[];
   proposalConfig?: string;
-  tags: string[]
+  tags: string[];
 }
 
 export async function run(args: any = process.argv) {
@@ -98,6 +98,7 @@ export async function run(args: any = process.argv) {
           owner: authority,
           authority,
           payer: authority,
+          proposal: proposalKey(organizationK, i)[0],
         })
         .prepare();
 
