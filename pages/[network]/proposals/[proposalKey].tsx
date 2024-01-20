@@ -14,22 +14,16 @@ import { format } from "date-fns";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useAsync } from "react-async-hook";
 import ReactMarkdown from "react-markdown";
 import ContentSection from "../../../components/ContentSection";
-import CopyableText from "../../../components/CopyableText";
 import MetaTags from "../../../components/MetaTags";
 import Page from "../../../components/Page";
 import VoteOptionsSection from "../../../components/VoteOptionsSection";
 import VoteResults from "../../../components/VoteResults";
 import { useNetwork } from "../../../hooks/useNetwork";
 import { humanReadable } from "../../../utils/formatting";
-import { AiFillCaretDown, AiFillCaretUp } from "react-icons/ai";
 import { VoteBreakdown } from "../../../components/VoteBreakdown";
-import Button, {
-  LinkButton,
-  SecondaryButton,
-} from "../../../components/Button";
+import { SecondaryButton } from "../../../components/Button";
 import { FaArrowLeft } from "react-icons/fa6";
 import { FaGithub } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
@@ -91,7 +85,7 @@ const VoteDetailsPage = ({
       index,
       percent: totalVotes?.isZero()
         ? 100 / choices.length
-        : (r.weight.toNumber() / totalVotes.toNumber()) * 100,
+        : (BigInt(r.weight.toString()) / BigInt(totalVotes.toString()) * BigInt(100)),
     }));
     return { results, totalVotes };
   }, [choices]);
