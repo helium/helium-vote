@@ -84,8 +84,10 @@ const VoteDetailsPage = ({
       ...r,
       index,
       percent: totalVotes?.isZero()
-        ? 100 / choices.length
-        : (BigInt(r.weight.toString()) / BigInt(totalVotes.toString()) * BigInt(100)),
+          ? 100 / proposal?.choices.length
+          : // Calculate with 4 decimals of precision
+            r.weight.mul(new BN(10000)).div(totalVotes).toNumber() *
+            (100 / 10000),
     }));
     return { results, totalVotes };
   }, [choices]);
