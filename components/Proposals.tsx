@@ -204,7 +204,7 @@ const REALMS_VOTES = {
           votes: 39630647870,
         },
         {
-          votes: 39630647870,
+          votes: 2405833,
         },
       ],
     },
