@@ -62,10 +62,14 @@ export const ProposalVoteCard = ({
         ...r,
         index,
         percent: totalVotes?.isZero()
-          ? BigInt(100) / BigInt(proposal?.choices.length)
-          : (BigInt(r.weight.toString()) / BigInt(totalVotes.toString())) * BigInt(100),
+          ? 100 / proposal?.choices.length
+          : // Calculate with 4 decimals of precision
+            r.weight.mul(new BN(10000)).div(totalVotes).toNumber() *
+            (100 / 10000),
       }))
-      .sort((a, b) => (a.percent < b.percent) ? -1 : ((a.percent > b.percent) ? 1 : 0));
+      .sort((a, b) =>
+        a.percent < b.percent ? -1 : a.percent > b.percent ? 1 : 0
+      );
     return { results, totalVotes };
   }, [proposal?.choices]);
 
