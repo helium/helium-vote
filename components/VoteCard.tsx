@@ -85,7 +85,7 @@ export const VoteCard = ({
             Votes
           </div>
           <div className="text-white text-base font-normal leading-normal">
-            {decimals ? truncatedHumanReadable(totalVotes, decimals, 2) : "..."}
+            {typeof decimals !== 'undefined' ? truncatedHumanReadable(totalVotes, decimals, 2) : "..."}
           </div>
         </div>
       </div>
