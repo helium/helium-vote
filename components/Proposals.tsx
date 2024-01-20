@@ -471,7 +471,7 @@ export const Proposals = ({
                   percent: (o.votes / total) * 100,
                 }))}
                 totalVotes={new BN(total)}
-                decimals={decimals}
+                decimals={0}
                 tags={["realms"]}
               />
             );
