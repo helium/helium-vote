@@ -11,6 +11,7 @@ import { humanReadable } from "../utils/formatting";
 import BN from "bn.js";
 import Loading from "./Loading";
 import { SecondaryButton } from "./Button";
+import { toNumber } from "@helium/spl-utils";
 
 export function VoteBreakdown({ proposalKey }: { proposalKey: PublicKey }) {
   const { markers, loading: loadingMarkers } = useVotes(proposalKey);
@@ -50,7 +51,7 @@ export function VoteBreakdown({ proposalKey }: { proposalKey: PublicKey }) {
     );
 
     const sortedMarkers = grouped.sort((a, b) =>
-      b.totalWeight.sub(a.totalWeight).toNumber()
+      toNumber(b.totalWeight.sub(a.totalWeight), decimals)
     );
 
     return sortedMarkers;
@@ -67,9 +68,12 @@ export function VoteBreakdown({ proposalKey }: { proposalKey: PublicKey }) {
         .join(", ");
 
       const voteWeight = humanReadable(marker.totalWeight, decimals);
-      const percentage = (
-        marker.totalWeight.mul(new BN(100000)).div(totalVotes).toNumber() / 1000
-      ).toFixed(2);
+      const percentage = marker.totalWeight
+        .mul(new BN(100000))
+        .div(totalVotes)
+        .div(new BN(1000))
+        .toNumber()
+        .toFixed(2);
 
       rows.push([owner, choices, voteWeight, percentage]);
     });
@@ -119,12 +123,12 @@ export function VoteBreakdown({ proposalKey }: { proposalKey: PublicKey }) {
               </td>
               <td className="px-4 py-2">
                 {/* Add two decimals precision */}
-                {(
-                  marker.totalWeight
-                    .mul(new BN(100000))
-                    .div(totalVotes)
-                    .toNumber() / 1000
-                ).toFixed(2)}
+                {marker.totalWeight
+                  .mul(new BN(100000))
+                  .div(totalVotes)
+                  .div(new BN(1000))
+                  .toNumber()
+                  .toFixed(2)}
               </td>
             </tr>
           ))}
