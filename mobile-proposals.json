@@ -72,5 +72,35 @@
       { "uri": null, "name": "For HIP 101" },
       { "uri": null, "name": "Against HIP 101" }
     ]
+  },
+  {
+    "name": "HIP 98: Modification of MOBILE subDAO Hex Limits",
+    "uri": "https://gist.githubusercontent.com/hiptron/3577d21663492fbcc8e5d95e71d9bb6a/raw/0a558064a149838016a65f326436048045cd70ab/HIP-98-Vote-Summary.md",
+    "maxChoicesPerVoter": 1,
+    "tags": ["HIP", "Economic", "Technical"],
+    "choices": [
+      { "uri": null, "name": "For HIP 98" },
+      { "uri": null, "name": "Against HIP 98" }
+    ]
+  },
+  {
+    "name": "HIP 103: MOBILE Oracle Hex Boosting",
+    "uri": "https://gist.githubusercontent.com/hiptron/38c211aad94735281519df1eddc7eef4/raw/9f0ae19eb81af84a857634bf9ae145f0cc2739c7/HIP-103-Vote-Summary.md",
+    "maxChoicesPerVoter": 1,
+    "tags": ["HIP", "Economic", "Technical"],
+    "choices": [
+      { "uri": null, "name": "For HIP 103" },
+      { "uri": null, "name": "Against HIP 103" }
+    ]
+  },
+  {
+    "name": "HIP 105: Modification of MOBILE subDAO Hex Limits",
+    "uri": "https://gist.githubusercontent.com/hiptron/af69d054596ee3b1029916101b4c422e/raw/23852cbc4d87b2a11ec74838d6b2eeb9adc5f60b/HIP-105-Vote-Summary.md",
+    "maxChoicesPerVoter": 1,
+    "tags": ["HIP", "Economic", "Technical"],
+    "choices": [
+      { "uri": null, "name": "For HIP 105" },
+      { "uri": null, "name": "Against HIP 105" }
+    ]
   }
 ]
