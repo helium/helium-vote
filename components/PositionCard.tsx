@@ -1,8 +1,18 @@
 import React, { useCallback, useState, useMemo } from "react";
-import { useMint, useSolanaUnixNow } from "@helium/helium-react-hooks";
+import {
+  useAnchorProvider,
+  useMint,
+  useSolanaUnixNow,
+} from "@helium/helium-react-hooks";
 import { BN } from "@coral-xyz/anchor";
 import Button, { SecondaryButton } from "./Button";
-import { HNT_MINT, toNumber } from "@helium/spl-utils";
+import {
+  HNT_MINT,
+  batchInstructionsToTxsWithPriorityFee,
+  batchParallelInstructionsWithPriorityFee,
+  sendAndConfirmWithRetry,
+  toNumber,
+} from "@helium/spl-utils";
 import { notify } from "../utils/notifications";
 import {
   daysToSecs,
@@ -39,6 +49,8 @@ import { useMetaplexMetadata } from "../hooks/useMetaplexMetadata";
 import { FaCodeBranch } from "react-icons/fa6";
 import { FaPauseCircle, FaPlayCircle, FaCalendarPlus } from "react-icons/fa";
 import { BiTransfer } from "react-icons/bi";
+import { MAX_TRANSACTIONS_PER_SIGNATURE_BATCH } from "./constants";
+import { Keypair, TransactionInstruction } from "@solana/web3.js";
 
 interface PositionCardProps {
   subDaos?: SubDaoWithMeta[];
@@ -56,6 +68,7 @@ export const PositionCard: React.FC<PositionCardProps> = ({
   const [isSplitModalOpen, setIsSplitModalOpen] = useState(false);
   const [isDelegateModalOpen, setIsDelegateModalOpen] = useState(false);
   const { loading: isLoading, positions, refetch } = useHeliumVsrState();
+  const provider = useAnchorProvider();
 
   const transferablePositions: PositionWithMeta[] = useMemo(() => {
     if (!unixNow || !positions.length) {
@@ -90,6 +103,41 @@ export const PositionCard: React.FC<PositionCardProps> = ({
       );
     });
   }, [position, unixNow, positions]);
+
+  const onInstructions = async (
+    instructions: TransactionInstruction[],
+    sigs?: Keypair[]
+  ) => {
+    if (sigs) {
+      const transactions = await batchInstructionsToTxsWithPriorityFee(
+        provider,
+        instructions
+      );
+      for (const tx of await provider.wallet.signAllTransactions(
+        transactions
+      )) {
+        sigs.forEach((sig) => {
+          if (tx.signatures.some((s) => s.publicKey.equals(sig.publicKey))) {
+            tx.partialSign(sig);
+          }
+        });
+
+        console.log(tx.signatures)
+        await sendAndConfirmWithRetry(
+          provider.connection,
+          tx.serialize(),
+          {
+            skipPreflight: true,
+          },
+          "confirmed"
+        );
+      }
+    } else {
+      await batchParallelInstructionsWithPriorityFee(provider, instructions, {
+        maxSignatureBatch: MAX_TRANSACTIONS_PER_SIGNATURE_BATCH,
+      });
+    }
+  };
 
   const {
     loading: isExtending,
@@ -178,7 +226,10 @@ export const PositionCard: React.FC<PositionCardProps> = ({
 
   const handleFlipPositionLockupKind = async () => {
     try {
-      await flipPositionLockupKind({ position });
+      await flipPositionLockupKind({
+        position,
+        onInstructions,
+      });
 
       if (!flippingError) {
         await refetchState();
@@ -199,6 +250,7 @@ export const PositionCard: React.FC<PositionCardProps> = ({
     await extendPosition({
       position,
       lockupPeriodsInDays: values.lockupPeriodInDays,
+      onInstructions,
     });
 
     if (!extendingError) {
@@ -212,6 +264,7 @@ export const PositionCard: React.FC<PositionCardProps> = ({
       amount: values.amount,
       lockupKind: values.lockupKind.value,
       lockupPeriodsInDays: values.lockupPeriodInDays,
+      onInstructions,
     });
 
     if (!splitingError) {
@@ -227,6 +280,7 @@ export const PositionCard: React.FC<PositionCardProps> = ({
       sourcePosition: position,
       amount,
       targetPosition,
+      onInstructions,
     });
 
     if (!transferingError) {
@@ -238,6 +292,7 @@ export const PositionCard: React.FC<PositionCardProps> = ({
     await delegatePosition({
       position,
       subDao,
+      onInstructions,
     });
 
     if (!delegatingError) {
@@ -247,7 +302,7 @@ export const PositionCard: React.FC<PositionCardProps> = ({
 
   const handleUndelegateTokens = async () => {
     try {
-      await undelegatePosition({ position });
+      await undelegatePosition({ position, onInstructions });
 
       if (!undelegatingError) {
         await refetchState();
@@ -263,7 +318,10 @@ export const PositionCard: React.FC<PositionCardProps> = ({
 
   const handleClaimRewards = async () => {
     try {
-      await claimPositionRewards({ position });
+      await claimPositionRewards({
+        position,
+        onInstructions,
+      });
 
       if (!claimingRewardsError) {
         await refetchState();
@@ -281,6 +339,7 @@ export const PositionCard: React.FC<PositionCardProps> = ({
     try {
       await closePosition({
         position,
+        onInstructions,
       });
 
       if (!closingError) {
