@@ -18,5 +18,15 @@
       { "uri": null, "name": "For HIP 104" },
       { "uri": null, "name": "Against HIP 104" }
     ]
+  },
+  {
+    "name": "HIP 106: Hotspot Bidirectional Coverage Requirement",
+    "uri": "https://gist.githubusercontent.com/hiptron/a16ee5cce27dcee7f8107e109e1b912e/raw/e0801fb11b70c1d6ad3651240e45da51cb9b4956/HIP-106-Vote-Summary.md",
+    "maxChoicesPerVoter": 1,
+    "tags": ["HIP", "Technical", "Economic"],
+    "choices": [
+      { "uri": null, "name": "For HIP 106" },
+      { "uri": null, "name": "Against HIP 106" }
+    ]
   }
 ]
