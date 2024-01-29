@@ -86,19 +86,19 @@
   dependencies:
     "@jridgewell/trace-mapping" "0.3.9"
 
-"@helium/account-fetch-cache-hooks@^0.5.0", "@helium/account-fetch-cache-hooks@^0.6.23":
-  version "0.6.23"
-  resolved "https://registry.yarnpkg.com/@helium/account-fetch-cache-hooks/-/account-fetch-cache-hooks-0.6.23.tgz#acfb6a7ab6aa3d89c9c8c347737993c3c52b2ae6"
-  integrity sha512-03udPpRwZyqwtEmoGD6daA3UA+qS+ts/0rQuWsR89yGg4p5YNvAcz95DaBm/T73/sltTcn/VqS8PTMyKiX/XXw==
+"@helium/account-fetch-cache-hooks@^0.5.0", "@helium/account-fetch-cache-hooks@^0.6.25":
+  version "0.6.25"
+  resolved "https://registry.yarnpkg.com/@helium/account-fetch-cache-hooks/-/account-fetch-cache-hooks-0.6.25.tgz#6bc1b3a911b8f3016eca6955ef3dbff1dfaf4f9d"
+  integrity sha512-7F0kfqxF0DhQMmxsLRIRIbtviVqe7n5LB+DGjJexGwOLmuh0KQolXghZpgdIqUMPvDXbYolH7TWDtMOOSUCQaw==
   dependencies:
-    "@helium/account-fetch-cache" "^0.6.23"
+    "@helium/account-fetch-cache" "^0.6.25"
     "@solana/web3.js" "^1.78.4"
     react-async-hook "^4.0.0"
 
-"@helium/account-fetch-cache@^0.5.0", "@helium/account-fetch-cache@^0.6.23":
-  version "0.6.23"
-  resolved "https://registry.yarnpkg.com/@helium/account-fetch-cache/-/account-fetch-cache-0.6.23.tgz#a5044152a28170f407b9e7cb9f26c6efde241c0d"
-  integrity sha512-6vL+J8lM0+N+lXZyBh8jWHNYOrcF0Rltpv/dSuO1D2p7iMc+qowoaQJYlK9qc3/nLOU/Q4aO/UZmRir4BjsQuw==
+"@helium/account-fetch-cache@^0.5.0", "@helium/account-fetch-cache@^0.6.25":
+  version "0.6.25"
+  resolved "https://registry.yarnpkg.com/@helium/account-fetch-cache/-/account-fetch-cache-0.6.25.tgz#a0678edf6d7d9e517a061ec6cacf9b867f248312"
+  integrity sha512-rQ5yziQwo8Pj5M2N+pgj/EkUFwTMewMeFAXunIQMAonrle6ArsaA1B7XPZBlSThNrYX70wHpnFQt6y8goZ9o6A==
   dependencies:
     "@solana/web3.js" "^1.78.4"
 
@@ -119,22 +119,22 @@
     "@solana/spl-token" "^0.3.8"
     "@solana/web3.js" "^1.78.4"
 
-"@helium/anchor-resolvers@^0.6.23":
-  version "0.6.23"
-  resolved "https://registry.yarnpkg.com/@helium/anchor-resolvers/-/anchor-resolvers-0.6.23.tgz#689e2f487d6ee64b638a2bc3b316fea0fb90c44a"
-  integrity sha512-memBUpTQWXalQfcmkL6d8cfOxjOzZqATZBFcqH9OMFrrvC+6h9APILpfuV3jHjFd59B4UDStQ0B30IACHh0kjg==
+"@helium/anchor-resolvers@^0.6.25":
+  version "0.6.25"
+  resolved "https://registry.yarnpkg.com/@helium/anchor-resolvers/-/anchor-resolvers-0.6.25.tgz#f8865caca8338dc99d611b68acafc5a4d8bfd922"
+  integrity sha512-unVDY3eMsXfO97sDDJbsbrRLjA/0EOifdGWyk2ZsyHWu4LKNf484SSQtoG5lxhlmY7sSjBRvNW+dE/pXOxdaxQ==
   dependencies:
     "@solana/spl-token" "^0.3.8"
     "@solana/web3.js" "^1.78.4"
 
-"@helium/circuit-breaker-sdk@^0.6.23":
-  version "0.6.23"
-  resolved "https://registry.yarnpkg.com/@helium/circuit-breaker-sdk/-/circuit-breaker-sdk-0.6.23.tgz#00dbad9a9f1553963a3c0b603eadbfc4add4faec"
-  integrity sha512-HHvnjTQea5qrSR9RjwlTAGSaKx8IpQzdetEEWldN9VhKgqangm/2gH3/K8D5oAOX+iaRILduSDYYhR0zYjhnEg==
+"@helium/circuit-breaker-sdk@^0.6.25":
+  version "0.6.25"
+  resolved "https://registry.yarnpkg.com/@helium/circuit-breaker-sdk/-/circuit-breaker-sdk-0.6.25.tgz#858e625b9cc383f50ec64dc5c9124136aaf1d62e"
+  integrity sha512-AjiAwyYm9m7FieuQ1xi0xqEfz3ESXjEVRPV5/LZXdpLPDP8ssadRrWFecXwnT8LIB/7urLDf8/YEvBLNZZpheg==
   dependencies:
     "@coral-xyz/anchor" "^0.28.0"
-    "@helium/anchor-resolvers" "^0.6.23"
-    "@helium/idls" "^0.6.23"
+    "@helium/anchor-resolvers" "^0.6.25"
+    "@helium/idls" "^0.6.25"
     bn.js "^5.2.0"
     bs58 "^4.0.1"
 
@@ -145,37 +145,37 @@
   dependencies:
     bignumber.js "^9.0.0"
 
-"@helium/helium-react-hooks@^0.5.0", "@helium/helium-react-hooks@^0.6.23":
-  version "0.6.23"
-  resolved "https://registry.yarnpkg.com/@helium/helium-react-hooks/-/helium-react-hooks-0.6.23.tgz#0c48ea8479f1e67a1371e5bed55b27135132c840"
-  integrity sha512-USWhi73fxRhLQchk6di+iAlYuT2ll7MmxrAqPMsj5cvvKKA7/aRV1znL85q5XkA29WMnh6BNli6dmEI2NwA/yA==
+"@helium/helium-react-hooks@^0.5.0", "@helium/helium-react-hooks@^0.6.25":
+  version "0.6.25"
+  resolved "https://registry.yarnpkg.com/@helium/helium-react-hooks/-/helium-react-hooks-0.6.25.tgz#b921ace5cc0c70ee60f09b127aa123a0c83f5e97"
+  integrity sha512-Qb2GhHsHaO86dKd/+AnaR4WChVpSg2tQIxnVjTLbvCURxumUlcKScFVxk2pHKIYZEjDHPBrTgWZd6ZnxKql9Fg==
   dependencies:
     "@coral-xyz/anchor" "^0.28.0"
-    "@helium/account-fetch-cache" "^0.6.23"
-    "@helium/account-fetch-cache-hooks" "^0.6.23"
+    "@helium/account-fetch-cache" "^0.6.25"
+    "@helium/account-fetch-cache-hooks" "^0.6.25"
     "@solana/spl-token" "^0.3.8"
     "@solana/web3.js" "^1.78.4"
     bs58 "^4.0.1"
     pako "^2.0.3"
     react-async-hook "^4.0.0"
 
-"@helium/helium-sub-daos-sdk@^0.6.23":
-  version "0.6.23"
-  resolved "https://registry.yarnpkg.com/@helium/helium-sub-daos-sdk/-/helium-sub-daos-sdk-0.6.23.tgz#09b3c6ae2335dd08a09801b92c3d5ca8303b3da3"
-  integrity sha512-h7ZPAQGZW5fDejCOy9SPT7Hl1YnF8a475h7FdQmlSKydBczYudOkmILDWYXRCktuor/ZlrnHhBqvr0995Kvu6Q==
+"@helium/helium-sub-daos-sdk@^0.6.25":
+  version "0.6.25"
+  resolved "https://registry.yarnpkg.com/@helium/helium-sub-daos-sdk/-/helium-sub-daos-sdk-0.6.25.tgz#fb2b6cf70e5185751c4535b66f086095020909c6"
+  integrity sha512-hQ2n+Jqj42BAe8NIOXjKv6gL83iLf+dKXWbJhgLKD7JvjTvVvJeMCuY+CFPwHmmtV56twdCsZ52JXndbK5DkPA==
   dependencies:
     "@coral-xyz/anchor" "^0.28.0"
-    "@helium/anchor-resolvers" "^0.6.23"
-    "@helium/circuit-breaker-sdk" "^0.6.23"
-    "@helium/treasury-management-sdk" "^0.6.23"
-    "@helium/voter-stake-registry-sdk" "^0.6.23"
+    "@helium/anchor-resolvers" "^0.6.25"
+    "@helium/circuit-breaker-sdk" "^0.6.25"
+    "@helium/treasury-management-sdk" "^0.6.25"
+    "@helium/voter-stake-registry-sdk" "^0.6.25"
     bn.js "^5.2.0"
     bs58 "^4.0.1"
 
-"@helium/idls@^0.6.23":
-  version "0.6.23"
-  resolved "https://registry.yarnpkg.com/@helium/idls/-/idls-0.6.23.tgz#cc9754f5deb26e162b11070e440b7de6ac404ebe"
-  integrity sha512-VQYiykfwrlLmBf37uArb/XEEElMLAaNXx3CGp4RJmPCKTEsZtgLz3mAwfew79fAb1O/4qfhR7h1OhRxlyW/KgA==
+"@helium/idls@^0.6.25":
+  version "0.6.25"
+  resolved "https://registry.yarnpkg.com/@helium/idls/-/idls-0.6.25.tgz#5ca42baf85038eee60cc5461ea5c21ba08d6bc06"
+  integrity sha512-LSrYFwtwrSUS1IBjBfXcJVLDF2aYX1QVixXgEcvDfwn94ttgu3Gjc2uuMeBEYOMAw5grhvOTWw2wXSnJ+O3hEQ==
   dependencies:
     "@coral-xyz/anchor" "^0.28.0"
     "@solana/web3.js" "^1.78.4"
@@ -223,15 +223,15 @@
     "@helium/anchor-resolvers" "^0.5.0"
     "@helium/modular-governance-idls" "^0.0.8"
 
-"@helium/spl-utils@^0.6.23":
-  version "0.6.23"
-  resolved "https://registry.yarnpkg.com/@helium/spl-utils/-/spl-utils-0.6.23.tgz#89dc6443273c4d98e78897894a6188d93e809b70"
-  integrity sha512-H4QRRl9nWjwzudVI/pYuL+sMQ1mdAzhb782SC93+yFFPfQux/kVWcmFEDo74h0yaudxYzAHrS2vPzfwv9caSAQ==
+"@helium/spl-utils@^0.6.25":
+  version "0.6.25"
+  resolved "https://registry.yarnpkg.com/@helium/spl-utils/-/spl-utils-0.6.25.tgz#54da2ad68e71d21a12ebeadfe0d36dace86a0f3a"
+  integrity sha512-S5x+Dl5YSxqykcCn2LJKSpj1aq9oDjnaO0iidf8bEDShmQziChuCUh71o8/1Rd8LUr/FPEUzZjHvhb8MuMVRgw==
   dependencies:
     "@coral-xyz/anchor" "^0.28.0"
-    "@helium/account-fetch-cache" "^0.6.23"
+    "@helium/account-fetch-cache" "^0.6.25"
     "@helium/address" "^4.10.2"
-    "@helium/anchor-resolvers" "^0.6.23"
+    "@helium/anchor-resolvers" "^0.6.25"
     "@metaplex-foundation/mpl-token-metadata" "^2.10.0"
     "@solana/spl-account-compression" "^0.1.7"
     "@solana/spl-token" "^0.3.8"
@@ -250,31 +250,31 @@
     "@helium/anchor-resolvers" "^0.5.0"
     "@helium/modular-governance-idls" "^0.0.8"
 
-"@helium/treasury-management-sdk@^0.6.23":
-  version "0.6.23"
-  resolved "https://registry.yarnpkg.com/@helium/treasury-management-sdk/-/treasury-management-sdk-0.6.23.tgz#8de0022725cc221a0fb6605506101b63cd27837a"
-  integrity sha512-tsetLd/VxYG0ysDHRMRFTxcYTJIQ//qQ8XLozUQOL92ZaTVcQltxUue+vv+QLxNCeb1mgFN/+x1KRVQ9cD2gVw==
+"@helium/treasury-management-sdk@^0.6.25":
+  version "0.6.25"
+  resolved "https://registry.yarnpkg.com/@helium/treasury-management-sdk/-/treasury-management-sdk-0.6.25.tgz#b8874452122e40090c144074f60c1982b3bd4241"
+  integrity sha512-zQ3VnYtFj1mD9DpipzLB2ZFD5Z5ZQh4ZjHGAJvqx3N/pTvrFC6DVyEnEVQT/UO8ICIFBAK2WPNdfMIS/I1auJg==
   dependencies:
     "@coral-xyz/anchor" "^0.28.0"
-    "@helium/anchor-resolvers" "^0.6.23"
-    "@helium/circuit-breaker-sdk" "^0.6.23"
-    "@helium/idls" "^0.6.23"
+    "@helium/anchor-resolvers" "^0.6.25"
+    "@helium/circuit-breaker-sdk" "^0.6.25"
+    "@helium/idls" "^0.6.25"
     bn.js "^5.2.0"
     bs58 "^4.0.1"
 
-"@helium/voter-stake-registry-hooks@^0.6.23":
-  version "0.6.23"
-  resolved "https://registry.yarnpkg.com/@helium/voter-stake-registry-hooks/-/voter-stake-registry-hooks-0.6.23.tgz#5e256f672e0655ff0dcd286e990bdcc293e06806"
-  integrity sha512-ca5ninH42l1sZo/OEUeHOL0drKQ/ACbfmIgx9XNekCNkiZ3SdKJtuV4by9BGQRDWaUUua2BncJwzVhysJRC3Nw==
+"@helium/voter-stake-registry-hooks@^0.6.25":
+  version "0.6.25"
+  resolved "https://registry.yarnpkg.com/@helium/voter-stake-registry-hooks/-/voter-stake-registry-hooks-0.6.25.tgz#19b7a6ea6b429433e8744064b38c468c2b7a3577"
+  integrity sha512-XJu3too/uOJ8aNpICbUZdDJ6WTyDjtz+37Y5AcyZD/6chesCUU1hHW0Gbf2IGpIA2Hh1Y2R96vE/7tySrBB2OA==
   dependencies:
     "@coral-xyz/anchor" "^0.28.0"
-    "@helium/account-fetch-cache" "^0.6.23"
-    "@helium/account-fetch-cache-hooks" "^0.6.23"
-    "@helium/helium-react-hooks" "^0.6.23"
-    "@helium/helium-sub-daos-sdk" "^0.6.23"
+    "@helium/account-fetch-cache" "^0.6.25"
+    "@helium/account-fetch-cache-hooks" "^0.6.25"
+    "@helium/helium-react-hooks" "^0.6.25"
+    "@helium/helium-sub-daos-sdk" "^0.6.25"
     "@helium/modular-governance-hooks" "^0.0.8"
-    "@helium/spl-utils" "^0.6.23"
-    "@helium/voter-stake-registry-sdk" "^0.6.23"
+    "@helium/spl-utils" "^0.6.25"
+    "@helium/voter-stake-registry-sdk" "^0.6.25"
     "@solana/wallet-adapter-base" "^0.9.22"
     "@solana/wallet-adapter-react" "^0.15.32"
     "@solana/web3.js" "^1.78.4"
@@ -282,14 +282,14 @@
     bs58 "^4.0.1"
     react-async-hook "^4.0.0"
 
-"@helium/voter-stake-registry-sdk@^0.6.23":
-  version "0.6.23"
-  resolved "https://registry.yarnpkg.com/@helium/voter-stake-registry-sdk/-/voter-stake-registry-sdk-0.6.23.tgz#3c74b87da0321895d8f45c181320d8556757baaf"
-  integrity sha512-a/GkFfrmB0j+02F4mDEEVSEFM85er4ntWFgo8MmcSJ3FgEk2W+YXB7Cbqh9bvfqYThYL4Gj86nYXiO9BZPVGrw==
+"@helium/voter-stake-registry-sdk@^0.6.25":
+  version "0.6.25"
+  resolved "https://registry.yarnpkg.com/@helium/voter-stake-registry-sdk/-/voter-stake-registry-sdk-0.6.25.tgz#5097f31dc3b2767afdb974def81dcd27e4e8b70a"
+  integrity sha512-Vp2IJlUDaFrgR9nryXXzFFC27pNt95CW4rESFf3vpEo2EF1Y4f2pNWDeyVp58qYuXXbWlHR5vYD722RL9RHMMQ==
   dependencies:
     "@coral-xyz/anchor" "^0.28.0"
-    "@helium/anchor-resolvers" "^0.6.23"
-    "@helium/idls" "^0.6.23"
+    "@helium/anchor-resolvers" "^0.6.25"
+    "@helium/idls" "^0.6.25"
     "@metaplex-foundation/mpl-token-metadata" "^2.10.0"
     "@solana/spl-token" "^0.3.8"
     bn.js "^5.2.0"

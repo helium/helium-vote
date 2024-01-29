@@ -1,10 +1,17 @@
 import { BN } from "@coral-xyz/anchor";
 import {
+  useAnchorProvider,
   useAssociatedTokenAccount,
   useMint,
   useOwnedAmount,
 } from "@helium/helium-react-hooks";
-import { toBN, toNumber } from "@helium/spl-utils";
+import {
+  batchInstructionsToTxsWithPriorityFee,
+  batchParallelInstructionsWithPriorityFee,
+  sendAndConfirmWithRetry,
+  toBN,
+  toNumber,
+} from "@helium/spl-utils";
 import {
   calcLockupMultiplier,
   getRegistrarKey,
@@ -15,7 +22,15 @@ import {
   useSubDaos,
 } from "@helium/voter-stake-registry-hooks";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
+import { useWalletModal } from "@solana/wallet-adapter-react-ui";
+import {
+  Keypair,
+  LAMPORTS_PER_SOL,
+  TransactionInstruction,
+} from "@solana/web3.js";
+import axios from "axios";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useAsync } from "react-async-hook";
 import { AiFillLock } from "react-icons/ai";
 import { BsFillLightningChargeFill, BsLink45Deg } from "react-icons/bs";
 import { useMetaplexMetadata } from "../hooks/useMetaplexMetadata";
@@ -27,10 +42,7 @@ import { LockCommunityTokensButton } from "./LockCommunityTokensButton";
 import { LockTokensModal, LockTokensModalFormValues } from "./LockTokensModal";
 import { PositionCard } from "./PositionCard";
 import { VotingPowerBox } from "./VotingPowerBox";
-import { useAsync } from "react-async-hook";
-import axios from "axios";
-import { LAMPORTS_PER_SOL } from "@solana/web3.js";
-import { useWalletModal } from "@solana/wallet-adapter-react-ui";
+import { MAX_TRANSACTIONS_PER_SIGNATURE_BATCH } from "./constants";
 
 function daysToSecs(days: number): number {
   return days * 60 * 60 * 24;
@@ -63,6 +75,41 @@ export const LockTokensAccount: React.FC = (props) => {
   const { setVisible } = useWalletModal();
   const { symbol: tokenName } = useMetaplexMetadata(mint);
   const canDelegate = true;
+  const provider = useAnchorProvider();
+
+  const onInstructions = async (
+    instructions: TransactionInstruction[],
+    sigs?: Keypair[]
+  ) => {
+    if (sigs) {
+      const transactions = await batchInstructionsToTxsWithPriorityFee(
+        provider,
+        instructions
+      );
+      for (const tx of await provider.wallet.signAllTransactions(
+        transactions
+      )) {
+        sigs.forEach((sig) => {
+          if (tx.signatures.some((s) => s.publicKey.equals(sig.publicKey))) {
+            tx.partialSign(sig);
+          }
+        });
+
+        await sendAndConfirmWithRetry(
+          provider.connection,
+          tx.serialize(),
+          {
+            skipPreflight: true,
+          },
+          "confirmed"
+        );
+      }
+    } else {
+      await batchParallelInstructionsWithPriorityFee(provider, instructions, {
+        maxSignatureBatch: MAX_TRANSACTIONS_PER_SIGNATURE_BATCH,
+      });
+    }
+  };
 
   const { info: registrar } = useRegistrar(getRegistrarKey(mint));
   const { info: mintAcc } = useMint(mint);
@@ -148,13 +195,17 @@ export const LockTokensAccount: React.FC = (props) => {
       lockupPeriodsInDays: lockupPeriodInDays,
       lockupKind: lockupKind.value,
       mint,
+      onInstructions,
     });
     await refetchState();
   };
 
   const handleClaimAllRewards = async () => {
     try {
-      await claimAllPositionsRewards({ positions: positionsWithRewards });
+      await claimAllPositionsRewards({
+        positions: positionsWithRewards,
+        onInstructions,
+      });
 
       if (!claimingAllRewardsError) {
         await refetchState();
