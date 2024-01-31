@@ -14,6 +14,7 @@ export const VoteCard = ({
   totalVotes,
   decimals,
   tags,
+  cancelled,
 }: {
   id: string;
   href: string;
@@ -23,6 +24,7 @@ export const VoteCard = ({
   totalVotes?: BN;
   decimals?: number;
   tags: string[];
+  cancelled: boolean;
 }) => {
   return (
     <Link href={href} className="w-full flex flex-row cursor-pointer">
@@ -45,12 +47,13 @@ export const VoteCard = ({
 
         <div className="h-full flex-col grow justify-between md:items-end inline-flex">
           <div className="text-white text-base font-normal leading-normal">
-            {endTs && <CountdownTimer endTs={endTs} key={id} />}
+            {!cancelled && endTs && <CountdownTimer endTs={endTs} key={id} />}
+            {cancelled && <span className="text-orange-400">Cancelled</span>}
           </div>
           <div className="mt-2 md:mt-0 flex flex-row items-center justify-center w-full pb-1">
             {!results ? (
               <div className="w-full h-4 bg-gradient-to-r from-gray-200 to-gray-400 rounded-lg animate-pulse" />
-            ) : (
+            ) : !cancelled ? (
               results.map((outcome, i, { length }) => {
                 const bg = getBackgroundColor(outcome.index);
 
@@ -77,7 +80,7 @@ export const VoteCard = ({
                   />
                 );
               })
-            )}
+            ): null}
           </div>
         </div>
         <div className="h-full flex-col justify-between items-start inline-flex">
@@ -85,7 +88,9 @@ export const VoteCard = ({
             Votes
           </div>
           <div className="text-white text-base font-normal leading-normal">
-            {typeof decimals !== 'undefined' ? truncatedHumanReadable(totalVotes, decimals, 2) : "..."}
+            {typeof decimals !== "undefined"
+              ? truncatedHumanReadable(totalVotes, decimals, 2)
+              : "..."}
           </div>
         </div>
       </div>

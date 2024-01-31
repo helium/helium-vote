@@ -92,7 +92,8 @@ const VoteDetailsPage = ({
     return { results, totalVotes };
   }, [choices]);
 
-  const completed = endTs?.toNumber() <= Date.now().valueOf() / 1000;
+  const cancelled = !!proposal?.state.cancelled;
+  const completed = cancelled || endTs?.toNumber() <= Date.now().valueOf() / 1000;
 
   const twitterUrl = useMemo(() => {
     const url = new URL("https://twitter.com/intent/tweet");
@@ -304,7 +305,7 @@ const VoteDetailsPage = ({
               </div>
             </div>
           </div>
-          {completed && (
+          {completed && !cancelled && (
             <div className="w-full flex flex-col lg:flex-row justify-between mb-2 mt-8">
               <p className="text-whtie text-lg font-bold text-white tracking-tighter">
                 Final Results
@@ -312,7 +313,15 @@ const VoteDetailsPage = ({
             </div>
           )}
 
-          {completed && (
+          {cancelled && (
+            <div className="w-full flex flex-col lg:flex-row justify-between mb-2 mt-8">
+              <p className="text-orange-400 text-lg font-bold text-white tracking-tighter">
+                Vote Cancelled
+              </p>
+            </div>
+          )}
+
+          {completed && !cancelled && (
             <div className="bg-gray-800 p-5 flex flex-col lg:flex-row justify-between space-y-2 lg:space-y-0 align-center w-full">
               <div>
                 <p className="text-white">Vote Closed</p>
@@ -354,7 +363,7 @@ const VoteDetailsPage = ({
               </div>
             </div>
           )}
-          {completed && votingResults.results?.length > 0 && (
+          {completed && !cancelled && votingResults.results?.length > 0 && (
             <div className="flex flex-col space-y-2 mt-3">
               <VoteResults
                 decimals={decimals}
@@ -371,7 +380,7 @@ const VoteDetailsPage = ({
             />
           )}
 
-          {completed && (
+          {completed && !cancelled && (
             <div className="mt-12">
               <p className="mb-2 text-whtie text-lg font-bold text-white tracking-tighter tracking-tighter">
                 Voter Breakdown

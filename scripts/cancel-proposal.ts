@@ -19,12 +19,6 @@ export async function run(args: any = process.argv) {
       default: "http://127.0.0.1:8899",
       describe: "The solana url",
     },
-    name: {
-      required: true,
-      alias: "n",
-      describe: "The name of the proposal",
-      type: "string",
-    },
     proposal: {
       required: true,
       type: "string",
