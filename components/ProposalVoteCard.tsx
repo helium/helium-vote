@@ -84,6 +84,7 @@ export const ProposalVoteCard = ({
         // Hide results while voting in progress
         Object.keys(state)[0] === "voting" ? undefined : votingResults?.results
       }
+      cancelled={!!state.cancelled}
       totalVotes={totalVotes}
       decimals={decimals}
     />
