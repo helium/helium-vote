@@ -102,5 +102,25 @@
       { "uri": null, "name": "For HIP 105" },
       { "uri": null, "name": "Against HIP 105" }
     ]
+  },
+  {
+    "name": "HIP 98: MOBILE SubDAO Quality of Service Requirements",
+    "uri": "https://gist.githubusercontent.com/hiptron/9044893b8d39de2a22194d5259f8034a/raw/c249daa59b51e355fe6bdc8656ea75b6999b1f94/HIP-98-Vote-Summary.md",
+    "maxChoicesPerVoter": 1,
+    "tags": ["HIP", "Economic", "Technical"],
+    "choices": [
+      { "uri": null, "name": "For HIP 98" },
+      { "uri": null, "name": "Against HIP 98" }
+    ]
+  },
+  {
+    "name": "HIP 105: Modification of MOBILE subDAO Hex Limits",
+    "uri": "https://gist.githubusercontent.com/hiptron/56a061af986c9b6fd7710433b7e84c31/raw/8a1877a85f7b35672cc474e0bb97220ec6855e10/HIP-105-Vote-Summary.md",
+    "maxChoicesPerVoter": 1,
+    "tags": ["HIP", "Economic", "Technical"],
+    "choices": [
+      { "uri": null, "name": "For HIP 105" },
+      { "uri": null, "name": "Against HIP 105" }
+    ]
   }
 ]
