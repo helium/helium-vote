@@ -466,6 +466,7 @@ export const Proposals = ({
                 href={proposal.href}
                 name={proposal.name}
                 endTs={proposal.endTs}
+                cancelled={false} // assume no cancelled realms votes
                 results={proposal.outcomes.map((o, index) => ({
                   index,
                   percent: (o.votes / total) * 100,
@@ -487,6 +488,7 @@ export const Proposals = ({
                 href={`/legacy/${proposal.id}`}
                 name={proposal.name}
                 endTs={proposal.deadlineTs}
+                cancelled={false} // assume no cancelled legacy votes
                 results={proposal.outcomes.map((o, index) => ({
                   index,
                   percent: (o.hntVoted / total) * 100,
