@@ -343,7 +343,7 @@ const VoteDetailsPage = ({
               <div className="text-white bg-gray-800 p-5 flex flex-row justify-start space-x-8 md:space-x-12 align-center w-fit">
                 <div className="flex flex-col space-y-2">
                   <p className="text-gray-50 text-xs font-medium">
-                    TOTAL WEIGHT
+                    TOTAL POWER
                   </p>
                   <p className="font-bold">
                     {humanReadable(votingResults?.totalVotes, decimals)}

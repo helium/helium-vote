@@ -59,7 +59,7 @@ export function VoteBreakdown({ proposalKey }: { proposalKey: PublicKey }) {
 
   const csvData = useMemo(() => {
     const rows = [];
-    rows.push(["Owner", "Choices", "Vote Weight", "Percentage"]);
+    rows.push(["Owner", "Choices", "Vote Power", "Percentage"]);
 
     groupedSortedMarkers.forEach((marker) => {
       const owner = marker.voter.toBase58();
@@ -95,7 +95,7 @@ export function VoteBreakdown({ proposalKey }: { proposalKey: PublicKey }) {
           <tr>
             <th className="px-4 py-2 text-left">Owner</th>
             <th className="px-4 py-2 text-left">Choices</th>
-            <th className="px-4 py-2 text-left">Vote Weight</th>
+            <th className="px-4 py-2 text-left">Vote Power</th>
             <th className="px-4 py-2 text-left">Percentage</th>
           </tr>
         </thead>

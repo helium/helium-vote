@@ -29,7 +29,7 @@ export const VotingPowerBox: React.FC<VotingPowerBoxProps> = ({
         votingPower &&
         !amountLocked.isZero() &&
         !votingPower.isZero() && (
-          <Tooltip content="Vote Weight Multiplier – Increase your vote weight by locking tokens">
+          <Tooltip content="Vote Power Multiplier – Increase your vote power by locking tokens">
             <div className="cursor-help flex font-normal items-center text-xs ml-3 rounded-full bg-bkg-3 px-2 py-1">
               <BsFillLightningChargeFill className="h-3 mr-1 text-primary-light w-3" />
               {`${
