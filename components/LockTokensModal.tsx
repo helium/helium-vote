@@ -43,12 +43,12 @@ export enum LockupKind {
 const lockupInfosByType = {
   [LockupKind.cliff]: [
     "Tokens are locked for a fixed duration and are released in full at the end of it.",
-    "Vote weight declines linearly until release.",
+    "Vote power declines linearly until release.",
     "Example: You lock 10.000 tokens for two years. They are then unavailable for the next two years. After this time, you can withdraw them again.",
   ],
   [LockupKind.constant]: [
     "Tokens are locked indefinitely. At any time you can start the unlock process which lasts for the initially chosen lockup duration.",
-    "Vote weight stays constant until you start the unlock process, then it declines linearly until release.",
+    "Vote power stays constant until you start the unlock process, then it declines linearly until release.",
     "Example: You lock 10.000 tokens with a lockup duration of one year. After two years you decide to start the unlocking process. Another year after that, you can withdraw the tokens.",
   ],
 };
@@ -292,8 +292,8 @@ export const LockTokensModal: React.FC<{
             )}
             <div className={`${labelClasses} flex items-center`}>
               {lockupKind.value === LockupKind.constant
-                ? "Vote Weight Multiplier"
-                : "Initial Vote Weight Multiplier"}
+                ? "Vote Power Multiplier"
+                : "Initial Vote Power Multiplier"}
               {lockupKind.value !== LockupKind.constant ? (
                 <Tooltip content="The multiplier will decline linearly over time">
                   <AiOutlineQuestionCircle className="cursor-help h-4 ml-1 w-4" />
