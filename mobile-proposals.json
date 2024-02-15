@@ -142,5 +142,25 @@
       { "uri": null, "name": "zer0tweets" },
       { "uri": null, "name": "gristleking" }
     ]
+  },
+  {
+    "name": "MOBILE Working Group (Odd Class) Elections - Q1 2024",
+    "uri": "https://gist.githubusercontent.com/hiptron/ba01aac987bfb0534db79489cdebcc04/raw/4e87e42ae3665488702615d4d243197b05255e86/2024Q1-MOBILE-Election-Summary.md",
+    "maxChoicesPerVoter": 5,
+    "tags": ["working-group"],
+    "choices": [
+      { "uri": null, "name": "Olav/Saintolav" },
+      { "uri": null, "name": "JD - Moken/cryptojd" },
+      { "uri": null, "name": "Sean Carey/densone" },
+      { "uri": null, "name": "Fisher/iamandrewfisher" },
+      { "uri": null, "name": "Jay M/jaym2518" },
+      { "uri": null, "name": "gateholder" },
+      { "uri": null, "name": "JohnEnglishTech" },
+      { "uri": null, "name": "Jhella" },
+      { "uri": null, "name": "keefe007" },
+      { "uri": null, "name": "goaltender_bobby" },
+      { "uri": null, "name": "zer0tweets" },
+      { "uri": null, "name": "gristleking" }
+    ]
   }
 ]
