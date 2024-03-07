@@ -237,7 +237,7 @@
     pako "^2.0.3"
     react-async-hook "^4.0.0"
 
-"@helium/helium-sub-daos-sdk@^0.6.30", "@helium/helium-sub-daos-sdk@^0.6.35":
+"@helium/helium-sub-daos-sdk@^0.6.35":
   version "0.6.35"
   resolved "https://registry.yarnpkg.com/@helium/helium-sub-daos-sdk/-/helium-sub-daos-sdk-0.6.35.tgz#e6c7a385e0d4a19de39d7ab9d2558ca51eaa3107"
   integrity sha512-P6nEaXyhDoJn3DzkoZwmaRhkjPGxjA/1sITZklABjlic0mf3uaBMAd2MFS8HjUGdkyxBwMbcHoK5HF2TL1iuwQ==
@@ -327,15 +327,6 @@
     borsh "^0.7.0"
     bs58 "^4.0.1"
 
-"@helium/state-controller-sdk@^0.0.8":
-  version "0.0.8"
-  resolved "https://registry.yarnpkg.com/@helium/state-controller-sdk/-/state-controller-sdk-0.0.8.tgz#f51b63f59ae1916638723de270bfe6ddd82da087"
-  integrity sha512-NDGcJewQp9YaDCoMfk8QYVnFuBI2zD82dffX5ghrDBh5mJvVGH6yZKPa1edJoyqCc277oaYzlnhEQZ1hVDTGKA==
-  dependencies:
-    "@coral-xyz/anchor" "^0.28.0"
-    "@helium/anchor-resolvers" "^0.5.0"
-    "@helium/modular-governance-idls" "^0.0.8"
-
 "@helium/treasury-management-sdk@^0.6.35":
   version "0.6.35"
   resolved "https://registry.yarnpkg.com/@helium/treasury-management-sdk/-/treasury-management-sdk-0.6.35.tgz#57c71927f794abf8d71ab53892b433804c8303e7"
@@ -348,7 +339,7 @@
     bn.js "^5.2.0"
     bs58 "^4.0.1"
 
-"@helium/voter-stake-registry-hooks@^0.6.30":
+"@helium/voter-stake-registry-hooks@^0.6.30", "@helium/voter-stake-registry-hooks@^0.6.35":
   version "0.6.35"
   resolved "https://registry.yarnpkg.com/@helium/voter-stake-registry-hooks/-/voter-stake-registry-hooks-0.6.35.tgz#95c9df8df51f260197063747d7f6b54a8f9e76e1"
   integrity sha512-6w0OaoJVCwXZHrXehcjAxjcvwjQYuOz+yTDcMrC7FTrlK5WiNvmARgW1C0Bh6kbgXlCCRxIx+kWmiAG+cwtkxQ==
@@ -369,25 +360,7 @@
     bs58 "^4.0.1"
     react-async-hook "^4.0.0"
 
-"@helium/voter-stake-registry-hooks@file:.yalc/@helium/voter-stake-registry-hooks":
-  version "0.6.30"
-  dependencies:
-    "@coral-xyz/anchor" "^0.28.0"
-    "@helium/account-fetch-cache" "^0.6.30"
-    "@helium/account-fetch-cache-hooks" "^0.6.30"
-    "@helium/helium-react-hooks" "^0.6.30"
-    "@helium/helium-sub-daos-sdk" "^0.6.30"
-    "@helium/modular-governance-hooks" "^0.0.8"
-    "@helium/spl-utils" "^0.6.30"
-    "@helium/voter-stake-registry-sdk" "^0.6.30"
-    "@solana/wallet-adapter-base" "^0.9.22"
-    "@solana/wallet-adapter-react" "^0.15.32"
-    "@solana/web3.js" "^1.78.4"
-    axios "^1.3.6"
-    bs58 "^4.0.1"
-    react-async-hook "^4.0.0"
-
-"@helium/voter-stake-registry-sdk@^0.6.30", "@helium/voter-stake-registry-sdk@^0.6.35":
+"@helium/voter-stake-registry-sdk@^0.6.35":
   version "0.6.35"
   resolved "https://registry.yarnpkg.com/@helium/voter-stake-registry-sdk/-/voter-stake-registry-sdk-0.6.35.tgz#10b8ca2e8d13d4f240f71242cce7b189e86dc7f4"
   integrity sha512-tegDacmm7kyl/YGzP1JbqO0iLyvkCe5eX5zoqYZf8+J1zV1jr+TbbHZQ9D4vbB5iHtE+T5VtxT68eQ1/5NPzmQ==
