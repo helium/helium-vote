@@ -1,0 +1,462 @@
+"use client";
+
+import { secsToDays, onInstructions } from "@/lib/utils";
+import { useGovernance } from "@/providers/GovernanceProvider";
+import {
+  useAnchorProvider,
+  useSolanaUnixNow,
+} from "@helium/helium-react-hooks";
+import { toNumber } from "@helium/spl-utils";
+import {
+  PositionWithMeta,
+  SubDaoWithMeta,
+  useClaimPositionRewards,
+  useDelegatePosition,
+  useFlipPositionLockupKind,
+  useTransferPosition,
+  useSplitPosition,
+  useExtendPosition,
+  useClosePosition,
+  useRelinquishPositionVotes,
+} from "@helium/voter-stake-registry-hooks";
+import BN from "bn.js";
+import classNames from "classnames";
+import { ArrowUpFromDot, CheckCheck, Merge, Split } from "lucide-react";
+import { useRouter } from "next/navigation";
+import React, {
+  FC,
+  PropsWithChildren,
+  useCallback,
+  useMemo,
+  useState,
+} from "react";
+import { useAsync } from "react-async-hook";
+import { toast } from "sonner";
+import { ContentSection } from "../ContentSection";
+import { Card, CardContent } from "../ui/card";
+import { FlipPositionPrompt } from "./FlipPositionPrompt";
+import { MergePositionPrompt } from "./MergePositionPrompt";
+import { PositionActionBoundary } from "./PositionActionBoundary";
+import { PositionCallout } from "./PositionCallout";
+import { UpdatePositionDelegationPrompt } from "./UpdatePositionDelegationPrompt";
+import { SplitPositionPrompt } from "./SplitPositionPrompt";
+import { LockTokensFormValues } from "../LockTokensForm";
+import { ExtendPositionPrompt } from "./ExtendPositionPrompt";
+import { ReclaimPositionPrompt } from "./ReclaimPositionPrompt";
+import { WalletSignTransactionError } from "@solana/wallet-adapter-base";
+
+export type PositionAction =
+  | "flip"
+  | "delegate"
+  | "extend"
+  | "split"
+  | "merge"
+  | "reclaim";
+
+export interface PositionManagerProps {
+  initAction?: PositionAction;
+  position: PositionWithMeta;
+}
+
+const PositionAction: FC<
+  PropsWithChildren<{
+    active?: boolean;
+    disabled?: boolean;
+    Icon: any;
+    onClick: () => void;
+  }>
+> = ({ active, disabled, Icon, onClick, children }) => (
+  <div
+    className={classNames(
+      "flex flex-row flex-1 items-center py-3 px-4 rounded-md bg-slate-600 cursor-pointer border-2 border-transparent hover:bg-opacity-80 active:bg-opacity-70",
+      active && "!bg-info !border-info-foreground font-medium",
+      disabled &&
+        "cursor-default opacity-50 hover:bg-opacity-100 active:bg-opacity-100"
+    )}
+    onClick={!disabled ? onClick : () => {}}
+  >
+    <div
+      className={classNames(
+        "rounded-full p-3 bg-background mr-4",
+        active && "!bg-info-foreground/30"
+      )}
+    >
+      <Icon />
+    </div>
+    {children}
+  </div>
+);
+
+export const PositionManager: FC<PositionManagerProps> = ({
+  position,
+  initAction,
+}) => {
+  const [action, setAction] = useState<PositionAction | undefined>(initAction);
+  const provider = useAnchorProvider();
+  const {
+    mintAcc,
+    network,
+    positions,
+    organization,
+    refetch: refetchState,
+  } = useGovernance();
+  const router = useRouter();
+  const { lockup } = position;
+  const unixNow = useSolanaUnixNow() || Date.now() / 1000;
+  const isDecayed = lockup.endTs.lte(new BN(unixNow));
+  const canDelegate = network === "hnt";
+  const mergablePositions: PositionWithMeta[] = useMemo(() => {
+    if (!unixNow || !positions || !positions.length) {
+      return [];
+    }
+
+    const { lockup } = position;
+    const lockupKind = Object.keys(lockup.kind)[0];
+    const positionLockupPeriodInDays = secsToDays(
+      lockupKind === "constant"
+        ? lockup.endTs.sub(lockup.startTs).toNumber()
+        : lockup.endTs.sub(new BN(unixNow || 0)).toNumber()
+    );
+
+    return positions.filter((pos) => {
+      const { lockup } = pos;
+      const lockupKind = Object.keys(lockup.kind)[0];
+      const lockupPeriodInDays = secsToDays(
+        lockupKind === "constant"
+          ? lockup.endTs.sub(lockup.startTs).toNumber()
+          : lockup.endTs.sub(new BN(unixNow)).toNumber()
+      );
+
+      return (
+        (unixNow >= pos.genesisEnd.toNumber() ||
+          unixNow <=
+            position.votingMint.genesisVotePowerMultiplierExpirationTs.toNumber() ||
+          !pos.hasGenesisMultiplier) &&
+        !pos.isDelegated &&
+        !position.pubkey.equals(pos.pubkey) &&
+        lockupPeriodInDays >= positionLockupPeriodInDays
+      );
+    });
+  }, [position, unixNow, positions]);
+
+  const maxActionableAmount = mintAcc
+    ? toNumber(position.amountDepositedNative, mintAcc)
+    : 0;
+
+  const reset = useCallback(() => {
+    refetchState();
+    setAction(undefined);
+  }, [refetchState, setAction]);
+
+  const { loading: isFlipping, flipPositionLockupKind } =
+    useFlipPositionLockupKind();
+  const { loading: isClaiming, claimPositionRewards } =
+    useClaimPositionRewards();
+  const { loading: isDelegating, delegatePosition } = useDelegatePosition();
+  const { loading: isTransfering, transferPosition } = useTransferPosition();
+  const { loading: isSplitting, splitPosition } = useSplitPosition();
+  const { loading: isExtending, extendPosition } = useExtendPosition();
+  const { loading: isReclaiming, closePosition } = useClosePosition();
+  const { loading: isRelinquishing, relinquishPositionVotes } =
+    useRelinquishPositionVotes();
+
+  const handleRelinquishPositionVotes = async () => {
+    try {
+      await relinquishPositionVotes({
+        position,
+        organization,
+        onInstructions: onInstructions(provider),
+      });
+
+      toast("Votes Relinquished");
+    } catch (e) {
+      if (!(e instanceof WalletSignTransactionError) && e instanceof Error) {
+        toast(e.message);
+      }
+    }
+  };
+
+  const handleClosePosition = async () => {
+    try {
+      await closePosition({
+        position,
+        onInstructions: onInstructions(provider),
+      });
+      router.replace(`/${network}/positions`);
+
+      toast("Position Reclaimed");
+    } catch (e) {
+      if (!(e instanceof WalletSignTransactionError) && e instanceof Error) {
+        toast(e.message);
+      }
+    }
+  };
+
+  const handleFlipPositionLockupKind = async () => {
+    try {
+      await flipPositionLockupKind({
+        position,
+        onInstructions: onInstructions(provider),
+      });
+
+      toast("Position flipped");
+      setAction(undefined);
+    } catch (e) {
+      if (!(e instanceof WalletSignTransactionError) && e instanceof Error) {
+        toast(e.message);
+      }
+    }
+  };
+
+  const handleClaimPositionRewards = async () => {
+    try {
+      await claimPositionRewards({
+        position,
+        onInstructions: onInstructions(provider),
+      });
+
+      toast("Rewards claimed");
+    } catch (e) {
+      if (!(e instanceof WalletSignTransactionError) && e instanceof Error) {
+        toast(e.message);
+      }
+    }
+  };
+
+  const handleDelegatePosition = async (subDao?: SubDaoWithMeta) => {
+    try {
+      await delegatePosition({
+        position,
+        subDao,
+        onInstructions: onInstructions(provider),
+      });
+
+      toast("Delegation updated");
+      reset();
+    } catch (e) {
+      if (!(e instanceof WalletSignTransactionError) && e instanceof Error) {
+        toast(e.message);
+      }
+    }
+  };
+
+  const handleExtendPosition = async (values: LockTokensFormValues) => {
+    try {
+      await extendPosition({
+        position,
+        lockupPeriodsInDays: values.lockupPeriodInDays,
+        onInstructions: onInstructions(provider),
+      });
+
+      toast("Position extended");
+    } catch (e) {
+      if (!(e instanceof WalletSignTransactionError) && e instanceof Error) {
+        toast(e.message);
+      }
+    }
+  };
+
+  const handleSplitPosition = async (values: LockTokensFormValues) => {
+    try {
+      await splitPosition({
+        sourcePosition: position,
+        amount: values.amount,
+        lockupKind: values.lockupKind,
+        lockupPeriodsInDays: values.lockupPeriodInDays,
+        onInstructions: onInstructions(provider),
+      });
+
+      toast("Position split");
+      reset();
+    } catch (e) {
+      if (!(e instanceof WalletSignTransactionError) && e instanceof Error) {
+        toast(e.message);
+      }
+    }
+  };
+
+  const handleMergePosition = async (
+    targetPosition: PositionWithMeta,
+    amount: number
+  ) => {
+    try {
+      await transferPosition({
+        sourcePosition: position,
+        amount,
+        targetPosition,
+        onInstructions: onInstructions(provider),
+      });
+
+      if (amount === maxActionableAmount) {
+        router.replace(`/${network}/positions`);
+      }
+
+      toast("Position merged");
+      reset();
+    } catch (e) {
+      if (!(e instanceof WalletSignTransactionError) && e instanceof Error) {
+        toast(e.message);
+      }
+    }
+  };
+
+  useAsync(async () => {
+    if (action) {
+      const actionFunctions = {
+        claim: handleClaimPositionRewards,
+      };
+
+      const selectedAction =
+        actionFunctions[action as keyof typeof actionFunctions];
+
+      if (selectedAction) {
+        await selectedAction();
+      }
+    }
+  }, [action]);
+
+  return (
+    <ContentSection className="flex-1 py-8 max-md:py-0 px-4 max-md:px-0">
+      <Card className="max-md:rounded-none">
+        <CardContent className="flex flex-row p-0">
+          <div className="flex flex-col border-r-2 border-background max-md:border-none max-md:flex-1">
+            <div className="flex flex-col p-4 border-b-2 border-background">
+              <PositionCallout
+                position={position}
+                isClaiming={isClaiming}
+                isReclaiming={isReclaiming}
+                setManagerAction={setAction}
+                handleClaimRewards={handleClaimPositionRewards}
+              />
+            </div>
+            <div className="flex flex-col py-10 px-4 gap-12 min-w-[465px] max-md:min-w-full max-md:py-4 max-md:gap-4">
+              <div className="flex flex-row justify-center items-center">
+                <span className="flex flex-grow h-[1px] bg-foreground/30 mx-2" />
+                <span>Position Actions</span>
+                <span className="flex flex-grow h-[1px] bg-foreground/30 mx-2" />
+              </div>
+              <div className="flex flex-col gap-4 max-md:gap-2">
+                {canDelegate && (
+                  <PositionAction
+                    active={action === "delegate"}
+                    disabled={!position.delegatedSubDao && isDecayed}
+                    Icon={CheckCheck}
+                    onClick={() => setAction("delegate")}
+                  >
+                    Update Delegation
+                  </PositionAction>
+                )}
+                <PositionAction
+                  active={action === "extend"}
+                  Icon={() => (
+                    <ArrowUpFromDot className="transform rotate-90" />
+                  )}
+                  onClick={() => setAction("extend")}
+                >
+                  Extend Position
+                </PositionAction>
+                <PositionAction
+                  active={action === "split"}
+                  Icon={Split}
+                  onClick={() => setAction("split")}
+                >
+                  Split Position
+                </PositionAction>
+                <PositionAction
+                  active={action === "merge"}
+                  Icon={Merge}
+                  onClick={() => setAction("merge")}
+                >
+                  Merge Position
+                </PositionAction>
+              </div>
+              <span className="flex flex-grow h-[1px] bg-foreground/30 mx-2" />
+            </div>
+          </div>
+          <div
+            className={classNames(
+              "items-stretch justify-center w-full",
+              "max-md:h-full max-md:fixed max-md:top-0 max-md:left-0 max-md:bg-card",
+              !action && "max-md:hidden"
+            )}
+          >
+            <PositionActionBoundary
+              position={position}
+              action={action}
+              isClaiming={isClaiming}
+              isRelinquishing={isRelinquishing}
+              setManagerAction={setAction}
+              handleClaimRewards={handleClaimPositionRewards}
+              handleRelinquishVotes={handleRelinquishPositionVotes}
+            >
+              {!action && (
+                <div className="flex flex-col h-full justify-center items-center p-8">
+                  <div className="flex flex-col items-center">
+                    <h3 className="text-xl text-muted-foreground">
+                      Manage Position
+                    </h3>
+                    <p className="text-sm text-center text-muted-foreground">
+                      Select an action from the left to manage your position
+                    </p>
+                  </div>
+                </div>
+              )}
+              {action === "flip" && (
+                <FlipPositionPrompt
+                  position={position}
+                  isSubmitting={isFlipping}
+                  onCancel={() => setAction(undefined)}
+                  onConfirm={handleFlipPositionLockupKind}
+                />
+              )}
+              {action === "reclaim" && (
+                <ReclaimPositionPrompt
+                  position={position}
+                  isSubmitting={isReclaiming}
+                  onCancel={() => setAction(undefined)}
+                  onConfirm={handleClosePosition}
+                />
+              )}
+              {action === "delegate" && (
+                <UpdatePositionDelegationPrompt
+                  position={position}
+                  isSubmitting={isDelegating}
+                  onCancel={() => setAction(undefined)}
+                  onConfirm={handleDelegatePosition}
+                />
+              )}
+              {action === "extend" && (
+                <ExtendPositionPrompt
+                  position={position}
+                  maxActionableAmount={maxActionableAmount}
+                  isSubmitting={isExtending}
+                  onCancel={() => setAction(undefined)}
+                  onConfirm={handleExtendPosition}
+                />
+              )}
+              {action === "split" && (
+                <SplitPositionPrompt
+                  position={position}
+                  maxActionableAmount={maxActionableAmount}
+                  isSubmitting={isSplitting}
+                  onCancel={() => setAction(undefined)}
+                  onConfirm={handleSplitPosition}
+                />
+              )}
+              {action === "merge" && (
+                <MergePositionPrompt
+                  position={position}
+                  positions={mergablePositions}
+                  maxActionableAmount={maxActionableAmount}
+                  isSubmitting={isTransfering}
+                  onCancel={() => setAction(undefined)}
+                  onConfirm={handleMergePosition}
+                />
+              )}
+            </PositionActionBoundary>
+          </div>
+        </CardContent>
+      </Card>
+    </ContentSection>
+  );
+};

@@ -1,0 +1,10 @@
+{
+  "version": "v1",
+  "packages": {
+    "@helium/voter-stake-registry-hooks": {
+      "signature": "5ee1151a57bd8d726379610569302111",
+      "file": true,
+      "replaced": "^0.6.30"
+    }
+  }
+}
