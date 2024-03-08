@@ -6,7 +6,6 @@ import {
   PositionManager,
 } from "@/components/PositionManager/PositionManager";
 import { WalletBoundary } from "@/components/WalletBoundary";
-import { formMetaTags } from "@/lib/utils";
 import { useGovernance } from "@/providers/GovernanceProvider";
 import { PublicKey } from "@solana/web3.js";
 import React, { useMemo } from "react";
