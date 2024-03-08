@@ -16,6 +16,7 @@ import { CreatePositionButton } from "./CreatePositionButton";
 import { onInstructions } from "@/lib/utils";
 import { useAnchorProvider } from "@helium/helium-react-hooks";
 import { ContentSection } from "./ContentSection";
+import { WalletSignTransactionError } from "@solana/wallet-adapter-base";
 
 export const Positions: FC<{ className?: string }> = ({ className = "" }) => {
   const provider = useAnchorProvider();
@@ -77,23 +78,24 @@ export const Positions: FC<{ className?: string }> = ({ className = "" }) => {
     [positions]
   );
 
-  const {
-    error: claimingAllRewardsError,
-    loading: claimingAllRewards,
-    claimAllPositionsRewards,
-  } = useClaimAllPositionsRewards();
+  const { loading: claimingAllRewards, claimAllPositionsRewards } =
+    useClaimAllPositionsRewards();
 
   const handleClaimRewards = async () => {
     if (positionsWithRewards) {
-      await claimAllPositionsRewards({
-        positions: positionsWithRewards,
-        onInstructions: onInstructions(provider),
-      }).then(() => {
-        if (!claimingAllRewardsError) {
-          toast("Rewards claimed!");
-          refetchState();
+      try {
+        await claimAllPositionsRewards({
+          positions: positionsWithRewards,
+          onInstructions: onInstructions(provider),
+        });
+
+        toast("Rewards claimed!");
+        refetchState();
+      } catch (e) {
+        if (!(e instanceof WalletSignTransactionError) && e instanceof Error) {
+          toast(e.message);
         }
-      });
+      }
     }
   };
 
