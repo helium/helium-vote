@@ -115,7 +115,7 @@ export const PositionActionBoundary: FC<
                     Update Delegation
                   </Button>
                 )}
-                {!hasVotes && (
+                {hasVotes && (
                   <div className="flex flex-row bg-background rounded-md flex-1">
                     <Button
                       className="text-foreground flex-1"
