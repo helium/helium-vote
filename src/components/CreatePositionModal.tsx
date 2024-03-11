@@ -130,7 +130,7 @@ export const CreatePositionModal: FC<React.PropsWithChildren<{}>> = ({
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="pt-10 px-8 max-md:min-w-full overflow-y-auto overflow-x-hidden max-h-screen">
+      <DialogContent className="pt-10 px-8 overflow-y-auto overflow-x-hidden max-md:min-w-full max-md:min-h-full max-h-screen">
         <div className="flex flex-col">
           <div className="flex flex-row justify-between items-center">
             <h3>{verb} Position</h3>
