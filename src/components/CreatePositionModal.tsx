@@ -111,8 +111,13 @@ export const CreatePositionModal: FC<React.PropsWithChildren<{}>> = ({
 
         toast.success("Position created successfully");
         setIsSubmitting(false);
-        setOpen(false);
-        refetchState();
+
+        if (!createPositionError) {
+          setOpen(false);
+          refetchState();
+        } else {
+          toast(createPositionError.message);
+        }
       }
     } catch (e) {
       setIsSubmitting(false);
