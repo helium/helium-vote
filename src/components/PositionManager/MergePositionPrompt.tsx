@@ -113,8 +113,9 @@ export const MergePositionPrompt: FC<{
         <X className="size-6" onClick={onCancel} />
       </div>
       {!canMerge && (
-        <div className="flex flex-col gap-4">
-          <div className="flex flex-col items-center justify-center">
+        <div className="flex flex-col flex-grow justify-center">
+          k
+          <div className="flex flex-col max-md:flex-grow items-center justify-center">
             <div className="flex flex-col items-center">
               <h3 className="text-xl text-muted-foreground">Unable to Merge</h3>
               <p className="text-sm text-center text-muted-foreground">
@@ -122,18 +123,20 @@ export const MergePositionPrompt: FC<{
               </p>
             </div>
           </div>
-          <Button variant="secondary" onClick={onCancel}>
-            Cancel
-          </Button>
+          <div className="flex flex-col max-md:flex-grow max-md:justify-end gap-2 mt-4">
+            <Button variant="secondary" onClick={onCancel}>
+              Cancel
+            </Button>
+          </div>
         </div>
       )}
       {canMerge && (
-        <div className="flex flex-col mb-4">
+        <div className="flex flex-col mb-4 gap-1">
           <div className="flex flex-row justify-between items-center">
-            <h5>Merge Position</h5>
+            <h3>Merge Position</h3>
             {canMerge && <StepIndicator steps={2} currentStep={step} />}
           </div>
-          <p className="text-base">
+          <p>
             Positions cannot be transferred between accounts; only within the
             same account. Transfers are limited to positions of{" "}
             <span className="font-bold">equal or greater duration</span>, useful
@@ -224,7 +227,7 @@ export const MergePositionPrompt: FC<{
               className="rounded-r-md bg-gradient-to-b from-background to-background/30 max-md:rounded-tr-none max-md:rounded-b-md"
             />
           </div>
-          <div className="flex flex-col max-md:flex-grow justify-end gap-2">
+          <div className="flex flex-col max-md:flex-grow justify-end gap-2 mt-4">
             <div className="flex flex-row justify-between items-center gap-2">
               <Button
                 variant="secondary"

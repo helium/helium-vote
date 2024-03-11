@@ -70,9 +70,9 @@ export const ExtendPositionPrompt: FC<{
       <div className="hidden max-md:flex flex-row w-full justify-end mb-4">
         <X className="size-6" onClick={onCancel} />
       </div>
-      <div className="flex flex-col w-full mb-4">
+      <div className="flex flex-col w-full mb-4 gap-1">
         <div className="flex flex-row justify-between items-center">
-          <h5>Extend Position</h5>
+          <h3>Extend Position</h3>
           <StepIndicator steps={2} currentStep={step} />
         </div>
         {step === 1 ? (

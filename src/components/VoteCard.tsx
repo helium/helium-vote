@@ -35,7 +35,7 @@ export const VoteCardSkeleton: FC = () => (
         <Skeleton className="flex w-8/12 h-4 bg-slate-800 rounded-sm" />
         <Skeleton className="flex w-1/2 h-4 bg-slate-800 rounded-sm" />
       </div>
-      <div className="flex flex-col flex-1 gap-2  items-end">
+      <div className="flex flex-col flex-1 gap-2 items-end">
         <Skeleton className="flex w-8/12 h-4 bg-slate-800 rounded-sm" />
         <Skeleton className="flex w-1/2 h-4 bg-slate-800 rounded-sm" />
       </div>
@@ -85,7 +85,7 @@ export const VoteCard: FC<{
                   <Badge
                     key={tag}
                     className={classNames(
-                      "mr-1 rounded-sm font-normal border-2",
+                      "mr-1 rounded-[4px]",
                       { "bg-foreground": i === 0 },
                       {
                         "bg-transparent border-background text-foreground":
@@ -97,7 +97,7 @@ export const VoteCard: FC<{
                   </Badge>
                 ))}
             </div>
-            {!completed && <Pill variant="success"> Actively Voting</Pill>}
+            {!completed && <Pill variant="success">Actively Voting</Pill>}
             {isActive && completed && (
               <Pill variant="warning">Voting Closed</Pill>
             )}
@@ -115,7 +115,9 @@ export const VoteCard: FC<{
                 <p className="text-muted-foreground text-xs">
                   EST. TIME REMANING
                 </p>
-                <CountdownTimer endTs={endTs} />
+                <div className="text-sm">
+                  <CountdownTimer endTs={endTs} />
+                </div>
               </div>
               <div className="flex flex-col items-end">
                 <p className="text-muted-foreground text-xs">VOTES</p>
@@ -126,13 +128,13 @@ export const VoteCard: FC<{
             </div>
           ) : (
             <div className="flex flex-col flex-grow gap-2">
-              <div className="flex flex-row rounded-full items-center w-full h-3 overflow-hidden">
+              <div className="flex flex-row rounded-full w-full h-2 overflow-hidden">
                 {results.map((result, idx) => (
                   <div
                     key={result.index}
                     style={{ width: `calc(${result.percent}% + 5px)` }}
                     className={classNames(
-                      "h-3 flex",
+                      "h-2 flex",
                       idx !== results.length - 1 &&
                         "border-r-[1px] border-card-background/20",
                       {
@@ -158,21 +160,27 @@ export const VoteCard: FC<{
               <div className="flex flex-row justify-between">
                 {!isCancelled && (
                   <div className="flex flex-col">
-                    <p className="text-muted-foreground text-xs">COMPLETED</p>
-                    <p className="text-base">
+                    <p className="text-muted-foreground text-xs tracking-tighter">
+                      COMPLETED
+                    </p>
+                    <p className="text-sm">
                       {getTimeFromNowFmt(new BN(endTs))}
                     </p>
                   </div>
                 )}
                 <div className="flex flex-col">
-                  <p className="text-muted-foreground text-xs">FINAL VOTES</p>
-                  <p className="text-base">
+                  <p className="text-muted-foreground text-xs tracking-tighter">
+                    FINAL VOTES
+                  </p>
+                  <p className="text-sm">
                     {humanReadable(new BN(totalVotes), decimals || 0) || "None"}
                   </p>
                 </div>
                 <div className="flex flex-col">
-                  <p className="text-muted-foreground text-xs">RESULT</p>
-                  <p className="text-base capitalize">
+                  <p className="text-muted-foreground text-xs tracking-tighter">
+                    RESULT
+                  </p>
+                  <p className="text-sm capitalize">
                     {isActive && completed ? "Pending" : finalResult}
                   </p>
                 </div>

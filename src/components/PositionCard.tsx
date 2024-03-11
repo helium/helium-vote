@@ -2,7 +2,6 @@
 
 import {
   getMinDurationFmt,
-  getPositionVoteMultiplier,
   getTimeLeftFromNowFmt,
   humanReadable,
 } from "@/lib/utils";
@@ -200,7 +199,7 @@ export const PositionCard: FC<{
           <div className="flex flex-col">
             <p className="text-muted-foreground text-xs">VOTING POWER</p>
             <div className="flex flex-row items-center gap-2">
-              <p className="text-base">{votingPower}</p>
+              <p className="text-sm">{votingPower}</p>
               {hasGenesisMultiplier && (
                 <Pill variant="purple" className="border-0">
                   x3
@@ -210,7 +209,7 @@ export const PositionCard: FC<{
           </div>
           <div className="flex flex-col flex-grow max-md:items-end">
             <p className="text-muted-foreground text-xs">TIME LEFT</p>
-            <p className="text-base">
+            <p className="text-sm">
               {isConstant
                 ? getMinDurationFmt(
                     position.lockup.startTs,
@@ -232,7 +231,7 @@ export const PositionCard: FC<{
                     fill
                   />
                 </div>
-                <p>{delegatedSubDaoMetadata.symbol}</p>
+                <p className="text-xs">{delegatedSubDaoMetadata.symbol}</p>
               </div>
             ) : !isDecayed ? (
               <Link

@@ -81,15 +81,15 @@ export const ProposalSkeleton = () => (
 );
 
 const ProposalHipBlurb: FC<{ network: string }> = ({ network }) => (
-  <div className="flex flex-col p-2.5 bg-background rounded-sm gap-2">
+  <div className="flex flex-col p-2.5 bg-background rounded-sm gap-3">
     <div className="relative size-12">
       <Image alt={`ve${network}`} src={`/images/ve${network}.svg`} fill />
     </div>
-    <p>
+    <p className="text-sm">
       This HIP affects the {network.toUpperCase()} network which requires ve
       {network.toUpperCase()} positions for vote participation.
     </p>
-    <Link href={`/${network}/positions`} className="underline">
+    <Link href={`/${network}/positions`} className="underline text-sm">
       Manage Voting Power
     </Link>
   </div>
@@ -105,7 +105,7 @@ export const ProposalBreakdown: FC<{
   <div className="flex flex-col p-2.5 bg-background rounded-sm gap-2">
     <div className="flex flex-col gap-1">
       <p className="text-xs">{timeExpired ? "DATE OCCURED" : "DEADLINE"}</p>
-      <p className="font-normal">
+      <p className="font-normal text-sm">
         {format(new Date((endTs?.toNumber() || 0) * 1000), "PPp")}
       </p>
       <Separator className="my-1 h-[1px] bg-slate-500" />
@@ -113,13 +113,17 @@ export const ProposalBreakdown: FC<{
     {!timeExpired && !isCancelled ? (
       <div className="flex flex-col gap-1">
         <p className="text-xs">EST. TIME REMAINING</p>
-        <CountdownTimer endTs={endTs?.toNumber()} />
+        <div className="text-sm">
+          <CountdownTimer endTs={endTs?.toNumber()} />
+        </div>
         <Separator className="my-1 h-[1px] bg-slate-500" />
       </div>
     ) : null}
     <div className="flex flex-col gap-1">
       <p className="text-xs">TOTAL veTOKENS</p>
-      <p className="font-normal">{humanReadable(totalVotes, decimals)}</p>
+      <p className="font-normal text-sm">
+        {humanReadable(totalVotes, decimals)}
+      </p>
     </div>
   </div>
 );
@@ -302,14 +306,14 @@ export const Proposal: FC<{
               <FaArrowLeft />
               Back to Votes
             </Link>
-            <div className="flex flex-row mb-12">
+            <div className="flex flex-row">
               {proposal?.tags
                 .filter((tag) => tag !== "tags")
                 .map((tag, i) => (
                   <Badge
                     key={tag}
                     className={classNames(
-                      "mr-1 rounded-sm font-normal py-1.5 border-2",
+                      "mr-1 rounded-[4px]",
                       { "bg-foreground": i === 0 },
                       {
                         "bg-transparent border-background text-foreground":

@@ -20,12 +20,12 @@ const NetworkTab: FC<{
     )}
   >
     <div className="flex flex-row justify-cente items-center gap-4 max-md:gap-2">
-      <div className="size-8 rounded-full relative">
+      <div className="size-7 rounded-full relative">
         <Image alt={`${name} icon`} src={icon} fill />
       </div>
-      <p className="pr-4">{name}</p>
+      <p className="pr-4 text-sm">{name}</p>
     </div>
-    <div className={classNames("flex h-1 mt-4", { "bg-primary": active })} />
+    <div className={classNames("flex h-1 mt-3", { "bg-primary": active })} />
   </Link>
 );
 

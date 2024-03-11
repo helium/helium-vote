@@ -56,9 +56,9 @@ export const UpdatePositionDelegationPrompt: FC<{
       </div>
       <div className="flex flex-col justify-center items-stretch">
         <div className="flex flex-col gap-4">
-          <div className="flex flex-col">
+          <div className="flex flex-col gap-1">
             <div className="flex flex-row justify-between items-center">
-              <h5>{step === 1 ? "Update Position" : "Update Delegation"}</h5>
+              <h3>{step === 1 ? "Update Position" : "Update Delegation"}</h3>
               <StepIndicator steps={2} currentStep={step} />
             </div>
             {step === 1 ? (

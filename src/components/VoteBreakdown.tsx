@@ -141,7 +141,7 @@ export const VoteBreakdown: FC<{
   return (
     <div className="flex flex-col flex-grow gap-4">
       <div className="flex flex-row justify-between">
-        <h4>Voter Breakdown</h4>
+        <h5>Voter Breakdown</h5>
         <span
           className="cursor-pointer hover:underline max-md:hidden"
           onClick={handleCSVDownload}
@@ -149,7 +149,7 @@ export const VoteBreakdown: FC<{
           Download as CSV
         </span>
       </div>
-      <p className="w-12/12 md:w-8/12">
+      <p className="w-12/12 md:w-8/12 text-sm">
         Note: For MOBILE/IOT subnetworks, this is shown as 1/10 of your vote
         power becuase the underlying contracts in spl-governance onlysupport
         64-bits of precision

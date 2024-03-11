@@ -1,6 +1,6 @@
 "use client";
 
-import { secsToDays, onInstructions } from "@/lib/utils";
+import { onInstructions, secsToDays } from "@/lib/utils";
 import { useGovernance } from "@/providers/GovernanceProvider";
 import {
   useAnchorProvider,
@@ -11,14 +11,15 @@ import {
   PositionWithMeta,
   SubDaoWithMeta,
   useClaimPositionRewards,
-  useDelegatePosition,
-  useFlipPositionLockupKind,
-  useTransferPosition,
-  useSplitPosition,
-  useExtendPosition,
   useClosePosition,
+  useDelegatePosition,
+  useExtendPosition,
+  useFlipPositionLockupKind,
   useRelinquishPositionVotes,
+  useSplitPosition,
+  useTransferPosition,
 } from "@helium/voter-stake-registry-hooks";
+import { WalletSignTransactionError } from "@solana/wallet-adapter-base";
 import BN from "bn.js";
 import classNames from "classnames";
 import { ArrowUpFromDot, CheckCheck, Merge, Split } from "lucide-react";
@@ -33,17 +34,16 @@ import React, {
 import { useAsync } from "react-async-hook";
 import { toast } from "sonner";
 import { ContentSection } from "../ContentSection";
+import { LockTokensFormValues } from "../LockTokensForm";
 import { Card, CardContent } from "../ui/card";
+import { ExtendPositionPrompt } from "./ExtendPositionPrompt";
 import { FlipPositionPrompt } from "./FlipPositionPrompt";
 import { MergePositionPrompt } from "./MergePositionPrompt";
 import { PositionActionBoundary } from "./PositionActionBoundary";
 import { PositionCallout } from "./PositionCallout";
-import { UpdatePositionDelegationPrompt } from "./UpdatePositionDelegationPrompt";
-import { SplitPositionPrompt } from "./SplitPositionPrompt";
-import { LockTokensFormValues } from "../LockTokensForm";
-import { ExtendPositionPrompt } from "./ExtendPositionPrompt";
 import { ReclaimPositionPrompt } from "./ReclaimPositionPrompt";
-import { WalletSignTransactionError } from "@solana/wallet-adapter-base";
+import { SplitPositionPrompt } from "./SplitPositionPrompt";
+import { UpdatePositionDelegationPrompt } from "./UpdatePositionDelegationPrompt";
 
 export type PositionAction =
   | "flip"

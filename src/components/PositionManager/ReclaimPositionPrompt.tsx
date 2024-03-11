@@ -35,9 +35,9 @@ export const ReclaimPositionPrompt: FC<{
           />
         </div>
       </div>
-      <h5 className="text-center">Congratulations!</h5>
+      <h3 className="text-center">Congratulations!</h3>
       <p className="text-center text-muted-foreground max-md:text-sm">
-        a Your position has decayed now, so you can reclaim your position. This
+        Your position has decayed now, so you can reclaim your position. This
         would mean converting your ve{upperNetwork} back into the original{" "}
         {upperNetwork} amount that you locked as well as claiming all accrued
         rewards that were unclaimed

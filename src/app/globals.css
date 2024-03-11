@@ -70,19 +70,19 @@
     @apply border-border;
   }
   h1 {
-    @apply scroll-m-20 text-5xl font-semibold lg:text-5xl;
+    @apply scroll-m-20 text-5xl font-semibold tracking-tight;
   }
   h2 {
-    @apply scroll-m-20 text-3xl font-semibold lg:text-4xl;
+    @apply scroll-m-20 text-3xl font-semibold tracking-tight;
   }
   h3 {
-    @apply scroll-m-20 text-2xl font-medium lg:text-3xl;
+    @apply scroll-m-20 text-2xl font-medium tracking-tight;
   }
   h4 {
-    @apply scroll-m-20 text-xl font-medium lg:text-2xl;
+    @apply scroll-m-20 text-xl font-medium tracking-tight;
   }
   h5 {
-    @apply scroll-m-20 text-lg font-medium lg:text-xl;
+    @apply scroll-m-20 text-lg font-medium tracking-tight;
   }
   p {
     @apply scroll-m-20 text-base font-light;

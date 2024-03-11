@@ -15,10 +15,10 @@ const Banner: FC = () => {
   const { network } = useGovernance();
 
   return (
-    <ContentSection className="flex-1 px-4 md:px-0 mt-4">
+    <ContentSection className="flex-1 px-4 md:px-0">
       <Card className="overflow-hidden">
-        <CardContent className="p-4 flex flex-row gap-4 items-center max-md:flex-col">
-          <div className="flex max-md:hidden size-40 flex-shrink-0 relative">
+        <CardContent className="p-4 flex flex-row gap-4 items-center relative max-md:flex-col md:pl-36">
+          <div className="flex max-md:hidden size-40 flex-shrink-0 absolute left-[-40px] top-[-25px]">
             <Image
               alt="Network Banner"
               src="/images/illustration-voting-power.png"
@@ -32,9 +32,9 @@ const Banner: FC = () => {
               fill
             />
           </div>
-          <div className="flex flex-col flex-grow gap-2">
+          <div className="flex flex-col flex-grow gap-1">
             <p>How proposals work:</p>
-            <h4>Voting is enabled by locking tokens within this network</h4>
+            <h5>Voting is enabled by locking tokens within this network</h5>
             <p className="text-sm text-slate-100">
               Create a vote escrow position using either HNT, MOBILE, or IOT
               tokens depending on the network you&apos;re on
@@ -44,28 +44,30 @@ const Banner: FC = () => {
             <div className="flex flex-col flex-1 gap-2 max-md:flex-none">
               <Button
                 variant="ghost"
+                size="xs"
                 disabled
-                className="!opacity-90 font-normal"
+                className="!opacity-90 font-normal text-xs text-muted-foreground"
               >
                 Ready to Vote?
               </Button>
               <Button
                 variant="ghost"
+                size="xs"
                 disabled
-                className="!opacity-90 font-normal"
+                className="!opacity-90 font-normal text-xs text-muted-foreground"
               >
                 Need Tokens?
               </Button>
             </div>
             <div className="flex flex-col flex-1 gap-2">
-              <CreatePositionButton />
+              <CreatePositionButton size="xs" />
               <Link
                 href={`https://jup.ag/swap/SOL-${network.toUpperCase()}`}
                 rel="noopener noreferrer"
                 target="_blank"
                 className="flex flex-row"
               >
-                <Button variant="ghost" className="flex-grow gap-2">
+                <Button variant="ghost" size="xs" className="flex-grow gap-2">
                   <div className="p-1 rounded-full border-2 border-foreground">
                     <FaArrowRightArrowLeft className="rotate-90" />
                   </div>

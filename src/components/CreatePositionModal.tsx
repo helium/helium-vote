@@ -132,60 +132,66 @@ export const CreatePositionModal: FC<React.PropsWithChildren<{}>> = ({
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="pt-10 px-8 max-md:min-w-full overflow-y-auto overflow-x-hidden max-h-screen">
         <div className="flex flex-col">
-          <div className="flex flex-col justify-center gap-6">
-            <div className="flex flex-col">
-              <div className="flex flex-row justify-between items-center">
-                <h4>{verb} Position</h4>
-                <StepIndicator steps={steps} currentStep={step} />
-              </div>
-              <p className="text-base">
-                Boost your voting power by strategically locking your tokens for
-                a specified period, opting for either a constant or decaying
-                lockup
-              </p>
-            </div>
+          <div className="flex flex-row justify-between items-center">
+            <h3>{verb} Position</h3>
+            <StepIndicator steps={steps} currentStep={step} />
           </div>
-          {step === 1 && (
-            <LockTokensForm
-              initValues={formValues}
-              submitText="Next"
-              maxLockupAmount={maxLockupAmount}
-              calcMultiplierFn={handleCalcLockupMultiplier}
-              onCancel={() => setOpen(false)}
-              onSubmit={handleSubmit}
-            />
-          )}
+          <p className="text-sm">
+            Boost your voting power by strategically locking your tokens for a
+            specified period, opting for either a constant or decaying lockup
+          </p>
         </div>
 
+        {step === 1 && (
+          <LockTokensForm
+            initValues={formValues}
+            submitText="Next"
+            maxLockupAmount={maxLockupAmount}
+            calcMultiplierFn={handleCalcLockupMultiplier}
+            onCancel={() => setOpen(false)}
+            onSubmit={handleSubmit}
+          />
+        )}
+
         {steps > 2 && step === 2 && (
-          <div className="flex flex-col gap-4">
-            <SubDaoSelection
-              selectedSubDaoPk={selectedSubDaoPk}
-              onSelect={setSelectedSubDaoPk}
-            />
-            <div className="flex flex-col gap-1 p-2 text-sm bg-slate-600 rounded">
-              By selecting a subnetwork, you indicate that:
-              <ul className="flex flex-col px-6 list-disc">
-                <li>You believe in that subnetwork</li>
-                <li>
-                  You wish to receive either MOBILE or IOT tokens as rewards
-                  (which can be claimed on a daily basis)
-                </li>
-                <li>You help increase the DAO Utility Score</li>
-              </ul>
-              Remember the following before you delegate:
-              <ul className="flex flex-col px-6 list-disc">
-                <li>
-                  Delegated positions can only be un-delegated after claiming
-                  all accrued rewards.
-                </li>
-                <li>
-                  You cannot modify a delegated position; you must undelegate
-                  (as well as relinquished all votes on it) before conducting
-                  any of the following actions upon it: decaying vs. pausing,
-                  extending, splitting, or merging
-                </li>
-              </ul>
+          <>
+            <div className="flex flex-col gap-2">
+              <SubDaoSelection
+                selectedSubDaoPk={selectedSubDaoPk}
+                onSelect={setSelectedSubDaoPk}
+              />
+              <div className="flex flex-col gap-4 p-4 text-sm bg-slate-600 rounded">
+                <div>
+                  <span className="font-medium">
+                    By selecting a subnetwork, you indicate that:
+                  </span>
+                  <ul className="flex flex-col px-6 list-disc font-light">
+                    <li>You believe in that subnetwork</li>
+                    <li>
+                      You wish to receive either MOBILE or IOT tokens as rewards
+                      (which can be claimed on a daily basis)
+                    </li>
+                    <li>You help increase the DAO Utility Score</li>
+                  </ul>
+                </div>
+                <div>
+                  <span className="font-medium">
+                    Remember the following before you delegate:
+                  </span>
+                  <ul className="flex flex-col px-6 list-disc font-light">
+                    <li>
+                      Delegated positions can only be un-delegated after
+                      claiming all accrued rewards.
+                    </li>
+                    <li>
+                      You cannot modify a delegated position; you must
+                      undelegate (as well as relinquished all votes on it)
+                      before conducting any of the following actions upon it:
+                      decaying vs. pausing, extending, splitting, or merging
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </div>
             <div className="flex flex-row gap-2">
               <Button
@@ -202,7 +208,7 @@ export const CreatePositionModal: FC<React.PropsWithChildren<{}>> = ({
                 Review
               </Button>
             </div>
-          </div>
+          </>
         )}
         {step === steps && (
           <>

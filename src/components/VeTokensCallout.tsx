@@ -102,8 +102,8 @@ const VeTokenItem: FC<{ mint: PublicKey }> = ({ mint }) => {
   return (
     <div className="flex flex-col items-center text-xs font-normal gap-1 pr-4 sm:border-r-2 sm:border-background">
       <span className="max-sm:hidden">{image.alt}</span>
-      <div className="flex flex-col sm:flex-row items-center gap-1 text-base font-bold">
-        <div className="relative size-8">
+      <div className="flex flex-col sm:flex-row items-center gap-1.5 text-sm font-medium">
+        <div className="relative size-7">
           <Image alt={image.alt} src={image.src} fill />
         </div>
         {loading || powerToDisplay === "0" ? (

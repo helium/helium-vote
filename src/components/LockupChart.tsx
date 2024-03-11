@@ -16,7 +16,7 @@ export const LockupChart: React.FC<LockupChartProps> = ({
   const divRef = useRef<HTMLDivElement>(null);
   const lightGrey = "#AAB6C5";
   const blue = "#3B82F6";
-  const canvasHeight = 200;
+  const canvasHeight = 140;
 
   useEffect(() => {
     if (divRef.current) {
@@ -49,7 +49,7 @@ export const LockupChart: React.FC<LockupChartProps> = ({
       context.save();
       context.translate(10, height / 2);
       context.rotate(-Math.PI / 2);
-      context.fillText("Voting and Delegation Power", 0, 10);
+      context.fillText("Voting Power", 0, 10);
       context.restore();
 
       // Draw 100% on the Y-axis
@@ -69,11 +69,12 @@ export const LockupChart: React.FC<LockupChartProps> = ({
 
       const scalePerYear = (width - 40) / 6; // Assuming the chart spans 6 years
       const rectangleWidth = scalePerYear * 2; // Rectangle spans 2 years
-      // Adjust starting point for triangle if 'constant'
       let triangleStartX = 40;
 
-      // Additional logic for drawing a rectangle if type is 'constant'
       if (type === "constant") {
+        triangleStartX += scalePerYear * 2; // Move start to the right by 2 years
+
+        // Additional logic for drawing a rectangle if type is 'constant'
         context.fillStyle = "white";
         context.fillRect(40, 10, rectangleWidth, height - 30); // Fill rectangle starting from the Y axis
 
@@ -86,14 +87,11 @@ export const LockupChart: React.FC<LockupChartProps> = ({
         context.stroke();
       }
 
-      if (type === "constant") {
-        triangleStartX += scalePerYear * 2; // Move start to the right by 2 years
-      }
-
-      // Existing code to calculate the lockup period and draw the triangle...
+      // calculate the lockup period and draw the triangle...
       const lockupPeriodInYears = lockupPeriodInDays / 365;
       const lockupEndPointX =
         triangleStartX + (width - 40) * (lockupPeriodInYears / 6);
+
       context.beginPath();
       context.moveTo(triangleStartX, 10); // Adjusted start point
       context.lineTo(lockupEndPointX, height - 20);
@@ -186,7 +184,7 @@ export const LockupChart: React.FC<LockupChartProps> = ({
   }, [type, lockupPeriodInDays]);
 
   return (
-    <div className="w-full bg-background pt-4 pr-4 rounded-sm">
+    <div className="w-full bg-background pt-4 pr-4 rounded-[4px]">
       <div ref={divRef} className="w-full overflow-none">
         {width && <Canvas width={width} height={canvasHeight} draw={draw} />}
       </div>

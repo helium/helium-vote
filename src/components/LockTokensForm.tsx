@@ -170,24 +170,23 @@ export const LockTokensForm: FC<{
   const upperNetwork = network.toUpperCase();
 
   return (
-    <div className="flex flex-col max-md:h-full gap-6">
+    <div className="flex flex-col max-md:h-full gap-4">
       {hasMinLockup ? (
-        <div className="flex flex-col gap-2">
-          <span className="flex flex-col gap-2 text-sm px-4 py-2 bg-slate-600 rounded">
-            Select a new lockup period longer than or equal to the existing{" "}
-            {getFormattedStringFromDays(minLockupTimeInDays)}
-            {mode === "split" && (
-              <span>
-                Splitting a Landrush position after the Landrush period will
-                result in the split tokens losing the multiplier!
-              </span>
-            )}
-          </span>
-        </div>
+        <span className="flex flex-col gap-1 p-2 text-xs bg-slate-600 rounded">
+          Select a new lockup period longer than or equal to the existing{" "}
+          {getFormattedStringFromDays(minLockupTimeInDays)}
+          {mode === "split" && (
+            <span>
+              Splitting a Landrush position after the Landrush period will
+              result in the split tokens losing the multiplier!
+            </span>
+          )}
+        </span>
       ) : null}
+
       <div className="flex flex-col gap-4">
         {["lock", "split"].includes(mode) && (
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-1">
             <div className="flex flex-row justify-between items-center text-sm">
               <span>Lockup Amount</span>
               <div className="flex flex-row gap-1 items-center">
@@ -212,24 +211,20 @@ export const LockTokensForm: FC<{
               step={mintMinAmount}
             />
             {mode === "lock" && (
-              <div className="p-2 text-sm bg-slate-600 rounded">
-                <span>
-                  ve{upperNetwork} is computed as a factor of token amount and
-                  lockup time i.e. 100 {upperNetwork} will provide 500 ve
-                  {upperNetwork} (voting power) in the Helium network which will
-                  decay linearly once unlocked.
-                </span>
+              <div className="p-2 text-xs bg-slate-600 rounded">
+                ve{upperNetwork} is computed as a factor of token amount and
+                lockup time and will decay linearly once unlocked
               </div>
             )}
           </div>
         )}
 
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-1">
           <div className="flex flex-row justify-between items-center text-sm">
             {!showCustomDuration ? (
               <span>Duration</span>
             ) : (
-              <span>Duration (days)</span>
+              <span>Duration (In Days)</span>
             )}
             <div className="flex flex-row gap-1 items-center">
               <span
@@ -262,7 +257,7 @@ export const LockTokensForm: FC<{
                   {getFormattedStringFromDays(minLockupTimeInDays)}
                 </div>
               ) : null}
-              <div className="flex flex-row flex-grow gap-4">
+              <div className="flex flex-row flex-grow gap-2.5">
                 {(hasMinLockup
                   ? [...lockupPeriodOptions.splice(1)]
                   : lockupPeriodOptions
@@ -274,7 +269,7 @@ export const LockTokensForm: FC<{
                     <div
                       key={option.value}
                       className={classNames(
-                        "flex flex-row flex-1 justify-center items-center py-4 rounded-md  bg-slate-600 cursor-pointer border-2 border-transparent hover:bg-opacity-80 active:bg-opacity-70",
+                        "flex flex-row flex-1 justify-center items-center py-2.5 rounded-md  bg-slate-600 cursor-pointer border-2 border-transparent hover:bg-opacity-80 active:bg-opacity-70",
                         isActive &&
                           "!bg-info !border-info-foreground font-medium"
                       )}
@@ -311,62 +306,66 @@ export const LockTokensForm: FC<{
               }}
             />
           )}
-          <div className="flex flex-col gap-2">
-            <div className="flex flex-row justify-between items-center text-sm">
-              {lockupKind === LockupKind.constant ? (
-                <span>Vote Weight Multiplier</span>
-              ) : (
-                <HoverCard>
-                  <HoverCardTrigger className="flex flex-row gap-2 justify-center items-center">
-                    <FaCircleInfo /> <span>Initial Vote Power Multiplier:</span>
-                  </HoverCardTrigger>
-                  <HoverCardContent side="top">
-                    The multiplier will decline linearly over time
-                  </HoverCardContent>
-                </HoverCard>
-              )}
-              <span>{lockupMultiplier}x</span>
-            </div>
-            <div className="flex flex-row rounded-full items-center w-full h-3 overflow-hidden bg-background">
-              <div
-                style={{ width: `${lockupMultiplier}%` }}
-                className={"h-3 flex bg-vote-6"}
-              />
-            </div>
+        </div>
+
+        <div className="flex flex-col gap-1">
+          <div className="flex flex-row justify-between items-center text-sm">
+            {lockupKind === LockupKind.constant ? (
+              <span>Vote Weight Multiplier</span>
+            ) : (
+              <HoverCard>
+                <HoverCardTrigger className="flex flex-row gap-2 justify-center items-center">
+                  <FaCircleInfo /> <span>Initial Vote Power Multiplier:</span>
+                </HoverCardTrigger>
+                <HoverCardContent side="top">
+                  The multiplier will decline linearly over time
+                </HoverCardContent>
+              </HoverCard>
+            )}
+            <span>{lockupMultiplier}x</span>
+          </div>
+          <div className="flex flex-row rounded-full items-center w-full h-2 overflow-hidden bg-background">
+            <div
+              style={{ width: `${lockupMultiplier}%` }}
+              className={"h-2 flex bg-vote-6"}
+            />
           </div>
         </div>
+
         {["lock", "split"].includes(mode) && (
-          <>
+          <div className="flex flex-col gap-1">
             <LockupChart
               type={lockupKind}
               lockupPeriodInDays={lockupPeriodInDays}
             />
             {lockupKind === LockupKind.cliff && (
-              <span className="px-4 py-2 text-sm bg-slate-600 rounded">
+              <span className="p-2 text-xs bg-slate-600 rounded">
                 After {getFormattedStringFromDays(lockupPeriodInDays)} you'll be
                 able to reclaim your tokens; your voting power will decay over
-                time as soon as you create this position.
+                time as soon as you create this position
               </span>
             )}
             {lockupKind === LockupKind.constant && (
-              <span className="px-4 py-2 text-sm bg-slate-600 rounded">
+              <span className="p-2 text-xs bg-slate-600 rounded">
                 It will take {getFormattedStringFromDays(lockupPeriodInDays)}{" "}
                 after you initiate decaying of this position for the locked
-                tokens to be available for reclaiming. You can initiate the
-                decay at any time.
+                tokens to be available for reclaiming. We are using 2 years as
+                an example here. You can initiate the decay at any time
               </span>
             )}
-            <div className="flex flex-row gap-2 items-center py-2">
-              <Checkbox
-                className="size-7"
-                checked={lockupKind === LockupKind.constant}
-                onClick={handleToggleLockupKind}
-              />
-              <h5>Delay the decay of this position?</h5>
-            </div>
-          </>
+          </div>
         )}
+
+        <div className="flex flex-row gap-2 items-center">
+          <Checkbox
+            className="size-7"
+            checked={lockupKind === LockupKind.constant}
+            onClick={handleToggleLockupKind}
+          />
+          <p className="font-medium">Delay the decay of this position?</p>
+        </div>
       </div>
+
       <div className="flex flex-col flex-grow justify-end">
         <div className="flex flex-row gap-2">
           {onCancel && (

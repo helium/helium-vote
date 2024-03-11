@@ -42,7 +42,7 @@ export const SubDaoSelection: FC<{
               )}
               onClick={() => onSelect(undefined)}
             >
-              <div className="flex flex-col gap-4 justify-center items-center">
+              <div className="flex flex-col gap-1 justify-center items-center">
                 <div className="size-12 rounded-full relative">
                   <Image alt="hnt" src="/images/hnt.svg" fill />
                 </div>
@@ -64,7 +64,7 @@ export const SubDaoSelection: FC<{
                 )}
                 onClick={() => onSelect(subDao.pubkey)}
               >
-                <div className="flex flex-col gap-4 justify-center items-center">
+                <div className="flex flex-col gap-1 justify-center items-center">
                   <div className="size-12 rounded-full relative">
                     <Image
                       alt={subDao.dntMetadata.json?.name}
