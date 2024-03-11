@@ -18,7 +18,7 @@ import { useAnchorProvider } from "@helium/helium-react-hooks";
 import { ContentSection } from "./ContentSection";
 import { WalletSignTransactionError } from "@solana/wallet-adapter-base";
 
-export const Positions: FC<{ className?: string }> = ({ className = "" }) => {
+export const Positions: FC = () => {
   const provider = useAnchorProvider();
   const { connecting } = useWallet();
   const {

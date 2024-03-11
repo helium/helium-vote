@@ -27,13 +27,16 @@ export default async function NetworkPage({
       <Header />
       <NetworkBanner />
       <Proposals>
-        {legacyProposals.reverse().map((proposal) => (
-          <LegacyProposalCard
-            key={proposal.id}
-            network={network}
-            proposal={proposal}
-          />
-        ))}
+        {network === "hnt" &&
+          legacyProposals
+            .reverse()
+            .map((proposal) => (
+              <LegacyProposalCard
+                key={proposal.id}
+                network={network}
+                proposal={proposal}
+              />
+            ))}
       </Proposals>
     </div>
   );

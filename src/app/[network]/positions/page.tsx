@@ -20,10 +20,7 @@ export const generateMetadata = async ({ params }: PositionsPageParams) => {
   });
 };
 
-export default async function PositionsPage({
-  params,
-  searchParams,
-}: PositionsPageParams) {
+export default async function PositionsPage() {
   return (
     <>
       <Header hideHero={true} route="/$network/positions" />

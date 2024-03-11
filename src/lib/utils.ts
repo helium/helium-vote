@@ -292,7 +292,6 @@ export const onInstructions =
             }
           });
 
-          console.log(tx.signatures);
           await sendAndConfirmWithRetry(
             provider.connection,
             tx.serialize(),
@@ -339,7 +338,7 @@ export const getProposalContent = async (proposalKey: PublicKey) => {
     new PublicKey(proposalKey)
   );
 
-  const res = await fetch(proposal.uri, { next: { revalidate: 10 * 60 } });
+  const res = await fetch(proposal.uri, { next: { revalidate: 60 * 60 * 24 } });
   const content = await res.text();
   return { content, name: proposal.name };
 };

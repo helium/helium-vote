@@ -1,12 +1,12 @@
 "use client";
 
 import { VoteChoiceWithMeta } from "@/lib/types";
-import { useGovernance } from "@/providers/GovernanceProvider";
 import { useRelinquishVote, useVote } from "@helium/voter-stake-registry-hooks";
 import { PublicKey } from "@solana/web3.js";
 import React, { FC, useState } from "react";
 import { VoteOption } from "./VoteOption";
 import { toast } from "sonner";
+import { WalletSignTransactionError } from "@solana/wallet-adapter-base";
 
 export const VoteOptions: FC<{
   choices?: VoteChoiceWithMeta[];
@@ -14,36 +14,41 @@ export const VoteOptions: FC<{
   proposalKey: PublicKey;
 }> = ({ choices = [], maxChoicesPerVoter, proposalKey }) => {
   const [currVote, setCurrVote] = useState(0);
-  const {} = useGovernance();
-
-  const {
-    voteWeights,
-    canVote,
-    vote,
-    loading: voting,
-    error: voteErr,
-  } = useVote(proposalKey);
+  const { voteWeights, canVote, vote, loading: voting } = useVote(proposalKey);
 
   const {
     canRelinquishVote,
     relinquishVote,
     loading: relinquishing,
-    error: relErr,
   } = useRelinquishVote(proposalKey);
 
   const handleVote = (choice: VoteChoiceWithMeta) => async () => {
     if (canVote(choice.index)) {
-      setCurrVote(choice.index);
-      await vote({ choice: choice.index }).then(() => toast("Vote submitted"));
+      try {
+        setCurrVote(choice.index);
+        await vote({ choice: choice.index });
+        toast("Vote submitted");
+      } catch (e) {
+        if (!(e instanceof WalletSignTransactionError) && e instanceof Error) {
+          setCurrVote(0);
+          toast(e.message);
+        }
+      }
     }
   };
 
   const handleRelinquish = (choice: VoteChoiceWithMeta) => async () => {
     if (canRelinquishVote(choice.index)) {
-      setCurrVote(choice.index);
-      await relinquishVote({ choice: choice.index }).then(() =>
-        toast("Vote relinquished")
-      );
+      try {
+        setCurrVote(choice.index);
+        await relinquishVote({ choice: choice.index });
+        toast("Vote relinquished");
+      } catch (e) {
+        if (!(e instanceof WalletSignTransactionError) && e instanceof Error) {
+          setCurrVote(0);
+          toast(e.message);
+        }
+      }
     }
   };
 

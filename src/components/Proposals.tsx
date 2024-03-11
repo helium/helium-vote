@@ -12,8 +12,6 @@ import { VoteCard, VoteCardSkeleton } from "./VoteCard";
 import { Card } from "./ui/card";
 import { ContentSection } from "./ContentSection";
 
-// LegacyProposals are passed in as children from the page
-// They render as server components
 export const Proposals: FC<React.PropsWithChildren<{ className?: string }>> = ({
   children,
 }) => {
@@ -45,7 +43,7 @@ export const Proposals: FC<React.PropsWithChildren<{ className?: string }>> = ({
     [undupedProposals]
   );
 
-  const unactiveProposals = useMemo(
+  const inactiveProposals = useMemo(
     () =>
       undupedProposals.filter(
         (proposal) =>
@@ -112,11 +110,11 @@ export const Proposals: FC<React.PropsWithChildren<{ className?: string }>> = ({
           </div>
         )}
       </section>
-      {unactiveProposals.length > 0 || React.Children.count(children) > 0 ? (
+      {inactiveProposals.length > 0 || React.Children.count(children) > 0 ? (
         <section className="flex flex-col gap-4 mt-4">
           <h5>Closed Votes</h5>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-            {unactiveProposals.map((proposal, i) => (
+            {inactiveProposals.map((proposal, i) => (
               <ProposalCard
                 key={proposal.publicKey.toBase58()}
                 proposal={proposal.info as ProposalV0}
@@ -148,7 +146,7 @@ export const Proposals: FC<React.PropsWithChildren<{ className?: string }>> = ({
                 />
               );
             })}
-            {network === "hnt" && children}
+            {children}
           </div>
         </section>
       ) : null}
