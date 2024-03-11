@@ -28,11 +28,7 @@ export const ReclaimPositionPrompt: FC<{
       </div>
       <div className="flex flex-row justify-center">
         <div className="relative size-52">
-          <Image
-            alt={`illustration-%{network}`}
-            src={`/images/illustration-${network}.png`}
-            fill
-          />
+          <Image alt={`%{network}`} src={`/images/${network}.svg`} fill />
         </div>
       </div>
       <h3 className="text-center">Congratulations!</h3>
