@@ -78,8 +78,8 @@ export const ExtendPositionPrompt: FC<{
         {step === 1 ? (
           <p className="text-base">
             Extending your position increases the unlocking time and provides a
-            larger multiplier for voting power or delegation (given that you're
-            on Helium)
+            larger multiplier for voting power or delegation (given that
+            you&apos;re on Helium)
           </p>
         ) : (
           <p className="text-base">

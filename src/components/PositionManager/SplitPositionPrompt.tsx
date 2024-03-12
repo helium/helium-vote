@@ -82,14 +82,14 @@ export const SplitPositionPrompt: FC<{
         {step === 1 ? (
           <p className="text-base">
             Positions can be split into another position, useful for delegating
-            (if you're on the Helium network) to different networks or setting
-            varied lockup times
+            (if you&apos;re on the Helium network) to different networks or
+            setting varied lockup times
           </p>
         ) : (
           <p className="text-base">
             Please review the following information before confirming and
-            remember that by doing so you'll have to pay a network fee in order
-            to finalize your decision.
+            remember that by doing so you&apos;ll have to pay a network fee in
+            order to finalize your decision.
           </p>
         )}
       </div>

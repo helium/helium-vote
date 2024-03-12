@@ -18,7 +18,7 @@ export const SubDaoSelection: FC<{
     return (
       <div className="flex flex-row max-md:flex-col gap-2">
         {[...Array(hideNoneOption ? 2 : 3)].map((_, i) => (
-          <div className="flex">
+          <div key={`subDaoSelectionSkeleton-${i}`} className="flex">
             <Skeleton
               key={i}
               className="h-32 bg-background flex-1 rounded-md"

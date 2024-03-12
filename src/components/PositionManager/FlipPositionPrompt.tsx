@@ -29,7 +29,7 @@ export const FlipPositionPrompt: FC<{
         <h3>{isConstant ? "Decay" : "Pause"} Position</h3>
         <p className="text-base">
           Your current position is {isConstant ? "paused" : "decaying"}, please
-          confirm whether you'd like to{" "}
+          confirm whether you&apos;d like to{" "}
           {isConstant ? "let it decay" : "pause it"} or not?
         </p>
       </div>

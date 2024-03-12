@@ -100,7 +100,10 @@ export const Positions: FC = () => {
   };
 
   const hasRewards = positionsWithRewards && positionsWithRewards?.length > 0;
-  const isLoading = useMemo(() => !connecting && loadingGov, [loadingGov]);
+  const isLoading = useMemo(
+    () => !connecting && loadingGov,
+    [connecting, loadingGov]
+  );
 
   if (isLoading) {
     return (

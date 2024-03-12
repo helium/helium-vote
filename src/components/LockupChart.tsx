@@ -22,7 +22,7 @@ export const LockupChart: React.FC<LockupChartProps> = ({
     if (divRef.current) {
       setWidth(divRef.current.offsetWidth);
     }
-  }, [divRef.current]);
+  }, [divRef]);
 
   const draw = useMemo(() => {
     return (

@@ -28,6 +28,7 @@ const VeTokenItem: FC<{ mint: PublicKey }> = ({ mint }) => {
   const decimals = useMint(mint)?.info?.decimals;
   const registrarKey = useMemo(
     () => mint && getRegistrarKey(mint),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [mint?.toBase58()]
   );
   const { info: registrar } = useRegistrar(registrarKey);
@@ -41,6 +42,7 @@ const VeTokenItem: FC<{ mint: PublicKey }> = ({ mint }) => {
         mint,
         provider,
       },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [wallet?.publicKey?.toBase58(), mint.toBase58(), connection, provider]
   );
 
@@ -80,6 +82,7 @@ const VeTokenItem: FC<{ mint: PublicKey }> = ({ mint }) => {
     }
 
     return {};
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [positions]);
 
   const prevPower = usePrevious(votingPower);

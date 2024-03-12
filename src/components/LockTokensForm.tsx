@@ -340,9 +340,9 @@ export const LockTokensForm: FC<{
             />
             {lockupKind === LockupKind.cliff && (
               <span className="p-2 text-xs bg-slate-600 rounded">
-                After {getFormattedStringFromDays(lockupPeriodInDays)} you'll be
-                able to reclaim your tokens; your voting power will decay over
-                time as soon as you create this position
+                After {getFormattedStringFromDays(lockupPeriodInDays)}{" "}
+                you&rsquo;ll be able to reclaim your tokens; your voting power
+                will decay over time as soon as you create this position
               </span>
             )}
             {lockupKind === LockupKind.constant && (

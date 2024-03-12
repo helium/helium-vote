@@ -64,8 +64,8 @@ export const UpdatePositionDelegationPrompt: FC<{
             {step === 1 ? (
               <p className="text-base">
                 In order to take any action (such as decaying, pausing,
-                extending, splitting, or merging it) you'll need to undelegate
-                it first
+                extending, splitting, or merging it) you&apos;ll need to
+                undelegate it first
               </p>
             ) : (
               <p className="text-base">
