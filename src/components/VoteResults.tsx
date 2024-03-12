@@ -36,7 +36,7 @@ export const VoteResults: FC<{
           </div>
           <div className="flex flex-row items-center justify-between">
             <p className="text-muted-foreground">
-              {humanReadable(r.weight, decimals, true) || "None"}
+              {humanReadable(r.weight, decimals) || "None"}
             </p>
             <p className="font-normal">{r.percent.toFixed(2)}%</p>
           </div>
