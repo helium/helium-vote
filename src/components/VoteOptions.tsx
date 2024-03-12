@@ -28,10 +28,10 @@ export const VoteOptions: FC<{
         setCurrVote(choice.index);
         await vote({ choice: choice.index });
         toast("Vote submitted");
-      } catch (e) {
-        if (!(e instanceof WalletSignTransactionError) && e instanceof Error) {
+      } catch (e: any) {
+        if (!(e instanceof WalletSignTransactionError)) {
           setCurrVote(0);
-          toast(e.message);
+          toast(e.message || "Vote failed, please try again");
         }
       }
     }
@@ -43,10 +43,10 @@ export const VoteOptions: FC<{
         setCurrVote(choice.index);
         await relinquishVote({ choice: choice.index });
         toast("Vote relinquished");
-      } catch (e) {
-        if (!(e instanceof WalletSignTransactionError) && e instanceof Error) {
+      } catch (e: any) {
+        if (!(e instanceof WalletSignTransactionError)) {
           setCurrVote(0);
-          toast(e.message);
+          toast(e.message || "Relinquish vote failed, please try again");
         }
       }
     }

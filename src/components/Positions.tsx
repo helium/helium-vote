@@ -91,9 +91,9 @@ export const Positions: FC = () => {
 
         toast("Rewards claimed!");
         refetchState();
-      } catch (e) {
-        if (!(e instanceof WalletSignTransactionError) && e instanceof Error) {
-          toast(e.message);
+      } catch (e: any) {
+        if (!(e instanceof WalletSignTransactionError)) {
+          toast(e.message || "Claiming rewards failed, please try again");
         }
       }
     }

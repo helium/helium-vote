@@ -102,6 +102,7 @@ export const PositionManager: FC<PositionManagerProps> = ({
   } = useGovernance();
   const router = useRouter();
   const { lockup } = position;
+  const isConstant = Object.keys(lockup.kind)[0] === "constant";
   const unixNow = useSolanaUnixNow() || Date.now() / 1000;
   const isDecayed = lockup.endTs.lte(new BN(unixNow));
   const canDelegate = network === "hnt";
@@ -169,9 +170,9 @@ export const PositionManager: FC<PositionManagerProps> = ({
       });
 
       toast("Votes Relinquished");
-    } catch (e) {
-      if (!(e instanceof WalletSignTransactionError) && e instanceof Error) {
-        toast(e.message);
+    } catch (e: any) {
+      if (!(e instanceof WalletSignTransactionError)) {
+        toast(e.message || "Relinquish failed, please try again");
       }
     }
   };
@@ -185,9 +186,9 @@ export const PositionManager: FC<PositionManagerProps> = ({
       router.replace(`/${network}/positions`);
 
       toast("Position Reclaimed");
-    } catch (e) {
-      if (!(e instanceof WalletSignTransactionError) && e instanceof Error) {
-        toast(e.message);
+    } catch (e: any) {
+      if (!(e instanceof WalletSignTransactionError)) {
+        toast(e.message || "Reclaim failed, please try again");
       }
     }
   };
@@ -201,9 +202,12 @@ export const PositionManager: FC<PositionManagerProps> = ({
 
       toast("Position flipped");
       setAction(undefined);
-    } catch (e) {
-      if (!(e instanceof WalletSignTransactionError) && e instanceof Error) {
-        toast(e.message);
+    } catch (e: any) {
+      if (!(e instanceof WalletSignTransactionError)) {
+        toast(
+          e.message ||
+            `${isConstant ? "Pause" : "Decay"} failed, please try again`
+        );
       }
     }
   };
@@ -216,9 +220,9 @@ export const PositionManager: FC<PositionManagerProps> = ({
       });
 
       toast("Rewards claimed");
-    } catch (e) {
-      if (!(e instanceof WalletSignTransactionError) && e instanceof Error) {
-        toast(e.message);
+    } catch (e: any) {
+      if (!(e instanceof WalletSignTransactionError)) {
+        toast(e.message || "Claim failed, please try again");
       }
     }
   };
@@ -233,9 +237,9 @@ export const PositionManager: FC<PositionManagerProps> = ({
 
       toast("Delegation updated");
       reset();
-    } catch (e) {
-      if (!(e instanceof WalletSignTransactionError) && e instanceof Error) {
-        toast(e.message);
+    } catch (e: any) {
+      if (!(e instanceof WalletSignTransactionError)) {
+        toast(e.message || "Delegation failed, please try again");
       }
     }
   };
@@ -249,9 +253,9 @@ export const PositionManager: FC<PositionManagerProps> = ({
       });
 
       toast("Position extended");
-    } catch (e) {
-      if (!(e instanceof WalletSignTransactionError) && e instanceof Error) {
-        toast(e.message);
+    } catch (e: any) {
+      if (!(e instanceof WalletSignTransactionError)) {
+        toast(e.message || "Extension failed, please try again");
       }
     }
   };
@@ -268,9 +272,9 @@ export const PositionManager: FC<PositionManagerProps> = ({
 
       toast("Position split");
       reset();
-    } catch (e) {
-      if (!(e instanceof WalletSignTransactionError) && e instanceof Error) {
-        toast(e.message);
+    } catch (e: any) {
+      if (!(e instanceof WalletSignTransactionError)) {
+        toast(e.message || "Split failed, please try again");
       }
     }
   };
@@ -293,9 +297,9 @@ export const PositionManager: FC<PositionManagerProps> = ({
 
       toast("Position merged");
       reset();
-    } catch (e) {
-      if (!(e instanceof WalletSignTransactionError) && e instanceof Error) {
-        toast(e.message);
+    } catch (e: any) {
+      if (!(e instanceof WalletSignTransactionError)) {
+        toast(e.message || "Merge failed, please try again");
       }
     }
   };

@@ -119,10 +119,10 @@ export const CreatePositionModal: FC<React.PropsWithChildren<{}>> = ({
           toast(createPositionError.message);
         }
       }
-    } catch (e) {
+    } catch (e: any) {
       setIsSubmitting(false);
-      if (!(e instanceof WalletSignTransactionError) && e instanceof Error) {
-        toast(e.message);
+      if (!(e instanceof WalletSignTransactionError)) {
+        toast(e.message || "Position creation failed, please try again");
       }
     }
   };
