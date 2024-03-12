@@ -33,10 +33,11 @@ export const WalletConnectButton: FC<{
   }
 
   return (
-    <Button
-      variant="secondary"
+    <div
       className={classNames(
-        "pr-6",
+        "h-11 px-4 md:px-6 py-2",
+        "pr-6 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+        "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         shrink && "max-md:text-[0px] max-md:pr-1",
         className
       )}
@@ -54,6 +55,6 @@ export const WalletConnectButton: FC<{
           lineHeight: "inherit",
         }}
       />
-    </Button>
+    </div>
   );
 };

@@ -15,7 +15,7 @@ const Banner: FC = () => {
   const { network } = useGovernance();
 
   return (
-    <ContentSection className="flex-1 px-4 md:px-0">
+    <ContentSection className="flex-1">
       <Card className="overflow-hidden">
         <CardContent className="p-4 flex flex-row gap-4 items-center relative max-md:flex-col md:pl-36">
           <div className="flex max-md:hidden size-40 flex-shrink-0 absolute left-[-40px] top-[-25px]">
@@ -27,6 +27,7 @@ const Banner: FC = () => {
           </div>
           <div className="hidden max-md:flex w-full max-w-[364px] h-[160px] flex-shrink-0 relative">
             <Image
+              priority
               alt="Network Banner"
               src="/images/illustration-voting-power.mobile.png"
               fill
@@ -40,7 +41,7 @@ const Banner: FC = () => {
               tokens depending on the network you&apos;re on
             </p>
           </div>
-          <div className="flex flex-row gap-4 max-md:w-full">
+          <div className="flex flex-row gap-4 max-md:w-full max-md:gap-12">
             <div className="flex flex-col flex-1 gap-2 max-md:flex-none">
               <Button
                 variant="ghost"
@@ -60,7 +61,7 @@ const Banner: FC = () => {
               </Button>
             </div>
             <div className="flex flex-col flex-1 gap-2">
-              <CreatePositionButton size="xs" />
+              <CreatePositionButton size="xs" hideIcon showText />
               <Link
                 href={`https://jup.ag/swap/SOL-${network.toUpperCase()}`}
                 rel="noopener noreferrer"

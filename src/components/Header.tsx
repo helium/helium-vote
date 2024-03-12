@@ -18,7 +18,7 @@ export const Header: FC<{
   return (
     <header className="flex flex-col bg-card">
       <div className="bg-slate-950 md:bg-transparent">
-        <ContentSection className="!flex-row py-4 justify-between items-center max-md:px-4">
+        <ContentSection className="!flex-row py-4 justify-between items-center">
           <Link
             href="/"
             className="flex flex-row justifiy-center items-center gap-2"
@@ -35,7 +35,7 @@ export const Header: FC<{
         </ContentSection>
       </div>
       {!hideHero && (
-        <ContentSection className="max-md:px-4">
+        <ContentSection>
           <div className="flex flex-row h-[342px] py-6 justify-between max-md:py-12 max-md:h-auto">
             <div className="flex justify-center items-center">
               <div>
@@ -60,7 +60,7 @@ export const Header: FC<{
       )}
       {!hideNav && (
         <div className="bg-slate-800/45">
-          <ContentSection className="!flex-row justify-between max-md:px-4">
+          <ContentSection className="!flex-row justify-between">
             <NetworkTabs route={route} />
             {isOnPositions ? (
               <div className="my-2">

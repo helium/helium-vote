@@ -46,7 +46,7 @@ const MARKDOWN_MAX = 540;
 export const ProposalSkeleton = () => (
   <>
     <Skeleton className="flex flex-row flex-shrink-0 w-full h-12 rounded-none bg-card" />
-    <ContentSection className="!px-0 md:py-8">
+    <ContentSection className="max-md:px-0 md:py-8">
       <Card className="p-2 rounded-none md:rounded-md">
         <CardHeader className="gap-2">
           <Skeleton className="w-2/12 h-7 bg-background rounded-sm" />
@@ -296,7 +296,7 @@ export const Proposal: FC<{
             : "Voting has been Cancelled"}
         </p>
       </div>
-      <ContentSection className="py-8 max-md:py-0">
+      <ContentSection className="py-8 max-md:py-0 max-md:px-0">
         <Card className="p-2 rounded-md max-md:rounded-none">
           <CardHeader className="gap-2">
             <Link

@@ -20,7 +20,7 @@ export const WalletBoundary: FC<
 
   if (!connected)
     return (
-      <ContentSection className="flex-1 py-8 px-4 md:px-0">
+      <ContentSection className="flex-1 py-8">
         <Card className="flex flex-col flex-grow items-center justify-center gap-4">
           <div className="flex flex-col items-center">
             <h3 className="text-xl text-muted-foreground">{heading}</h3>

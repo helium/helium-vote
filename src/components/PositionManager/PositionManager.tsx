@@ -320,8 +320,8 @@ export const PositionManager: FC<PositionManagerProps> = ({
   }, [action]);
 
   return (
-    <ContentSection className="flex-1 py-8 max-md:py-0 px-4 max-md:px-0">
-      <Card className="max-md:rounded-none">
+    <ContentSection className="flex-1 py-8 max-md:py-0 max-md:px-0">
+      <Card className="max-md:flex-1 max-md:rounded-none">
         <CardContent className="flex flex-row p-0">
           <div className="flex flex-col border-r-2 border-background max-md:border-none max-md:flex-1">
             <div className="flex flex-col p-4 border-b-2 border-background">

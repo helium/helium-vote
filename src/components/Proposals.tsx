@@ -65,7 +65,7 @@ export const Proposals: FC<React.PropsWithChildren<{ className?: string }>> = ({
 
   if (isLoading)
     return (
-      <ContentSection className="flex-1 px-4 md:px-0">
+      <ContentSection className="flex-1">
         <section className="flex flex-col gap-4">
           <h4>Open Votes</h4>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -86,7 +86,7 @@ export const Proposals: FC<React.PropsWithChildren<{ className?: string }>> = ({
     );
 
   return (
-    <ContentSection className="flex-1 px-4 md:px-0">
+    <ContentSection className="flex-1">
       <section className="flex flex-col gap-4">
         <h4>Open Votes</h4>
         {activeProposals.length === 0 ? (

@@ -9,11 +9,13 @@ import classNames from "classnames";
 
 interface CreatePositionButtonProps extends ButtonProps {
   hideIcon?: boolean;
+  showText?: boolean;
   className?: string;
 }
 
 export const CreatePositionButton: FC<CreatePositionButtonProps> = ({
   hideIcon = false,
+  showText = false,
   className = "",
   ...rest
 }) => {
@@ -28,7 +30,9 @@ export const CreatePositionButton: FC<CreatePositionButtonProps> = ({
         {...rest}
       >
         {!hideIcon && <FaBolt className="size-4" />}
-        <span className="max-md:hidden ">Create Position</span>
+        <span className={!showText ? "max-md:hidden" : ""}>
+          Create Position
+        </span>
       </Button>
     </CreatePositionModal>
   );

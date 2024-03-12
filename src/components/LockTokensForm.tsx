@@ -349,8 +349,8 @@ export const LockTokensForm: FC<{
               <span className="p-2 text-xs bg-slate-600 rounded">
                 It will take {getFormattedStringFromDays(lockupPeriodInDays)}{" "}
                 after you initiate decaying of this position for the locked
-                tokens to be available for reclaiming. We are using 2 years as
-                an example here. You can initiate the decay at any time
+                tokens to be available for reclaiming. 2 years is used as an
+                example here. You can initiate the decay at any time
               </span>
             )}
           </div>

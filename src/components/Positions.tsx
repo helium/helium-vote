@@ -107,7 +107,7 @@ export const Positions: FC = () => {
 
   if (isLoading) {
     return (
-      <ContentSection className="flex-1 py-8 px-4 md:px-0">
+      <ContentSection className="flex-1 py-8">
         <section className="flex flex-col h-full gap-4">
           <h4>All Positions</h4>
           <Card className="h-full bg-card/45 border border-slate-900">
@@ -128,7 +128,7 @@ export const Positions: FC = () => {
   }
 
   return (
-    <ContentSection className="flex-1 py-4 px-4 md:px-0">
+    <ContentSection className="flex-1 py-4">
       <section className="flex flex-col flex-1 gap-4">
         <div className="flex flex-col gap-2 md:gap-0 md:flex-row md:justify-between md:items-center">
           <h4>All Positions</h4>
