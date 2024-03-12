@@ -6,8 +6,8 @@ const args = hideBin(process.argv);
 const script = args[0];
 
 require(__dirname + `/../scripts/${script}`)
-  .run(args.filter((arg) => arg !== script))
-  .catch((err) => {
+  .run(args.filter((arg: any) => arg !== script))
+  .catch((err: any) => {
     console.error(err);
     process.exit(1);
   })
