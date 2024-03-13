@@ -23,6 +23,327 @@ const nextConfig = {
     },
   },
   serverRuntimeConfig: {
+    realmProposals: [
+      {
+        network: "hnt",
+        publicKey: "6qgUFLqXkaJAcDvSufHFafQkRXt1MWegtZ9qsHvizp7S",
+        tags: ["HIP 88", "Realms"],
+        name: "HIP 88: Adjustment of DAO Utility A Score",
+        status: "passed",
+        endTs: 1690329600,
+        gist: "https://api.github.com/gists/96877b57f1e04b9f55bf8dc31c6472ad",
+        github:
+          "https://github.com/helium/HIP/blob/515a49fc9945fdb8492784af1234c2cb37946dab/0088-adjustment-of-dao-utility-a-score.md",
+        summary: `This HIP proposes to make the $A$ factor of the subDAO utility score more granular by using the individual onboarding fee of an active device paid instead of relying on a homogeneous onboarding fee. This will allow subDAOs to change their onboarding fee without either negatively affecting their subDAO utility score.`,
+        outcomes: [
+          {
+            value: "For HIP 88",
+            votes: 253457245,
+          },
+          {
+            value: "Against HIP 88",
+            votes: 2337953,
+          },
+        ],
+      },
+      {
+        network: "mobile",
+        publicKey: "5pPPhWfuMx7cHNW4Um9PTuceJLw7RrqwJ7LKQ8Ldc98q",
+        tags: ["HIP 96", "Realms"],
+        name: "HIP 96: WiFi AP Onboarding Structure",
+        status: "passed",
+        endTs: 1700524800,
+        gist: "https://api.github.com/gists/dea5455f5fb40c75f52389a1237447b1",
+        github:
+          "https://github.com/helium/HIP/blob/eb016bda8c6144c988b005814abc7b9877058520/0096-wifi-ap-onboarding-structure.md",
+        summary: `This HIP outlines the onboarding fee structure for two new device types: "Indoor WiFi APs" and "Outdoor WiFi APs". The proposed onboarding fees are designed to be approximately 10% of the Manufacturer's Suggested Retail Price (MSRP) of the devices (please see below for specifics). The fees consist of a combination of HNT derived data credits and MOBILE tokens. It is expected that future devices of different classes will follow a similar pricing structure based on their respective MSRP.`,
+        outcomes: [
+          {
+            value: "For HIP 96",
+            votes: 1427911791,
+          },
+          {
+            value: "Against HIP 96",
+            votes: 191161783,
+          },
+        ],
+      },
+      {
+        network: "mobile",
+        publicKey: "8Nd4VFUZcBUhP28sSkz4SDcKEWrGu5j9Hsaz8RLn4hao",
+        tags: ["HIP 93", "Realms"],
+        name: "HIP 93: Addition of Wi-Fi Access Points to the Helium Mobile SubDAO",
+        status: "passed",
+        endTs: 1696723200,
+        gist: "https://api.github.com/gists/f47b85d997c491e1c3f6a1f9b4e2b022",
+        github:
+          "https://github.com/helium/HIP/blob/95a4ccdb5c4072e78c6dd7bb02e4655ee2fbd68e/0093-addition-of-wifi-aps-to-mobile-subdao.md",
+        summary: `This HIP outlines important aspects of adding Wi-Fi access points to the Helium Mobile Network. It describes location verification during onboarding for indoor access points and suggests approaches to continuously verify the locations of such access points. Additionally, the HIP proposes an algorithm and reward structure for Wi-Fi access points similar to what is defined in HIP-74 but adjusted for the technical specifics of Wi-Fi compared to CBRS radios.`,
+        outcomes: [
+          {
+            value: "For HIP 93",
+            votes: 1962680401,
+          },
+          {
+            value: "Against HIP 93",
+            votes: 39061945,
+          },
+        ],
+      },
+      {
+        network: "mobile",
+        publicKey: "GRrnrpk1BRQz54EyrNFcst1bo1iNiD1ZALh7KFbX9j6U",
+        tags: ["HIP 85", "Realms"],
+        name: "HIP 85: MOBILE Hex Coverage Limit",
+        status: "passed",
+        endTs: 1696723200,
+        gist: "https://api.github.com/gists/e02599521188b7975dbd7698559ef1c6",
+        github:
+          "https://github.com/helium/HIP/blob/b1012db5fb7669eadf026a7e559b0e23198b9de3/0085-mobile-hex-coverage-limit.md",
+        summary:
+          "This Helium Improvement Proposal (HIP) suggests adding a baseline hex multiplier score to the MOBILE Proof-of-Coverage (PoC) Modeled Coverage Points based on whether other coverage from Helium 5G deployments exists within that res12 hex. This will reward unique coverage with more Modeled Coverage PoC points than redundant and overlapping coverage. This HIP only applies to outdoor radios, and no changes to the reward structure of indoor mobile radios are being made with this HIP.",
+        outcomes: [
+          {
+            value: "For HIP 85",
+            votes: 2796461680,
+          },
+          {
+            value: "Against HIP 85",
+            votes: 800787600,
+          },
+        ],
+      },
+      {
+        network: "mobile",
+        publicKey: "DtMtA61XvnNWAPb3rr9isaPPHopUQCHFhAu5QJmaNy1k",
+        tags: ["HIP 87", "Realms"],
+        name: "HIP 87: Proportional Service Provider Rewards",
+        status: "passed",
+        endTs: 1630147200,
+        gist: "https://api.github.com/gists/e87bb276130668e4ccc8225a87a48adc",
+        github:
+          "https://github.com/helium/HIP/blob/1bfb7e6b53943caa166336be00bca90cb9926076/0087-proportional-service-provider-rewards.md",
+        summary:
+          "This proposal clarifies Service Provider eligibility for rewards established in HIP-53 (currently defined as 10% of emissions). It implements a usage-based approach to calculating Service Provider rewards similar to HIP-10 for the IOT Network. Service Providers will be rewarded in MOBILE tokens at a 1:1 ratio to burned Data Credits. The proposal also specifies that any part of this category that is not rewarded will not be minted. This prevents a Service Provider from claiming the full MOBILE Service Provider Reward Bucket while burning less than an equivalent amount of Data Credits (DC). A proportional distribution will be applied if the total Data Credits exceeds the emissions value for this category of rewards.",
+        outcomes: [
+          {
+            value: "For HIP 87",
+            votes: 1492393195,
+          },
+          {
+            value: "Against HIP 87",
+            votes: 48365150,
+          },
+        ],
+      },
+      {
+        network: "mobile",
+        publicKey: "8AZepByGXEejTYwy3mLKA57k19w27uukc9QUhJHFVYwj",
+        tags: ["HIP 89", "Realms"],
+        name: "HIP 89: MOBILE Network Onboarding Fees",
+        status: "passed",
+        endTs: 1686182400,
+        gist: "https://api.github.com/gists/56a697239fee2b1656660b8118059091",
+        github:
+          "https://github.com/helium/HIP/blob/abab936e10fc7729df68c54542a5cf8098771c98/0089-mobile-network-onboard-fees.md",
+        summary:
+          "This HIP requests that Helium Foundation correct the MOBILE Onboarding Fee from 0 USD to 40 USD and the MOBILE Location Assert Fee from 0 USD to 10 USD as soon as possible so that the fees are in compliance with HIP-53 and HIP-19.",
+        outcomes: [
+          {
+            value: "For HIP 89",
+            votes: 4013479169,
+          },
+          {
+            value: "Against HIP 89",
+            votes: 134321356,
+          },
+        ],
+      },
+      {
+        network: "mobile",
+        publicKey: "E2XvmWoYx2ZGs1uWHjNszgmsnq3Dtd1x2a64tsqJyDKT",
+        tags: ["HIP 84", "Realms"],
+        name: "HIP 84: Service Provider Hex Boosting",
+        status: "passed",
+        endTs: 1686873600,
+        gist: "https://api.github.com/gists/00d60764123e797a90c00c7923fe87d9",
+        github:
+          "https://github.com/helium/HIP/blob/main/0084-service-provider-hex-boosting.md",
+        summary:
+          "HIP 84 proposes a framework to enhance the growth and optimization of the Mobile Network by allowing Service Providers to influence the deployment of coverage in specific locations. The aim is to improve the usefulness and coverage of the network by targeting areas with a high potential for data offloading.",
+        outcomes: [
+          {
+            value: "For HIP 84",
+            votes: 3206476606,
+          },
+          {
+            value: "Against HIP 84",
+            votes: 102417503,
+          },
+        ],
+      },
+      {
+        network: "mobile",
+        publicKey: "3u2DUcZ2GMRviU5Ycy827urBtovutUiGrt3jqJHQek3w",
+        tags: ["HIP 82", "Realms"],
+        name: "HIP 82: Add Helium Mobile as a Service Provider to the Helium Mobile subDAO",
+        status: "passed",
+        endTs: 1686873600,
+        gist: "https://api.github.com/gists/2a00c4f0ff1135157f3c5c63c8a8d009",
+        github:
+          "https://github.com/helium/HIP/blob/main/0082-helium-mobile-service-provider.md",
+        summary:
+          "HIP 82 proposes the addition of Helium Mobile as a Service Provider to the Helium Mobile Network subNetwork. The Helium Community has made significant progress in building the Helium Mobile Network, and Helium Mobile, a subsidiary of Nova Labs, seeks to build on this opportune time by initiating the first Service Provider of the Mobile Network. Helium Mobile aims to offload its subscriber traffic onto the network, paving the way for other Service Providers to join and improving the overall network traffic and rewards for Hotspot operators.",
+        outcomes: [
+          {
+            value: "For HIP 82",
+            votes: 3963064787,
+          },
+          {
+            value: "Against HIP 82",
+            votes: 2405833,
+          },
+        ],
+      },
+      {
+        network: "mobile",
+        publicKey: "3r2bTix8eGGKiu1HTzLpXY7PdS5321n4sFqNs8cBDRNR",
+        tags: ["HIP 79", "Realms"],
+        name: "HIP 79: Mobile PoC - Mappers Rewards",
+        status: "passed",
+        endTs: 1686873600,
+        gist: "https://api.github.com/gists/3a8cb565709532faba8736fbae59e0c1",
+        github:
+          "https://github.com/helium/HIP/blob/main/0079-mobile-poc-mappers-rewards.md",
+        summary:
+          "HIP 79 proposes creating a new rewardable entity for the Mobile Network, Mobile Mappers. It introduces a framework for rewarding different types of mapping activities, such as verification mapping and discovery mapping. The proposal suggests reducing the Service Provider reward bucket from 20% to 10% and increasing the Mapper reward bucket from 10% to 20% to increase reward incentives for Mappers. Mappers will be eligible for specific percentages of emitted MOBILE rewards based on their participation in mapping activities.",
+        outcomes: [
+          {
+            value: "For HIP 79",
+            votes: 2834268827,
+          },
+          {
+            value: "Against HIP 79",
+            votes: 609079206,
+          },
+        ],
+      },
+      {
+        network: "iot",
+        publicKey: "99ca9Adku8Zk151vGiySEPcGJxdd8V2wAQkGFK4PcE54",
+        tags: ["HIP 100", "Realms"],
+        name: "HIP 100: Deploy EU868 Region Plan to the Majority of Africa",
+        status: "passed",
+        endTs: 1703270056,
+        gist: "https://api.github.com/gists/59a99d6b1b2950bd2db6cbdcefc5de80",
+        github:
+          "https://github.com/helium/HIP/blob/2ff77a15f060554155ec07410310ae3784c82345/0100-deploy-eu868-region-plan-to-the-majority-of-africa.md",
+        summary:
+          "This HIP recommends that the community provisionally sets the majority of the currently unspecified and EU433 region countries in the Africa region to the EU868 regional frequency plan.",
+        outcomes: [
+          {
+            value: "For HIP 100",
+            votes: 378364305,
+          },
+          {
+            value: "Against HIP 100",
+            votes: 254809,
+          },
+        ],
+      },
+      {
+        network: "iot",
+        publicKey: "H5mGJg9927DBRr1NH64VVk6hoSTJdnAC5kngGxgvumUS",
+        tags: ["HIP 83", "Realms"],
+        name: "HIP 83: Restore First to Respond Witness Rewarding",
+        status: "passed",
+        endTs: 1698105600,
+        gist: "https://api.github.com/gists/a8a6b05b62e17bd51cd127a12c086765",
+        github:
+          "https://github.com/helium/HIP/blob/6da11e7f008fff4ffb792529bd1f8a789098d051/0083-restore-first-to-witness.md",
+        summary:
+          "Currently, the Proof-of-Coverage Oracles collect all the witnesses for a beacon and randomly reward a selection of 14 witnesses. This HIP proposes to revert to rewarding the first 14 Hotspots responding to a beacon, incentivizing the most useful Hotspots to sensor traffic by prioritizing the low latency connections that sensors need for uplinks, downlinks, and join requests to work correctly.",
+        outcomes: [
+          {
+            value: "For HIP 83",
+            votes: 863027756,
+          },
+          {
+            value: "Against HIP 83",
+            votes: 363924298,
+          },
+        ],
+      },
+      {
+        network: "iot",
+        publicKey: "4TZE7E3KvRgZiaSMF8h4s7F9UhWDJUgNdNuBz8y1dGzq",
+        tags: ["HIP 92", "Realms"],
+        name: "HIP 92: Correcting IOT Pre-mine Calculation Errors",
+        status: "failed",
+        endTs: 1697155200,
+        gist: "https://api.github.com/gists/72288f3a95db0ef20964af7f76eb4e0a",
+        github:
+          "https://github.com/helium/HIP/blob/006347d95fe690e987f924ddbfc2c7a6900a022e/0092-premine-error-correction.md",
+        summary:
+          'Based on the specifications in Helium Docs, and in HIP 52, all Hotspots that were active, not on the denylist, and earned rewards from either beaconing, witnessing or passing rewardable data, were supposed to receive the IOT pre-mine at the migration. This HIP proposes to correct for a coding error that left out all "Data Only" Hotspots, as well as an error in the selection process during the migration, which missed some active Hotspots with PoC rewards.',
+        outcomes: [
+          {
+            value: "For HIP 92",
+            votes: 365113578,
+          },
+          {
+            value: "Against HIP 92",
+            votes: 530750223,
+          },
+        ],
+      },
+      {
+        network: "iot",
+        publicKey: "GDDd639STzeJgJfuha2Ciyx1uDixYHhr4B5sUisG6v5K",
+        tags: ["HIP 91", "Realms"],
+        name: "HIP 91: Continuation of Reduced IOT Location Assertion Cost",
+        status: "passed",
+        endTs: 1690156800,
+        gist: "https://api.github.com/gists/3f56a283971be5f75243b6736d60c2cf",
+        github:
+          "https://github.com/helium/HIP/blob/ba77309dbd3a6d7dccdfd6a02bd832620c96cc66/0091-data-driven-extension-reduced-iot-assertion-cost.md",
+        summary:
+          "This HIP proposes an extension of the reduced Hotspot location assertion fees on the network. Currently, the fees for IOT hotspots were halved as per HIP-69 since the Solana migration. However, this adjustment is set to expire on July 20th, 2023, at midnight UTC, after which the fee will increase back to $10 in Data Credits. This proposal suggests maintaining the reduced fee for an additional 6 months to incentivize hotspot relocation and gather more data on the impact of a $5 versus a $10 reassert fee.",
+        outcomes: [
+          {
+            value: "For HIP 91",
+            votes: 263167353,
+          },
+          {
+            value: "Against HIP 91",
+            votes: 10425403,
+          },
+        ],
+      },
+      {
+        network: "iot",
+        publicKey: "E3LHMo2Ke59vFUH5gMjtUSQoSHokodHujkNqPu5GwfYr",
+        tags: ["HIP 72", "Realms"],
+        name: "HIP 72: Secure Concentrators",
+        status: "failed",
+        endTs: 1690156800,
+        gist: "https://api.github.com/gists/7d512295cb1e363b56624ea51e8cf8a1",
+        github:
+          "https://github.com/helium/HIP/blob/c13a68bac7f4d8df3cbbbe26ff0ea6649ab43d2d/0072-secure-concentrators.md",
+        summary:
+          "In this HIP, we propose an amendment to HIP 19 to enable a new type of IoT network actor: a Secure Concentrator Card (SCC). A Secure Concentrator Card is similar to a standard LoRaWAN concentrator card, but with an additional Secure Microcontroller Unit (SMCU) and onboard GPS receiver. The SMCU digitally signs LoRa data packets as they are received from the radio. In this way, packet data and its corresponding metadata (RSSI, Frequency, GPS location and time) can be verified to be authentic. The primary intention of this HIP is to combat Proof-of-Coverage gaming. Secure Concentrtors achieve this by providing trustworthy data upon which better gaming detectors and PoC algorithms can be built.",
+        outcomes: [
+          {
+            value: "For HIP 72",
+            votes: 369921986,
+          },
+          {
+            value: "Against HIP 72",
+            votes: 234458613,
+          },
+        ],
+      },
+    ],
     legacyProposals: [
       {
         id: "14MnuexopPfDg3bmq8JdCm7LMDkUBoqhqanD9QzLrUURLZxFHBx",

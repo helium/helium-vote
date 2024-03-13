@@ -108,23 +108,25 @@ export const ProposalBreakdown: FC<{
       <p className="font-normal text-sm">
         {format(new Date((endTs?.toNumber() || 0) * 1000), "PPp")}
       </p>
-      <Separator className="my-1 h-[1px] bg-slate-500" />
     </div>
     {!timeExpired && !isCancelled ? (
       <div className="flex flex-col gap-1">
+        <Separator className="my-1 h-[1px] bg-slate-500" />
         <p className="text-xs">EST. TIME REMAINING</p>
         <div className="text-sm">
           <CountdownTimer endTs={endTs?.toNumber()} />
         </div>
-        <Separator className="my-1 h-[1px] bg-slate-500" />
       </div>
     ) : null}
-    <div className="flex flex-col gap-1">
-      <p className="text-xs">TOTAL veTOKENS</p>
-      <p className="font-normal text-sm">
-        {humanReadable(totalVotes, decimals)}
-      </p>
-    </div>
+    {totalVotes && (
+      <div className="flex flex-col gap-1">
+        <Separator className="my-1 h-[1px] bg-slate-500" />
+        <p className="text-xs">TOTAL veTOKENS</p>
+        <p className="font-normal text-sm">
+          {humanReadable(totalVotes, decimals)}
+        </p>
+      </div>
+    )}
   </div>
 );
 

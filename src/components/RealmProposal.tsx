@@ -1,6 +1,6 @@
 "use client";
 
-import { ILegacyProposal } from "@/lib/types";
+import { IRealmProposal } from "@/lib/types";
 import { useGovernance } from "@/providers/GovernanceProvider";
 import BN from "bn.js";
 import classNames from "classnames";
@@ -12,23 +12,21 @@ import { VoteResults } from "./VoteResults";
 import { Badge } from "./ui/badge";
 import { Card, CardContent, CardHeader } from "./ui/card";
 import { ProposalBreakdown, ProposalSocial } from "./Proposal";
+import Markdown from "react-markdown";
 
-export const LegacyProposal: FC<{
+export const RealmProposal: FC<{
   proposalKey: string;
-  proposal: ILegacyProposal;
-}> = ({ proposalKey, proposal }) => {
+  proposal: IRealmProposal;
+  content: string;
+}> = ({ proposalKey, proposal, content }) => {
   const { network } = useGovernance();
-  const { name, description, tags, authors, deadlineTs } = proposal;
-  const total = proposal.outcomes.reduce((acc, o) => acc + o.hntVoted, 0);
-  const totalUniqueWallets = proposal.outcomes.reduce(
-    (acc, { uniqueWallets: votes }) => acc + votes,
-    0
-  );
+  const { name, summary, tags, endTs } = proposal;
+  const total = proposal.outcomes.reduce((acc, o) => acc + o.votes, 0);
   const votingResults = proposal.outcomes.map((o, index) => ({
     index,
     name: o.value,
-    weight: new BN(o.hntVoted),
-    percent: (o.hntVoted / total) * 100,
+    weight: new BN(o.votes),
+    percent: (o.votes / total) * 100,
   }));
 
   const twitterUrl = new URL("https://twitter.com/intent/tweet");
@@ -38,7 +36,7 @@ export const LegacyProposal: FC<{
   );
   twitterUrl.searchParams.append(
     "url",
-    `https://heliumvote.com/${network}/proposals/legacy/${proposalKey}`
+    `https://heliumvote.com/${network}/proposals/realm/${proposalKey}`
   );
 
   return (
@@ -76,69 +74,40 @@ export const LegacyProposal: FC<{
                 ))}
             </div>
             <h1>{name}</h1>
-            {authors && (
-              <div className="flex flex-row">
-                <p className="text-sm">
-                  <span className="font-semibold">{`Author${
-                    authors.length > 1 ? "s" : ""
-                  }: `}</span>
-                  {authors.map(({ nickname, link }, i, { length }) => (
-                    <>
-                      {link ? ( // if link, use anchor
-                        <Link
-                          href={link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          <span className="text-primary">{nickname}</span>
-                        </Link>
-                      ) : (
-                        //if no link, show plain text
-                        <span>{nickname}</span>
-                      )}
-                      {length > 1 && i + 1 !== length && (
-                        <span className="text-muted-foreground">, </span>
-                      )}
-                    </>
-                  ))}
-                </p>
-              </div>
-            )}
           </CardHeader>
           <CardContent className="flex flex-col gap-4 h-full">
             <div className="flex flex-row gap-4 justify-between">
               <div className="flex flex-col w-auto lg:w-6/12 max-md:w-12/12">
-                <VoteResults results={votingResults} decimals={8} />
+                <VoteResults results={votingResults} decimals={0} />
                 <div className="flex-col gap-2 mt-6 hidden max-md:flex">
                   <ProposalBreakdown
                     timeExpired={true}
-                    endTs={new BN(deadlineTs)}
-                    totalVotes={new BN(totalUniqueWallets)}
+                    endTs={new BN(endTs)}
                     decimals={0}
                   />
                   <ProposalSocial
                     network={network}
                     proposalKey={proposalKey}
-                    githubUrl={proposal.link}
+                    githubUrl={proposal.github}
                     twitterUrl={twitterUrl}
                   />
                 </div>
-                <div className="flex flex-col mt-4">
-                  <h4>Description</h4>
-                  {description}
+                <div className="w-full flex flex-col mt-5">
+                  <Markdown className="prose prose-headings:m-0 prose-headings:font-normal prose-hr:my-8 prose-p:text-foreground clear-both dark:prose-invert">
+                    {content.replace(name, "")}
+                  </Markdown>
                 </div>
               </div>
               <div className="flex flex-col gap-4 w-4/12 lg:w-3/12 max-md:hidden">
                 <ProposalBreakdown
                   timeExpired={true}
-                  endTs={new BN(deadlineTs)}
-                  totalVotes={new BN(totalUniqueWallets)}
+                  endTs={new BN(endTs)}
                   decimals={0}
                 />
                 <ProposalSocial
                   network={network}
                   proposalKey={proposalKey}
-                  githubUrl={proposal.link}
+                  githubUrl={proposal.github}
                   twitterUrl={twitterUrl}
                 />
               </div>

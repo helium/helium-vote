@@ -1,21 +1,20 @@
 "use client";
 
-import { realmProposals } from "@/data/realmProposals";
-import { ProposalState, ProposalV0 } from "@/lib/types";
+import { ProposalV0 } from "@/lib/types";
 import { getDerivedProposalState } from "@/lib/utils";
 import { useGovernance } from "@/providers/GovernanceProvider";
 import { useOrganizationProposals } from "@helium/modular-governance-hooks";
 import { organizationKey } from "@helium/organization-sdk";
 import React, { FC, useMemo } from "react";
-import { ProposalCard } from "./ProposalCard";
-import { VoteCard, VoteCardSkeleton } from "./VoteCard";
-import { Card } from "./ui/card";
 import { ContentSection } from "./ContentSection";
+import { ProposalCard } from "./ProposalCard";
+import { VoteCardSkeleton } from "./VoteCard";
+import { Card } from "./ui/card";
 
 export const Proposals: FC<React.PropsWithChildren<{ className?: string }>> = ({
   children,
 }) => {
-  const { loading: loadingGov, mint, network, networkName } = useGovernance();
+  const { loading: loadingGov, networkName } = useGovernance();
   const organization = useMemo(
     () => organizationKey(networkName)[0],
     [networkName]
@@ -52,16 +51,7 @@ export const Proposals: FC<React.PropsWithChildren<{ className?: string }>> = ({
     [undupedProposals]
   );
 
-  const realmsProposals = useMemo(() => {
-    if (mint) {
-      return realmProposals[mint.toBase58()];
-    }
-  }, [mint]);
-
-  const isLoading = useMemo(
-    () => loading || loadingGov || !proposalsWithDups,
-    [loading, loadingGov, proposalsWithDups]
-  );
+  const isLoading = useMemo(() => loading || loadingGov, [loading, loadingGov]);
 
   if (isLoading)
     return (
@@ -111,7 +101,7 @@ export const Proposals: FC<React.PropsWithChildren<{ className?: string }>> = ({
         )}
       </section>
       {inactiveProposals.length > 0 || React.Children.count(children) > 0 ? (
-        <section className="flex flex-col gap-4 mt-4">
+        <section className="flex flex-col gap-4 my-4">
           <h5>Closed Votes</h5>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
             {inactiveProposals.map((proposal, i) => (
@@ -121,31 +111,6 @@ export const Proposals: FC<React.PropsWithChildren<{ className?: string }>> = ({
                 proposalKey={proposal.publicKey}
               />
             ))}
-            {realmsProposals?.map((proposal, i) => {
-              const total = proposal.outcomes.reduce(
-                (acc, o) => acc + o.votes,
-                0
-              );
-
-              return (
-                <VoteCard
-                  key={`realm-${i}`}
-                  href={proposal.href}
-                  tags={proposal.tags}
-                  name={proposal.name}
-                  description={proposal.summary}
-                  results={proposal.outcomes.map((o, index) => ({
-                    index,
-                    percent: (o.votes / total) * 100,
-                  }))}
-                  finalResult={proposal.status}
-                  endTs={proposal.endTs}
-                  decimals={0}
-                  state={proposal.status as ProposalState}
-                  totalVotes={total}
-                />
-              );
-            })}
             {children}
           </div>
         </section>
