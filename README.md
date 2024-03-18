@@ -1,6 +1,6 @@
 # Helium Vote
 
-A straw poll website that enables a simple straw-poll for Helium related initiatives. This is a simple polling mechanism for voting on HIPs in the Helium community.
+A polling website that enables a simple For or Against Vote for Helium related initiatives and Helium Improvement Proposals (HIPs). This is the official polling mechanism for voting on HIPs in the Helium community.
 
 ## Features
 
