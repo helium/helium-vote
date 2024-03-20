@@ -170,7 +170,7 @@ export const PositionCard: FC<{
             </div>
             <div className="flex flex-row gap-1">
               {isDecayed && <Pill variant="success">100% Decayed</Pill>}
-              {!isConstant && <Pill variant="info">Paused</Pill>}
+              {isConstant && <Pill variant="info">Paused</Pill>}
               {!isConstant && !isDecayed && (
                 <Pill variant="warning">
                   {decayedPercentage.toString()}% Decayed
