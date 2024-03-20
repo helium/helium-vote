@@ -37,7 +37,7 @@ export const PositionCallout: FC<{
   const unixNow = useSolanaUnixNow() || Date.now() / 1000;
   const lockupKind = Object.keys(lockup.kind)[0] as string;
   const isConstant = lockupKind === "constant";
-  const isDecayed = lockup.endTs.lte(new BN(unixNow));
+  const isDecayed = !isConstant && lockup.endTs.lte(new BN(unixNow));
   const elapsedTime = new BN(unixNow).sub(lockup.startTs);
   const totalTime = lockup.endTs.sub(lockup.startTs);
   const decayedPercentage = elapsedTime.muln(100).div(totalTime);
@@ -47,10 +47,12 @@ export const PositionCallout: FC<{
     ? subDaos?.find((sd) => sd.pubkey.equals(position.delegatedSubDao!))
         ?.dntMetadata
     : null;
+
   const voteMultiplier = getPositionVoteMultiplier(position);
   const votingPower = isDecayed
     ? "0"
     : humanReadable(position.votingPower, mintAcc?.decimals);
+
   const lockedTokens =
     mintAcc && humanReadable(position.amountDepositedNative, mintAcc.decimals);
 

@@ -10,8 +10,10 @@ import { ContentSection } from "./ContentSection";
 import { CreatePositionButton } from "./CreatePositionButton";
 import { useGovernance } from "@/providers/GovernanceProvider";
 import Link from "next/link";
+import { WalletConnectButton } from "./WalletConnectButton";
 
-const Banner: FC = () => {
+export const NetworkBanner: FC = () => {
+  const { connected } = useWallet();
   const { network } = useGovernance();
 
   return (
@@ -42,50 +44,56 @@ const Banner: FC = () => {
             </p>
           </div>
           <div className="flex flex-row gap-4 max-md:w-full max-md:gap-12">
-            <div className="flex flex-col flex-1 gap-2 max-md:flex-none">
-              <Button
-                variant="ghost"
-                size="xs"
-                disabled
-                className="!opacity-90 font-normal text-xs text-muted-foreground"
-              >
-                Ready to Vote?
-              </Button>
-              <Button
-                variant="ghost"
-                size="xs"
-                disabled
-                className="!opacity-90 font-normal text-xs text-muted-foreground"
-              >
-                Need Tokens?
-              </Button>
-            </div>
-            <div className="flex flex-col flex-1 gap-2">
-              <CreatePositionButton size="xs" hideIcon showText />
-              <Link
-                href={`https://jup.ag/swap/SOL-${network.toUpperCase()}`}
-                rel="noopener noreferrer"
-                target="_blank"
-                className="flex flex-row"
-              >
-                <Button variant="ghost" size="xs" className="flex-grow gap-2">
-                  <div className="p-1 rounded-full border-2 border-foreground">
-                    <FaArrowRightArrowLeft className="rotate-90" />
-                  </div>
-                  Swap Here
-                </Button>
-              </Link>
-            </div>
+            {!connected && (
+              <div className="flex flex-row w-full justify-center items-center">
+                <WalletConnectButton />
+              </div>
+            )}
+            {connected && (
+              <>
+                <div className="flex flex-col flex-1 gap-2 max-md:flex-none">
+                  <Button
+                    variant="ghost"
+                    size="xs"
+                    disabled
+                    className="!opacity-90 font-normal text-xs text-muted-foreground"
+                  >
+                    Ready to Vote?
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="xs"
+                    disabled
+                    className="!opacity-90 font-normal text-xs text-muted-foreground"
+                  >
+                    Need Tokens?
+                  </Button>
+                </div>
+                <div className="flex flex-col flex-1 gap-2">
+                  <CreatePositionButton size="xs" hideIcon showText />
+                  <Link
+                    href={`https://jup.ag/swap/SOL-${network.toUpperCase()}`}
+                    rel="noopener noreferrer"
+                    target="_blank"
+                    className="flex flex-row"
+                  >
+                    <Button
+                      variant="ghost"
+                      size="xs"
+                      className="flex-grow gap-2"
+                    >
+                      <div className="p-1 rounded-full border-2 border-foreground">
+                        <FaArrowRightArrowLeft className="rotate-90" />
+                      </div>
+                      Swap Here
+                    </Button>
+                  </Link>
+                </div>
+              </>
+            )}
           </div>
         </CardContent>
       </Card>
     </ContentSection>
   );
-};
-
-export const NetworkBanner: FC = () => {
-  const { connected } = useWallet();
-
-  if (!connected) return null;
-  return <Banner />;
 };

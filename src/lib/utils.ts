@@ -238,8 +238,10 @@ export const getMintMinAmountAsDecimal = (mint: Mint) => {
 
 export const getPositionVoteMultiplier = (position: PositionWithMeta) => {
   const { lockup } = position;
+  const lockupKind = Object.keys(lockup.kind)[0] as string;
   const currentTs = new BN(Date.now() / 1000);
-  const isDecayed = lockup.endTs.lte(currentTs);
+  const isConstant = lockupKind === "constant";
+  const isDecayed = !isConstant && lockup.endTs.lte(currentTs);
 
   if (isDecayed) {
     return "0";

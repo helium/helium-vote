@@ -104,7 +104,7 @@ export const PositionManager: FC<PositionManagerProps> = ({
   const { lockup } = position;
   const isConstant = Object.keys(lockup.kind)[0] === "constant";
   const unixNow = useSolanaUnixNow() || Date.now() / 1000;
-  const isDecayed = lockup.endTs.lte(new BN(unixNow));
+  const isDecayed = !isConstant && lockup.endTs.lte(new BN(unixNow));
   const canDelegate = network === "hnt";
   const mergablePositions: PositionWithMeta[] = useMemo(() => {
     if (!unixNow || !positions || !positions.length) {
