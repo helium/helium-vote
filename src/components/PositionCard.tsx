@@ -74,7 +74,7 @@ export const PositionCard: FC<{
   const unixNow = useSolanaUnixNow() || Date.now() / 1000;
   const lockupKind = Object.keys(lockup.kind)[0] as string;
   const isConstant = lockupKind === "constant";
-  const isDecayed = lockup.endTs.lte(new BN(unixNow));
+  const isDecayed = !isConstant && lockup.endTs.lte(new BN(unixNow));
   const elapsedTime = new BN(unixNow).sub(lockup.startTs);
   const totalTime = lockup.endTs.sub(lockup.startTs);
   const decayedPercentage = elapsedTime.muln(100).div(totalTime);
@@ -179,7 +179,7 @@ export const PositionCard: FC<{
             </div>
           </div>
           <CardTitle className="flex flex-row items-center justify-between">
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-2 py-1">
               {lockedTokens} for
               <span className="font-light">
                 {getMinDurationFmt(
@@ -201,7 +201,7 @@ export const PositionCard: FC<{
             <div className="flex flex-row items-center gap-2">
               <p className="text-sm">{votingPower}</p>
               {hasGenesisMultiplier && (
-                <Pill variant="purple" className="border-0">
+                <Pill variant="purple" className="border-0 px-2 py-0.5">
                   x3
                 </Pill>
               )}

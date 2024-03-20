@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 import { VariantProps, cva } from "class-variance-authority";
 
 const pillVariants = cva(
-  "inline-flex items-center rounded-full border px-2 py-1 text-xs font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+  "inline-flex items-center rounded-full border px-2 py-1 text-xs font-medium",
   {
     variants: {
       variant: {
@@ -27,7 +27,9 @@ export interface PillProps
 
 function Pill({ className, variant, ...props }: PillProps) {
   return (
-    <div className={cn(pillVariants({ variant }), className)} {...props} />
+    <div className="flex flex-row items-center">
+      <div className={cn(pillVariants({ variant }), className)} {...props} />
+    </div>
   );
 }
 
