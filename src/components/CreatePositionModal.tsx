@@ -129,7 +129,7 @@ export const CreatePositionModal: FC<React.PropsWithChildren<{}>> = ({
 
   const verb =
     (step === 1 && "Create") ||
-    (step > 2 && step === 2 && "Delegate") ||
+    (steps > 2 && step === 2 && "Delegate") ||
     (step === steps && "Review");
 
   return (
