@@ -114,7 +114,6 @@ export const MergePositionPrompt: FC<{
       </div>
       {!canMerge && (
         <div className="flex flex-col flex-grow justify-center">
-          k
           <div className="flex flex-col max-md:flex-grow items-center justify-center">
             <div className="flex flex-col items-center">
               <h3 className="text-xl text-muted-foreground">Unable to Merge</h3>
