@@ -26,9 +26,11 @@ export const UpdatePositionDelegationPrompt: FC<{
   const [step, setStep] = useState(1);
   const [selectedSubDaoPk, setSelectedSubDaoPk] = useState<PublicKey>();
   const { subDaos } = useGovernance();
-  const { lockup, isDelegated, delegatedSubDao } = position;
   const unixNow = useSolanaUnixNow() || Date.now() / 1000;
-  const isDecayed = lockup.endTs.lte(new BN(unixNow));
+  const { lockup, isDelegated, delegatedSubDao } = position;
+  const lockupKind = Object.keys(lockup.kind)[0] as string;
+  const isConstant = lockupKind === "constant";
+  const isDecayed = !isConstant && lockup.endTs.lte(new BN(unixNow));
 
   const hasSelectedSubDao =
     (selectedSubDaoPk && !delegatedSubDao) ||

@@ -86,6 +86,7 @@ export const LockTokensForm: FC<{
   const mintMinAmount = mintAcc ? getMintMinAmountAsDecimal(mintAcc) : 1;
   const currentPrecision = precision(mintMinAmount);
   const hasMinLockup = minLockupTimeInDays && minLockupTimeInDays > 0;
+  const hasMaxLockup = maxLockupTimeInDays && maxLockupTimeInDays !== Infinity;
 
   const lockupPeriodOptions = [
     ...(hasMinLockup
@@ -285,17 +286,15 @@ export const LockTokensForm: FC<{
             <Input
               placeholder="Enter amount"
               value={lockupPeriodInDays}
-              onKeyPress={(event) => {
-                if (!/[0-9]/.test(event.key)) {
-                  event.preventDefault();
-                }
-              }}
-              onChange={(e) =>
-                setLockupPeriodInDays(Number(e.target.value || 0))
+              type="number"
+              min={hasMinLockup ? minLockupTimeInDays : 1}
+              max={hasMaxLockup ? maxLockupTimeInDays : Infinity}
+              step={1}
+              onChange={({ target: { value } }) =>
+                setLockupPeriodInDays(Number(value || 0))
               }
-              onBlur={() => {
-                const val = lockupPeriodInDays;
-
+              onBlur={({ target: { value } }) => {
+                const val = Number(value || 0);
                 setLockupPeriodInDays(
                   val > minLockupTimeInDays
                     ? val > maxLockupTimeInDays
@@ -358,11 +357,13 @@ export const LockTokensForm: FC<{
 
         <div className="flex flex-row gap-2 items-center">
           <Checkbox
-            className="size-7"
+            className="size-5"
             checked={lockupKind === LockupKind.constant}
             onClick={handleToggleLockupKind}
           />
-          <p className="font-medium">Delay the decay of this position?</p>
+          <p className="text-sm font-medium">
+            Delay the decay of this position?
+          </p>
         </div>
       </div>
 
