@@ -339,17 +339,19 @@ export const LockTokensForm: FC<{
             />
             {lockupKind === LockupKind.cliff && (
               <span className="p-2 text-xs bg-slate-600 rounded">
-                After {getFormattedStringFromDays(lockupPeriodInDays)}{" "}
-                you&rsquo;ll be able to reclaim your tokens; your voting power
-                will decay over time as soon as you create this position
+                Cliff positions start decaying right away as soon as you create
+                them. After {getFormattedStringFromDays(lockupPeriodInDays)}{" "}
+                you&rsquo;ll be able to reclaim your tokens.
               </span>
             )}
             {lockupKind === LockupKind.constant && (
               <span className="p-2 text-xs bg-slate-600 rounded">
-                It will take {getFormattedStringFromDays(lockupPeriodInDays)}{" "}
-                after you initiate decaying of this position for the locked
-                tokens to be available for reclaiming. 2 years is used as an
-                example here. You can initiate the decay at any time
+                Constant positions only start decaying once you initiate the
+                decay. It will take{" "}
+                {getFormattedStringFromDays(lockupPeriodInDays)} after you
+                initiate decaying of this position for the locked tokens to be
+                available for reclaiming. 2 years is used as an example here.
+                You can initiate the decay at any time
               </span>
             )}
           </div>
