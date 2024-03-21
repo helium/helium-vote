@@ -162,5 +162,15 @@
       { "uri": null, "name": "zer0tweets" },
       { "uri": null, "name": "gristleking" }
     ]
+  },
+  {
+    "name": "HIP 107: Preventing Gaming Within the MOBILE Network",
+    "uri": "https://gist.githubusercontent.com/hiptron/6b8c90ff19e455af6f85d80ddd72693c/raw/d09eace9e0099ae019fdb1463d8e51fd754d1a1e/HIP-107-Vote-Summary.md",
+    "maxChoicesPerVoter": 1,
+    "tags": ["HIP", "Economic", "Technical"],
+    "choices": [
+      { "uri": null, "name": "For HIP 107" },
+      { "uri": null, "name": "Against HIP 107" }
+    ]
   }
 ]
