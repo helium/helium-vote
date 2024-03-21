@@ -132,6 +132,14 @@ export const CreatePositionModal: FC<React.PropsWithChildren<{}>> = ({
     (steps > 2 && step === 2 && "Delegate") ||
     (step === steps && "Review");
 
+  const subheading =
+    (step === 1 &&
+      "Boost your voting power by strategically locking your tokens for a specified period, opting for either a constant or decaying lockup") ||
+    (steps > 2 &&
+      step === 2 &&
+      "Choose whether to delegate your tokens to a subnetwork for rewards") ||
+    (step === steps && "Review your position before creating it");
+
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>{children}</DialogTrigger>
@@ -141,10 +149,7 @@ export const CreatePositionModal: FC<React.PropsWithChildren<{}>> = ({
             <h3>{verb} Position</h3>
             <StepIndicator steps={steps} currentStep={step} />
           </div>
-          <p className="text-sm">
-            Boost your voting power by strategically locking your tokens for a
-            specified period, opting for either a constant or decaying lockup
-          </p>
+          <p className="text-sm">{subheading}</p>
         </div>
 
         {step === 1 && (
