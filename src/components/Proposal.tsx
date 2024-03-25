@@ -279,6 +279,22 @@ export const Proposal: FC<{
     }
   }, [proposalKey, endTs, network, completed, name]);
 
+  const rewriteLinks = () => {
+    const visit = require('unist-util-visit');
+
+    return function transformer(tree: any) {
+      visit.visit(tree, 'link', (node: import('unist').Literal) => {
+        node.data = {
+          ...node.data,
+          hProperties: {
+            ...(node.data || {}).hProperties,
+            target: '_blank',
+          }
+        }
+      })
+    }
+  }
+
   if (isLoading) return <ProposalSkeleton />;
   return (
     <>
@@ -398,7 +414,7 @@ export const Proposal: FC<{
                       overflow: "hidden",
                     }}
                   >
-                    <Markdown className="prose prose-headings:m-0 prose-headings:font-normal prose-hr:my-8 prose-p:text-foreground clear-both dark:prose-invert">
+                    <Markdown remarkPlugins={[rewriteLinks]} className="prose prose-headings:m-0 prose-headings:font-normal prose-hr:my-8 prose-p:text-foreground clear-both dark:prose-invert">
                       {content.replace(name, "")}
                     </Markdown>
                   </div>
