@@ -28,5 +28,26 @@
       { "uri": null, "name": "For HIP 106" },
       { "uri": null, "name": "Against HIP 106" }
     ]
+  },
+  {
+    "name": "IOT Working Group Elections - Q1 2024",
+    "uri": "https://gist.githubusercontent.com/hiptron/16c4c6bb8bd9fd295e88992421df5d5c/raw/8b7c15cbe9f9848978cd02556b531cb3c19ddc5c/2024Q1-IOT-Election-Summary.md",
+    "maxChoicesPerVoter": 10,
+    "tags": ["working-group"],
+    "choices": [
+      { "uri": null, "name": "arvedaur" },
+      { "uri": null, "name": "BFGNeil" },
+      { "uri": null, "name": "professor/v4gab0nd" },
+      { "uri": null, "name": "Ay0hCrypto" },
+      { "uri": null, "name": "grayhatguyllc" },
+      { "uri": null, "name": "Jules22" },
+      { "uri": null, "name": "tteague" },
+      { "uri": null, "name": "Ducktator" },
+      { "uri": null, "name": "CityByApp" },
+      { "uri": null, "name": "ElonTusk" },
+      { "uri": null, "name": "nosmaster89" },
+      { "uri": null, "name": "gradoj" },
+      { "uri": null, "name": "Joey {Will not DM}/joeyhiller" }
+    ]
   }
 ]
