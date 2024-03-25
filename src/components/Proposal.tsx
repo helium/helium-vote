@@ -283,7 +283,7 @@ export const Proposal: FC<{
     const visit = require('unist-util-visit');
 
     return function transformer(tree: any) {
-      visit.visit(tree, 'link', (node: import('unist').Literal) => {
+      visit.visit(tree, 'link', (node: any) => {
         node.data = {
           ...node.data,
           hProperties: {
