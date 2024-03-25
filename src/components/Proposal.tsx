@@ -104,7 +104,7 @@ export const ProposalBreakdown: FC<{
 }> = ({ timeExpired, endTs, isCancelled, totalVotes, decimals }) => (
   <div className="flex flex-col p-2.5 bg-background rounded-sm gap-2">
     <div className="flex flex-col gap-1">
-      <p className="text-xs">{timeExpired ? "DATE OCCURED" : "DEADLINE"}</p>
+      <p className="text-xs">{timeExpired ? "DATE OCCURRED" : "DEADLINE"}</p>
       <p className="font-normal text-sm">
         {format(new Date((endTs?.toNumber() || 0) * 1000), "PPp")}
       </p>
