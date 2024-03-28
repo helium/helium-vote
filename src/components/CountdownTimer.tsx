@@ -1,7 +1,7 @@
 "use client";
 
 import { addMinutes } from "date-fns";
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import Countdown from "react-countdown";
 
 export const CountdownTimer: FC<{
@@ -16,7 +16,8 @@ export const CountdownTimer: FC<{
     deadlineDate = addMinutes(now, blocksRemaining);
   }
 
-  const [countdownCompleted, setCountdownCompleted] = useState(false);
+  const [countdownCompleted, setCountdownCompleted] = useState(!endTs);
+  useEffect(() => setCountdownCompleted(!endTs), [endTs]);
 
   if (countdownCompleted) {
     return <div>Voting closed</div>;
