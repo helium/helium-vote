@@ -1,0 +1,95 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 221.2 83.2% 53.3%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --success: 145 80% 10%;
+    --success-foreground: 142 71% 35%;
+    --warning: 21 92% 15%;
+    --warning-foreground: 38 92% 50%;
+    --info: 226 57% 21%;
+    --info-foreground: 217 91% 60%;
+    --purple: 274 87 21%;
+    --purple-foreground: 258 90 66%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 221.2 83.2% 53.3%;
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 214 19% 24%;
+    --foreground: 210 40% 98%;
+    --card: 214 19% 15%;
+    --card-foreground: 210 40% 98%;
+    --popover: 214 17% 8%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 227 94% 56%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 213 19% 32%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --success: 145 80% 10%;
+    --success-foreground: 142 71% 45%;
+    --warning: 21 92% 15%;
+    --warning-foreground: 38 92% 50%;
+    --info: 226 57% 21%;
+    --info-foreground: 217 91% 60%;
+    --purple: 274 87 21%;
+    --purple-foreground: 258 90 66%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 224.3 76.3% 48%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  h1 {
+    @apply scroll-m-20 text-5xl font-semibold tracking-tight;
+  }
+  h2 {
+    @apply scroll-m-20 text-3xl font-semibold tracking-tight;
+  }
+  h3 {
+    @apply scroll-m-20 text-2xl font-medium tracking-tight;
+  }
+  h4 {
+    @apply scroll-m-20 text-xl font-medium tracking-tight;
+  }
+  h5 {
+    @apply scroll-m-20 text-lg font-medium tracking-tight;
+  }
+  p {
+    @apply scroll-m-20 text-base font-light;
+  }
+  input[type=number]::-webkit-inner-spin-button,
+  input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}

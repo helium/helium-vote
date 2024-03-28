@@ -1,6 +1,13 @@
 import fs from "fs";
-import * as anchor from "@coral-xyz/anchor"
-import { Commitment, ComputeBudgetProgram, Keypair, PublicKey, Signer, TransactionInstruction } from "@solana/web3.js";
+import * as anchor from "@coral-xyz/anchor";
+import {
+  Commitment,
+  ComputeBudgetProgram,
+  Keypair,
+  PublicKey,
+  Signer,
+  TransactionInstruction,
+} from "@solana/web3.js";
 import Squads, { getTxPDA } from "@sqds/sdk";
 import { sendInstructions, withPriorityFees } from "@helium/spl-utils";
 import { BN } from "bn.js";

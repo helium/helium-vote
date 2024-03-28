@@ -33,14 +33,14 @@ export async function run(args: any = process.argv) {
     maxChoicesPerVoter: {
       type: "number",
       describe: "The number of choices a voter can select at the same time",
-      default: 1
+      default: 1,
     },
     choices: {
       alias: "c",
       default: ["Yes", "No"],
     },
     proposalConfig: {
-      type: "string"
+      type: "string",
     },
     orgName: {
       type: "string",
@@ -120,10 +120,7 @@ export async function run(args: any = process.argv) {
 
   await sendInstructionsOrSquads({
     provider,
-    instructions: [
-      instruction,
-      setState,
-    ],
+    instructions: [instruction, setState],
     executeTransaction: false,
     squads,
     multisig: argv.multisig ? new PublicKey(argv.multisig) : undefined,
@@ -131,5 +128,5 @@ export async function run(args: any = process.argv) {
     signers: [],
   });
 
-  console.log(`Proposal created: ${proposal.toBase58()}`);
+  console.log(`Proposal created: ${proposal?.toBase58()}`);
 }
