@@ -9,7 +9,7 @@ import {
   useProposalConfig,
   useResolutionSettings,
 } from "@helium/modular-governance-hooks";
-import { useRegistrar } from "@helium/voter-stake-registry-hooks";
+import { useRegistrar, useVote } from "@helium/voter-stake-registry-hooks";
 import { Separator } from "@radix-ui/react-separator";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { PublicKey } from "@solana/web3.js";
@@ -200,6 +200,7 @@ export const Proposal: FC<{
   const { loading: loadingGov, amountLocked, network } = useGovernance();
   const pKey = useMemo(() => new PublicKey(proposalKey), [proposalKey]);
   const { loading: loadingProposal, info: proposal } = useProposal(pKey);
+  const { loading: loadingVote, voteWeights} = useVote(pKey);
   const name = proposal?.name || initName;
   const { info: proposalConfig } = useProposalConfig(proposal?.proposalConfig);
   const { info: registrar } = useRegistrar(proposalConfig?.voteController);
@@ -259,6 +260,8 @@ export const Proposal: FC<{
   const isFailed = derivedState === "failed";
   const completed =
     timeExpired || (timeExpired && isActive) || isCancelled || isFailed;
+
+  const voted = !loadingVote && voteWeights?.some((n) => n.gt(new BN(0)));
 
   const twitterUrl = useMemo(() => {
     if (endTs) {
@@ -378,11 +381,13 @@ export const Proposal: FC<{
                     proposalKey={pKey}
                   />
                 )}
-                {completed && votingResults?.totalVotes.gt(new BN(0)) && (
-                  <VoteResults
-                    results={votingResults.results}
-                    decimals={decimals}
-                  />
+                {(completed || (connected && !noVotingPower && voted)) && votingResults?.totalVotes.gt(new BN(0)) && (
+                    <div className="flex-col gap-2 mt-6">
+                      <VoteResults
+                          results={votingResults.results}
+                          decimals={decimals}
+                      />
+                    </div>
                 )}
                 <div className="flex-col gap-2 mt-6 hidden max-md:flex">
                   <ProposalHipBlurb network={network} />
