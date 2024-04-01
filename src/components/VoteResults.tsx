@@ -8,6 +8,7 @@ export const VoteResults: FC<{
   decimals?: number;
 }> = ({ results = [], decimals = 0 }) => (
   <div className="flex flex-col gap-2">
+    <h5>Vote Results</h5>
     {results
       ?.sort((a, b) => b.percent - a.percent)
       .map((r) => (
