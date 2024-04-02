@@ -80,11 +80,11 @@ export const Proposals: FC<React.PropsWithChildren<{ className?: string }>> = ({
       <section className="flex flex-col gap-4">
         <h4>Open Votes</h4>
         {activeProposals.length === 0 ? (
-          <Card className="py-10">
-            <div className="flex flex-col items-center justify-center p-11">
+          <Card className="py-2">
+            <div className="flex flex-col items-center justify-center p-6">
               <h3 className="text-xl text-muted-foreground">No Active Votes</h3>
               <p className="text-sm text-center text-muted-foreground">
-                There are no active votes for this network at this time
+                There are currently no active votes on this network.
               </p>
             </div>
           </Card>
