@@ -15,15 +15,15 @@ const NetworkTab: FC<{
   <Link
     href={href}
     className={classNames(
-      "flex flex-col justify-end cursor-pointer text-slate-50 hover:text-foreground",
+      "flex flex-col justify-end cursor-pointer text-slate-50 max-md:pr-1 hover:text-foreground",
       { "!text-foreground": active }
     )}
   >
-    <div className="flex flex-row justify-cente items-center gap-4 max-md:gap-2">
-      <div className="size-7 rounded-full relative">
+    <div className="flex flex-row justify-center items-center gap-2 pl-2 pr-2 max-md:pl-1 max-md:pr-1">
+      <div className="size-6 rounded-full relative">
         <Image alt={`${name} icon`} src={icon} fill />
       </div>
-      <p className="pr-4 text-sm">{name}</p>
+      <p className="text-md font-normal">{name}</p>
     </div>
     <div className={classNames("flex h-1 mt-3", { "bg-primary": active })} />
   </Link>
