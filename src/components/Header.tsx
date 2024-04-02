@@ -23,10 +23,12 @@ export const Header: FC<{
             href="/"
             className="flex flex-row justifiy-center items-center gap-2"
           >
-            <div className="size-8 rounded-full relative">
-              <Image alt="logo" src="/images/logo.svg" fill />
+            <div className="size-8 relative sm:hidden">
+              <Image alt="Helium Governance Logo" src="/images/logo-roundel.svg" fill />
             </div>
-            <h4 className="max-sm:hidden">governance</h4>
+            <div className="h-8 w-44 relative max-sm:hidden">
+              <Image alt="Helium Governance Logo" src="/images/logo-wordmark.svg" fill />
+            </div>
           </Link>
           <div className="flex flex-row flex-grow gap-4 justify-end items-center">
             <VeTokensCallout />
