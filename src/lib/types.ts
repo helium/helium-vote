@@ -1,7 +1,12 @@
 import { IdlAccounts } from "@coral-xyz/anchor";
 import { Proposal } from "@helium/modular-governance-idls/lib/types/proposal";
 
-export type ProposalState = "active" | "cancelled" | "passed" | "failed";
+export type ProposalState =
+  | "active"
+  | "cancelled"
+  | "passed"
+  | "failed"
+  | "completed";
 export interface ILegacyProposal {
   id: string;
   deadline: number;
