@@ -24,10 +24,19 @@ export const Header: FC<{
             className="flex flex-row justifiy-center items-center gap-2"
           >
             <div className="size-8 relative sm:hidden">
-              <Image alt="Helium Governance Logo" src="/images/logo-roundel.svg" fill />
+              <Image
+                alt="Helium Governance Logo"
+                src="/images/logo-roundel.svg"
+                fill
+              />
             </div>
-            <div className="h-8 w-44 relative max-sm:hidden">
-              <Image alt="Helium Governance Logo" src="/images/logo-wordmark.svg" fill />
+            <div className="h-8 w-36 relative max-sm:hidden">
+              <Image
+                alt="Helium Governance Logo"
+                src="/images/logo-wordmark.svg"
+                width={140}
+                height={20}
+              />
             </div>
           </Link>
           <div className="flex flex-row flex-grow gap-4 justify-end items-center">
@@ -41,10 +50,14 @@ export const Header: FC<{
           <div className="flex flex-row h-[342px] py-6 justify-between items-start max-md:py-12 max-md:h-auto">
             <div className="flex justify-center items-center">
               <div>
-                <h1 className="max-md:text-5xl text-7xl">Helium<br/>Governance</h1>
+                <h1 className="max-md:text-5xl text-7xl">
+                  Helium
+                  <br />
+                  Governance
+                </h1>
                 <p className="max-w-lg mt-4 text-slate-50 text-lg leading-5">
-                  Helium Vote is where the community comes together to make
-                  decisions on the network.
+                  Where the community comes together to make decisions on
+                  the network.
                 </p>
               </div>
             </div>
