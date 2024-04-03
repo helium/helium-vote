@@ -40,7 +40,7 @@ export const NetworkBanner: FC = () => {
             <h5>Voting is enabled by locking tokens within this network</h5>
             <p className="text-sm text-slate-100">
               Create a vote escrow position using either HNT, MOBILE, or IOT
-              tokens depending on the network you&apos;re on
+              tokens
             </p>
           </div>
           <div className="flex flex-row gap-4 max-md:w-full max-md:gap-12">
