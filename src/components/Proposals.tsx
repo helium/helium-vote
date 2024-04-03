@@ -100,7 +100,7 @@ export const Proposals: FC<React.PropsWithChildren<{ className?: string }>> = ({
           </div>
         )}
       </section>
-      {inactiveProposals.length > 0 || React.Children.count(children) > 0 ? (
+      {inactiveProposals.length > 0 || children ? (
         <section className="flex flex-col gap-4 my-4">
           <h5>Closed Votes</h5>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-3">

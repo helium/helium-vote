@@ -146,10 +146,9 @@ export const LockTokensForm: FC<{
 
     setAmount(
       parseFloat(
-        Math.max(
-          Number(mintMinAmount),
-          Math.min(Number(maxLockupAmount), Number(e.target.value))
-        ).toFixed(currentPrecision)
+        Math.max(Number(mintMinAmount), Number(e.target.value)).toFixed(
+          currentPrecision
+        )
       )
     );
   };
@@ -204,7 +203,6 @@ export const LockTokensForm: FC<{
             </div>
             <Input
               placeholder="Enter amount"
-              max={maxLockupAmount}
               min={mintMinAmount}
               value={amount}
               type="number"
@@ -387,7 +385,7 @@ export const LockTokensForm: FC<{
               {
                 lock:
                   !amount ||
-                  !maxLockupAmount ||
+                  amount > maxLockupAmount ||
                   !lockupPeriod.value ||
                   lockupPeriod.value === 0 ||
                   isSubmitting,
@@ -397,7 +395,7 @@ export const LockTokensForm: FC<{
                   isSubmitting,
                 split:
                   !amount ||
-                  !maxLockupAmount ||
+                  amount > maxLockupAmount ||
                   !lockupPeriod.value ||
                   lockupPeriod.value === 0 ||
                   isSubmitting,
@@ -405,7 +403,9 @@ export const LockTokensForm: FC<{
             }
           >
             {isSubmitting && <Loader2 className="size-5 animate-spin" />}
-            {submitText}
+            {!amount || amount <= maxLockupAmount
+              ? submitText
+              : `Insufficient ${upperNetwork}`}
           </Button>
         </div>
       </div>
