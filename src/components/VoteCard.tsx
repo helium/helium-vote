@@ -113,7 +113,7 @@ export const VoteCard: FC<{
             <div className="flex flex-row flex-grow justify-between">
               <div className="flex flex-col">
                 <p className="text-muted-foreground text-xs">
-                  EST. TIME REMANING
+                  EST. TIME REMAINING
                 </p>
                 <div className="text-sm">
                   <CountdownTimer endTs={endTs} />
