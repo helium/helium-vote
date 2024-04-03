@@ -1,5 +1,5 @@
 import * as anchor from "@coral-xyz/anchor";
-import { init as initOrg, organizationKey } from "@helium/organization-sdk";
+import { init as initOrg } from "@helium/organization-sdk";
 import { init as initProp } from "@helium/proposal-sdk";
 import { init as initState, settings } from "@helium/state-controller-sdk";
 import { registrarKey } from "@helium/voter-stake-registry-sdk";
@@ -55,8 +55,8 @@ export async function run(args: any = process.argv) {
     },
     ver: {
       type: "string",
-      default: "V1"
-    }
+      default: "V1",
+    },
   });
   const argv = await yarg.argv;
   process.env.ANCHOR_WALLET = argv.wallet;
@@ -67,7 +67,7 @@ export async function run(args: any = process.argv) {
     [Buffer.from("governance", "utf-8"), Buffer.from(argv.realmName, "utf-8")],
     new PublicKey("hgovkRU6Ghe1Qoyb54HdSLdqN7VtxaifBzRmh9jtd3S")
   )[0];
-  console.log("Realm is", realmKey.toBase58())
+  console.log("Realm is", realmKey.toBase58());
   const registrarK = registrarKey(realmKey, new PublicKey(argv.mint))[0];
   console.log("Registrar is", registrarK.toBase58());
   const provider = anchor.getProvider() as anchor.AnchorProvider;
@@ -109,9 +109,9 @@ export async function run(args: any = process.argv) {
       await withPriorityFees({
         connection: provider.connection,
         computeUnits: 200000,
-        instructions: [await initResolutionSettings.instruction()]
+        instructions: [await initResolutionSettings.instruction()],
       })
-    )
+    );
   }
 
   const voteController = registrarK;
@@ -154,39 +154,44 @@ export async function run(args: any = process.argv) {
     proposalProgram: proposalProgram.programId,
     uri: "https://helium.com",
   });
-  const organization = (await initOrganization.pubkeys()).organization;
-  if (!(await exists(provider.connection, organization))) {
-    console.log("Creating organization");
-    await sendInstructions(
-      provider,
-      await withPriorityFees({
-        connection: provider.connection,
-        computeUnits: 200000,
-        instructions: [await initOrganization.instruction()],
-      })
-    );
-    console.log(`Created org ${organization.toBase58()}`);
-  } else {
-    const organizationAcc = await orgProgram.account.organizationV0.fetch(organization)
-    const instruction = await orgProgram.methods
-      .updateOrganizationV0({
-        defaultProposalConfig: proposalConfig,
-        proposalProgram: null,
-        uri: null,
-        authority,
-      })
-      .accounts({ organization, authority: organizationAcc.authority })
-      .instruction();
 
-    await sendInstructionsOrSquads({
-      provider,
-      instructions: [instruction],
-      executeTransaction: false,
-      squads,
-      multisig: argv.multisig ? new PublicKey(argv.multisig) : undefined,
-      authorityIndex: argv.authorityIndex,
-      signers: [],
-    });
+  const organization = (await initOrganization.pubkeys()).organization;
+  if (organization) {
+    if (!(await exists(provider.connection, organization))) {
+      console.log("Creating organization");
+      await sendInstructions(
+        provider,
+        await withPriorityFees({
+          connection: provider.connection,
+          computeUnits: 200000,
+          instructions: [await initOrganization.instruction()],
+        })
+      );
+      console.log(`Created org ${organization.toBase58()}`);
+    } else {
+      const organizationAcc = await orgProgram.account.organizationV0.fetch(
+        organization
+      );
+      const instruction = await orgProgram.methods
+        .updateOrganizationV0({
+          defaultProposalConfig: proposalConfig,
+          proposalProgram: null,
+          uri: null,
+          authority,
+        })
+        .accounts({ organization, authority: organizationAcc.authority })
+        .instruction();
+
+      await sendInstructionsOrSquads({
+        provider,
+        instructions: [instruction],
+        executeTransaction: false,
+        squads,
+        multisig: argv.multisig ? new PublicKey(argv.multisig) : undefined,
+        authorityIndex: argv.authorityIndex,
+        signers: [],
+      });
+    }
   }
 }
 
