@@ -182,5 +182,25 @@
       { "uri": null, "name": "For HIP 107" },
       { "uri": null, "name": "Against HIP 107" }
     ]
+  },
+  {
+    "name": "HIP 109: Hex Boosting by Deployment",
+    "uri": "https://gist.githubusercontent.com/hiptron/87b9aa3e681f9c895f478c796a41c131/raw/fe75966648571b1445cdfe00ce2fde46b04fb273/HIP-109-Vote-Summary.md",
+    "maxChoicesPerVoter": 1,
+    "tags": ["HIP", "Economic", "Technical"],
+    "choices": [
+      { "uri": null, "name": "For HIP 109" },
+      { "uri": null, "name": "Against HIP 109" }
+    ]
+  },
+  {
+    "name": "HIP 113: Reward CBRS as Experimental",
+    "uri": "https://gist.githubusercontent.com/hiptron/41c5dbbe8ef3d012609e76629bfd2591/raw/56e07db838203fc63241d327a48d54ddace45218/HIP-113-Vote-Summary.md",
+    "maxChoicesPerVoter": 1,
+    "tags": ["HIP", "Economic"],
+    "choices": [
+      { "uri": null, "name": "For HIP 113" },
+      { "uri": null, "name": "Against HIP 113" }
+    ]
   }
 ]
