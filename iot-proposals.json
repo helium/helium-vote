@@ -49,5 +49,15 @@
       { "uri": null, "name": "gradoj" },
       { "uri": null, "name": "Joey {Will not DM}/joeyhiller" }
     ]
+  },
+  {
+    "name": "HIP 112: Scaling IOT Hotspot Assert Fees",
+    "uri": "https://gist.githubusercontent.com/hiptron/d27f07a752babf6b98bdde9b070c19a8/raw/cc8562fd5039598081e847834957ced018af634e/HIP-112-Vote-Summary.md",
+    "maxChoicesPerVoter": 1,
+    "tags": ["HIP", "Technical", "Economic"],
+    "choices": [
+      { "uri": null, "name": "For HIP 112" },
+      { "uri": null, "name": "Against HIP 112" }
+    ]
   }
 ]
