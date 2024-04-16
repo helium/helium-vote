@@ -1,6 +1,9 @@
 name: Create Proposals
 
 on:
+  pull_request:
+    branches:
+      - main
   push:
     branches:
       - main
@@ -32,11 +35,13 @@ jobs:
         shell: bash
 
       - run: echo "$DEPLOY_KEYPAIR" > ./deploy-keypair.json && chmod 600 ./deploy-keypair.json
+        if: github.ref == 'refs/heads/main'
         shell: bash
         env:
           DEPLOY_KEYPAIR: ${{ secrets.DEPLOYER_KEYPAIR }}
 
       - name: Run Bulk Create Helium Proposals
+        if: github.ref == 'refs/heads/main'
         run: |
           ./node_modules/.bin/ts-node ./bin/helium-vote.ts bulk-create-proposal \
             -u "https://solana-rpc.web.helium.io?session-key=Pluto" \
@@ -46,6 +51,7 @@ jobs:
             --multisig ${{ secrets.MULTISIG }}
 
       - name: Run Bulk Create Mobile Proposals
+        if: github.ref == 'refs/heads/main'
         run: |
           ./node_modules/.bin/ts-node ./bin/helium-vote.ts bulk-create-proposal \
             -u "https://solana-rpc.web.helium.io?session-key=Pluto" \
@@ -55,6 +61,7 @@ jobs:
             --multisig ${{ secrets.MULTISIG }}
 
       - name: Run Bulk Create Iot Proposals
+        if: github.ref == 'refs/heads/main'
         run: |
           ./node_modules/.bin/ts-node ./bin/helium-vote.ts bulk-create-proposal \
             -u "https://solana-rpc.web.helium.io?session-key=Pluto" \
