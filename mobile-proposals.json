@@ -202,5 +202,25 @@
       { "uri": null, "name": "For HIP 113" },
       { "uri": null, "name": "Against HIP 113" }
     ]
+  },
+  {
+    "name": "HIP 110: Proxy Voting",
+    "uri": "https://gist.githubusercontent.com/hiptron/4404ea1e78ed8c92ba5001df45740386/raw/88adb21a40475dd7b6673e816492357fb425c72a/HIP-110-MOBILE-Vote-Summary.md",
+    "maxChoicesPerVoter": 1,
+    "tags": ["HIP", "Technical", "Governance"],
+    "choices": [
+      { "uri": null, "name": "For HIP 110" },
+      { "uri": null, "name": "Against HIP 110" }
+    ]
+  },
+  {
+    "name": "HIP 117: Add MNTD. as a Hotspot Vendor to the Helium MOBILE subNetwork",
+    "uri": "https://gist.githubusercontent.com/hiptron/baf9f7bfd5d31d108163f7eaaa6b70f7/raw/ad6e28aef0d86f99561d82179e09bc175d0bd392/HIP-117-Vote-Summary.md",
+    "maxChoicesPerVoter": 1,
+    "tags": ["HIP", "Governance"],
+    "choices": [
+      { "uri": null, "name": "For HIP 117" },
+      { "uri": null, "name": "Against HIP 117" }
+    ]
   }
 ]
