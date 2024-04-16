@@ -51,6 +51,16 @@
     ]
   },
   {
+    "name": "HIP 110: Proxy Voting",
+    "uri": "https://gist.githubusercontent.com/hiptron/4404ea1e78ed8c92ba5001df45740386/raw/88adb21a40475dd7b6673e816492357fb425c72a/HIP-110-IOT-Vote-Summary.md",
+    "maxChoicesPerVoter": 1,
+    "tags": ["HIP", "Technical", "Governance"],
+    "choices": [
+      { "uri": null, "name": "For HIP 110" },
+      { "uri": null, "name": "Against HIP 110" }
+    ]
+  },
+  {
     "name": "HIP 112: Scaling IOT Hotspot Assert Fees",
     "uri": "https://gist.githubusercontent.com/hiptron/d27f07a752babf6b98bdde9b070c19a8/raw/cc8562fd5039598081e847834957ced018af634e/HIP-112-Vote-Summary.md",
     "maxChoicesPerVoter": 1,
