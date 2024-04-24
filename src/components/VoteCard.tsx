@@ -17,6 +17,7 @@ import {
   CardTitle,
 } from "./ui/card";
 import { Skeleton } from "./ui/skeleton";
+import { toNumber } from "@helium/spl-utils";
 
 export const VoteCardSkeleton: FC = () => (
   <Card className="flex flex-col overflow-hidden">
@@ -54,6 +55,7 @@ export const VoteCard: FC<{
   totalVotes: number | BN;
   decimals?: number;
   state: ProposalState;
+  isLegacy?: boolean;
 }> = ({
   href,
   tags,
@@ -65,11 +67,13 @@ export const VoteCard: FC<{
   decimals,
   totalVotes,
   state,
+  isLegacy = false,
 }) => {
   const timeExpired = endTs && endTs <= Date.now().valueOf() / 1000;
   const isCancelled = state === "cancelled";
   const isActive = !isCancelled && state === "active";
   const isFailed = !isCancelled && state === "failed";
+  const metMinimumVotes = toNumber(totalVotes, decimals || 0) >= 100000000;
   const completed =
     timeExpired || (timeExpired && isActive) || isCancelled || isFailed;
 
@@ -102,6 +106,9 @@ export const VoteCard: FC<{
               <Pill variant="warning">Voting Closed</Pill>
             )}
             {isCancelled && <Pill variant="warning">Vote Cancelled</Pill>}
+            {isFailed && !isLegacy && !metMinimumVotes && (
+              <Pill variant="warning">Quorum Miss</Pill>
+            )}
           </div>
           <CardTitle className="line-clamp-1">{name}</CardTitle>
           <CardDescription className="line-clamp-2">

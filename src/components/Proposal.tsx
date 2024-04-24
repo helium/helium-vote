@@ -200,7 +200,7 @@ export const Proposal: FC<{
   const { loading: loadingGov, amountLocked, network } = useGovernance();
   const pKey = useMemo(() => new PublicKey(proposalKey), [proposalKey]);
   const { loading: loadingProposal, info: proposal } = useProposal(pKey);
-  const { loading: loadingVote, voteWeights} = useVote(pKey);
+  const { loading: loadingVote, voteWeights } = useVote(pKey);
   const name = proposal?.name || initName;
   const { info: proposalConfig } = useProposalConfig(proposal?.proposalConfig);
   const { info: registrar } = useRegistrar(proposalConfig?.voteController);
@@ -283,20 +283,20 @@ export const Proposal: FC<{
   }, [proposalKey, endTs, network, completed, name]);
 
   const rewriteLinks = () => {
-    const visit = require('unist-util-visit');
+    const visit = require("unist-util-visit");
 
     return function transformer(tree: any) {
-      visit.visit(tree, 'link', (node: any) => {
+      visit.visit(tree, "link", (node: any) => {
         node.data = {
           ...node.data,
           hProperties: {
             ...(node.data || {}).hProperties,
-            target: '_blank',
-          }
-        }
-      })
-    }
-  }
+            target: "_blank",
+          },
+        };
+      });
+    };
+  };
 
   if (isLoading) return <ProposalSkeleton />;
   return (
@@ -381,14 +381,15 @@ export const Proposal: FC<{
                     proposalKey={pKey}
                   />
                 )}
-                {(completed || (connected && !noVotingPower && voted)) && votingResults?.totalVotes.gt(new BN(0)) && (
+                {(completed || (connected && !noVotingPower && voted)) &&
+                  votingResults?.totalVotes.gt(new BN(0)) && (
                     <div className="flex-col gap-2 mt-6">
                       <VoteResults
-                          results={votingResults.results}
-                          decimals={decimals}
+                        results={votingResults.results}
+                        decimals={decimals}
                       />
                     </div>
-                )}
+                  )}
                 <div className="flex-col gap-2 mt-6 hidden max-md:flex">
                   <ProposalHipBlurb network={network} />
                   <ProposalBreakdown
@@ -419,7 +420,10 @@ export const Proposal: FC<{
                       overflow: "hidden",
                     }}
                   >
-                    <Markdown remarkPlugins={[rewriteLinks]} className="prose prose-headings:m-0 prose-headings:font-normal prose-hr:my-8 prose-p:text-foreground clear-both dark:prose-invert">
+                    <Markdown
+                      remarkPlugins={[rewriteLinks]}
+                      className="prose prose-headings:m-0 prose-headings:font-normal prose-hr:my-8 prose-p:text-foreground clear-both dark:prose-invert"
+                    >
                       {content.replace(name, "")}
                     </Markdown>
                   </div>

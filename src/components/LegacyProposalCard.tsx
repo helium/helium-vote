@@ -28,6 +28,7 @@ export const LegacyProposalCard: FC<{
       endTs={proposal.deadlineTs}
       totalVotes={total}
       decimals={8}
+      isLegacy
     />
   );
 };
