@@ -80,7 +80,12 @@ export const formMetaTags = (args?: {
 export const getLegacyProposalState = (
   proposal: ILegacyProposal
 ): ProposalState => {
-  const passed = proposal.outcomes[0].hntVoted > proposal.outcomes[1].hntVoted;
+  const totalVotes = proposal.outcomes.reduce((acc, o) => acc + o.hntVoted, 0);
+  const forVotes = proposal.outcomes[0].hntVoted;
+  const againstVotes = proposal.outcomes[1].hntVoted;
+  const percentageOfForVotes = (forVotes / totalVotes) * 100;
+  const passed = forVotes > againstVotes && percentageOfForVotes >= 66.67;
+
   return passed ? "passed" : "failed";
 };
 

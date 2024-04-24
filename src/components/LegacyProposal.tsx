@@ -132,8 +132,8 @@ export const LegacyProposal: FC<{
                 <ProposalBreakdown
                   timeExpired={true}
                   endTs={new BN(deadlineTs)}
-                  totalVotes={new BN(totalUniqueWallets)}
-                  decimals={0}
+                  totalVotes={new BN(total)}
+                  decimals={8}
                 />
                 <ProposalSocial
                   network={network}
