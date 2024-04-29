@@ -7,6 +7,8 @@ import React, { FC, useState } from "react";
 import { VoteOption } from "./VoteOption";
 import { toast } from "sonner";
 import { WalletSignTransactionError } from "@solana/wallet-adapter-base";
+import { onInstructions } from "@/lib/utils";
+import { useAnchorProvider } from "@helium/helium-react-hooks";
 
 export const VoteOptions: FC<{
   choices?: VoteChoiceWithMeta[];
@@ -21,12 +23,16 @@ export const VoteOptions: FC<{
     relinquishVote,
     loading: relinquishing,
   } = useRelinquishVote(proposalKey);
+  const provider = useAnchorProvider();
 
   const handleVote = (choice: VoteChoiceWithMeta) => async () => {
-    if (canVote(choice.index)) {
+    if (canVote(choice.index) && provider) {
       try {
         setCurrVote(choice.index);
-        await vote({ choice: choice.index });
+        await vote({
+          choice: choice.index,
+          onInstructions: onInstructions(provider),
+        });
         toast("Vote submitted");
       } catch (e: any) {
         if (!(e instanceof WalletSignTransactionError)) {

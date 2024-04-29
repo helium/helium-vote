@@ -6,7 +6,7 @@ import { init as initState } from "@helium/state-controller-sdk";
 import { init as initProposal } from "@helium/proposal-sdk";
 import { AccountFetchCache, chunks } from "@helium/account-fetch-cache";
 import { Transaction } from "@solana/web3.js";
-import { bulkSendTransactions } from "@helium/spl-utils";
+import { batchInstructionsToTxsWithPriorityFee, bulkSendTransactions } from "@helium/spl-utils";
 
 export async function run(args: any = process.argv) {
   const yarg = yargs(args).options({
@@ -61,15 +61,7 @@ export async function run(args: any = process.argv) {
     })
     .instruction()
   }))
-
-  const txs = chunks(resolveIxs, 10).map((ixs) => {
-    const tx = new Transaction({
-      feePayer: provider.wallet.publicKey
-    })
-    tx.add(...ixs)
-    return tx
-  })
-
+  const txs = await batchInstructionsToTxsWithPriorityFee(provider, resolveIxs)
   await bulkSendTransactions(provider, txs)
   console.log("Done")
 }

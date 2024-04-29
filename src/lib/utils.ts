@@ -1,9 +1,13 @@
 import { AnchorProvider } from "@coral-xyz/anchor";
 import { init as initProp } from "@helium/proposal-sdk";
 import {
+  HELIUM_COMMON_LUT,
+  HELIUM_COMMON_LUT_DEVNET,
   batchInstructionsToTxsWithPriorityFee,
   batchParallelInstructionsWithPriorityFee,
+  bulkSendTransactions,
   sendAndConfirmWithRetry,
+  toVersionedTx,
 } from "@helium/spl-utils";
 import { PositionWithMeta } from "@helium/voter-stake-registry-hooks";
 import { Mint } from "@solana/spl-token";
@@ -292,31 +296,59 @@ export const onInstructions =
           instructions,
           {
             basePriorityFee: 2,
+            extraSigners: sigs,
+            addressLookupTableAddresses: [
+              provider.connection.rpcEndpoint.includes("test")
+                ? HELIUM_COMMON_LUT_DEVNET
+                : HELIUM_COMMON_LUT,
+            ],
           }
         );
+        const asVersionedTx = transactions.map(toVersionedTx);
+        let i = 0;
         for (const tx of await provider.wallet.signAllTransactions(
-          transactions
+          asVersionedTx
         )) {
+          const draft = transactions[i];
           sigs.forEach((sig) => {
-            if (tx.signatures.some((s) => s.publicKey.equals(sig.publicKey))) {
-              tx.partialSign(sig);
+            if (draft.signers?.some((s) => s.publicKey.equals(sig.publicKey))) {
+              tx.sign([sig]);
             }
           });
 
           await sendAndConfirmWithRetry(
             provider.connection,
-            tx.serialize(),
+            Buffer.from(tx.serialize()),
             {
               skipPreflight: true,
             },
             "confirmed"
           );
+          i++;
         }
       } else {
-        await batchParallelInstructionsWithPriorityFee(provider, instructions, {
-          basePriorityFee: 2,
-          maxSignatureBatch: MAX_TRANSACTIONS_PER_SIGNATURE_BATCH,
-        });
+        const transactions = await batchInstructionsToTxsWithPriorityFee(
+          provider,
+          instructions,
+          {
+            basePriorityFee: 2,
+            addressLookupTableAddresses: [
+              provider.connection.rpcEndpoint.includes("test")
+                ? HELIUM_COMMON_LUT_DEVNET
+                : HELIUM_COMMON_LUT,
+            ],
+          }
+        );
+        console.log("hehe")
+
+        await bulkSendTransactions(
+          provider,
+          transactions,
+          undefined,
+          5,
+          sigs,
+          MAX_TRANSACTIONS_PER_SIGNATURE_BATCH
+        );
       }
     }
   };
