@@ -47,7 +47,10 @@ export const VoteOptions: FC<{
     if (canRelinquishVote(choice.index)) {
       try {
         setCurrVote(choice.index);
-        await relinquishVote({ choice: choice.index });
+        await relinquishVote({
+          choice: choice.index,
+          onInstructions: onInstructions(provider),
+        });
         toast("Vote relinquished");
       } catch (e: any) {
         if (!(e instanceof WalletSignTransactionError)) {
