@@ -46,5 +46,15 @@
       { "uri": null, "name": "For HIP 110" },
       { "uri": null, "name": "Against HIP 110" }
     ]
+  },
+  {
+    "name": "HIP 110: Proxy Voting - Revote",
+    "uri": "https://gist.githubusercontent.com/hiptron/4404ea1e78ed8c92ba5001df45740386/raw/d56b1636d4e16450c97afc630d8acdf5d3e1f59f/HIP-110-HNT-Revote-Summary.md",
+    "maxChoicesPerVoter": 1,
+    "tags": ["HIP", "Technical", "Governance"],
+    "choices": [
+      { "uri": null, "name": "For HIP 110" },
+      { "uri": null, "name": "Against HIP 110" }
+    ]
   }
 ]
