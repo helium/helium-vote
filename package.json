@@ -14,7 +14,7 @@
     "@helium/account-fetch-cache-hooks": "^0.7.11",
     "@helium/helium-react-hooks": "^0.7.11",
     "@helium/modular-governance-hooks": "^0.0.8",
-    "@helium/modular-governance-idls": "^0.0.8-next",
+    "@helium/modular-governance-idls": "^0.0.8-next.19+4fa4c6b",
     "@helium/organization-sdk": "^0.0.8",
     "@helium/spl-utils": "file:.yalc/@helium/spl-utils",
     "@helium/state-controller-sdk": "^0.0.8",

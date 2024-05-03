@@ -4,10 +4,9 @@ import {
   HELIUM_COMMON_LUT,
   HELIUM_COMMON_LUT_DEVNET,
   batchInstructionsToTxsWithPriorityFee,
-  batchParallelInstructionsWithPriorityFee,
   bulkSendTransactions,
   sendAndConfirmWithRetry,
-  toVersionedTx,
+  toVersionedTx
 } from "@helium/spl-utils";
 import { PositionWithMeta } from "@helium/voter-stake-registry-hooks";
 import { Mint } from "@solana/spl-token";
@@ -347,7 +346,6 @@ export const onInstructions =
             ],
           }
         );
-        console.log("hehe")
 
         await bulkSendTransactions(
           provider,
