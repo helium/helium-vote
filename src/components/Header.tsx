@@ -1,11 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
-import React, { FC } from "react";
+import { FC } from "react";
 import { ContentSection } from "./ContentSection";
 import { CreatePositionButton } from "./CreatePositionButton";
 import { NetworkTabs } from "./NetworkTabs";
+import { SubNav } from "./SubNav";
 import { VeTokensCallout } from "./VeTokensCallout";
-import { ViewPositionsButton } from "./ViewPositionsButton";
 import { WalletConnectButton } from "./WalletConnectButton";
 
 export const Header: FC<{
@@ -82,7 +82,7 @@ export const Header: FC<{
                 <CreatePositionButton />
               </div>
             ) : (
-              <ViewPositionsButton className="my-2" />
+              <SubNav />
             )}
           </ContentSection>
         </div>

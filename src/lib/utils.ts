@@ -36,6 +36,14 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export const ellipsisMiddle = (wallet: string): string => {
+  const length = wallet.length;
+  const start = wallet.slice(0, 5);
+  const end = wallet.slice(length - 5, length);
+  const middle = "...";
+  return start + middle + end;
+};
+
 export const formMetaTags = (args?: {
   title?: string;
   description?: string;

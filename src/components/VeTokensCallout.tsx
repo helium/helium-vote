@@ -11,10 +11,10 @@ import { HNT_MINT, IOT_MINT, MOBILE_MINT, toNumber } from "@helium/spl-utils";
 import {
   calcPositionVotingPower,
   getPositionKeys,
-  getRegistrarKey,
   usePositions,
   useRegistrar,
 } from "@helium/voter-stake-registry-hooks";
+import { getRegistrarKey } from "@helium/voter-stake-registry-sdk";
 import { PublicKey } from "@solana/web3.js";
 import BN from "bn.js";
 import Image from "next/image";

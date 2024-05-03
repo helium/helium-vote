@@ -197,7 +197,13 @@ export const Proposal: FC<{
   const { connected, connecting } = useWallet();
   const markdownRef = useRef<HTMLDivElement>(null);
   const [markdownExpanded, setMarkdownExpanded] = useState(false);
-  const { loading: loadingGov, amountLocked, network } = useGovernance();
+  const {
+    loading: loadingGov,
+    amountLocked,
+    amountProxyLocked,
+    network,
+  } = useGovernance();
+  const totalLocked = amountLocked?.add(amountProxyLocked || new BN(0));
   const pKey = useMemo(() => new PublicKey(proposalKey), [proposalKey]);
   const { loading: loadingProposal, info: proposal } = useProposal(pKey);
   const { loading: loadingVote, voteWeights } = useVote(pKey);
@@ -254,7 +260,7 @@ export const Proposal: FC<{
     [connecting, loadingGov, loadingProposal, proposal]
   );
   const timeExpired = endTs && endTs.toNumber() <= Date.now().valueOf() / 1000;
-  const noVotingPower = !isLoading && (!amountLocked || amountLocked.isZero());
+  const noVotingPower = !isLoading && (!totalLocked || totalLocked.isZero());
   const isActive = derivedState === "active";
   const isCancelled = derivedState === "cancelled";
   const isFailed = derivedState === "failed";

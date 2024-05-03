@@ -1,5 +1,5 @@
 import React, { FC, useMemo, useState } from "react";
-import { humanReadable } from "@/lib/utils";
+import { ellipsisMiddle, humanReadable } from "@/lib/utils";
 import { PublicKey } from "@solana/web3.js";
 import {
   useProposal,
@@ -23,14 +23,6 @@ import { Button } from "./ui/button";
 import { FaChevronDown } from "react-icons/fa6";
 import classNames from "classnames";
 import Link from "next/link";
-
-const ellipsisMiddle = (wallet: string): string => {
-  const length = wallet.length;
-  const start = wallet.slice(0, 5);
-  const end = wallet.slice(length - 5, length);
-  const middle = "...";
-  return start + middle + end;
-};
 
 export const VoteBreakdown: FC<{
   proposalKey: PublicKey;
