@@ -74,7 +74,7 @@
     "name": "HIP 116: LoRaWAN Device Address Price Adjustment",
     "uri": "https://gist.githubusercontent.com/hiptron/b2398f992befdace42c29c19592a48a3/raw/ff675812251e1451d323da568b05a30688405147/HIP-116-Vote-Summary.md",
     "maxChoicesPerVoter": 1,
-    "tags": ["HIP", "Technical", "Economic"],
+    "tags": ["HIP", "Economic"],
     "choices": [
       { "uri": null, "name": "For HIP 116" },
       { "uri": null, "name": "Against HIP 116" }
