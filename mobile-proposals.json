@@ -222,5 +222,19 @@
       { "uri": null, "name": "For HIP 117" },
       { "uri": null, "name": "Against HIP 117" }
     ]
+  },
+  {
+    "name": "MOBILE Working Group (Even Class) Elections - Q2 2024",
+    "uri": "https://gist.githubusercontent.com/hiptron/d9e7ce88ec409cf25fd62e51acb63c9c/raw/647a19049c8e2c36b440f83f22daee04394f3de8/2024Q2-MOBILE-Election-Summary.md",
+    "maxChoicesPerVoter": 5,
+    "tags": ["working-group"],
+    "choices": [
+      { "uri": null, "name": "codebymdb/mdb1710" },
+      { "uri": null, "name": "lnjenkins" },
+      { "uri": null, "name": "KeithR" },
+      { "uri": null, "name": "Atlasdraggon" },
+      { "uri": null, "name": "Max Gold/Max - wif hat" },
+      { "uri": null, "name": "MaknBank/MaknBank#0865" }
+    ]
   }
 ]
