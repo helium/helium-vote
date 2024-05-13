@@ -1,8 +1,5 @@
 import { useMint } from "@helium/helium-react-hooks";
-import {
-  PositionWithMeta,
-  useHeliumVsrState,
-} from "@helium/voter-stake-registry-hooks";
+import { PositionWithMeta } from "@helium/voter-stake-registry-hooks";
 import { PublicKey } from "@solana/web3.js";
 import BN from "bn.js";
 import React, { useEffect, useMemo, useState } from "react";
@@ -13,6 +10,7 @@ import { Loader2 } from "lucide-react";
 import { useMetaplexMetadata } from "@/hooks/useMetaplexMetadata";
 import { humanReadable } from "@/lib/utils";
 import { Button } from "./ui/button";
+import { useGovernance } from "@/providers/GovernanceProvider";
 
 interface AssignProxyModalProps {
   onSubmit: (args: {
@@ -28,7 +26,7 @@ export const AssignProxyModal: React.FC<
 > = ({ onSubmit, wallet, children }) => {
   const [open, setOpen] = useState(false);
 
-  const { loading, positions, mint } = useHeliumVsrState();
+  const { loading, positions, mint } = useGovernance();
   const [selectedPositions, setSelectedPositions] = useState<Set<string>>(
     new Set<string>()
   );

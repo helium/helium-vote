@@ -1,6 +1,6 @@
 import { humanReadable } from "@/lib/utils";
+import { useGovernance } from "@/providers/GovernanceProvider";
 import { useMint } from "@helium/helium-react-hooks";
-import { useHeliumVsrState } from "@helium/voter-stake-registry-hooks";
 import { ProposalWithVotes } from "@helium/voter-stake-registry-sdk";
 import { PublicKey } from "@solana/web3.js";
 import BN from "bn.js";
@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 
 export default function VoteHistory({ wallet }: { wallet: PublicKey }) {
-  const { voteService, mint } = useHeliumVsrState();
+  const { voteService, mint } = useGovernance();
   const { info: mintAcc } = useMint(mint);
   const decimals = mintAcc?.decimals;
   const [voteHistories, setVoteHistory] = useState<ProposalWithVotes[]>([]);
@@ -79,7 +79,6 @@ export default function VoteHistory({ wallet }: { wallet: PublicKey }) {
               const totalWeight = voteHistory.choices.reduce((acc, c) => {
                 return acc.add(new BN(c.weight));
               }, new BN(0));
-              console.log(totalWeight.toNumber());
               const percent = voteHistory.votes[0]
                 ? (100 * Number(voteHistory.votes[0].weight)) /
                   totalWeight.toNumber()

@@ -323,7 +323,7 @@ export const Proposal: FC<{
             : "Voting has been Cancelled"}
         </p>
       </div>
-      <ContentSection className="py-8 max-md:py-0 max-md:px-0">
+      <ContentSection className="py-12 max-md:py-0 max-md:px-0">
         <Card className="p-2 rounded-md max-md:rounded-none">
           <CardHeader className="gap-2">
             <Link

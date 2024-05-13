@@ -1,7 +1,5 @@
-import {
-  PositionWithMeta,
-  useHeliumVsrState,
-} from "@helium/voter-stake-registry-hooks";
+import { useGovernance } from "@/providers/GovernanceProvider";
+import { PositionWithMeta } from "@helium/voter-stake-registry-hooks";
 import { DialogContent } from "@radix-ui/react-dialog";
 import { PublicKey } from "@solana/web3.js";
 import { Loader2 } from "lucide-react";
@@ -24,7 +22,7 @@ export const RevokeProxyModal: React.FC<RevokeProxyModalProps> = ({
   onSubmit,
   wallet,
 }) => {
-  const { loading, positions, mint } = useHeliumVsrState();
+  const { loading, positions, mint } = useGovernance();
   const [selectedPositions, setSelectedPositions] = useState<Set<string>>(
     new Set<string>()
   );
@@ -58,7 +56,7 @@ export const RevokeProxyModal: React.FC<RevokeProxyModalProps> = ({
       onClose();
     } catch (e: any) {
       setIsSubmitting(false);
-      toast(e.message || "Unable to Revoke proxy")
+      toast(e.message || "Unable to Revoke proxy");
     }
   };
 

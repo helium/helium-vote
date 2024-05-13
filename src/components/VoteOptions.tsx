@@ -1,7 +1,7 @@
 "use client";
 
 import { VoteChoiceWithMeta } from "@/lib/types";
-import { useHeliumVsrState, useRelinquishVote, useVote } from "@helium/voter-stake-registry-hooks";
+import { useRelinquishVote, useVote } from "@helium/voter-stake-registry-hooks";
 import { PublicKey } from "@solana/web3.js";
 import React, { FC, useState } from "react";
 import { VoteOption } from "./VoteOption";
@@ -17,8 +17,6 @@ export const VoteOptions: FC<{
 }> = ({ choices = [], maxChoicesPerVoter, proposalKey }) => {
   const [currVote, setCurrVote] = useState(0);
   const { voteWeights, canVote, vote, loading: voting } = useVote(proposalKey);
-  const { positions } = useHeliumVsrState()
-  console.log(positions)
 
   const {
     canRelinquishVote,

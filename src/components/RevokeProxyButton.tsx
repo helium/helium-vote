@@ -1,9 +1,9 @@
-import React, { useMemo } from "react";
+import { useGovernance } from "@/providers/GovernanceProvider";
 import { useWallet } from "@solana/wallet-adapter-react";
-import { useHeliumVsrState } from "@helium/voter-stake-registry-hooks";
 import { PublicKey } from "@solana/web3.js";
-import { Button } from "./ui/button";
 import { Loader2 } from "lucide-react";
+import React, { useMemo } from "react";
+import { Button } from "./ui/button";
 
 export const RevokeProxyButton: React.FC<{
   className?: string;
@@ -12,7 +12,7 @@ export const RevokeProxyButton: React.FC<{
   wallet?: PublicKey;
 }> = ({ wallet, className = "", onClick, isLoading = false }) => {
   const { connected } = useWallet();
-  const { loading, positions } = useHeliumVsrState();
+  const { loading, positions } = useGovernance();
 
   const proxiedPositions = useMemo(
     () =>

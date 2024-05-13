@@ -1,4 +1,4 @@
-#!/usr/bin/env ts-node
+#!/usr/bin/env npx ts-node
 
 const { hideBin } = require("yargs/helpers");
 

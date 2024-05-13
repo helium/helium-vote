@@ -1,19 +1,23 @@
 "use client";
 
-import { useHeliumVsrState } from "@helium/voter-stake-registry-hooks";
-import InfiniteScroll from "react-infinite-scroll-component";
-import { useEffect, useState } from "react";
-import { useMint } from "@helium/helium-react-hooks";
-import BN from "bn.js";
-import Link from "next/link";
 import { useNetwork } from "@/hooks/useNetwork";
 import { ellipsisMiddle, humanReadable } from "@/lib/utils";
+import { useMint } from "@helium/helium-react-hooks";
 import { EnhancedProxy } from "@helium/voter-stake-registry-sdk";
-import { ContentSection } from "./ContentSection";
-import { Card } from "./ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { useAsyncCallback } from "react-async-hook";
+import BN from "bn.js";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useAsyncCallback } from "react-async-hook";
+import { FaMagnifyingGlass } from "react-icons/fa6";
+import { RiUserStarFill } from "react-icons/ri";
+import InfiniteScroll from "react-infinite-scroll-component";
+import { ContentSection } from "./ContentSection";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { Button } from "./ui/button";
+import { Card } from "./ui/card";
+import { Input } from "./ui/input";
+import { useGovernance } from "@/providers/GovernanceProvider";
 
 function CardDetail({ title, value }: { title: string; value: string }) {
   return (
@@ -27,7 +31,7 @@ function CardDetail({ title, value }: { title: string; value: string }) {
 }
 
 export function Proxies() {
-  const { voteService, mint } = useHeliumVsrState();
+  const { voteService, mint } = useGovernance();
   const { info: mintAcc } = useMint(mint);
   const decimals = mintAcc?.decimals;
   const [proxies, setProxies] = useState<EnhancedProxy[]>([]);
@@ -57,10 +61,35 @@ export function Proxies() {
     }
   }, [voteService?.registrar.toBase58()]);
 
+  const handleBrowseProxies = () => {
+    // TODO: Implement
+  };
+
   return (
     <ContentSection className="flex-1 py-4">
       <section className="flex flex-col flex-1 gap-4">
-        <h4>Browse Proxies</h4>
+        <div className="flex flex-col gap-2 md:gap-0 md:flex-row md:justify-between md:items-center">
+          <h4>Browse Proxies</h4>
+          <div className="flex flex-col gap-2 md:flex-row md:items-center">
+            <div className="w-full flex-1 flex-row relative">
+              <FaMagnifyingGlass className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Input
+                type="search"
+                placeholder="Search name or address..."
+                className="w-full appearance-none bg-secondary border-none pl-8 shadow-none md:w-2/3 lg:w-1/3"
+              />
+            </div>
+            <Button
+              variant="secondary"
+              className="text-foreground flex flex-row gap-2 items-center"
+              disabled={!proxies.length}
+              onClick={handleBrowseProxies}
+            >
+              <RiUserStarFill className="size-6" />
+              Browse
+            </Button>
+          </div>
+        </div>
         <InfiniteScroll
           dataLength={proxies.length}
           next={fetchMoreData}
@@ -87,7 +116,9 @@ export function Proxies() {
                       </Avatar>
                       <div className="flex flex-col w-60">
                         <h4>{proxy.name}</h4>
-                        <span className="text-slate-50 text-xs">{ellipsisMiddle(proxy.wallet)}</span>
+                        <span className="text-slate-50 text-xs">
+                          {ellipsisMiddle(proxy.wallet)}
+                        </span>
                       </div>
                     </div>
 

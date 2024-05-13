@@ -1,10 +1,10 @@
 "use client";
 
 import { ellipsisMiddle, humanReadable } from "@/lib/utils";
+import { useGovernance } from "@/providers/GovernanceProvider";
 import { useMint } from "@helium/helium-react-hooks";
 import {
   useAssignProxies,
-  useHeliumVsrState,
   useProxiedTo,
   useUnassignProxies,
 } from "@helium/voter-stake-registry-hooks";
@@ -12,19 +12,17 @@ import { EnhancedProxy, WithRank } from "@helium/voter-stake-registry-sdk";
 import { PublicKey } from "@solana/web3.js";
 import BN from "bn.js";
 import Image from "next/image";
+import Link from "next/link";
 import { useMemo, useState } from "react";
+import { FaArrowLeft } from "react-icons/fa6";
 import ReactMarkdown from "react-markdown";
 import { AssignProxyModal } from "./AssignProxyModal";
+import { ContentSection } from "./ContentSection";
 import { ProxyButton } from "./ProxyButton";
 import { RevokeProxyButton } from "./RevokeProxyButton";
 import { RevokeProxyModal } from "./RevokeProxyModal";
-import VoteHistory from "./VoteHistory";
-import { ContentSection } from "./ContentSection";
 import { Card, CardContent, CardHeader } from "./ui/card";
-import { FaArrowLeft } from "react-icons/fa6";
-import Link from "next/link";
-import { useNetwork } from "@/hooks/useNetwork";
-import { useGovernance } from "@/providers/GovernanceProvider";
+import VoteHistory from "./VoteHistory";
 
 export function ProxyProfile({
   proxy,
@@ -35,7 +33,7 @@ export function ProxyProfile({
   detail: string;
   image: string;
 }) {
-  const { mint } = useHeliumVsrState();
+  const { mint } = useGovernance();
   const { info: mintAcc } = useMint(mint);
   const decimals = mintAcc?.decimals;
   const [revokeProxyModalVisible, setRevokeProxyModalVisible] = useState(false);

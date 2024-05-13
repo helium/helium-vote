@@ -14,14 +14,14 @@ export const generateMetadata = async ({ params }: VotersPageParams) => {
 
   return formMetaTags({
     title: `${network.toUpperCase()} Positions`,
-    url: `https://heliumvote.com/${network}/voters`,
+    url: `https://heliumvote.com/${network}/proxies`,
   });
 };
 
 export default async function PositionsPage() {
   return (
     <>
-      <Header hideHero={true} route="/$network/voters" />
+      <Header hideHero={true} route="/$network/proxies" />
       <Proxies />
     </>
   );
