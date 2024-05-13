@@ -10,6 +10,8 @@ import { LuScrollText } from "react-icons/lu";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { Button } from "./ui/button";
@@ -31,7 +33,12 @@ export const SubNav: React.FC = () => {
   return (
     <div>
       <div className="hidden md:block">
-        <ToggleGroup type="single" className="p-2" value={currentPath}>
+        <ToggleGroup
+          variant="subNav"
+          type="single"
+          className="py-4"
+          value={currentPath}
+        >
           <ToggleGroupItem value="proposals" aria-label="Proposals">
             <Link className="flex items-center gap-2 p-2" href={`${basePath}`}>
               <LuScrollText className="size-4" />
@@ -60,39 +67,41 @@ export const SubNav: React.FC = () => {
       </div>
       <div className="md:hidden p-2">
         <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="bg-black/30">
+          <DropdownMenuTrigger>
+            <Button variant="secondary" className="bg-black/30">
               <Icon className="size-4" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-56">
-            <DropdownMenuLabel>
-              <Link
-                className="flex items-center gap-2 p-2"
-                href={`${basePath}`}
-              >
-                <LuScrollText className="size-4" />
-                Proposals
-              </Link>
-            </DropdownMenuLabel>
-            <DropdownMenuLabel>
-              <Link
-                className="flex items-center gap-2 p-2"
-                href={`${basePath}/proxies`}
-              >
-                <IoPerson className="size-4" />
-                Proxies
-              </Link>
-            </DropdownMenuLabel>
-            <DropdownMenuLabel>
-              <Link
-                className="flex items-center gap-2 p-2"
-                href={`${basePath}/positions`}
-              >
-                <FaBolt className="size-4" />
-                Positions
-              </Link>
-            </DropdownMenuLabel>
+          <DropdownMenuContent className="min-w-56">
+            <DropdownMenuGroup>
+              <DropdownMenuItem>
+                <Link
+                  className="flex items-center gap-2 p-2"
+                  href={`${basePath}`}
+                >
+                  <LuScrollText className="size-4" />
+                  Proposals
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <Link
+                  className="flex items-center gap-2 p-2"
+                  href={`${basePath}/proxies`}
+                >
+                  <IoPerson className="size-4" />
+                  Proxies
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <Link
+                  className="flex items-center gap-2 p-2"
+                  href={`${basePath}/positions`}
+                >
+                  <FaBolt className="size-4" />
+                  Positions
+                </Link>
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

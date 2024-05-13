@@ -132,21 +132,24 @@ export const Positions: FC = () => {
       <section className="flex flex-col flex-1 gap-4">
         <div className="flex flex-col gap-2 md:gap-0 md:flex-row md:justify-between md:items-center">
           <h4>All Positions</h4>
-          {network === "hnt" && (
-            <Button
-              variant="default"
-              className="text-foreground flex flex-row gap-2 items-center"
-              disabled={!hasRewards || claimingAllRewards}
-              onClick={handleClaimRewards}
-            >
-              {claimingAllRewards ? (
-                <Loader2 className="size-4 animate-spin" />
-              ) : (
-                <FaStar className="size-4" />
-              )}
-              {claimingAllRewards ? "Claiming Rewards..." : "Claim Rewards"}
-            </Button>
-          )}
+          <div className="flex max-md:flex-col gap-2">
+            <CreatePositionButton showText />
+            {network === "hnt" && (
+              <Button
+                variant="default"
+                className="text-foreground flex flex-row gap-2 items-center"
+                disabled={!hasRewards || claimingAllRewards}
+                onClick={handleClaimRewards}
+              >
+                {claimingAllRewards ? (
+                  <Loader2 className="size-4 animate-spin" />
+                ) : (
+                  <FaStar className="size-4" />
+                )}
+                {claimingAllRewards ? "Claiming Rewards..." : "Claim Rewards"}
+              </Button>
+            )}
+          </div>
         </div>
         {!notDecayedPositions?.length && !decayedPositions?.length && (
           <Card className="flex flex-col flex-1">

@@ -22,7 +22,7 @@ import { useGovernance } from "@/providers/GovernanceProvider";
 function CardDetail({ title, value }: { title: string; value: string }) {
   return (
     <div className="flex flex-col gap-1">
-      <span className="font-medium uppercase text-xs text-slate-400">
+      <span className="font-medium uppercase text-xs text-muted-foreground">
         {title}
       </span>
       <span>{value}</span>
@@ -85,7 +85,7 @@ export function Proxies() {
               disabled={!proxies.length}
               onClick={handleBrowseProxies}
             >
-              <RiUserStarFill className="size-6" />
+              <RiUserStarFill className="size-4" />
               Browse
             </Button>
           </div>
@@ -104,49 +104,44 @@ export function Proxies() {
           <div className="flex flex-col gap-4 space-between">
             {proxies.map((proxy, index) => (
               <Link key={index} href={`${path}/${proxy.wallet}`}>
-                <Card className="hover:opacity-80 flex flex-col md:flex-row-reverse">
-                  <div className="flex flex-row md:justify-end flex-grow p-2 text-xs text-slate-50">
-                    <span>Assigned {proxy.numAssignments} positions</span>
+                <Card className="flex hover:opacity-80 max-md:flex-col max-md:bg-card/45 max-md:overflow-hidden">
+                  <div className="p-4 flex flex-row gap-2 items-center max-md:bg-card ">
+                    <Avatar>
+                      <AvatarImage src={proxy.image} alt={proxy.name} />
+                      <AvatarFallback>{proxy.name}</AvatarFallback>
+                    </Avatar>
+                    <div className="flex flex-col w-60">
+                      <h4>{proxy.name}</h4>
+                      <span className="text-foreground text-xs">
+                        {ellipsisMiddle(proxy.wallet)}
+                      </span>
+                    </div>
                   </div>
-                  <div className="flex flex-col md:flex-row md:items-center gap-4">
-                    <div className="p-4 flex flex-row gap-2 items-center">
-                      <Avatar>
-                        <AvatarImage src={proxy.image} alt={proxy.name} />
-                        <AvatarFallback>{proxy.name}</AvatarFallback>
-                      </Avatar>
-                      <div className="flex flex-col w-60">
-                        <h4>{proxy.name}</h4>
-                        <span className="text-slate-50 text-xs">
-                          {ellipsisMiddle(proxy.wallet)}
-                        </span>
-                      </div>
-                    </div>
 
-                    <div className="gap-4 bg-card-muted p-4 rounded-b-lg md:bg-transparent grid md:grid-cols-3 sm:grid-cols-2 xs:grid-cols-2">
-                      <CardDetail
-                        title="Proposals Voted"
-                        value={proxy.numProposalsVoted}
-                      />
-                      <CardDetail
-                        title="Total Voting Power"
-                        value={
-                          proxy.delegatedVeTokens
-                            ? humanReadable(
-                                new BN(proxy.delegatedVeTokens),
-                                decimals
-                              )!
-                            : "0"
-                        }
-                      />
-                      <CardDetail
-                        title="Last Voted"
-                        value={
-                          proxy.lastVotedAt
-                            ? proxy.lastVotedAt.toDateString()
-                            : "Never"
-                        }
-                      />
-                    </div>
+                  <div className="p-4 gap-8 grid md:grid-cols-3 sm:grid-cols-2 xs:grid-cols-2">
+                    <CardDetail
+                      title="Proposals Voted"
+                      value={proxy.numProposalsVoted}
+                    />
+                    <CardDetail
+                      title="Total Voting Power"
+                      value={
+                        proxy.delegatedVeTokens
+                          ? humanReadable(
+                              new BN(proxy.delegatedVeTokens),
+                              decimals
+                            )!
+                          : "0"
+                      }
+                    />
+                    <CardDetail
+                      title="Last Voted"
+                      value={
+                        proxy.lastVotedAt
+                          ? proxy.lastVotedAt.toDateString()
+                          : "Never"
+                      }
+                    />
                   </div>
                 </Card>
               </Link>
