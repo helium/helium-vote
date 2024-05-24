@@ -1,5 +1,6 @@
 "use client";
 
+import { IoWarningOutline } from "react-icons/io5";
 import { useNetwork } from "@/hooks/useNetwork";
 import { ellipsisMiddle, humanReadable } from "@/lib/utils";
 import { useMint } from "@helium/helium-react-hooks";
@@ -18,6 +19,8 @@ import { Button } from "./ui/button";
 import { Card } from "./ui/card";
 import { Input } from "./ui/input";
 import { useGovernance } from "@/providers/GovernanceProvider";
+
+const DECENTRALIZATION_RISK_INDEX = 6;
 
 function CardDetail({ title, value }: { title: string; value: string }) {
   return (
@@ -61,33 +64,18 @@ export function Proxies() {
     }
   }, [voteService?.registrar.toBase58()]);
 
-  const handleBrowseProxies = () => {
-    // TODO: Implement
-  };
-
   return (
     <ContentSection className="flex-1 py-4">
       <section className="flex flex-col flex-1 gap-4">
         <div className="flex flex-col gap-2 md:gap-0 md:flex-row md:justify-between md:items-center">
           <h4>Browse Proxies</h4>
-          <div className="flex flex-col gap-2 md:flex-row md:items-center">
-            <div className="w-full flex-1 flex-row relative">
-              <FaMagnifyingGlass className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input
-                type="search"
-                placeholder="Search name or address..."
-                className="w-full appearance-none bg-secondary border-none pl-8 shadow-none md:w-2/3 lg:w-1/3"
-              />
-            </div>
-            <Button
-              variant="secondary"
-              className="text-foreground flex flex-row gap-2 items-center"
-              disabled={!proxies.length}
-              onClick={handleBrowseProxies}
-            >
-              <RiUserStarFill className="size-4" />
-              Browse
-            </Button>
+          <div className="w-half flex-row relative justify-end md:w-2/3 lg:w-1/3">
+            <FaMagnifyingGlass className="absolute left-2.5 top-5 h-4 w-4 text-muted-foreground" />
+            <Input
+              type="search"
+              placeholder="Search name or address..."
+              className="w-full appearance-none bg-secondary border-none pl-8 shadow-none"
+            />
           </div>
         </div>
         <InfiniteScroll
@@ -103,48 +91,63 @@ export function Proxies() {
         >
           <div className="flex flex-col gap-4 space-between">
             {proxies.map((proxy, index) => (
-              <Link key={index} href={`${path}/${proxy.wallet}`}>
-                <Card className="flex hover:opacity-80 max-md:flex-col max-md:bg-card/45 max-md:overflow-hidden">
-                  <div className="p-4 flex flex-row gap-2 items-center max-md:bg-card ">
-                    <Avatar>
-                      <AvatarImage src={proxy.image} alt={proxy.name} />
-                      <AvatarFallback>{proxy.name}</AvatarFallback>
-                    </Avatar>
-                    <div className="flex flex-col w-60">
-                      <h4>{proxy.name}</h4>
-                      <span className="text-foreground text-xs">
-                        {ellipsisMiddle(proxy.wallet)}
-                      </span>
+              <>
+                <Link key={index} href={`${path}/${proxy.wallet}`}>
+                  <Card className="flex hover:opacity-80 max-md:flex-col max-md:bg-card/45 max-md:overflow-hidden">
+                    <div className="p-4 flex flex-row gap-2 items-center max-md:bg-card ">
+                      <Avatar>
+                        <AvatarImage src={proxy.image} alt={proxy.name} />
+                        <AvatarFallback>{proxy.name}</AvatarFallback>
+                      </Avatar>
+                      <div className="flex flex-col w-60">
+                        <h4>{proxy.name}</h4>
+                        <span className="text-foreground text-xs">
+                          {ellipsisMiddle(proxy.wallet)}
+                        </span>
+                      </div>
                     </div>
-                  </div>
 
-                  <div className="p-4 gap-8 grid md:grid-cols-3 sm:grid-cols-2 xs:grid-cols-2">
-                    <CardDetail
-                      title="Proposals Voted"
-                      value={proxy.numProposalsVoted}
+                    <div className="p-4 gap-8 grid md:grid-cols-3 sm:grid-cols-2 xs:grid-cols-2">
+                      <CardDetail
+                        title="Proposals Voted"
+                        value={proxy.numProposalsVoted}
+                      />
+                      <CardDetail
+                        title="Total Voting Power"
+                        value={
+                          proxy.delegatedVeTokens
+                            ? humanReadable(
+                                new BN(proxy.delegatedVeTokens),
+                                decimals
+                              )!
+                            : "0"
+                        }
+                      />
+                      <CardDetail
+                        title="Last Voted"
+                        value={
+                          proxy.lastVotedAt
+                            ? proxy.lastVotedAt.toDateString()
+                            : "Never"
+                        }
+                      />
+                    </div>
+                  </Card>
+                </Link>
+                {index == DECENTRALIZATION_RISK_INDEX ? (
+                  <div className="py-2 px-4 text-sm w-full bg-accent/30 rounded-lg flex flex-row gap-2 items-center">
+                    <IoWarningOutline
+                      className="size-8"
+                      color="hsla(25, 95%, 53%, 1)"
                     />
-                    <CardDetail
-                      title="Total Voting Power"
-                      value={
-                        proxy.delegatedVeTokens
-                          ? humanReadable(
-                              new BN(proxy.delegatedVeTokens),
-                              decimals
-                            )!
-                          : "0"
-                      }
-                    />
-                    <CardDetail
-                      title="Last Voted"
-                      value={
-                        proxy.lastVotedAt
-                          ? proxy.lastVotedAt.toDateString()
-                          : "Never"
-                      }
-                    />
+                    <span>
+                      Assigning proxy to top voters may threaten the
+                      decentralization of the network. Consider assigning proxy
+                      to voters below this line.
+                    </span>
                   </div>
-                </Card>
-              </Link>
+                ) : null}
+              </>
             ))}
           </div>
         </InfiniteScroll>

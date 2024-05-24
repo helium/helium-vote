@@ -17,6 +17,8 @@ import {
 import { Button } from "./ui/button";
 import { DropdownMenuLabel } from "@radix-ui/react-dropdown-menu";
 import { IconType } from "react-icons";
+import { HiDotsVertical } from "react-icons/hi";
+import { cn } from "@/lib/utils";
 
 const icons: { [key: string]: IconType } = {
   proposals: LuScrollText,
@@ -28,7 +30,6 @@ export const SubNav: React.FC = () => {
   const path = usePathname();
   const basePath = path.split("/").slice(0, 2).join("/");
   const currentPath = path.split("/")[2] || "proposals";
-  const Icon = icons[currentPath];
 
   return (
     <div>
@@ -36,7 +37,7 @@ export const SubNav: React.FC = () => {
         <ToggleGroup
           variant="subNav"
           type="single"
-          className="py-4"
+          className="py-2 pt-4"
           value={currentPath}
         >
           <ToggleGroupItem value="proposals" aria-label="Proposals">
@@ -68,22 +69,22 @@ export const SubNav: React.FC = () => {
       <div className="md:hidden p-2">
         <DropdownMenu>
           <DropdownMenuTrigger>
-            <Button variant="secondary" className="bg-black/30">
-              <Icon className="size-4" />
+            <Button element="div" variant="secondary" className="bg-black/30">
+              <HiDotsVertical className="size-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="min-w-56">
             <DropdownMenuGroup>
-              <DropdownMenuItem>
+              <DropdownMenuItem active={currentPath === "proposals"}>
                 <Link
-                  className="flex items-center gap-2 p-2"
+                  className={cn("flex items-center gap-2 p-2")}
                   href={`${basePath}`}
                 >
                   <LuScrollText className="size-4" />
                   Proposals
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem>
+              <DropdownMenuItem active={currentPath === "proxies"}>
                 <Link
                   className="flex items-center gap-2 p-2"
                   href={`${basePath}/proxies`}
@@ -92,7 +93,7 @@ export const SubNav: React.FC = () => {
                   Proxies
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem>
+              <DropdownMenuItem active={currentPath === "positions"}>
                 <Link
                   className="flex items-center gap-2 p-2"
                   href={`${basePath}/positions`}

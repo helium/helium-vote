@@ -4,6 +4,8 @@ import { PublicKey } from "@solana/web3.js";
 import { Button } from "./ui/button";
 import { Loader2 } from "lucide-react";
 import { useGovernance } from "@/providers/GovernanceProvider";
+import { RiUserSharedFill } from "react-icons/ri";
+import { cn } from "@/lib/utils";
 
 export const ProxyButton: React.FC<{
   className?: string;
@@ -16,27 +18,27 @@ export const ProxyButton: React.FC<{
   const unproxiedPositions = useMemo(
     () =>
       positions?.filter(
-        (p) => !p.proxy || p.proxy.nextOwner.equals(PublicKey.default)
+        (p) => !p.proxy || p.proxy.nextVoter.equals(PublicKey.default)
       ),
     [positions]
   );
 
-  const tooltipContent = !connected
-    ? "Connect your wallet to claim"
-    : !unproxiedPositions?.length
-    ? "You don't have any positions available to proxy."
-    : "";
-
   return (
     <Button
-      className={className}
+      variant="secondary"
+      className={cn(
+        "text-foreground flex flex-row gap-2 items-center p-6 w-full",
+        className
+      )}
       disabled={!connected || loading || !unproxiedPositions?.length}
       onClick={onClick}
     >
-      <div className="flex items-center">
-        {isLoading && <Loader2 className="size-5 animate-spin" />}
-        <span>Assign Voting Proxies</span>
-      </div>
+      {isLoading ? (
+        <Loader2 className="size-5 animate-spin" />
+      ) : (
+        <RiUserSharedFill className="size-4" />
+      )}
+      Assign Proxy
     </Button>
   );
 };

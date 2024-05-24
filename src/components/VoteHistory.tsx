@@ -1,4 +1,5 @@
 import { humanReadable } from "@/lib/utils";
+import Image from "next/image"
 import { useGovernance } from "@/providers/GovernanceProvider";
 import { useMint } from "@helium/helium-react-hooks";
 import { ProposalWithVotes } from "@helium/voter-stake-registry-sdk";
@@ -6,6 +7,9 @@ import { PublicKey } from "@solana/web3.js";
 import BN from "bn.js";
 import { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group";
+import { usePathname } from "next/navigation";
+import Link from "next/link";
 
 export default function VoteHistory({ wallet }: { wallet: PublicKey }) {
   const { voteService, mint } = useGovernance();
@@ -41,8 +45,67 @@ export default function VoteHistory({ wallet }: { wallet: PublicKey }) {
     }
   }, [voteService]);
 
+  const path = usePathname();
+  const currentPath = path.split("/")[0] || "hnt";
+  function getNetworkPath(network: string) {
+    const split = path.split("/")
+    split.shift();
+    return [network, ...split].join("/")
+  }
+
   return (
-    <div className="dark:bg-gray-800 overflow-auto">
+    <div className="overflow-auto">
+      <div className="flex flex-col py-2 md:items-center md:flex-row md:justify-between">
+        <h2 className="text-white text-xl font-medium">Proposals</h2>
+        <ToggleGroup
+          variant="subNav"
+          type="single"
+          value={currentPath}
+        >
+          <ToggleGroupItem value="hnt" aria-label="HNT">
+            <Link
+              className="flex items-center gap-2 p-2"
+              href={`${getNetworkPath("hnt")}`}
+            >
+              <Image
+                width={16}
+                height={16}
+                alt="hnt Icon"
+                src="/images/hntWhite.svg"
+              />
+              HNT
+            </Link>
+          </ToggleGroupItem>
+          <ToggleGroupItem value="mobile" aria-label="MOBILE">
+            <Link
+              className="flex items-center gap-2 p-2"
+              href={`${getNetworkPath("mobile")}`}
+            >
+              <Image
+                width={16}
+                height={16}
+                alt="moile Icon"
+                src="/images/mobileWhite.svg"
+              />
+              MOBILE
+            </Link>
+          </ToggleGroupItem>
+          <ToggleGroupItem value="mobile" aria-label="IOT">
+            <Link
+              className="flex items-center gap-2 p-2"
+              href={`${getNetworkPath("iot")}`}
+            >
+              <Image
+                width={16}
+                height={16}
+                alt="iot Icon"
+                src="/images/iotWhite.svg"
+              />
+              MOBILE
+            </Link>
+          </ToggleGroupItem>
+        </ToggleGroup>
+      </div>
       <InfiniteScroll
         dataLength={voteHistories.length}
         next={fetchMoreData}

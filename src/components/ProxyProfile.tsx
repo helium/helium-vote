@@ -15,7 +15,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa6";
-import ReactMarkdown from "react-markdown";
 import { AssignProxyModal } from "./AssignProxyModal";
 import { ContentSection } from "./ContentSection";
 import { ProxyButton } from "./ProxyButton";
@@ -23,6 +22,7 @@ import { RevokeProxyButton } from "./RevokeProxyButton";
 import { RevokeProxyModal } from "./RevokeProxyModal";
 import { Card, CardContent, CardHeader } from "./ui/card";
 import VoteHistory from "./VoteHistory";
+import { Markdown } from "./Markdown";
 
 export function ProxyProfile({
   proxy,
@@ -36,10 +36,6 @@ export function ProxyProfile({
   const { mint } = useGovernance();
   const { info: mintAcc } = useMint(mint);
   const decimals = mintAcc?.decimals;
-  const [revokeProxyModalVisible, setRevokeProxyModalVisible] = useState(false);
-  const handleSetRevokeProxy = () => {
-    setRevokeProxyModalVisible(true);
-  };
   const { assignProxies } = useAssignProxies();
   const { unassignProxies } = useUnassignProxies();
   const wallet = useMemo(() => new PublicKey(proxy.wallet), [proxy.wallet]);
@@ -55,9 +51,9 @@ export function ProxyProfile({
             className="flex flex-row items-center text-sm gap-2"
           >
             <FaArrowLeft />
-            Back to Proxies
+            Back to Proxy Voters
           </Link>
-          <div className="flex flex-row">
+          <div className="flex flex-col md:flex-row gap-4">
             <div className="grow flex flex-row items-center gap-2">
               <Image
                 className="w-24 h-24 rounded-full"
@@ -73,7 +69,7 @@ export function ProxyProfile({
               </div>
             </div>
             <div className="flex flex-row gap-8">
-              <div className="border-l border-gray-700 h-12" />
+              <div className="hidden md:block border-l border-gray-700 h-12" />
               <div className="flex flex-col gap-2">
                 <span className="text-gray-400 text-xs">Current Rank</span>
                 <span>
@@ -86,6 +82,13 @@ export function ProxyProfile({
               </div>
             </div>
           </div>
+
+          <AssignProxyModal onSubmit={assignProxies} wallet={wallet}>
+            <ProxyButton onClick={() => {}} isLoading={false} />
+          </AssignProxyModal>
+          <RevokeProxyModal onSubmit={unassignProxies} wallet={wallet}>
+            <RevokeProxyButton onClick={() => {}} isLoading={false} />
+          </RevokeProxyModal>
         </CardHeader>
 
         <CardContent>
@@ -95,27 +98,7 @@ export function ProxyProfile({
               {humanReadable(votingPower, decimals)}
             </div>
           )}
-          <RevokeProxyButton
-            wallet={wallet}
-            onClick={handleSetRevokeProxy}
-            isLoading={false}
-          />
 
-          <AssignProxyModal onSubmit={assignProxies} wallet={wallet}>
-            <ProxyButton
-              className="ml-4 mt-4"
-              onClick={() => {}}
-              isLoading={false}
-            />
-          </AssignProxyModal>
-          {revokeProxyModalVisible && (
-            <RevokeProxyModal
-              isOpen={revokeProxyModalVisible}
-              onClose={() => setRevokeProxyModalVisible(false)}
-              onSubmit={unassignProxies}
-              wallet={wallet}
-            />
-          )}
           <div className="text-lg mb-6">
             <div className="flex items-center">
               <span className="font-bold mr-2">Wallet:</span>
@@ -138,9 +121,7 @@ export function ProxyProfile({
               <span>{Number(proxy.percent).toFixed(2)}</span>
             </div>
           </div>
-          <div className="prose prose-dark whitespace-pre-wrap leading-snug">
-            <ReactMarkdown>{detail}</ReactMarkdown>
-          </div>
+          <Markdown>{detail}</Markdown>
           <VoteHistory wallet={wallet} />
         </CardContent>
       </Card>

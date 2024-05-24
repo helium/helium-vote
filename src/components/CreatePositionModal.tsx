@@ -1,18 +1,20 @@
 "use client";
 
-import { daysToSecs, getMinDurationFmt, onInstructions } from "@/lib/utils";
+import { daysToSecs, onInstructions } from "@/lib/utils";
 import { useGovernance } from "@/providers/GovernanceProvider";
-import { useAnchorProvider, useOwnedAmount } from "@helium/helium-react-hooks";
+import { useAnchorProvider, useMint, useOwnedAmount } from "@helium/helium-react-hooks";
 import { HNT_MINT, toBN, toNumber } from "@helium/spl-utils";
 import {
+  Position,
+  PositionWithMeta,
   calcLockupMultiplier,
-  useCreatePosition,
+  useCreatePosition
 } from "@helium/voter-stake-registry-hooks";
+import { WalletSignTransactionError } from "@solana/wallet-adapter-base";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { PublicKey } from "@solana/web3.js";
 import BN from "bn.js";
 import { Loader2 } from "lucide-react";
-import Image from "next/image";
 import React, { FC, useCallback, useMemo, useState } from "react";
 import { toast } from "sonner";
 import {
@@ -24,7 +26,7 @@ import { StepIndicator } from "./StepIndicator";
 import { SubDaoSelection } from "./SubDaoSelection";
 import { Button } from "./ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
-import { WalletSignTransactionError } from "@solana/wallet-adapter-base";
+import { PositionPreview } from "./PositionPreview";
 
 export const CreatePositionModal: FC<React.PropsWithChildren<{}>> = ({
   children,
@@ -74,6 +76,24 @@ export const CreatePositionModal: FC<React.PropsWithChildren<{}>> = ({
   const handleGoBack = () => {
     setStep(step - 1);
   };
+  const { info: mintAcc } = useMint(mint);
+
+  const draftPosition: Partial<PositionWithMeta> | undefined = useMemo(
+    () => formValues && ({
+      lockup: {
+        startTs: new BN(new Date().getTime() / 1000),
+        endTs: new BN(
+          new Date().setDate(
+            new Date().getDate() + formValues.lockupPeriodInDays
+          ) / 1000
+        ),
+        kind: formValues!.lockupKind == LockupKind.cliff ? { cliff: {} } as any : { decay: {} } as any,
+      },
+      amountDepositedNative: toBN(formValues!.amount, mintAcc?.decimals || 6),
+      delegatedSubDao: selectedSubDaoPk,
+    }),
+    [formValues, mintAcc, selectedSubDaoPk]
+  );
 
   const handleOpenChange = () => {
     setIsSubmitting(false);
@@ -222,51 +242,7 @@ export const CreatePositionModal: FC<React.PropsWithChildren<{}>> = ({
         )}
         {step === steps && (
           <>
-            <div className="flex flex-row gap-2 px-6 py-4 justiy-center items-center rounded-md bg-gradient-to-b from-background to-background/30">
-              <div className="size-10 rounded-full relative mr-4 max-md:mr-1">
-                <Image
-                  alt={`${network} icon`}
-                  src={`/images/${network}.svg`}
-                  fill
-                />
-              </div>
-              <div className="flex flex-col flex-1 text-xs">
-                <div className="flex flex-row flex-wrap gap-1 font-light">
-                  <span className="font-medium">
-                    {formValues!.amount} {network.toUpperCase()}
-                  </span>
-                  <span className="text-foreground/80">for</span>
-                  <span className="font-medium">
-                    {getMinDurationFmt(
-                      new BN(Date.now() / 1000),
-                      new BN(
-                        new Date().setDate(
-                          new Date().getDate() + formValues!.lockupPeriodInDays
-                        ) / 1000
-                      )
-                    )}
-                  </span>
-                  <span className="text-foreground/80">
-                    {formValues!.lockupKind === LockupKind.cliff
-                      ? "decaying starting today"
-                      : "decaying delayed"}
-                  </span>
-                </div>
-                {selectedSubDao && (
-                  <div className="flex flex-row gap-1 font-normal items-center">
-                    <span className="text-foreground/80">and delegated to</span>
-                    <div className="size-6 rounded-full relative">
-                      <Image
-                        alt={selectedSubDao.dntMetadata.json?.name}
-                        src={selectedSubDao.dntMetadata.json?.image}
-                        fill
-                      />
-                    </div>
-                    <span>{selectedSubDao.dntMetadata.symbol}</span>
-                  </div>
-                )}
-              </div>
-            </div>
+            { draftPosition && <PositionPreview position={draftPosition} /> }
             <div className="flex flex-col flex-grow justify-end">
               <div className="flex flex-row gap-2">
                 <Button

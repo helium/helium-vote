@@ -18,7 +18,7 @@ export default async function ProxyPage({
 
   return (
     <>
-      <Header hideHero={true} route="/$network/positions" />
+      <Header hideNav hideHero route="/$network/positions" />
       <ProxyProfile proxy={proxy} detail={detail!} image={image!} />
     </>
   );

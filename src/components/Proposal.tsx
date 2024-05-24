@@ -28,7 +28,6 @@ import {
   FaGithub,
   FaXTwitter,
 } from "react-icons/fa6";
-import Markdown from "react-markdown";
 import { toast } from "sonner";
 import { ContentSection } from "./ContentSection";
 import { CountdownTimer } from "./CountdownTimer";
@@ -40,6 +39,7 @@ import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import { Card, CardContent, CardHeader } from "./ui/card";
 import { Skeleton } from "./ui/skeleton";
+import { Markdown } from "./Markdown";
 
 const MARKDOWN_MAX = 540;
 
@@ -195,8 +195,6 @@ export const Proposal: FC<{
   proposalKey: string;
 }> = ({ name: initName, content, proposalKey }) => {
   const { connected, connecting } = useWallet();
-  const markdownRef = useRef<HTMLDivElement>(null);
-  const [markdownExpanded, setMarkdownExpanded] = useState(false);
   const {
     loading: loadingGov,
     amountLocked,
@@ -233,12 +231,6 @@ export const Proposal: FC<{
 
     return { results, totalVotes };
   }, [proposal]);
-
-  const markdownHeight = useMemo(
-    () => markdownRef.current?.clientHeight || 0,
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [markdownRef.current]
-  );
 
   const derivedState = useMemo(
     () => getDerivedProposalState(proposal as ProposalV0),
@@ -287,22 +279,6 @@ export const Proposal: FC<{
       return url;
     }
   }, [proposalKey, endTs, network, completed, name]);
-
-  const rewriteLinks = () => {
-    const visit = require("unist-util-visit");
-
-    return function transformer(tree: any) {
-      visit.visit(tree, "link", (node: any) => {
-        node.data = {
-          ...node.data,
-          hProperties: {
-            ...(node.data || {}).hProperties,
-            target: "_blank",
-          },
-        };
-      });
-    };
-  };
 
   if (isLoading) return <ProposalSkeleton />;
   return (
@@ -413,41 +389,9 @@ export const Proposal: FC<{
                     isCancelled={isCancelled}
                   />
                 </div>
-                <div
-                  className="w-full flex flex-col mt-5 pb-5"
-                  ref={markdownRef}
-                >
-                  <div
-                    style={{
-                      maxHeight:
-                        markdownExpanded || !completed
-                          ? undefined
-                          : MARKDOWN_MAX + "px",
-                      overflow: "hidden",
-                    }}
-                  >
-                    <Markdown
-                      remarkPlugins={[rewriteLinks]}
-                      className="prose prose-headings:m-0 prose-headings:font-normal prose-hr:my-8 prose-p:text-foreground clear-both dark:prose-invert"
-                    >
-                      {content.replace(name, "")}
-                    </Markdown>
-                  </div>
-
-                  {completed &&
-                    markdownHeight > MARKDOWN_MAX &&
-                    !markdownExpanded && (
-                      <div className="w-full flex flex-row justify-center items-center bg-card py-2">
-                        <Button
-                          variant="secondary"
-                          onClick={() => setMarkdownExpanded(true)}
-                          className="gap-2 w-full md:w-auto"
-                        >
-                          Show More <FaChevronDown />
-                        </Button>
-                      </div>
-                    )}
-                </div>
+                <Markdown initialExpanded={completed}>
+                  {content.replace(name, "")}
+                </Markdown>
               </div>
               <div className="flex flex-col gap-4 w-4/12 lg:w-3/12 max-md:hidden">
                 <ProposalHipBlurb network={network} />

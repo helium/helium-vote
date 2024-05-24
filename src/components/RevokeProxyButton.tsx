@@ -4,6 +4,8 @@ import { PublicKey } from "@solana/web3.js";
 import { Loader2 } from "lucide-react";
 import React, { useMemo } from "react";
 import { Button } from "./ui/button";
+import { RiUserReceivedFill } from "react-icons/ri";
+import { cn } from "@/lib/utils";
 
 export const RevokeProxyButton: React.FC<{
   className?: string;
@@ -19,31 +21,33 @@ export const RevokeProxyButton: React.FC<{
       positions?.filter(
         (p) =>
           p.proxy &&
-          !p.proxy.nextOwner.equals(PublicKey.default) &&
-          (!wallet || p.proxy.nextOwner.equals(wallet))
+          !p.proxy.nextVoter.equals(PublicKey.default) &&
+          (!wallet || p.proxy.nextVoter.equals(wallet))
       ),
     [positions]
   );
-
-  const tooltipContent = !connected
-    ? "Connect your wallet to claim"
-    : !proxiedPositions?.length
-    ? "You don't have any positions available to revoke proxy."
-    : "";
 
   const disabled = !connected || loading || !proxiedPositions?.length;
 
   return (
     <Button
       variant="secondary"
-      className={className + ` ${disabled ? "hidden" : ""}`}
+      className={cn(
+        "text-foreground flex flex-row gap-2 items-center p-6 w-full",
+        className,
+        {
+          hidden: disabled,
+        }
+      )}
       disabled={disabled}
       onClick={onClick}
     >
-      <div className="flex items-center">
-        {isLoading && <Loader2 className="size-5 animate-spin" />}
-        <span>Revoke Voting Proxies</span>
-      </div>
+      {isLoading ? (
+        <Loader2 className="size-5 animate-spin" />
+      ) : (
+        <RiUserReceivedFill className="size-4" />
+      )}
+      Revoke Proxies
     </Button>
   );
 };

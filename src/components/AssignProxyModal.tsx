@@ -1,16 +1,16 @@
-import { useMint } from "@helium/helium-react-hooks";
+import { useGovernance } from "@/providers/GovernanceProvider";
 import { PositionWithMeta } from "@helium/voter-stake-registry-hooks";
 import { PublicKey } from "@solana/web3.js";
 import BN from "bn.js";
-import React, { useEffect, useMemo, useState } from "react";
-import { getMinDurationFmt, getTimeLeftFromNowFmt } from "@/lib/dateTools";
-import { toast } from "sonner";
-import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
 import { Loader2 } from "lucide-react";
-import { useMetaplexMetadata } from "@/hooks/useMetaplexMetadata";
-import { humanReadable } from "@/lib/utils";
+import React, { useEffect, useMemo, useState } from "react";
+import { toast } from "sonner";
+import { NetworkSelect } from "./NetworkSelect";
+import { PositionPreview } from "./PositionPreview";
+import { ProxySearch } from "./ProxySearch";
 import { Button } from "./ui/button";
-import { useGovernance } from "@/providers/GovernanceProvider";
+import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
+import { Slider } from "./ui/slider";
 
 interface AssignProxyModalProps {
   onSubmit: (args: {
@@ -25,8 +25,10 @@ export const AssignProxyModal: React.FC<
   React.PropsWithChildren<AssignProxyModalProps>
 > = ({ onSubmit, wallet, children }) => {
   const [open, setOpen] = useState(false);
+  const { network: networkDefault } = useGovernance();
+  const [network, setNetwork] = useState(networkDefault);
 
-  const { loading, positions, mint } = useGovernance();
+  const { loading, positions } = useGovernance();
   const [selectedPositions, setSelectedPositions] = useState<Set<string>>(
     new Set<string>()
   );
@@ -34,7 +36,7 @@ export const AssignProxyModal: React.FC<
   const unproxiedPositions = useMemo(
     () =>
       positions?.filter(
-        (p) => !p.proxy || p.proxy.nextOwner.equals(PublicKey.default)
+        (p) => !p.proxy || p.proxy.nextVoter.equals(PublicKey.default)
       ) || [],
     [positions]
   );
@@ -103,13 +105,31 @@ export const AssignProxyModal: React.FC<
     setOpen(!open);
   };
 
+  const selectedAll = unproxiedPositions.length === selectedPositions.size;
+
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="pt-10 px-8 overflow-y-auto overflow-x-hidden max-md:min-w-full max-md:min-h-full max-h-screen">
-        <h2 className="text-xl mb-4 flex flex-row items-center">
-          Assign Voting Proxy
-        </h2>
+        <div className="mb-1">
+          <h2 className="text-2xl font-semibold leading-loose flex flex-row items-center">
+            Assign Proxy
+          </h2>
+          <div className="text-white text-base font-normal">
+            Enter the amount of voting power and cycle period you’d like to
+            assign the selected voter
+          </div>
+        </div>
+
+        <NetworkSelect
+          network={network}
+          onNetworkChange={(network) =>
+            setNetwork(network as "hnt" | "mobile" | "iot")
+          }
+        />
+
+        <ProxySearch value={recipient} onValueChange={setRecipient} />
+
         {loading ? (
           <>
             <div className="bg-hv-gray-500 rounded-md w-full p-4 mb-4 font-normal text-s">
@@ -120,39 +140,29 @@ export const AssignProxyModal: React.FC<
             </div>
           </>
         ) : (
-          <div className="p-2">
-            <div className="bg-hv-gray-500 rounded-md w-full p-4 mb-4 font-normal text-s">
-              <div>
-                Once you assign this wallet as your proxy, it will be able to
-                use your positions to vote on HIPs. You can override these votes
-                or revoke the proxy at any point. The proxy will expire at the
-                set expiration date.
+          <div>
+            <div className="w-full flex flex-col">
+              <div className="flex flex-row justify-between items-center">
+                <div>Assign Positions</div>
+                <Button
+                  onClick={() => {
+                    if (selectedAll) {
+                      setSelectedPositions(new Set([]));
+                    } else {
+                      setSelectedPositions(
+                        new Set(
+                          unproxiedPositions.map((p) => p.pubkey.toBase58())
+                        )
+                      );
+                    }
+                  }}
+                  variant="link"
+                  className="text-white text-base font-normal"
+                  style={{ paddingRight: "0px" }}
+                >
+                  {selectedAll ? "Deselect All" : "Select All"}
+                </Button>
               </div>
-              <br />
-              <div>
-                Proxy assignments are reset <b>August 1st</b> yearly.
-              </div>
-            </div>
-            <div>
-              <h2 className="text-lg mt-4 mb-2">Expiration Time</h2>
-              <input
-                type="range"
-                min="1"
-                step="1"
-                className="transparent h-1.5 w-full cursor-pointer appearance-none rounded-lg border-transparent bg-neutral-200"
-                max={maxDays}
-                value={selectedDays}
-                onChange={(e) => {
-                  setSelectedDays(parseInt(e.target.value));
-                }}
-              />
-              <div className="text-sm text-right">
-                {selectedDays} days (
-                {new Date(expirationTime * 1000).toLocaleString()})
-              </div>
-            </div>
-            <div className="w-full flex flex-col gap-2 pt-4">
-              <h2 className="text-lg mb-2">Positions to Assign</h2>
 
               {unproxiedPositions?.map((position) => {
                 return (
@@ -162,7 +172,6 @@ export const AssignProxyModal: React.FC<
                       position.pubkey.toBase58()
                     )}
                     position={position}
-                    mint={mint!}
                     onClick={() => {
                       setSelectedPositions((sel) => {
                         const key = position.pubkey.toBase58();
@@ -180,6 +189,25 @@ export const AssignProxyModal: React.FC<
                 );
               })}
             </div>
+            <div>
+              <h2 className="text-lg mt-4 mb-2">Expiration Time</h2>
+              <Slider
+                min={1}
+                step={1}
+                max={maxDays}
+                value={[selectedDays]}
+                onValueChange={(e) => {
+                  setSelectedDays(e[0]);
+                }}
+              />
+              <div className="mt-2 text-right text-gray-500 text-xs font-medium leading-none">
+                {new Date(expirationTime * 1000).toLocaleString()}
+              </div>
+            </div>
+            <div className="mt-2 text-slate-400 text-xs font-normal leading-none">
+              Your assigned proxy will expire by Aug 1 of each year by default,
+              however you may select any date prior to this epoch date.
+            </div>
             {!wallet && (
               <div className="w-full flex flex-col gap-2 pt-4">
                 <h2 className="text-lg mb-2">Wallet to Assign</h2>
@@ -194,17 +222,21 @@ export const AssignProxyModal: React.FC<
             )}
           </div>
         )}
-        <div className="flex flex-col pt-4">
+        <div className="justify-stretch flex flex-row pt-2 gap-2.5">
           <Button
-            className="mb-4"
+            className="flex-1"
+            variant="secondary"
+            onClick={() => setOpen(false)}
+          >
+            Go Back
+          </Button>
+          <Button
+            className="flex-1 text-white"
             onClick={handleOnSubmit}
             disabled={isSubmitting || !selectedPositions.size}
           >
             {isSubmitting && <Loader2 className="size-5 animate-spin" />}
-            Proxy your Votes
-          </Button>
-          <Button variant="secondary" onClick={() => setOpen(false)}>
-            Cancel
+            {!isSubmitting && "Confirm"}
           </Button>
         </div>
       </DialogContent>
@@ -216,35 +248,20 @@ export const PositionItem = ({
   position,
   isSelected,
   onClick,
-  mint,
 }: {
   position: PositionWithMeta;
   isSelected: boolean;
-  mint: PublicKey;
   onClick: () => void;
 }) => {
-  const { info: mintAcc } = useMint(mint);
-  const { symbol } = useMetaplexMetadata(mint);
-  const { lockup } = position;
-  const lockupKind = Object.keys(lockup.kind)[0] as string;
-  const isConstant = lockupKind === "constant";
-  const lockedTokens =
-    mintAcc && humanReadable(position.amountDepositedNative, mintAcc.decimals);
-  const lockupTime = isConstant
-    ? getMinDurationFmt(position.lockup.startTs, position.lockup.endTs)
-    : getTimeLeftFromNowFmt(position.lockup.endTs);
-  const lockupLabel = isConstant ? "duration" : "time left";
-  const fullLabel = `${lockedTokens} ${symbol} locked with ${lockupTime} ${lockupLabel}`;
-
   return (
     <div
-      className={`border rounded-md flex flex-row items-center gap-3 w-full p-4 hover:border-fgd-3 hover:bg-hv-gray-500 hover:cursor-pointer ${
-        isSelected ? "border border-hv-blue-700" : "border-hv-gray-200"
+      className={`rounded-xl border-4 gap-3 w-full p-0 hover:border-fgd-3 hover:bg-hv-gray-500 hover:cursor-pointer ${
+        isSelected ? "border-ring" : "border-none"
       }`}
       onClick={onClick}
       key={position.pubkey.toBase58()}
     >
-      {fullLabel}
+      <PositionPreview position={position} />
     </div>
   );
 };

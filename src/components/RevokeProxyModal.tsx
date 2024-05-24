@@ -1,39 +1,36 @@
 import { useGovernance } from "@/providers/GovernanceProvider";
 import { PositionWithMeta } from "@helium/voter-stake-registry-hooks";
-import { DialogContent } from "@radix-ui/react-dialog";
 import { PublicKey } from "@solana/web3.js";
 import { Loader2 } from "lucide-react";
 import React, { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { PositionItem } from "./AssignProxyModal";
 import { Button } from "./ui/button";
-import { Dialog } from "./ui/dialog";
+import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
 
 interface RevokeProxyModalProps {
-  isOpen: boolean;
-  onClose: () => void;
   onSubmit: (args: { positions: PositionWithMeta[] }) => Promise<void>;
   wallet?: PublicKey;
 }
 
-export const RevokeProxyModal: React.FC<RevokeProxyModalProps> = ({
-  isOpen,
-  onClose,
-  onSubmit,
-  wallet,
-}) => {
-  const { loading, positions, mint } = useGovernance();
+export const RevokeProxyModal: React.FC<
+  React.PropsWithChildren<RevokeProxyModalProps>
+> = ({ onSubmit, wallet, children }) => {
+  const [open, setOpen] = useState(false);
+
+  const { loading, positions } = useGovernance();
   const [selectedPositions, setSelectedPositions] = useState<Set<string>>(
     new Set<string>()
   );
+  console.log(positions)
   const [isSubmitting, setIsSubmitting] = useState(false);
   const proxiedPositions = useMemo(
     () =>
       positions?.filter(
         (p) =>
           p.proxy &&
-          !p.proxy.nextOwner.equals(PublicKey.default) &&
-          (!wallet || p.proxy.nextOwner.equals(wallet))
+          !p.proxy.nextVoter.equals(PublicKey.default) &&
+          (!wallet || p.proxy.nextVoter.equals(wallet))
       ),
     [positions, wallet]
   );
@@ -53,18 +50,25 @@ export const RevokeProxyModal: React.FC<RevokeProxyModalProps> = ({
         });
       }
 
-      onClose();
+      setOpen(false);
     } catch (e: any) {
       setIsSubmitting(false);
       toast(e.message || "Unable to Revoke proxy");
     }
   };
 
+  const handleOpenChange = () => {
+    setIsSubmitting(false);
+    setOpen(!open);
+  };
+
   return (
-    <Dialog onOpenChange={onClose} open={isOpen}>
-      <DialogContent>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
+      <DialogTrigger asChild>{children}</DialogTrigger>
+
+      <DialogContent className="pt-10 px-8 overflow-y-auto overflow-x-hidden max-md:min-w-full max-md:min-h-full max-h-screen">
         <h2 className="text-xl mb-4 flex flex-row items-center">
-          Revoke Voting Proxy
+          Revoke Proxies
         </h2>
         {loading ? (
           <>
@@ -77,9 +81,7 @@ export const RevokeProxyModal: React.FC<RevokeProxyModalProps> = ({
           </>
         ) : (
           <div className="p-2">
-            <div className="w-full flex flex-col gap-2 pt-4">
-              <h2 className="text-lg mb-2">Positions to Revoke</h2>
-
+            <div className="w-full flex flex-col gap-2">
               {proxiedPositions?.map((position) => {
                 return (
                   <PositionItem
@@ -88,7 +90,6 @@ export const RevokeProxyModal: React.FC<RevokeProxyModalProps> = ({
                       position.pubkey.toBase58()
                     )}
                     position={position}
-                    mint={mint!}
                     onClick={() => {
                       setSelectedPositions((sel) => {
                         const key = position.pubkey.toBase58();
@@ -108,17 +109,21 @@ export const RevokeProxyModal: React.FC<RevokeProxyModalProps> = ({
             </div>
           </div>
         )}
-        <div className="flex flex-col pt-4">
+        <div className="justify-stretch flex flex-row pt-2 gap-2.5">
           <Button
-            className="mb-4"
+            className="flex-1"
+            variant="secondary"
+            onClick={() => setOpen(false)}
+          >
+            Go Back
+          </Button>
+          <Button
+            className="flex-1 text-white"
             onClick={handleOnSubmit}
-            disabled={isSubmitting}
+            disabled={isSubmitting || !selectedPositions.size}
           >
             {isSubmitting && <Loader2 className="size-5 animate-spin" />}
-            Revoke Proxy
-          </Button>
-          <Button variant="secondary" onClick={onClose}>
-            Cancel
+            {!isSubmitting && "Confirm"}
           </Button>
         </div>
       </DialogContent>
