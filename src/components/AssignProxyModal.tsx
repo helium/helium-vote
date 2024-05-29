@@ -111,133 +111,136 @@ export const AssignProxyModal: React.FC<
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="pt-10 px-8 overflow-y-auto overflow-x-hidden max-md:min-w-full max-md:min-h-full max-h-screen">
-        <div className="mb-1">
-          <h2 className="text-2xl font-semibold leading-loose flex flex-row items-center">
-            Assign Proxy
-          </h2>
-          <div className="text-white text-base font-normal">
-            Enter the amount of voting power and cycle period you’d like to
-            assign the selected voter
+        <div className="flex flex-col gap-2">
+          <div className="mb-1">
+            <h2 className="text-2xl font-semibold leading-loose flex flex-row items-center">
+              Assign Proxy
+            </h2>
+            <div className="text-white text-base font-normal">
+              Enter the amount of voting power and cycle period you’d like to
+              assign the selected voter
+            </div>
           </div>
-        </div>
 
-        <NetworkSelect
-          network={network}
-          onNetworkChange={(network) =>
-            setNetwork(network as "hnt" | "mobile" | "iot")
-          }
-        />
+          <NetworkSelect
+            network={network}
+            onNetworkChange={(network) =>
+              setNetwork(network as "hnt" | "mobile" | "iot")
+            }
+          />
 
-        <ProxySearch value={recipient} onValueChange={setRecipient} />
+          <ProxySearch value={recipient} onValueChange={setRecipient} />
 
-        {loading ? (
-          <>
-            <div className="bg-hv-gray-500 rounded-md w-full p-4 mb-4 font-normal text-s">
-              <div>Fetching Positions available to Proxy</div>
-            </div>
-            <div className="p-4">
-              <Loader2 className="size-5 animate-spin" />
-            </div>
-          </>
-        ) : (
-          <div>
-            <div className="w-full flex flex-col">
-              <div className="flex flex-row justify-between items-center">
-                <div>Assign Positions</div>
-                <Button
-                  onClick={() => {
-                    if (selectedAll) {
-                      setSelectedPositions(new Set([]));
-                    } else {
-                      setSelectedPositions(
-                        new Set(
-                          unproxiedPositions.map((p) => p.pubkey.toBase58())
-                        )
-                      );
-                    }
-                  }}
-                  variant="link"
-                  className="text-white text-base font-normal"
-                  style={{ paddingRight: "0px" }}
-                >
-                  {selectedAll ? "Deselect All" : "Select All"}
-                </Button>
+          {loading ? (
+            <>
+              <div className="bg-hv-gray-500 rounded-md w-full p-4 mb-4 font-normal text-s">
+                <div>Fetching Positions available to Proxy</div>
               </div>
-
-              {unproxiedPositions?.map((position) => {
-                return (
-                  <PositionItem
-                    key={position.pubkey.toBase58()}
-                    isSelected={selectedPositions?.has(
-                      position.pubkey.toBase58()
-                    )}
-                    position={position}
-                    onClick={() => {
-                      setSelectedPositions((sel) => {
-                        const key = position.pubkey.toBase58();
-                        const newS = new Set(sel);
-                        if (sel.has(key)) {
-                          newS.delete(key);
-                          return newS;
-                        } else {
-                          newS.add(key);
-                          return newS;
-                        }
-                      });
-                    }}
-                  />
-                );
-              })}
-            </div>
+              <div className="p-4">
+                <Loader2 className="size-5 animate-spin" />
+              </div>
+            </>
+          ) : (
             <div>
-              <h2 className="text-lg mt-4 mb-2">Expiration Time</h2>
-              <Slider
-                min={1}
-                step={1}
-                max={maxDays}
-                value={[selectedDays]}
-                onValueChange={(e) => {
-                  setSelectedDays(e[0]);
-                }}
-              />
-              <div className="mt-2 text-right text-gray-500 text-xs font-medium leading-none">
-                {new Date(expirationTime * 1000).toLocaleString()}
+              <div className="w-full flex flex-col">
+                <div className="flex flex-row justify-between items-center">
+                  <div>Assign Positions</div>
+                  <Button
+                    onClick={() => {
+                      if (selectedAll) {
+                        setSelectedPositions(new Set([]));
+                      } else {
+                        setSelectedPositions(
+                          new Set(
+                            unproxiedPositions.map((p) => p.pubkey.toBase58())
+                          )
+                        );
+                      }
+                    }}
+                    variant="link"
+                    className="text-white text-base font-normal"
+                    style={{ paddingRight: "0px" }}
+                  >
+                    {selectedAll ? "Deselect All" : "Select All"}
+                  </Button>
+                </div>
+
+                {unproxiedPositions?.map((position) => {
+                  return (
+                    <PositionItem
+                      key={position.pubkey.toBase58()}
+                      isSelected={selectedPositions?.has(
+                        position.pubkey.toBase58()
+                      )}
+                      position={position}
+                      onClick={() => {
+                        setSelectedPositions((sel) => {
+                          const key = position.pubkey.toBase58();
+                          const newS = new Set(sel);
+                          if (sel.has(key)) {
+                            newS.delete(key);
+                            return newS;
+                          } else {
+                            newS.add(key);
+                            return newS;
+                          }
+                        });
+                      }}
+                    />
+                  );
+                })}
               </div>
-            </div>
-            <div className="mt-2 text-slate-400 text-xs font-normal leading-none">
-              Your assigned proxy will expire by Aug 1 of each year by default,
-              however you may select any date prior to this epoch date.
-            </div>
-            {!wallet && (
-              <div className="w-full flex flex-col gap-2 pt-4">
-                <h2 className="text-lg mb-2">Wallet to Assign</h2>
-                <input
-                  value={recipient}
-                  onChange={changeRecipient}
-                  className="text-black border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:border-blue-300"
-                  type="text"
-                  placeholder="Wallet Address"
+              <div>
+                <h2 className="text-lg mt-4 mb-2">Expiration Time</h2>
+                <Slider
+                  min={1}
+                  step={1}
+                  max={maxDays}
+                  value={[selectedDays]}
+                  onValueChange={(e) => {
+                    setSelectedDays(e[0]);
+                  }}
                 />
+                <div className="mt-2 text-right text-gray-500 text-xs font-medium leading-none">
+                  {new Date(expirationTime * 1000).toLocaleString()}
+                </div>
               </div>
-            )}
+              <div className="mt-2 text-slate-400 text-xs font-normal leading-none">
+                Your assigned proxy will expire by Aug 1 of each year by
+                default, however you may select any date prior to this epoch
+                date.
+              </div>
+              {!wallet && (
+                <div className="w-full flex flex-col gap-2 pt-4">
+                  <h2 className="text-lg mb-2">Wallet to Assign</h2>
+                  <input
+                    value={recipient}
+                    onChange={changeRecipient}
+                    className="text-black border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:border-blue-300"
+                    type="text"
+                    placeholder="Wallet Address"
+                  />
+                </div>
+              )}
+            </div>
+          )}
+          <div className="justify-stretch flex flex-row pt-2 gap-2.5">
+            <Button
+              className="flex-1"
+              variant="secondary"
+              onClick={() => setOpen(false)}
+            >
+              Go Back
+            </Button>
+            <Button
+              className="flex-1 text-white"
+              onClick={handleOnSubmit}
+              disabled={isSubmitting || !selectedPositions.size}
+            >
+              {isSubmitting && <Loader2 className="size-5 animate-spin" />}
+              {!isSubmitting && "Confirm"}
+            </Button>
           </div>
-        )}
-        <div className="justify-stretch flex flex-row pt-2 gap-2.5">
-          <Button
-            className="flex-1"
-            variant="secondary"
-            onClick={() => setOpen(false)}
-          >
-            Go Back
-          </Button>
-          <Button
-            className="flex-1 text-white"
-            onClick={handleOnSubmit}
-            disabled={isSubmitting || !selectedPositions.size}
-          >
-            {isSubmitting && <Loader2 className="size-5 animate-spin" />}
-            {!isSubmitting && "Confirm"}
-          </Button>
         </div>
       </DialogContent>
     </Dialog>

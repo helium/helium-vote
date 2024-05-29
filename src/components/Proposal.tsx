@@ -1,15 +1,8 @@
 "use client";
 
-import { ProposalV0 } from "@/lib/types";
-import { getDerivedProposalState, humanReadable } from "@/lib/utils";
+import { useProposalInfo } from "@/hooks/useProposalInfo";
+import { humanReadable } from "@/lib/utils";
 import { useGovernance } from "@/providers/GovernanceProvider";
-import { useMint } from "@helium/helium-react-hooks";
-import {
-  useProposal,
-  useProposalConfig,
-  useResolutionSettings,
-} from "@helium/modular-governance-hooks";
-import { useRegistrar, useVote } from "@helium/voter-stake-registry-hooks";
 import { Separator } from "@radix-ui/react-separator";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { PublicKey } from "@solana/web3.js";
@@ -18,19 +11,19 @@ import classNames from "classnames";
 import { format } from "date-fns";
 import Image from "next/image";
 import Link from "next/link";
-import React, { FC, useMemo, useRef, useState } from "react";
+import { FC, useMemo } from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import {
   FaArrowLeft,
-  FaChevronDown,
   FaCopy,
   FaDiscord,
   FaGithub,
-  FaXTwitter,
+  FaXTwitter
 } from "react-icons/fa6";
 import { toast } from "sonner";
 import { ContentSection } from "./ContentSection";
 import { CountdownTimer } from "./CountdownTimer";
+import { Markdown } from "./Markdown";
 import { VoteBreakdown } from "./VoteBreakdown";
 import { VoteOptions } from "./VoteOptions";
 import { VoteResults } from "./VoteResults";
@@ -39,7 +32,6 @@ import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import { Card, CardContent, CardHeader } from "./ui/card";
 import { Skeleton } from "./ui/skeleton";
-import { Markdown } from "./Markdown";
 
 const MARKDOWN_MAX = 540;
 
@@ -201,65 +193,20 @@ export const Proposal: FC<{
     amountProxyLocked,
     network,
   } = useGovernance();
-  const totalLocked = amountLocked?.add(amountProxyLocked || new BN(0));
   const pKey = useMemo(() => new PublicKey(proposalKey), [proposalKey]);
-  const { loading: loadingProposal, info: proposal } = useProposal(pKey);
-  const { loading: loadingVote, voteWeights } = useVote(pKey);
+  const {
+    voted,
+    completed,
+    isCancelled,
+    noVotingPower,
+    timeExpired,
+    isLoading,
+    votingResults,
+    proposal,
+    decimals,
+    endTs,
+  } = useProposalInfo(pKey);
   const name = proposal?.name || initName;
-  const { info: proposalConfig } = useProposalConfig(proposal?.proposalConfig);
-  const { info: registrar } = useRegistrar(proposalConfig?.voteController);
-  const decimals = useMint(registrar?.votingMints[0].mint)?.info?.decimals;
-  const { info: resolution } = useResolutionSettings(
-    proposalConfig?.stateController
-  );
-
-  const votingResults = useMemo(() => {
-    const totalVotes: BN = [...(proposal?.choices || [])].reduce(
-      (acc, { weight }) => weight.add(acc) as BN,
-      new BN(0)
-    );
-
-    const results = proposal?.choices.map((r, index) => ({
-      ...r,
-      index,
-      percent: totalVotes?.isZero()
-        ? 100 / proposal?.choices.length
-        : // Calculate with 4 decimals of precision
-          r.weight.mul(new BN(10000)).div(totalVotes).toNumber() *
-          (100 / 10000),
-    }));
-
-    return { results, totalVotes };
-  }, [proposal]);
-
-  const derivedState = useMemo(
-    () => getDerivedProposalState(proposal as ProposalV0),
-    [proposal]
-  );
-
-  const endTs =
-    resolution &&
-    (proposal?.state.resolved
-      ? proposal?.state.resolved.endTs
-      : proposal?.state.voting?.startTs.add(
-          resolution.settings.nodes.find(
-            (node) => typeof node.offsetFromStartTs !== "undefined"
-          )?.offsetFromStartTs?.offset ?? new BN(0)
-        ));
-
-  const isLoading = useMemo(
-    () => connecting || loadingGov || loadingProposal || !proposal,
-    [connecting, loadingGov, loadingProposal, proposal]
-  );
-  const timeExpired = endTs && endTs.toNumber() <= Date.now().valueOf() / 1000;
-  const noVotingPower = !isLoading && (!totalLocked || totalLocked.isZero());
-  const isActive = derivedState === "active";
-  const isCancelled = derivedState === "cancelled";
-  const isFailed = derivedState === "failed";
-  const completed =
-    timeExpired || (timeExpired && isActive) || isCancelled || isFailed;
-
-  const voted = !loadingVote && voteWeights?.some((n) => n.gt(new BN(0)));
 
   const twitterUrl = useMemo(() => {
     if (endTs) {

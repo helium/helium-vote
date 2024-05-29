@@ -391,3 +391,17 @@ export const getProposalContent = async (proposalKey: PublicKey) => {
   const content = await res.text();
   return { content, name: proposal.name };
 };
+
+export function debounce<T extends unknown[], U>(
+  callback: (...args: T) => PromiseLike<U> | U,
+  wait: number
+) {
+  let timer: any;
+
+  return (...args: T): Promise<U> => {
+    clearTimeout(timer);
+    return new Promise((resolve) => {
+      timer = setTimeout(() => resolve(callback(...args)), wait);
+    });
+  };
+}

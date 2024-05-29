@@ -22,7 +22,6 @@ export const RevokeProxyModal: React.FC<
   const [selectedPositions, setSelectedPositions] = useState<Set<string>>(
     new Set<string>()
   );
-  console.log(positions)
   const [isSubmitting, setIsSubmitting] = useState(false);
   const proxiedPositions = useMemo(
     () =>

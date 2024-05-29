@@ -23,6 +23,8 @@ import { RevokeProxyModal } from "./RevokeProxyModal";
 import { Card, CardContent, CardHeader } from "./ui/card";
 import VoteHistory from "./VoteHistory";
 import { Markdown } from "./Markdown";
+import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group";
+import { usePathname } from "next/navigation";
 
 export function ProxyProfile({
   proxy,
@@ -39,11 +41,100 @@ export function ProxyProfile({
   const { assignProxies } = useAssignProxies();
   const { unassignProxies } = useUnassignProxies();
   const wallet = useMemo(() => new PublicKey(proxy.wallet), [proxy.wallet]);
-  const { votingPower } = useProxiedTo(wallet);
+  const { votingPower, positions } = useProxiedTo(wallet);
   const { network } = useGovernance();
 
+  const path = usePathname();
+  const currentPath = path.split("/")[0] || "hnt";
+  function getNetworkPath(network: string) {
+    const split = path.split("/");
+    split.shift();
+    return [network, ...split].join("/");
+  }
+
+  const infoCard = (
+    <div className="w-full p-3 bg-gray-700 rounded-xl flex-col justify-center items-start gap-3 inline-flex">
+      <div className="w-full flex-col justify-center items-start gap-2 flex">
+        <div className="text-slate-500 text-xs font-medium leading-none">
+          VOTING POWER
+        </div>
+        <div className="w-full justify-start items-center gap-2 inline-flex">
+          <div className="flex-col flex-1 justify-center items-start gap-1 inline-flex">
+            <div className="text-white text-xs font-medium leading-none">
+              TOTAL POWER
+            </div>
+            <div className="text-white text-base font-medium leading-normal">
+              {proxy.delegatedVeTokens
+                ? humanReadable(new BN(proxy.delegatedVeTokens), decimals)
+                : "0"}
+            </div>
+          </div>
+          <div className="flex-col flex-1 justify-center items-start gap-1 inline-flex">
+            <div className="text-white text-xs font-medium leading-none">
+              PERCENTAGE
+            </div>
+            <div className="text-white text-base font-medium leading-normal">
+              {Number(proxy.percent).toFixed(2)}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="w-full flex-col justify-center items-start gap-2 flex">
+        <div className="text-slate-500 text-xs font-medium leading-none">
+          PROXIES
+        </div>
+        <div className="w-full justify-start items-center gap-2 inline-flex">
+          <div className="flex-1 flex-col justify-center items-start gap-1 inline-flex">
+            <div className="text-white text-xs font-medium leading-none">
+              PROPOSALS VOTED
+            </div>
+            <div className="text-white text-base font-medium leading-normal">
+              {proxy.numProposalsVoted}
+            </div>
+          </div>
+          <div className="flex-1 flex-col justify-center items-start gap-1 inline-flex">
+            <div className="text-white text-xs font-medium leading-none">
+              NUM ASSIGNMENTS
+            </div>
+            <div className="text-white text-base font-medium leading-normal">
+              {proxy.numAssignments}
+            </div>
+          </div>
+        </div>
+      </div>
+      {votingPower?.gt(new BN(0)) && (
+        <>
+          <div className="w-full border-b-[1px] border-gray-600" />
+          <div className="w-full flex-col justify-center items-start gap-2 flex">
+            <div className="text-slate-500 text-xs font-medium leading-none">
+              MY PROXIES
+            </div>
+            <div className="w-full justify-start items-center gap-2 inline-flex">
+              <div className="flex-col flex-1 justify-center items-start gap-1 inline-flex">
+                <div className="text-white text-xs font-medium leading-none">
+                  POWER FROM ME
+                </div>
+                <div className="text-white text-base font-medium leading-normal">
+                  {humanReadable(votingPower, decimals)}
+                </div>
+              </div>
+              <div className="flex-col flex-1 justify-center items-start gap-1 inline-flex">
+                <div className="text-white text-xs font-medium leading-none">
+                  POSITIONS ASSIGNED
+                </div>
+                <div className="text-white text-base font-medium leading-normal">
+                  {positions?.length}
+                </div>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+    </div>
+  );
+
   return (
-    <ContentSection className="flex-1 py-8 max-md:py-0 max-md:px-0">
+    <ContentSection className="flex-1 py-8 max-md:py-0 max-md:!px-0">
       <Card className="max-md:flex-1 max-md:rounded-none">
         <CardHeader>
           <Link
@@ -84,45 +175,86 @@ export function ProxyProfile({
           </div>
 
           <AssignProxyModal onSubmit={assignProxies} wallet={wallet}>
-            <ProxyButton onClick={() => {}} isLoading={false} />
+            <ProxyButton
+              className="md:hidden"
+              onClick={() => {}}
+              isLoading={false}
+            />
           </AssignProxyModal>
           <RevokeProxyModal onSubmit={unassignProxies} wallet={wallet}>
-            <RevokeProxyButton onClick={() => {}} isLoading={false} />
+            <RevokeProxyButton
+              className="md:hidden"
+              onClick={() => {}}
+              isLoading={false}
+            />
           </RevokeProxyModal>
         </CardHeader>
 
+        <div className="md:hidden border-b-2 border-gray-600 mx-4 mb-2" />
         <CardContent>
-          {votingPower && (
-            <div className="flex items-center">
-              <span className="font-bold mr-2">My Delegations:</span>
-              {humanReadable(votingPower, decimals)}
+          <Markdown>{detail}</Markdown>
+          <div className="md:hidden">{infoCard}</div>
+          <div className="flex flex-row justify-stretch gap-6">
+            <div className="overflow-auto flex flex-col justify-stretch w-full">
+              <div className="flex flex-col py-4 md:items-center md:flex-row md:justify-between">
+                <h2 className="text-white text-xl font-medium">Proposals</h2>
+                <ToggleGroup variant="subNav" type="single" value={currentPath}>
+                  <ToggleGroupItem value="hnt" aria-label="HNT">
+                    <Link
+                      className="flex items-center gap-2 p-2"
+                      href={`${getNetworkPath("hnt")}`}
+                    >
+                      <Image
+                        width={16}
+                        height={16}
+                        alt="hnt Icon"
+                        src="/images/hntWhite.svg"
+                      />
+                      HNT
+                    </Link>
+                  </ToggleGroupItem>
+                  <ToggleGroupItem value="mobile" aria-label="MOBILE">
+                    <Link
+                      className="flex items-center gap-2 p-2"
+                      href={`${getNetworkPath("mobile")}`}
+                    >
+                      <Image
+                        width={16}
+                        height={16}
+                        alt="moile Icon"
+                        src="/images/mobileWhite.svg"
+                      />
+                      MOBILE
+                    </Link>
+                  </ToggleGroupItem>
+                  <ToggleGroupItem value="mobile" aria-label="IOT">
+                    <Link
+                      className="flex items-center gap-2 p-2"
+                      href={`${getNetworkPath("iot")}`}
+                    >
+                      <Image
+                        width={16}
+                        height={16}
+                        alt="iot Icon"
+                        src="/images/iotWhite.svg"
+                      />
+                      IOT
+                    </Link>
+                  </ToggleGroupItem>
+                </ToggleGroup>
+              </div>
+              <VoteHistory wallet={wallet} />
             </div>
-          )}
-
-          <div className="text-lg mb-6">
-            <div className="flex items-center">
-              <span className="font-bold mr-2">Wallet:</span>
-              <span>{proxy.wallet}</span>
-            </div>
-            <div className="flex items-center">
-              <span className="font-bold mr-2">Num Delegations:</span>
-              <span>{proxy.numDelegations}</span>
-            </div>
-            <div className="flex items-center">
-              <span className="font-bold mr-2">Delegated Tokens:</span>
-              <span>
-                {proxy.delegatedVeTokens
-                  ? humanReadable(new BN(proxy.delegatedVeTokens), decimals)
-                  : "0"}
-              </span>
-            </div>
-            <div className="flex items-center">
-              <span className="font-bold mr-2">Percent:</span>
-              <span>{Number(proxy.percent).toFixed(2)}</span>
+            <div className="max-md:hidden flex flex-col gap-3 mt-3">
+              <AssignProxyModal onSubmit={assignProxies} wallet={wallet}>
+                <ProxyButton onClick={() => {}} isLoading={false} />
+              </AssignProxyModal>
+              <RevokeProxyModal onSubmit={unassignProxies} wallet={wallet}>
+                <RevokeProxyButton onClick={() => {}} isLoading={false} />
+              </RevokeProxyModal>
+              <div className="min-w-[300px]">{infoCard}</div>
             </div>
           </div>
-          <Markdown>{detail}</Markdown>
-          <VoteHistory wallet={wallet} />
         </CardContent>
       </Card>
     </ContentSection>

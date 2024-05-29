@@ -1,10 +1,9 @@
 import React, { useMemo, useState } from "react";
 import { AutoComplete, Option } from "./ui/autocomplete";
 import { useAsync } from "react-async-hook";
-import axios from "axios";
 import { useHeliumVsrState } from "@helium/voter-stake-registry-hooks";
 import { PublicKey } from "@solana/web3.js";
-import { ellipsisMiddle } from "@/lib/utils";
+import { debounce, ellipsisMiddle } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
 
 export const ProxySearch: React.FC<{
@@ -71,18 +70,4 @@ function isValidPublicKey(input: string | undefined) {
   } catch (e) {
     return false;
   }
-}
-
-function debounce<T extends unknown[], U>(
-  callback: (...args: T) => PromiseLike<U> | U,
-  wait: number
-) {
-  let timer: any;
-
-  return (...args: T): Promise<U> => {
-    clearTimeout(timer);
-    return new Promise((resolve) => {
-      timer = setTimeout(() => resolve(callback(...args)), wait);
-    });
-  };
 }

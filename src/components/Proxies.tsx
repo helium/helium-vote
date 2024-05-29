@@ -1,24 +1,23 @@
 "use client";
 
-import { IoWarningOutline } from "react-icons/io5";
-import { useNetwork } from "@/hooks/useNetwork";
-import { ellipsisMiddle, humanReadable } from "@/lib/utils";
+import { debounce, ellipsisMiddle, humanReadable } from "@/lib/utils";
+import { useGovernance } from "@/providers/GovernanceProvider";
 import { useMint } from "@helium/helium-react-hooks";
 import { EnhancedProxy } from "@helium/voter-stake-registry-sdk";
 import BN from "bn.js";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useAsyncCallback } from "react-async-hook";
 import { FaMagnifyingGlass } from "react-icons/fa6";
-import { RiUserStarFill } from "react-icons/ri";
+import { IoWarningOutline } from "react-icons/io5";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { ContentSection } from "./ContentSection";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { Button } from "./ui/button";
 import { Card } from "./ui/card";
 import { Input } from "./ui/input";
-import { useGovernance } from "@/providers/GovernanceProvider";
+import { Loader2 } from "lucide-react";
+import { Skeleton } from "./ui/skeleton";
 
 const DECENTRALIZATION_RISK_INDEX = 6;
 
@@ -33,6 +32,36 @@ function CardDetail({ title, value }: { title: string; value: string }) {
   );
 }
 
+const ProxyCardSkeleton: React.FC = () => {
+  return (
+    <Card className="flex hover:opacity-80 max-md:flex-col max-md:bg-card/45 max-md:overflow-hidden">
+      <div className="p-4 flex flex-row gap-2 items-center max-md:bg-card ">
+        <Skeleton className="size-10 rounded-full bg-slate-800" />
+
+        <div className="flex flex-col w-60 gap-1">
+          <Skeleton className="w-40 h-4 bg-slate-800" />
+          <Skeleton className="w-20 h-3 bg-slate-800" />
+        </div>
+      </div>
+
+      <div className="p-4 gap-8 grid md:grid-cols-3 sm:grid-cols-2 xs:grid-cols-2">
+        <div className="flex flex-col w-40 gap-1">
+          <Skeleton className="w-30 h-4 bg-slate-800" />
+          <Skeleton className="w-10 h-3 bg-slate-800" />
+        </div>
+        <div className="flex flex-col w-40 gap-1">
+          <Skeleton className="w-30 h-4 bg-slate-800" />
+          <Skeleton className="w-10 h-3 bg-slate-800" />
+        </div>
+        <div className="flex flex-col w-40 gap-1">
+          <Skeleton className="w-30 h-4 bg-slate-800" />
+          <Skeleton className="w-10 h-3 bg-slate-800" />
+        </div>
+      </div>
+    </Card>
+  );
+};
+
 export function Proxies() {
   const { voteService, mint } = useGovernance();
   const { info: mintAcc } = useMint(mint);
@@ -41,28 +70,36 @@ export function Proxies() {
   const [hasMore, setHasMore] = useState(false);
   const [page, setPage] = useState(1);
   const path = usePathname();
+  const [proxySearch, setProxySearch] = useState("");
 
-  const { execute: fetchMoreData, loading } = useAsyncCallback(async () => {
-    if (voteService) {
-      const newProxies = await voteService.getProxies({
-        page: page,
-        limit: 100,
-      });
-      setPage((p) => p + 1);
-      if (newProxies.length == 100) {
-        setHasMore(true);
-      }
-      setProxies((prevProxies) => [...prevProxies, ...newProxies]);
-    }
-  });
+  const fn = useMemo(
+    () =>
+      debounce(async (page: number, search: string) => {
+        setPage(page);
+        if (voteService) {
+          const newProxies = await voteService.getProxies({
+            page,
+            limit: 100,
+            query: search,
+          });
+          if (newProxies.length == 100) {
+            setHasMore(true);
+          }
+          setProxies((prevProxies) => [...prevProxies, ...newProxies]);
+        }
+      }, 300),
+    [voteService]
+  );
+
+  const { execute: fetchMoreData, loading } = useAsyncCallback(fn);
 
   useEffect(() => {
     if (voteService) {
       setProxies([]);
       setPage(1);
-      fetchMoreData();
+      fetchMoreData(1, proxySearch);
     }
-  }, [voteService?.registrar.toBase58()]);
+  }, [voteService?.registrar.toBase58(), proxySearch]);
 
   return (
     <ContentSection className="flex-1 py-4">
@@ -72,6 +109,8 @@ export function Proxies() {
           <div className="w-half flex-row relative justify-end md:w-2/3 lg:w-1/3">
             <FaMagnifyingGlass className="absolute left-2.5 top-5 h-4 w-4 text-muted-foreground" />
             <Input
+              value={proxySearch}
+              onChange={(e) => setProxySearch(e.target.value)}
               type="search"
               placeholder="Search name or address..."
               className="w-full appearance-none bg-secondary border-none pl-8 shadow-none"
@@ -80,12 +119,17 @@ export function Proxies() {
         </div>
         <InfiniteScroll
           dataLength={proxies.length}
-          next={fetchMoreData}
+          next={() => fetchMoreData(page + 1, proxySearch)}
           hasMore={!loading && hasMore}
-          loader={<h4>Loading...</h4>}
+          loader={
+            <div className="p-4 flex flex-row justify-center">
+              <Loader2 className="size-5 animate-spin" />
+            </div>
+          }
           endMessage={
-            <p style={{ textAlign: "center" }}>
-              <b>No More Proxies</b>
+            <p className="mt-3 text-white/opacity-75 text-sm text-center">
+              {proxies.length} of {proxies.length} voters loaded. You&apos;ve
+              reached the end of the list
             </p>
           }
         >
@@ -149,6 +193,7 @@ export function Proxies() {
                 ) : null}
               </>
             ))}
+            {loading && <ProxyCardSkeleton />}
           </div>
         </InfiniteScroll>
       </section>
