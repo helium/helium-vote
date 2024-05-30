@@ -171,7 +171,7 @@ export function Proxies() {
                         title="Last Voted"
                         value={
                           proxy.lastVotedAt
-                            ? proxy.lastVotedAt.toDateString()
+                            ? new Date(proxy.lastVotedAt).toLocaleDateString()
                             : "Never"
                         }
                       />

@@ -91,8 +91,10 @@ export const CreatePositionModal: FC<React.PropsWithChildren<{}>> = ({
       },
       amountDepositedNative: toBN(formValues!.amount, mintAcc?.decimals || 6),
       delegatedSubDao: selectedSubDaoPk,
+      // @ts-ignore
+      registrar: registrar?.pubkey,
     }),
-    [formValues, mintAcc, selectedSubDaoPk]
+    [formValues, mintAcc, selectedSubDaoPk, registrar]
   );
 
   const handleOpenChange = () => {

@@ -1,6 +1,7 @@
 import { networksToMint } from "@/lib/constants";
 import { getMinDurationFmt, humanReadable } from "@/lib/utils";
 import { useGovernance } from "@/providers/GovernanceProvider";
+import { useMint } from "@helium/helium-react-hooks";
 import { PositionWithMeta, useRegistrar } from "@helium/voter-stake-registry-hooks";
 import BN from "bn.js";
 import Image from "next/image";
@@ -15,7 +16,8 @@ export const PositionPreview: React.FC<{
     Object.entries(networksToMint).find(
       ([_, mint]) => votingMint && mint.equals(votingMint)
     )?.[0] || "hnt";
-  const amount = humanReadable(position.amountDepositedNative, 6);
+  const { info: mint } = useMint(votingMint)
+  const amount = humanReadable(position.amountDepositedNative, mint?.decimals);
   const { subDaos } = useGovernance()
   const subDao = useMemo(
     () =>

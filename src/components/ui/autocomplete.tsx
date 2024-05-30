@@ -133,7 +133,6 @@ export const AutoComplete = ({
               <CommandGroup>
                 {options.map((option) => {
                   const isSelected = selected?.value === option.value;
-                  console.log("isSelected", isSelected, selected?.value, option.value)
                   return (
                     <CommandItem
                       key={option.value}

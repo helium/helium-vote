@@ -303,14 +303,18 @@ export const Proposal: FC<{
                     </div>
                   </div>
                 )}
-                {connected && !noVotingPower && !completed && (
-                  <VoteOptions
-                    choices={votingResults.results}
-                    maxChoicesPerVoter={proposal!.maxChoicesPerVoter}
-                    proposalKey={pKey}
-                  />
-                )}
-                {(completed || (connected && !noVotingPower && voted)) &&
+                {connected &&
+                  !noVotingPower &&
+                  !completed &&
+                  proposal &&
+                  votingResults && (
+                    <VoteOptions
+                      choices={votingResults.results}
+                      maxChoicesPerVoter={proposal!.maxChoicesPerVoter}
+                      proposalKey={pKey}
+                    />
+                  )}
+                {(completed || (connected && !noVotingPower && voted)) && votingResults &&
                   votingResults?.totalVotes.gt(new BN(0)) && (
                     <div className="flex-col gap-2 mt-6">
                       <VoteResults

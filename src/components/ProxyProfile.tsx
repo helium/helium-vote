@@ -8,7 +8,12 @@ import {
   useProxiedTo,
   useUnassignProxies,
 } from "@helium/voter-stake-registry-hooks";
-import { EnhancedProxy, WithRank } from "@helium/voter-stake-registry-sdk";
+import {
+  EnhancedProxy,
+  VoteService,
+  WithRank,
+  getRegistrarKey,
+} from "@helium/voter-stake-registry-sdk";
 import { PublicKey } from "@solana/web3.js";
 import BN from "bn.js";
 import Image from "next/image";
@@ -25,6 +30,8 @@ import VoteHistory from "./VoteHistory";
 import { Markdown } from "./Markdown";
 import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group";
 import { usePathname } from "next/navigation";
+import { useAsync } from "react-async-hook";
+import { networksToMint } from "@/lib/constants";
 
 export function ProxyProfile({
   proxy,
@@ -35,7 +42,7 @@ export function ProxyProfile({
   detail: string;
   image: string;
 }) {
-  const { mint } = useGovernance();
+  const { mint, voteService } = useGovernance();
   const { info: mintAcc } = useMint(mint);
   const decimals = mintAcc?.decimals;
   const { assignProxies } = useAssignProxies();
@@ -43,6 +50,26 @@ export function ProxyProfile({
   const wallet = useMemo(() => new PublicKey(proxy.wallet), [proxy.wallet]);
   const { votingPower, positions } = useProxiedTo(wallet);
   const { network } = useGovernance();
+  const { result: networks } = useAsync(
+    async (vs: VoteService | undefined) => {
+      if (vs) {
+        const registrars = await vs.getRegistrarsForProxy(
+          new PublicKey(proxy.wallet)
+        );
+        if (registrars) {
+          return new Set(
+            Object.entries(networksToMint)
+              .filter(([_, mint]) => {
+                return registrars.includes(getRegistrarKey(mint).toBase58());
+              })
+              .map(([network]) => network)
+          );
+        }
+      }
+      return new Set()
+    },
+    [voteService]
+  );
 
   const path = usePathname();
   const currentPath = path.split("/")[0] || "hnt";
@@ -169,7 +196,11 @@ export function ProxyProfile({
               </div>
               <div className="flex flex-col gap-2">
                 <span className="text-gray-400 text-xs">Last Voted</span>
-                <span>{proxy.lastVotedAt?.toDateString() || "Never"}</span>
+                <span>
+                  {proxy.lastVotedAt
+                    ? new Date(proxy.lastVotedAt).toLocaleDateString()
+                    : "Never"}
+                </span>
               </div>
             </div>
           </div>
@@ -199,48 +230,54 @@ export function ProxyProfile({
               <div className="flex flex-col py-4 md:items-center md:flex-row md:justify-between">
                 <h2 className="text-white text-xl font-medium">Proposals</h2>
                 <ToggleGroup variant="subNav" type="single" value={currentPath}>
-                  <ToggleGroupItem value="hnt" aria-label="HNT">
-                    <Link
-                      className="flex items-center gap-2 p-2"
-                      href={`${getNetworkPath("hnt")}`}
-                    >
-                      <Image
-                        width={16}
-                        height={16}
-                        alt="hnt Icon"
-                        src="/images/hntWhite.svg"
-                      />
-                      HNT
-                    </Link>
-                  </ToggleGroupItem>
-                  <ToggleGroupItem value="mobile" aria-label="MOBILE">
-                    <Link
-                      className="flex items-center gap-2 p-2"
-                      href={`${getNetworkPath("mobile")}`}
-                    >
-                      <Image
-                        width={16}
-                        height={16}
-                        alt="moile Icon"
-                        src="/images/mobileWhite.svg"
-                      />
-                      MOBILE
-                    </Link>
-                  </ToggleGroupItem>
-                  <ToggleGroupItem value="mobile" aria-label="IOT">
-                    <Link
-                      className="flex items-center gap-2 p-2"
-                      href={`${getNetworkPath("iot")}`}
-                    >
-                      <Image
-                        width={16}
-                        height={16}
-                        alt="iot Icon"
-                        src="/images/iotWhite.svg"
-                      />
-                      IOT
-                    </Link>
-                  </ToggleGroupItem>
+                  {networks?.has("hnt") && (
+                    <ToggleGroupItem value="hnt" aria-label="HNT">
+                      <Link
+                        className="flex items-center gap-2 p-2"
+                        href={`${getNetworkPath("hnt")}`}
+                      >
+                        <Image
+                          width={16}
+                          height={16}
+                          alt="hnt Icon"
+                          src="/images/hntWhite.svg"
+                        />
+                        HNT
+                      </Link>
+                    </ToggleGroupItem>
+                  )}
+                  {networks?.has("mobile") && (
+                    <ToggleGroupItem value="mobile" aria-label="MOBILE">
+                      <Link
+                        className="flex items-center gap-2 p-2"
+                        href={`${getNetworkPath("mobile")}`}
+                      >
+                        <Image
+                          width={16}
+                          height={16}
+                          alt="moile Icon"
+                          src="/images/mobileWhite.svg"
+                        />
+                        MOBILE
+                      </Link>
+                    </ToggleGroupItem>
+                  )}
+                  {networks?.has("iot") && (
+                    <ToggleGroupItem value="mobile" aria-label="IOT">
+                      <Link
+                        className="flex items-center gap-2 p-2"
+                        href={`${getNetworkPath("iot")}`}
+                      >
+                        <Image
+                          width={16}
+                          height={16}
+                          alt="iot Icon"
+                          src="/images/iotWhite.svg"
+                        />
+                        IOT
+                      </Link>
+                    </ToggleGroupItem>
+                  )}
                 </ToggleGroup>
               </div>
               <VoteHistory wallet={wallet} />

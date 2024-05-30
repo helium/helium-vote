@@ -7,11 +7,14 @@ import { useGovernance } from "@/providers/GovernanceProvider";
 import { RiUserSharedFill } from "react-icons/ri";
 import { cn } from "@/lib/utils";
 
-export const ProxyButton: React.FC<{
-  className?: string;
-  onClick: () => void;
-  isLoading?: boolean;
-}> = ({ className = "", onClick, isLoading = false }) => {
+export const ProxyButton = React.forwardRef<
+  HTMLButtonElement,
+  {
+    className?: string;
+    onClick: () => void;
+    isLoading?: boolean;
+  }
+>(({ className = "", onClick, isLoading = false }, ref) => {
   const { connected } = useWallet();
   const { loading, positions } = useGovernance();
 
@@ -25,6 +28,7 @@ export const ProxyButton: React.FC<{
 
   return (
     <Button
+      ref={ref}
       variant="secondary"
       className={cn(
         "text-foreground flex flex-row gap-2 items-center p-6 w-full",
@@ -41,4 +45,7 @@ export const ProxyButton: React.FC<{
       Assign Proxy
     </Button>
   );
-};
+});
+
+ProxyButton.displayName = "ProxyButton";
+

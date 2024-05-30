@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  ellipsisMiddle,
   getMinDurationFmt,
   getTimeLeftFromNowFmt,
   humanReadable,
@@ -24,6 +25,10 @@ import {
   CardTitle,
 } from "./ui/card";
 import { Skeleton } from "./ui/skeleton";
+import { PublicKey } from "@solana/web3.js";
+import { useAsync } from "react-async-hook";
+import { VoteService } from "@helium/voter-stake-registry-sdk";
+import { useKnownProxy } from "@/hooks/useKnownProxy";
 
 export const PositionCardSkeleton: FC<{ compact?: boolean }> = () => {
   const { network } = useGovernance();
@@ -70,7 +75,13 @@ export const PositionCard: FC<{
 }> = ({ position, className = "", compact = false, onClick }) => {
   const path = usePathname();
   const { lockup, hasGenesisMultiplier } = position;
-  const { loading: loadingGov, network, mintAcc, subDaos } = useGovernance();
+  const {
+    loading: loadingGov,
+    network,
+    mintAcc,
+    subDaos,
+    voteService,
+  } = useGovernance();
   const unixNow = useSolanaUnixNow() || Date.now() / 1000;
   const lockupKind = Object.keys(lockup.kind)[0] as string;
   const isConstant = lockupKind === "constant";
@@ -79,6 +90,7 @@ export const PositionCard: FC<{
   const totalTime = lockup.endTs.sub(lockup.startTs);
   const decayedPercentage = elapsedTime.muln(100).div(totalTime);
   const canDelegate = network === "hnt";
+  const { knownProxy } = useKnownProxy(position?.proxy?.nextVoter)
 
   const lockedTokens =
     mintAcc && humanReadable(position.amountDepositedNative, mintAcc.decimals);
@@ -195,7 +207,7 @@ export const PositionCard: FC<{
             )}
           </CardTitle>
         </CardHeader>
-        <CardContent className="bg-slate-950 flex flex-row flex-grow justify-between py-4 gap-8">
+        <CardContent className="bg-slate-950 flex flex-row flex-grow justify-between py-2 gap-8">
           <div className="flex flex-col">
             <p className="text-muted-foreground text-xs">VOTING POWER</p>
             <div className="flex flex-row items-center gap-2">
@@ -220,30 +232,53 @@ export const PositionCard: FC<{
           </div>
         </CardContent>
         {canDelegate && (
-          <CardFooter className="flex flex-row flex-grow justify-between gap-2 py-2 border-4 border-slate-950 rounded-b-md min-h-14">
-            <p className="text-muted-foreground text-xs">DELEGATED TO</p>
-            {!isDecayed && delegatedSubDaoMetadata ? (
-              <div className="flex flex-row justify-center items-center gap-2 py-1">
-                <div className="relative size-6">
-                  <Image
-                    alt="delegated-subdao"
-                    src={delegatedSubDaoMetadata.json?.image}
-                    fill
-                  />
+          <CardFooter className="flex flex-col p-0 bg-slate-950">
+            <div className="w-full px-2">
+              <div className="w-full border-b-[1px] border-slate-500" />
+            </div>
+            <div className="w-full py-2 px-3 flex flex-row flex-grow justify-between items-center gap-2 rounded-b-md min-h-14 ">
+              <p className="text-muted-foreground text-xs">DELEGATED TO</p>
+              {!isDecayed && delegatedSubDaoMetadata ? (
+                <div className="flex flex-row justify-center items-center gap-2 py-1">
+                  <div className="relative size-6">
+                    <Image
+                      alt="delegated-subdao"
+                      src={delegatedSubDaoMetadata.json?.image}
+                      fill
+                    />
+                  </div>
+                  <p className="text-xs">{delegatedSubDaoMetadata.symbol}</p>
                 </div>
-                <p className="text-xs">{delegatedSubDaoMetadata.symbol}</p>
+              ) : !isDecayed ? (
+                <Link
+                  href={`${path}/${position.pubkey.toBase58()}?action=delegate`}
+                >
+                  <Button
+                    variant="default"
+                    size="xs"
+                    className="text-foreground"
+                  >
+                    Delegate Now
+                  </Button>
+                </Link>
+              ) : (
+                <p className="text-xs">UNDELEGATED</p>
+              )}
+            </div>
+            {position.proxy &&
+            !position.proxy.nextVoter.equals(PublicKey.default) ? (
+              <div className="w-full p-2 first-line:p-2 flex flex-row flex-grow justify-between items-center gap-2 py-2 border-4 border-slate-950 bg-card rounded-b-md min-h-14 ">
+                <p className="text-muted-foreground text-xs">PROXIED TO</p>
+                <Link
+                  href={`/${network}/proxies/${position.proxy.nextVoter.toBase58()}`}
+                >
+                  <Pill variant="pink">
+                    {knownProxy?.name ||
+                      ellipsisMiddle(position.proxy.nextVoter.toBase58())}
+                  </Pill>
+                </Link>
               </div>
-            ) : !isDecayed ? (
-              <Link
-                href={`${path}/${position.pubkey.toBase58()}?action=delegate`}
-              >
-                <Button variant="default" size="xs" className="text-foreground">
-                  Delegate Now
-                </Button>
-              </Link>
-            ) : (
-              <p className="text-xs">UNDELEGATED</p>
-            )}
+            ) : null}
           </CardFooter>
         )}
       </Card>

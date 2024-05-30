@@ -7,12 +7,14 @@ import { Button } from "./ui/button";
 import { RiUserReceivedFill } from "react-icons/ri";
 import { cn } from "@/lib/utils";
 
-export const RevokeProxyButton: React.FC<{
+export const RevokeProxyButton = React.forwardRef<
+  HTMLButtonElement,
+  {
   className?: string;
   onClick: () => void;
   isLoading?: boolean;
   wallet?: PublicKey;
-}> = ({ wallet, className = "", onClick, isLoading = false }) => {
+}>(({ wallet, className = "", onClick, isLoading = false }) => {
   const { connected } = useWallet();
   const { loading, positions } = useGovernance();
 
@@ -50,4 +52,6 @@ export const RevokeProxyButton: React.FC<{
       Revoke Proxies
     </Button>
   );
-};
+});
+
+RevokeProxyButton.displayName = "RevokeProxyButton";

@@ -10,6 +10,7 @@ import { CountdownTimer } from "./CountdownTimer";
 import { toNumber } from "@helium/spl-utils";
 import { Pill } from "./Pill";
 import { Loader2 } from "lucide-react";
+import Link from "next/link";
 
 export default function VoteHistory({ wallet }: { wallet: PublicKey }) {
   const { voteService, mint } = useGovernance();
@@ -28,10 +29,16 @@ export default function VoteHistory({ wallet }: { wallet: PublicKey }) {
       if (newVoteHistory.length < 100) {
         setHasMore(false);
       }
-      setVoteHistory((prevVoteHistory) => [
-        ...prevVoteHistory,
-        ...newVoteHistory,
-      ]);
+      setVoteHistory((prev) => {
+        const seen = new Set()
+        return [...prev, ...newVoteHistory].filter(x => {
+          if (!seen.has(x.address)) {
+            seen.add(x.address)
+            return true
+          }
+          return false
+        });
+      });
     }
   };
 
@@ -41,7 +48,7 @@ export default function VoteHistory({ wallet }: { wallet: PublicKey }) {
       setVoteHistory([]);
       fetchMoreData(1);
     }
-  }, [voteService]);
+  }, [voteService?.registrar.toBase58()]);
 
   return (
     <div className="w-full">
@@ -65,7 +72,7 @@ export default function VoteHistory({ wallet }: { wallet: PublicKey }) {
       >
         <div className="flex flex-col gap-2">
           {voteHistories.map((voteHistory, index) => {
-            return <ProposalItem key={index} proposal={voteHistory} />;
+            return <ProposalItem key={voteHistory.address} proposal={voteHistory} />;
           })}
         </div>
       </InfiniteScroll>
@@ -85,9 +92,13 @@ const ProposalItem: React.FC<{
     isFailed,
     isCancelled,
   } = useProposalStatus(proposal);
+  const { network } = useGovernance()
 
   return (
-    <div className="w-full flex flex-col md:flex-row">
+    <Link
+      href={`/${network}/proposals/${proposal.address}`}
+      className="w-full flex flex-col md:flex-row"
+    >
       <div className="flex-1 flex flex-col gap-2 max-md:rounded-t-xl md:rounded-l-xl bg-slate-800 p-4">
         <div className="flex flex-row gap-1">
           {!completed && <Pill variant="success">Actively Voting</Pill>}
@@ -98,7 +109,7 @@ const ProposalItem: React.FC<{
         </div>
 
         <div className="text-white text-xl font-medium">
-          HIP 37: H3Dex-based PoC Targeting
+          {proposal.name}
         </div>
         {timeExpired ? (
           <div className="flex flex-col">
@@ -150,7 +161,7 @@ const ProposalItem: React.FC<{
           </div>
         )}
       </div>
-    </div>
+    </Link>
   );
 };
 

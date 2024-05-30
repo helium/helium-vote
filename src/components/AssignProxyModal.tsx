@@ -165,30 +165,32 @@ export const AssignProxyModal: React.FC<
                   </Button>
                 </div>
 
-                {unproxiedPositions?.map((position) => {
-                  return (
-                    <PositionItem
-                      key={position.pubkey.toBase58()}
-                      isSelected={selectedPositions?.has(
-                        position.pubkey.toBase58()
-                      )}
-                      position={position}
-                      onClick={() => {
-                        setSelectedPositions((sel) => {
-                          const key = position.pubkey.toBase58();
-                          const newS = new Set(sel);
-                          if (sel.has(key)) {
-                            newS.delete(key);
-                            return newS;
-                          } else {
-                            newS.add(key);
-                            return newS;
-                          }
-                        });
-                      }}
-                    />
-                  );
-                })}
+                <div className="flex flex-col gap-2">
+                  {unproxiedPositions?.map((position) => {
+                    return (
+                      <PositionItem
+                        key={position.pubkey.toBase58()}
+                        isSelected={selectedPositions?.has(
+                          position.pubkey.toBase58()
+                        )}
+                        position={position}
+                        onClick={() => {
+                          setSelectedPositions((sel) => {
+                            const key = position.pubkey.toBase58();
+                            const newS = new Set(sel);
+                            if (sel.has(key)) {
+                              newS.delete(key);
+                              return newS;
+                            } else {
+                              newS.add(key);
+                              return newS;
+                            }
+                          });
+                        }}
+                      />
+                    );
+                  })}
+                </div>
               </div>
               <div>
                 <h2 className="text-lg mt-4 mb-2">Expiration Time</h2>

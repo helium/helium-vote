@@ -6,10 +6,12 @@ import {
   useAnchorProvider,
   useSolanaUnixNow,
 } from "@helium/helium-react-hooks";
+import { RiUserSharedFill } from "react-icons/ri";
 import { toNumber } from "@helium/spl-utils";
 import {
   PositionWithMeta,
   SubDaoWithMeta,
+  useAssignProxies,
   useClaimPositionRewards,
   useClosePosition,
   useDelegatePosition,
@@ -44,6 +46,8 @@ import { PositionCallout } from "./PositionCallout";
 import { ReclaimPositionPrompt } from "./ReclaimPositionPrompt";
 import { SplitPositionPrompt } from "./SplitPositionPrompt";
 import { UpdatePositionDelegationPrompt } from "./UpdatePositionDelegationPrompt";
+import { ProxyPositionPrompt } from "./ProxyPositionPrompt";
+import { PublicKey } from "@solana/web3.js";
 
 export type PositionAction =
   | "flip"
@@ -51,7 +55,8 @@ export type PositionAction =
   | "extend"
   | "split"
   | "merge"
-  | "reclaim";
+  | "reclaim"
+  | "proxy";
 
 export interface PositionManagerProps {
   initAction?: PositionAction;
@@ -149,6 +154,7 @@ export const PositionManager: FC<PositionManagerProps> = ({
     setAction(undefined);
   }, [refetchState, setAction]);
 
+  const { loading: isUpdatingProxy, assignProxies } = useAssignProxies();
   const { loading: isFlipping, flipPositionLockupKind } =
     useFlipPositionLockupKind();
   const { loading: isClaiming, claimPositionRewards } =
@@ -160,6 +166,23 @@ export const PositionManager: FC<PositionManagerProps> = ({
   const { loading: isReclaiming, closePosition } = useClosePosition();
   const { loading: isRelinquishing, relinquishPositionVotes } =
     useRelinquishPositionVotes();
+
+  const handleUpdateProxy = async (proxy: string) => {
+    try {
+      const nextVoter = new PublicKey(proxy)
+      await relinquishPositionVotes({
+        position,
+        organization,
+        onInstructions: onInstructions(provider),
+      });
+
+      toast("Proxy assigned");
+    } catch (e: any) {
+      if (!(e instanceof WalletSignTransactionError)) {
+        toast(e.message || "Relinquish failed, please try again");
+      }
+    }
+  };
 
   const handleRelinquishPositionVotes = async () => {
     try {
@@ -340,6 +363,13 @@ export const PositionManager: FC<PositionManagerProps> = ({
                 <span className="flex flex-grow h-[1px] bg-foreground/30 mx-2" />
               </div>
               <div className="flex flex-col gap-4 max-md:gap-2">
+                <PositionAction
+                  active={action === "proxy"}
+                  Icon={() => <RiUserSharedFill size={24}/>}
+                  onClick={() => setAction("proxy")}
+                >
+                  Update Proxy
+                </PositionAction>
                 {canDelegate && (
                   <PositionAction
                     active={action === "delegate"}
@@ -404,6 +434,14 @@ export const PositionManager: FC<PositionManagerProps> = ({
                     </p>
                   </div>
                 </div>
+              )}
+              {action === "proxy" && (
+                <ProxyPositionPrompt
+                  position={position}
+                  isSubmitting={isUpdatingProxy}
+                  onCancel={() => setAction(undefined)}
+                  onConfirm={handleUpdateProxy}
+                />
               )}
               {action === "flip" && (
                 <FlipPositionPrompt

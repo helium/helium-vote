@@ -61,14 +61,40 @@ export const RevokeProxyModal: React.FC<
     setOpen(!open);
   };
 
+  const selectedAll = proxiedPositions?.length === selectedPositions.size;
+
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>{children}</DialogTrigger>
 
       <DialogContent className="pt-10 px-8 overflow-y-auto overflow-x-hidden max-md:min-w-full max-md:min-h-full max-h-screen">
-        <h2 className="text-xl mb-4 flex flex-row items-center">
-          Revoke Proxies
-        </h2>
+        <div className="mb-1">
+          <h2 className="text-xl mb-4 flex flex-row items-center">
+            Revoke Proxies
+          </h2>
+          <div className="text-white text-base font-normal">
+            Select the positions you would like to revoke from this voter.
+          </div>
+        </div>
+        <div className="flex flex-row justify-between items-center">
+          <div>Proxied Positions</div>
+          <Button
+            onClick={() => {
+              if (selectedAll) {
+                setSelectedPositions(new Set([]));
+              } else {
+                setSelectedPositions(
+                  new Set(proxiedPositions?.map((p) => p.pubkey.toBase58()))
+                );
+              }
+            }}
+            variant="link"
+            className="text-white text-base font-normal"
+            style={{ paddingRight: "0px" }}
+          >
+            {selectedAll ? "Deselect All" : "Select All"}
+          </Button>
+        </div>
         {loading ? (
           <>
             <div className="bg-hv-gray-500 rounded-md w-full p-4 mb-4 font-normal text-s">
