@@ -14,6 +14,7 @@ const pillVariants = cva(
         info: "bg-info text-info-foreground border-info-foreground/20",
         purple: "bg-purple text-purple-foreground border-purple-foreground/20",
         pink: "bg-pink text-pink-foreground border-pink-foreground/20",
+        blue: "bg-blue-500 text-white border-blue-500/20",
       },
     },
     defaultVariants: {

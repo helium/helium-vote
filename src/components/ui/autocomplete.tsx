@@ -71,8 +71,20 @@ export const AutoComplete = ({
         input.blur();
       }
     },
-    [isOpen, options, onValueChange]
+    [isOpen, onInputChange, options, onValueChange]
   );
+
+    const handleKeyUp = useCallback(
+      (event: KeyboardEvent<HTMLDivElement>) => {
+        const input = inputRef.current;
+        if (!input) {
+          return;
+        }
+
+        onInputChange?.(input.value);
+      },
+      [onInputChange]
+    );
 
   const handleBlur = useCallback(() => {
     setOpen(false);
@@ -99,6 +111,7 @@ export const AutoComplete = ({
     <CommandPrimitive
       className="bg-slate-800 border-slate-700 border-1 rounded"
       onKeyDown={handleKeyDown}
+      onKeyUp={handleKeyUp}
     >
       <div>
         <CommandInput

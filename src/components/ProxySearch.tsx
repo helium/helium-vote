@@ -48,19 +48,15 @@ export const ProxySearch: React.FC<{
 
   const { result } = useAsync(debouncedSearch, [input]);
 
-  return result ? (
-    <AutoComplete
-      options={result || []}
-      emptyMessage="No results."
-      placeholder="Find proxy voter"
-      isLoading={isLoading}
-      onValueChange={(v) => onValueChange(v.value)}
-      value={result?.find((r) => r.value == value)}
-      onInputChange={setInput}
-    />
-  ) : (
-    <Loader2 className="size-4 animate-spin" />
-  );
+  return <AutoComplete
+    options={result || []}
+    emptyMessage="No results."
+    placeholder="Find proxy voter"
+    isLoading={isLoading}
+    onValueChange={(v) => onValueChange(v.value)}
+    value={result?.find((r) => r.value == value)}
+    onInputChange={setInput}
+  />;
 };
 
 function isValidPublicKey(input: string | undefined) {

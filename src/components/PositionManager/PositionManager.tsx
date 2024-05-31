@@ -20,6 +20,7 @@ import {
   useRelinquishPositionVotes,
   useSplitPosition,
   useTransferPosition,
+  useUnassignProxies,
 } from "@helium/voter-stake-registry-hooks";
 import { WalletSignTransactionError } from "@solana/wallet-adapter-base";
 import BN from "bn.js";
@@ -154,7 +155,9 @@ export const PositionManager: FC<PositionManagerProps> = ({
     setAction(undefined);
   }, [refetchState, setAction]);
 
-  const { loading: isUpdatingProxy, assignProxies } = useAssignProxies();
+  const { loading: isAssigningProxy, assignProxies } = useAssignProxies();
+  const { loading: isRevokingProxy, unassignProxies } = useUnassignProxies();
+  const isUpdatingProxy = isAssigningProxy || isRevokingProxy
   const { loading: isFlipping, flipPositionLockupKind } =
     useFlipPositionLockupKind();
   const { loading: isClaiming, claimPositionRewards } =
@@ -167,19 +170,36 @@ export const PositionManager: FC<PositionManagerProps> = ({
   const { loading: isRelinquishing, relinquishPositionVotes } =
     useRelinquishPositionVotes();
 
-  const handleUpdateProxy = async (proxy: string) => {
+  const handleUpdateProxy = async ({
+    proxy,
+    expirationTime,
+    isRevoke,
+  }: {
+    proxy?: string;
+    expirationTime?: number;
+    isRevoke?: boolean;
+  }) => {
     try {
-      const nextVoter = new PublicKey(proxy)
-      await relinquishPositionVotes({
-        position,
-        organization,
-        onInstructions: onInstructions(provider),
-      });
-
-      toast("Proxy assigned");
+      if (isRevoke) {
+        await unassignProxies({
+          positions: [position],
+          onInstructions: onInstructions(provider),
+        });
+      } else {
+        await assignProxies({
+          positions: [position],
+          recipient: new PublicKey(proxy || ""),
+          expirationTime: new BN(expirationTime || 0),
+          onInstructions: onInstructions(provider),
+        });
+      }
+      toast(`Proxy ${isRevoke ? "revoked" : "assigned"}`);
     } catch (e: any) {
       if (!(e instanceof WalletSignTransactionError)) {
-        toast(e.message || "Relinquish failed, please try again");
+        toast(
+          e.message ||
+            `${isRevoke ? "Revoke" : "Assign"} failed, please try again`
+        );
       }
     }
   };

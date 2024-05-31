@@ -4,7 +4,7 @@ import { useGovernance } from "@/providers/GovernanceProvider";
 import { ProposalWithVotes } from "@helium/voter-stake-registry-sdk";
 import { PublicKey } from "@solana/web3.js";
 import BN from "bn.js";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { CountdownTimer } from "./CountdownTimer";
 import { toNumber } from "@helium/spl-utils";
@@ -17,6 +17,15 @@ export default function VoteHistory({ wallet }: { wallet: PublicKey }) {
   const [voteHistories, setVoteHistory] = useState<ProposalWithVotes[]>([]);
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
+  const dedupedVoteHistories = useMemo(() => {
+    const seen = new Set();
+    return (voteHistories || [])
+      .filter((p) => {
+        const has = seen.has(p.name);
+        seen.add(p.name);
+        return !has;
+      })
+  }, [voteHistories]);
 
   const fetchMoreData = async (page: number) => {
     setPage(page);
@@ -71,8 +80,10 @@ export default function VoteHistory({ wallet }: { wallet: PublicKey }) {
         }
       >
         <div className="flex flex-col gap-2">
-          {voteHistories.map((voteHistory, index) => {
-            return <ProposalItem key={voteHistory.address} proposal={voteHistory} />;
+          {dedupedVoteHistories.map((voteHistory, index) => {
+            return (
+              <ProposalItem key={voteHistory.address} proposal={voteHistory} />
+            );
           })}
         </div>
       </InfiniteScroll>
@@ -88,8 +99,6 @@ const ProposalItem: React.FC<{
     timeExpired,
     endTs,
     votingResults,
-    isActive,
-    isFailed,
     isCancelled,
   } = useProposalStatus(proposal);
   const { network } = useGovernance()
@@ -102,9 +111,6 @@ const ProposalItem: React.FC<{
       <div className="flex-1 flex flex-col gap-2 max-md:rounded-t-xl md:rounded-l-xl bg-slate-800 p-4">
         <div className="flex flex-row gap-1">
           {!completed && <Pill variant="success">Actively Voting</Pill>}
-          {isActive && completed && (
-            <Pill variant="warning">Voting Closed</Pill>
-          )}
           {isCancelled && <Pill variant="warning">Vote Cancelled</Pill>}
         </div>
 

@@ -11,6 +11,7 @@ import { ProxySearch } from "./ProxySearch";
 import { Button } from "./ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
 import { Slider } from "./ui/slider";
+import { ExpirationTimeSlider } from "./ExpirationTimeSlider";
 
 interface AssignProxyModalProps {
   onSubmit: (args: {
@@ -192,38 +193,17 @@ export const AssignProxyModal: React.FC<
                   })}
                 </div>
               </div>
-              <div>
-                <h2 className="text-lg mt-4 mb-2">Expiration Time</h2>
-                <Slider
-                  min={1}
-                  step={1}
-                  max={maxDays}
-                  value={[selectedDays]}
-                  onValueChange={(e) => {
-                    setSelectedDays(e[0]);
-                  }}
-                />
-                <div className="mt-2 text-right text-gray-500 text-xs font-medium leading-none">
-                  {new Date(expirationTime * 1000).toLocaleString()}
-                </div>
-              </div>
+              <ExpirationTimeSlider
+                maxDays={maxDays}
+                setSelectedDays={setSelectedDays}
+                selectedDays={selectedDays}
+                expirationTime={expirationTime}
+              />
               <div className="mt-2 text-slate-400 text-xs font-normal leading-none">
                 Your assigned proxy will expire by Aug 1 of each year by
                 default, however you may select any date prior to this epoch
                 date.
               </div>
-              {!wallet && (
-                <div className="w-full flex flex-col gap-2 pt-4">
-                  <h2 className="text-lg mb-2">Wallet to Assign</h2>
-                  <input
-                    value={recipient}
-                    onChange={changeRecipient}
-                    className="text-black border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:border-blue-300"
-                    type="text"
-                    placeholder="Wallet Address"
-                  />
-                </div>
-              )}
             </div>
           )}
           <div className="justify-stretch flex flex-row pt-2 gap-2.5">
