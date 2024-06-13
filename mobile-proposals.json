@@ -269,7 +269,7 @@
   },
   {
     "name": "HIP 122: Amend Service Provider Hex Boosting",
-    "uri": "https://gist.githubusercontent.com/hiptron/5534033fae8fe909ba2ab8b0c6d7369f/raw/1d18f9aa7ad11a60aef9801f66580946b18a6fa0/HIP-122-Vote-Summary.md",
+    "uri": "https://gist.githubusercontent.com/hiptron/5534033fae8fe909ba2ab8b0c6d7369f/raw/200759eb61bef0d02423ab5a54e42f317622c278/HIP-122-Vote-Summary.md",
     "maxChoicesPerVoter": 1,
     "tags": ["HIP", "Economic", "Technical"],
     "choices": [
