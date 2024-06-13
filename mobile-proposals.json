@@ -236,5 +236,55 @@
       { "uri": null, "name": "Max Gold/Max - wif hat" },
       { "uri": null, "name": "MaknBank/MaknBank#0865" }
     ]
+  },
+  {
+    "name": "HIP 114: Incentive Escrow Fund for Subscriber Referrals",
+    "uri": "https://gist.githubusercontent.com/hiptron/a40f2d0ea840de4cafd0642420bf76ca/raw/9bd4b691ba0869d4cf1d7dfa5dcd0064bf408c91/HIP-114-Vote-Summary.md",
+    "maxChoicesPerVoter": 1,
+    "tags": ["HIP", "Economic", "Technical"],
+    "choices": [
+      { "uri": null, "name": "For HIP 114" },
+      { "uri": null, "name": "Against HIP 114" }
+    ]
+  },
+  {
+    "name": "HIP 118: Verification Mapping for MOBILE Network",
+    "uri": "https://gist.githubusercontent.com/hiptron/d0f0c290d49b3742aaea1d9e7775105e/raw/31bebf30bef57fc7276a164e01f5a6dcfcb281a6/HIP-118-Vote-Summary.md",
+    "maxChoicesPerVoter": 1,
+    "tags": ["HIP", "Economic", "Technical"],
+    "choices": [
+      { "uri": null, "name": "For HIP 118" },
+      { "uri": null, "name": "Against HIP 118" }
+    ]
+  },
+  {
+    "name": "HIP 119: Closing Gaming Loopholes Within the MOBILE Network",
+    "uri": "https://gist.githubusercontent.com/hiptron/0f96483730039261075f35d00ca89f4c/raw/b45c126046dd02607cfecad2e16edc03c2f5292c/HIP-119-Vote-Summary.md",
+    "maxChoicesPerVoter": 1,
+    "tags": ["HIP", "Economic", "Technical"],
+    "choices": [
+      { "uri": null, "name": "For HIP 119" },
+      { "uri": null, "name": "Against HIP 119" }
+    ]
+  },
+  {
+    "name": "HIP 122: Amend Service Provider Hex Boosting",
+    "uri": "https://gist.githubusercontent.com/hiptron/5534033fae8fe909ba2ab8b0c6d7369f/raw/200759eb61bef0d02423ab5a54e42f317622c278/HIP-122-Vote-Summary.md",
+    "maxChoicesPerVoter": 1,
+    "tags": ["HIP", "Economic", "Technical"],
+    "choices": [
+      { "uri": null, "name": "For HIP 122" },
+      { "uri": null, "name": "Against HIP 122" }
+    ]
+  },
+  {
+    "name": "HIP 125: Temporary Anti-Gaming Measures For Boosted Hexes",
+    "uri": "https://gist.githubusercontent.com/hiptron/dfa37ee07840907d36f0d5965cf66018/raw/d0db1426b9ef9ce4aca04df1ea352c2e5df332d7/HIP-125-Vote-Summary.md",
+    "maxChoicesPerVoter": 1,
+    "tags": ["HIP", "Economic", "Technical"],
+    "choices": [
+      { "uri": null, "name": "For HIP 125" },
+      { "uri": null, "name": "Against HIP 125" }
+    ]
   }
 ]
