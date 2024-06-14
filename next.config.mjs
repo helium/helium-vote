@@ -15,11 +15,23 @@ const nextConfig = {
         port: "",
         pathname: "/**/**",
       },
+      {
+        protocol: "https",
+        hostname: "helium.io",
+        port: "",
+        pathname: "/**/**",
+      },
+      {
+        protocol: "https",
+        hostname: "test-helium.com",
+        port: "",
+        pathname: "/**/**",
+      },
       ...(process.env.NODE_ENV === "development" && [
         {
           protocol: "http",
           hostname: "localhost",
-          port: "8081",
+          port: "8082",
           pathname: "/**/**",
         },
       ]),

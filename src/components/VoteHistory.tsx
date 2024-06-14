@@ -11,63 +11,32 @@ import { toNumber } from "@helium/spl-utils";
 import { Pill } from "./Pill";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
+import { useVotesForWallet } from "@helium/voter-stake-registry-hooks";
 
 export default function VoteHistory({ wallet }: { wallet: PublicKey }) {
-  const { voteService, mint } = useGovernance();
-  const [voteHistories, setVoteHistory] = useState<ProposalWithVotes[]>([]);
-  const [hasMore, setHasMore] = useState(true);
-  const [page, setPage] = useState(1);
+  const {
+    data: voteHistoryPages,
+    fetchNextPage,
+    hasNextPage,
+  } = useVotesForWallet({
+    wallet,
+    amountPerPage: 20,
+  });
   const dedupedVoteHistories = useMemo(() => {
     const seen = new Set();
-    return (voteHistories || [])
-      .filter((p) => {
-        const has = seen.has(p.name);
-        seen.add(p.name);
-        return !has;
-      })
-  }, [voteHistories]);
-
-  const fetchMoreData = async (page: number) => {
-    setPage(page);
-    if (voteService) {
-      const newVoteHistory = await voteService.getVotesForWallet({
-        wallet: wallet,
-        page: page,
-        limit: 100,
-      });
-      if (newVoteHistory.length < 100) {
-        setHasMore(false);
-      }
-      setVoteHistory((prev) => {
-        const seen = new Set()
-        return [...prev, ...newVoteHistory].filter(x => {
-          if (!seen.has(x.address)) {
-            seen.add(x.address)
-            return true
-          }
-          return false
-        });
-      });
-    }
-  };
-
-  useEffect(() => {
-    if (voteService) {
-      setHasMore(true);
-      setVoteHistory([]);
-      fetchMoreData(1);
-    }
-  }, [voteService?.registrar.toBase58()]);
+    return (voteHistoryPages?.pages?.flat() || []).filter((p) => {
+      const has = seen.has(p.name);
+      seen.add(p.name);
+      return !has;
+    });
+  }, [voteHistoryPages]);
 
   return (
     <div className="w-full">
       <InfiniteScroll
-        dataLength={voteHistories.length}
-        next={() => {
-          setPage(page + 1);
-          fetchMoreData(page + 1);
-        }}
-        hasMore={hasMore}
+        dataLength={dedupedVoteHistories.length}
+        next={fetchNextPage}
+        hasMore={hasNextPage}
         loader={
           <div className="p-4 flex flex-row justify-center">
             <Loader2 className="size-5 animate-spin" />
@@ -80,7 +49,7 @@ export default function VoteHistory({ wallet }: { wallet: PublicKey }) {
         }
       >
         <div className="flex flex-col gap-2">
-          {dedupedVoteHistories.map((voteHistory, index) => {
+          {dedupedVoteHistories.map((voteHistory) => {
             return (
               <ProposalItem key={voteHistory.address} proposal={voteHistory} />
             );
@@ -94,14 +63,11 @@ export default function VoteHistory({ wallet }: { wallet: PublicKey }) {
 const ProposalItem: React.FC<{
   proposal: ProposalWithVotes;
 }> = ({ proposal }) => {
-  const {
-    completed,
-    timeExpired,
-    endTs,
-    votingResults,
-    isCancelled,
-  } = useProposalStatus(proposal);
-  const { network } = useGovernance()
+  const { completed, timeExpired, endTs, votingResults, isCancelled } =
+    useProposalStatus(proposal);
+  const { network } = useGovernance();
+  // @ts-ignore
+  const choices = proposal.state?.resolved?.choices;
 
   return (
     <Link
@@ -114,16 +80,25 @@ const ProposalItem: React.FC<{
           {isCancelled && <Pill variant="warning">Vote Cancelled</Pill>}
         </div>
 
-        <div className="text-white text-xl font-medium">
-          {proposal.name}
-        </div>
+        <div className="text-white text-xl font-medium">{proposal.name}</div>
         {timeExpired ? (
           <div className="flex flex-col">
             <InfoItem
               name="Completed"
-              value={new Date(endTs.toNumber() * 1000).toLocaleDateString()}
+              value={new Date(endTs!.toNumber() * 1000).toLocaleDateString()}
             />
-            <InfoItem name="Result" value="Chicken" />
+            <InfoItem
+              name="Result"
+              // @ts-ignore
+              value={
+                choices
+                  ? Object.values(choices)
+                      // @ts-ignore
+                      .map((c: number) => proposal.choices[c].name)
+                      .join(", ")
+                  : ""
+              }
+            />
           </div>
         ) : null}
       </div>
@@ -162,7 +137,7 @@ const ProposalItem: React.FC<{
               <div className="uppercase text-slate-500 text-xs font-medium leading-none">
                 Est. Time Remaining
               </div>
-              <CountdownTimer endTs={endTs} />
+              <CountdownTimer endTs={endTs!} />
             </div>
           </div>
         )}

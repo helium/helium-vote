@@ -45,7 +45,7 @@ export function ProxyProfile({
   const { mint, voteService } = useGovernance();
   const { info: mintAcc } = useMint(mint);
   const decimals = mintAcc?.decimals;
-  const { assignProxies } = useAssignProxies();
+  const { mutateAsync: assignProxies } = useAssignProxies();
   const { unassignProxies } = useUnassignProxies();
   const wallet = useMemo(() => new PublicKey(proxy.wallet), [proxy.wallet]);
   const { votingPower, positions } = useProxiedTo(wallet);

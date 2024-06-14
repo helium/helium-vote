@@ -1,17 +1,21 @@
+import { Command as CommandPrimitive } from "cmdk";
+import {
+  useCallback,
+  useRef,
+  useState,
+  type KeyboardEvent
+} from "react";
 import {
   CommandGroup,
-  CommandItem,
-  CommandList,
   CommandInput,
-  Command,
+  CommandItem,
+  CommandList
 } from "./command";
-import { Command as CommandPrimitive } from "cmdk";
-import { useState, useRef, useCallback, type KeyboardEvent, useEffect } from "react";
 
 import { Skeleton } from "./skeleton";
 
-import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Check } from "lucide-react";
 
 export type Option = Record<"value" | "label", string> & Record<string, string>;
 
@@ -74,17 +78,17 @@ export const AutoComplete = ({
     [isOpen, onInputChange, options, onValueChange]
   );
 
-    const handleKeyUp = useCallback(
-      (event: KeyboardEvent<HTMLDivElement>) => {
-        const input = inputRef.current;
-        if (!input) {
-          return;
-        }
+  const handleKeyUp = useCallback(
+    (event: KeyboardEvent<HTMLDivElement>) => {
+      const input = inputRef.current;
+      if (!input) {
+        return;
+      }
 
-        onInputChange?.(input.value);
-      },
-      [onInputChange]
-    );
+      onInputChange?.(input.value);
+    },
+    [onInputChange]
+  );
 
   const handleBlur = useCallback(() => {
     setOpen(false);

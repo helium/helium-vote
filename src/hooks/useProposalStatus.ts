@@ -39,7 +39,7 @@ export function useProposalStatus(proposal?: ProposalV0 | ProposalWithVotes) {
     // @ts-ignore
     (proposal?.state.resolved
       ? // @ts-ignore
-        proposal?.state.resolved.endTs
+        new BN(proposal?.state.resolved.endTs)
       : // @ts-ignore
         new BN(proposal?.state.voting?.startTs).add(
           resolution.settings.nodes.find(

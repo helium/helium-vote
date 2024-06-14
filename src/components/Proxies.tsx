@@ -18,6 +18,7 @@ import { Card } from "./ui/card";
 import { Input } from "./ui/input";
 import { Loader2 } from "lucide-react";
 import { Skeleton } from "./ui/skeleton";
+import { useVoters } from "@helium/voter-stake-registry-hooks";
 
 const DECENTRALIZATION_RISK_INDEX = 6;
 
@@ -66,40 +67,19 @@ export function Proxies() {
   const { voteService, mint } = useGovernance();
   const { info: mintAcc } = useMint(mint);
   const decimals = mintAcc?.decimals;
-  const [proxies, setProxies] = useState<EnhancedProxy[]>([]);
-  const [hasMore, setHasMore] = useState(false);
-  const [page, setPage] = useState(1);
   const path = usePathname();
   const [proxySearch, setProxySearch] = useState("");
-
-  const fn = useMemo(
-    () =>
-      debounce(async (page: number, search: string) => {
-        setPage(page);
-        if (voteService) {
-          const newProxies = await voteService.getProxies({
-            page,
-            limit: 100,
-            query: search,
-          });
-          if (newProxies.length == 100) {
-            setHasMore(true);
-          }
-          setProxies((prevProxies) => [...prevProxies, ...newProxies]);
-        }
-      }, 300),
-    [voteService]
-  );
-
-  const { execute: fetchMoreData, loading } = useAsyncCallback(fn);
-
-  useEffect(() => {
-    if (voteService) {
-      setProxies([]);
-      setPage(1);
-      fetchMoreData(1, proxySearch);
-    }
-  }, [voteService?.registrar.toBase58(), proxySearch]);
+  const {
+    data: voters,
+    fetchNextPage,
+    hasNextPage,
+    isLoading,
+    isFetchingNextPage,
+  } = useVoters({
+    search: proxySearch,
+    amountPerPage: 100,
+  });
+  const proxies = voters?.pages.flat() || [];
 
   return (
     <ContentSection className="flex-1 py-4">
@@ -118,9 +98,9 @@ export function Proxies() {
           </div>
         </div>
         <InfiniteScroll
-          dataLength={proxies.length}
-          next={() => fetchMoreData(page + 1, proxySearch)}
-          hasMore={!loading && hasMore}
+          dataLength={proxies?.length}
+          next={() => fetchNextPage()}
+          hasMore={hasNextPage}
           loader={
             <div className="p-4 flex flex-row justify-center">
               <Loader2 className="size-5 animate-spin" />
@@ -193,7 +173,7 @@ export function Proxies() {
                 ) : null}
               </>
             ))}
-            {loading && <ProxyCardSkeleton />}
+            {(isLoading || isFetchingNextPage) && <ProxyCardSkeleton />}
           </div>
         </InfiniteScroll>
       </section>

@@ -104,7 +104,7 @@ const GovernanceProvider: FC<{ children: ReactNode }> = ({ children }) => {
         mint={mint}
         wallet={anchorProvider?.wallet as Wallet}
         connection={anchorProvider?.connection}
-        heliumVoteUri="http://localhost:8081"
+        heliumVoteUri={process.env.NEXT_PUBLIC_HELIUM_VOTE_URI}
       >
         {children}
       </HeliumVsrStateProvider>

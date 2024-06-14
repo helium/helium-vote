@@ -1,62 +1,57 @@
-import React, { useMemo, useState } from "react";
-import { AutoComplete, Option } from "./ui/autocomplete";
-import { useAsync } from "react-async-hook";
-import { useHeliumVsrState } from "@helium/voter-stake-registry-hooks";
+import { ellipsisMiddle } from "@/lib/utils";
+import { useVoters } from "@helium/voter-stake-registry-hooks";
 import { PublicKey } from "@solana/web3.js";
-import { debounce, ellipsisMiddle } from "@/lib/utils";
+import { useDebounce } from "@uidotdev/usehooks";
+import React, { useMemo, useState } from "react";
+import { AutoComplete } from "./ui/autocomplete";
 import { Loader2 } from "lucide-react";
 
 export const ProxySearch: React.FC<{
   value: string;
   onValueChange: (value: string) => void;
 }> = ({ value, onValueChange }) => {
-  const [isLoading, setLoading] = useState(false);
   const [input, setInput] = useState<string>();
-  const { voteService } = useHeliumVsrState();
+  const debouncedInput = useDebounce(input, 300);
+  const { data: resultPaged, isLoading } = useVoters({
+    search: debouncedInput || "",
+    amountPerPage: 20,
+  });
 
-  const debouncedSearch = useMemo(
-    () =>
-      debounce(async (query: string | undefined) => {
-        setLoading(true);
-        try {
-          const results = await voteService?.searchProxies({
-            query: query || "",
-          });
+  const result = useMemo(() => {
+    const resultsAsOptions =
+      resultPaged?.pages.flat().map((r) => {
+        return {
+          value: r.wallet,
+          label: `${r.name} | ${ellipsisMiddle(r.wallet)}`,
+        };
+      }) || [];
+    if (isValidPublicKey(debouncedInput)) {
+      resultsAsOptions.push({
+        value: debouncedInput || "",
+        label: debouncedInput || "",
+      });
+    }
+    return resultsAsOptions;
+  }, [resultPaged, debouncedInput]);
+  const selectedOption = useMemo(() => {
+    return result?.find((r) => r.value == value);
+  }, [result, value])
 
-          const resultsAsOptions =
-            results?.map((r) => {
-              return {
-                value: r.wallet,
-                label: `${r.name} | ${ellipsisMiddle(r.wallet)}`,
-              };
-            }) || [];
+  if (value && !selectedOption) {
+    return <Loader2 className="w-4 h-4 animate-spin" />;
+  }
 
-          if (isValidPublicKey(query)) {
-            resultsAsOptions.push({
-              value: query || "",
-              label: query || "",
-            });
-          }
-
-          return resultsAsOptions;
-        } finally {
-          setLoading(false);
-        }
-      }, 300),
-    [voteService]
+  return (
+    <AutoComplete
+      options={result || []}
+      emptyMessage="No results."
+      placeholder="Find proxy voter"
+      isLoading={isLoading}
+      onValueChange={(v) => onValueChange(v.value)}
+      value={selectedOption}
+      onInputChange={setInput}
+    />
   );
-
-  const { result } = useAsync(debouncedSearch, [input]);
-
-  return <AutoComplete
-    options={result || []}
-    emptyMessage="No results."
-    placeholder="Find proxy voter"
-    isLoading={isLoading}
-    onValueChange={(v) => onValueChange(v.value)}
-    value={result?.find((r) => r.value == value)}
-    onInputChange={setInput}
-  />;
 };
 
 function isValidPublicKey(input: string | undefined) {

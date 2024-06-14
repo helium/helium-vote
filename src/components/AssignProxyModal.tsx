@@ -70,7 +70,7 @@ export const AssignProxyModal: React.FC<
     if (selectedDays > maxDays) {
       setSelectedDays(maxDays);
     }
-  }, [maxDays]);
+  }, [maxDays, selectedDays]);
 
   const changeRecipient = (e: any) => {
     setRecipient(e.target.value);
