@@ -11,17 +11,25 @@ import { toNumber } from "@helium/spl-utils";
 import { Pill } from "./Pill";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
-import { useVotesForWallet } from "@helium/voter-stake-registry-hooks";
+import {
+  useHeliumVsrState,
+  votesForWalletQuery,
+} from "@helium/voter-stake-registry-hooks";
+import { useInfiniteQuery } from "@tanstack/react-query";
 
 export default function VoteHistory({ wallet }: { wallet: PublicKey }) {
+  const { voteService } = useHeliumVsrState();
   const {
     data: voteHistoryPages,
     fetchNextPage,
     hasNextPage,
-  } = useVotesForWallet({
-    wallet,
-    amountPerPage: 20,
-  });
+  } = useInfiniteQuery(
+    votesForWalletQuery({
+      voteService,
+      wallet,
+      amountPerPage: 20,
+    })
+  );
   const dedupedVoteHistories = useMemo(() => {
     const seen = new Set();
     return (voteHistoryPages?.pages?.flat() || []).filter((p) => {
@@ -137,7 +145,7 @@ const ProposalItem: React.FC<{
               <div className="uppercase text-slate-500 text-xs font-medium leading-none">
                 Est. Time Remaining
               </div>
-              <CountdownTimer endTs={endTs!} />
+              <CountdownTimer endTs={endTs?.toNumber()!} />
             </div>
           </div>
         )}

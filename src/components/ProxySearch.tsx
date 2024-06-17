@@ -1,21 +1,24 @@
 import { ellipsisMiddle } from "@/lib/utils";
-import { useVoters } from "@helium/voter-stake-registry-hooks";
 import { PublicKey } from "@solana/web3.js";
 import { useDebounce } from "@uidotdev/usehooks";
 import React, { useMemo, useState } from "react";
 import { AutoComplete } from "./ui/autocomplete";
 import { Loader2 } from "lucide-react";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { proxiesQuery } from "@helium/voter-stake-registry-hooks";
 
 export const ProxySearch: React.FC<{
   value: string;
   onValueChange: (value: string) => void;
 }> = ({ value, onValueChange }) => {
-  const [input, setInput] = useState<string>();
+  const [input, setInput] = useState<string>(value);
   const debouncedInput = useDebounce(input, 300);
-  const { data: resultPaged, isLoading } = useVoters({
-    search: debouncedInput || "",
-    amountPerPage: 20,
-  });
+  const { data: resultPaged, isLoading, error } = useInfiniteQuery(
+    proxiesQuery({
+      search: debouncedInput || "",
+      amountPerPage: 20,
+    })
+  );
 
   const result = useMemo(() => {
     const resultsAsOptions =

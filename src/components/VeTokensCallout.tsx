@@ -10,12 +10,14 @@ import {
 import { HNT_MINT, IOT_MINT, MOBILE_MINT, toNumber } from "@helium/spl-utils";
 import {
   calcPositionVotingPower,
-  getPositionKeys,
+  positionKeysForWalletQuery,
+  useHeliumVsrState,
   usePositions,
   useRegistrar,
 } from "@helium/voter-stake-registry-hooks";
 import { getRegistrarKey } from "@helium/voter-stake-registry-sdk";
 import { PublicKey } from "@solana/web3.js";
+import { useQuery } from "@tanstack/react-query";
 import BN from "bn.js";
 import Image from "next/image";
 import React, { FC, useMemo } from "react";
@@ -33,30 +35,16 @@ const VeTokenItem: FC<{ mint: PublicKey }> = ({ mint }) => {
   );
   const { info: registrar } = useRegistrar(registrarKey);
 
-  const args = useMemo(
-    () =>
-      wallet &&
-      mint &&
-      connection && {
-        wallet: wallet.publicKey,
-        mint,
-        provider,
-      },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [wallet?.publicKey?.toBase58(), mint.toBase58(), connection, provider]
-  );
-
-  const { result, loading: loadingPositionKeys } = useAsync(
-    async (args: any | undefined) => {
-      if (args) {
-        return getPositionKeys(args);
-      }
-    },
-    [args]
+  const { voteService } = useHeliumVsrState();
+  const { data: result, isLoading: loadingPositionKeys } = useQuery(
+    positionKeysForWalletQuery({
+      wallet: wallet?.publicKey,
+      voteService,
+    })
   );
 
   const { loading: loadingFetchedPositions, accounts: fetchedPositions } =
-    usePositions(result?.positionKeys);
+    usePositions(result?.positions);
 
   const positions = useMemo(
     () => fetchedPositions?.map((fetched) => fetched.info),

@@ -155,8 +155,8 @@ export const PositionManager: FC<PositionManagerProps> = ({
     setAction(undefined);
   }, [refetchState, setAction]);
 
-  const { loading: isAssigningProxy, assignProxies } = useAssignProxies();
-  const { loading: isRevokingProxy, unassignProxies } = useUnassignProxies();
+  const { isPending: isAssigningProxy, mutateAsync: assignProxies } = useAssignProxies();
+  const { isPending: isRevokingProxy, mutateAsync: unassignProxies } = useUnassignProxies();
   const isUpdatingProxy = isAssigningProxy || isRevokingProxy
   const { loading: isFlipping, flipPositionLockupKind } =
     useFlipPositionLockupKind();

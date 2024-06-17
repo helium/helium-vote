@@ -1,55 +1,57 @@
 "use client";
 
+import { networksToMint } from "@/lib/constants";
 import { ellipsisMiddle, humanReadable } from "@/lib/utils";
 import { useGovernance } from "@/providers/GovernanceProvider";
 import { useMint } from "@helium/helium-react-hooks";
 import {
+  proxyQuery,
   useAssignProxies,
   useProxiedTo,
   useUnassignProxies,
 } from "@helium/voter-stake-registry-hooks";
 import {
-  EnhancedProxy,
   VoteService,
-  WithRank,
-  getRegistrarKey,
+  getRegistrarKey
 } from "@helium/voter-stake-registry-sdk";
 import { PublicKey } from "@solana/web3.js";
+import { useQuery } from "@tanstack/react-query";
 import BN from "bn.js";
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { usePathname } from "next/navigation";
+import { useMemo } from "react";
+import { useAsync } from "react-async-hook";
 import { FaArrowLeft } from "react-icons/fa6";
 import { AssignProxyModal } from "./AssignProxyModal";
 import { ContentSection } from "./ContentSection";
+import { Markdown } from "./Markdown";
 import { ProxyButton } from "./ProxyButton";
 import { RevokeProxyButton } from "./RevokeProxyButton";
 import { RevokeProxyModal } from "./RevokeProxyModal";
-import { Card, CardContent, CardHeader } from "./ui/card";
 import VoteHistory from "./VoteHistory";
-import { Markdown } from "./Markdown";
+import { Card, CardContent, CardHeader } from "./ui/card";
 import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group";
-import { usePathname } from "next/navigation";
-import { useAsync } from "react-async-hook";
-import { networksToMint } from "@/lib/constants";
 
-export function ProxyProfile({
-  proxy,
-  detail,
-  image,
-}: {
-  proxy: EnhancedProxy & WithRank;
-  detail: string;
-  image: string;
-}) {
-  const { mint, voteService } = useGovernance();
+export function ProxyProfile({ wallet: walletRaw }: { wallet: string }) {
+  const wallet = useMemo(() => new PublicKey(walletRaw), [walletRaw]);
+  const { mint, network, voteService } = useGovernance();
+  const { data: proxyRaw, error } = useQuery(
+    proxyQuery({
+      wallet: useMemo(() => new PublicKey(wallet), [wallet]),
+      voteService,
+    })
+  );
+  console.log("raw", error);
+  // Due to hydration, should always be present
+  const proxy = proxyRaw!;
+  const detail = proxy.detail;
+  const image = proxy.image;
   const { info: mintAcc } = useMint(mint);
   const decimals = mintAcc?.decimals;
   const { mutateAsync: assignProxies } = useAssignProxies();
-  const { unassignProxies } = useUnassignProxies();
-  const wallet = useMemo(() => new PublicKey(proxy.wallet), [proxy.wallet]);
+  const { mutateAsync: unassignProxies } = useUnassignProxies();
   const { votingPower, positions } = useProxiedTo(wallet);
-  const { network } = useGovernance();
   const { result: networks } = useAsync(
     async (vs: VoteService | undefined) => {
       if (vs) {
@@ -66,7 +68,7 @@ export function ProxyProfile({
           );
         }
       }
-      return new Set()
+      return new Set();
     },
     [voteService]
   );

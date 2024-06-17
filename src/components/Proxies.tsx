@@ -1,14 +1,15 @@
 "use client";
 
-import { debounce, ellipsisMiddle, humanReadable } from "@/lib/utils";
+import { ellipsisMiddle, humanReadable } from "@/lib/utils";
 import { useGovernance } from "@/providers/GovernanceProvider";
 import { useMint } from "@helium/helium-react-hooks";
-import { EnhancedProxy } from "@helium/voter-stake-registry-sdk";
+import { proxiesQuery } from "@helium/voter-stake-registry-hooks";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import BN from "bn.js";
+import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
-import { useAsyncCallback } from "react-async-hook";
+import { useState } from "react";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import { IoWarningOutline } from "react-icons/io5";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -16,9 +17,8 @@ import { ContentSection } from "./ContentSection";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Card } from "./ui/card";
 import { Input } from "./ui/input";
-import { Loader2 } from "lucide-react";
 import { Skeleton } from "./ui/skeleton";
-import { useVoters } from "@helium/voter-stake-registry-hooks";
+import { useDebounce } from "@uidotdev/usehooks";
 
 const DECENTRALIZATION_RISK_INDEX = 6;
 
@@ -69,16 +69,20 @@ export function Proxies() {
   const decimals = mintAcc?.decimals;
   const path = usePathname();
   const [proxySearch, setProxySearch] = useState("");
+  const searchDebounced = useDebounce(proxySearch, 300);
   const {
     data: voters,
     fetchNextPage,
     hasNextPage,
     isLoading,
     isFetchingNextPage,
-  } = useVoters({
-    search: proxySearch,
-    amountPerPage: 100,
-  });
+  } = useInfiniteQuery(
+    proxiesQuery({
+      search: searchDebounced,
+      amountPerPage: 100,
+      voteService: voteService,
+    })
+  );
   const proxies = voters?.pages.flat() || [];
 
   return (
