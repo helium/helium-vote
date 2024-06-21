@@ -7,8 +7,8 @@ import React, { FC } from "react";
 import { FaCircle, FaCircleCheck } from "react-icons/fa6";
 import { Loader2 } from "lucide-react";
 import { PublicKey } from "@solana/web3.js";
-import { useKnownProxy } from "@/hooks/useKnownProxy";
 import { Pill } from "./Pill";
+import { useKnownProxy } from "@helium/voter-stake-registry-hooks";
 
 export const VoteOption: FC<{
   option: VoteChoiceWithMeta;

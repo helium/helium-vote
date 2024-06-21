@@ -8,7 +8,7 @@ import {
 } from "@/lib/utils";
 import { useGovernance } from "@/providers/GovernanceProvider";
 import { useSolanaUnixNow } from "@helium/helium-react-hooks";
-import { PositionWithMeta } from "@helium/voter-stake-registry-hooks";
+import { PositionWithMeta, useKnownProxy } from "@helium/voter-stake-registry-hooks";
 import BN from "bn.js";
 import classNames from "classnames";
 import Image from "next/image";
@@ -28,7 +28,6 @@ import { Skeleton } from "./ui/skeleton";
 import { PublicKey } from "@solana/web3.js";
 import { useAsync } from "react-async-hook";
 import { VoteService } from "@helium/voter-stake-registry-sdk";
-import { useKnownProxy } from "@/hooks/useKnownProxy";
 
 export const PositionCardSkeleton: FC<{ compact?: boolean }> = () => {
   const { network } = useGovernance();

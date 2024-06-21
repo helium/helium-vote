@@ -10,10 +10,7 @@ import {
   useProxiedTo,
   useUnassignProxies,
 } from "@helium/voter-stake-registry-hooks";
-import {
-  VoteService,
-  getRegistrarKey
-} from "@helium/voter-stake-registry-sdk";
+import { VoteService, getRegistrarKey } from "@helium/voter-stake-registry-sdk";
 import { PublicKey } from "@solana/web3.js";
 import { useQuery } from "@tanstack/react-query";
 import BN from "bn.js";
@@ -42,7 +39,6 @@ export function ProxyProfile({ wallet: walletRaw }: { wallet: string }) {
       voteService,
     })
   );
-  console.log("raw", error);
   // Due to hydration, should always be present
   const proxy = proxyRaw!;
   const detail = proxy.detail;
@@ -93,8 +89,14 @@ export function ProxyProfile({ wallet: walletRaw }: { wallet: string }) {
               TOTAL POWER
             </div>
             <div className="text-white text-base font-medium leading-normal">
-              {proxy.delegatedVeTokens
-                ? humanReadable(new BN(proxy.delegatedVeTokens), decimals)
+              {proxy.delegatedVeTokens && decimals
+                ? // Force 2 decimals
+                  humanReadable(
+                    new BN(proxy.delegatedVeTokens).div(
+                      new BN(Math.pow(10, decimals - 2))
+                    ),
+                    2
+                  )
                 : "0"}
             </div>
           </div>
@@ -144,7 +146,10 @@ export function ProxyProfile({ wallet: walletRaw }: { wallet: string }) {
                   POWER FROM ME
                 </div>
                 <div className="text-white text-base font-medium leading-normal">
-                  {humanReadable(votingPower, decimals)}
+                  {humanReadable(
+                    votingPower.div(new BN(Math.pow(10, (decimals || 0) - 2))),
+                    2
+                  )}
                 </div>
               </div>
               <div className="flex-col flex-1 justify-center items-start gap-1 inline-flex">
@@ -177,7 +182,7 @@ export function ProxyProfile({ wallet: walletRaw }: { wallet: string }) {
             <div className="grow flex flex-row items-center gap-2">
               <Image
                 className="w-24 h-24 rounded-full"
-                src={image}
+                src={image || ""}
                 alt="Profile"
                 width={48}
                 height={48}
@@ -185,7 +190,9 @@ export function ProxyProfile({ wallet: walletRaw }: { wallet: string }) {
               />
               <div className="flex flex-col gap-1">
                 <h1 className="text-2xl font-semibold">{proxy.name}</h1>
-                <span className="text-xs">{ellipsisMiddle(proxy.wallet)}</span>
+                <span className="text-xs">
+                  {proxy.wallet && ellipsisMiddle(proxy.wallet)}
+                </span>
               </div>
             </div>
             <div className="flex flex-row gap-8">
@@ -225,7 +232,7 @@ export function ProxyProfile({ wallet: walletRaw }: { wallet: string }) {
 
         <div className="md:hidden border-b-2 border-gray-600 mx-4 mb-2" />
         <CardContent>
-          <Markdown>{detail}</Markdown>
+          <Markdown>{detail || `${proxy.wallet}`}</Markdown>
           <div className="md:hidden">{infoCard}</div>
           <div className="flex flex-row justify-stretch gap-6">
             <div className="overflow-auto flex flex-col justify-stretch w-full">

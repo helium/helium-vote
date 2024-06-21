@@ -8,6 +8,7 @@ import { VoteService, getRegistrarKey } from "@helium/voter-stake-registry-sdk";
 import { PublicKey } from "@solana/web3.js";
 import { HydrationBoundary, QueryClient, dehydrate, useQueryClient } from "@tanstack/react-query";
 import { useMemo } from "react";
+import { notFound } from "next/navigation";
 
 function getVoteService({ mint }: { mint: PublicKey }) {
   const registrar = getRegistrarKey(mint);
@@ -29,16 +30,22 @@ export default async function ProxyPage({
   const wallet = useMemo(() => new PublicKey(walletRaw), [walletRaw]);
   const queryClient = new QueryClient();
 
-  await queryClient.prefetchQuery(
+  // Do not use prefetch here, because we want to error when it errors
+  const result = await queryClient.fetchQuery(
     proxyQuery({
       wallet,
       voteService,
     })
   );
+
+
+  if (!result) {
+    return notFound();
+  }
+
   const dehydrated = dehydrate(
     queryClient,
   );
-  console.log(dehydrated);
 
   return (
     <>

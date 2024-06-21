@@ -123,7 +123,7 @@ const ProposalItem: React.FC<{
               name="Percent of Vote"
               value={
                 // Calc with 4 decimals precision
-                proposal.votes[0].weight
+                proposal.votes[0].weight && !votingResults.totalVotes.isZero()
                   ? (
                       new BN(proposal.votes[0].weight)
                         .mul(new BN(10000))

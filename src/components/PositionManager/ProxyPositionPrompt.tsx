@@ -1,17 +1,15 @@
 "use client";
 
-import { PositionWithMeta } from "@helium/voter-stake-registry-hooks";
-import React, { FC, useMemo, useState } from "react";
-import { Button } from "../ui/button";
-import { Loader2, X } from "lucide-react";
-import { PositionCard } from "../PositionCard";
-import { useKnownProxy } from "@/hooks/useKnownProxy";
-import { ProxySearch } from "../ProxySearch";
-import { ExpirationTimeSlider } from "../ExpirationTimeSlider";
-import { PublicKey } from "@solana/web3.js";
-import { RiUserSharedFill } from "react-icons/ri";
 import { useGovernance } from "@/providers/GovernanceProvider";
+import { PositionWithMeta, useKnownProxy } from "@helium/voter-stake-registry-hooks";
+import { PublicKey } from "@solana/web3.js";
+import { Loader2, X } from "lucide-react";
 import Link from "next/link";
+import { FC, useMemo, useState } from "react";
+import { RiUserSharedFill } from "react-icons/ri";
+import { ExpirationTimeSlider } from "../ExpirationTimeSlider";
+import { ProxySearch } from "../ProxySearch";
+import { Button } from "../ui/button";
 
 export const ProxyPositionPrompt: FC<{
   position: PositionWithMeta;
@@ -22,9 +20,13 @@ export const ProxyPositionPrompt: FC<{
   const isProxied =
     position.proxy?.nextVoter &&
     !position.proxy?.nextVoter.equals(PublicKey.default);
-  const { knownProxy } = useKnownProxy(position.proxy?.nextVoter)
-  const [proxy, setProxy] = useState<string>(position.proxy?.nextVoter?.toBase58() || "")
-  const { network } = useGovernance()
+  const { knownProxy } = useKnownProxy(position.proxy?.nextVoter);
+  const [proxy, setProxy] = useState<string>(
+    position.proxy?.nextVoter.equals(PublicKey.default)
+      ? ""
+      : position.proxy?.nextVoter.toBase58() || ""
+  );
+  const { network } = useGovernance();
 
   const today = new Date();
   const augustFirst = Date.UTC(

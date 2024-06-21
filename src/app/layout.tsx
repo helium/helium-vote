@@ -10,10 +10,8 @@ export const metadata = formMetaTags();
 
 export default function RootLayout({
   children,
-  dehydratedState,
 }: {
   children: React.ReactNode;
-  dehydratedState: any;
 }) {
   return (
     <html lang="en">

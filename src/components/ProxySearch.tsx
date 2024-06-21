@@ -5,7 +5,10 @@ import React, { useMemo, useState } from "react";
 import { AutoComplete } from "./ui/autocomplete";
 import { Loader2 } from "lucide-react";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { proxiesQuery } from "@helium/voter-stake-registry-hooks";
+import {
+  proxiesQuery,
+  useHeliumVsrState,
+} from "@helium/voter-stake-registry-hooks";
 
 export const ProxySearch: React.FC<{
   value: string;
@@ -13,10 +16,12 @@ export const ProxySearch: React.FC<{
 }> = ({ value, onValueChange }) => {
   const [input, setInput] = useState<string>(value);
   const debouncedInput = useDebounce(input, 300);
-  const { data: resultPaged, isLoading, error } = useInfiniteQuery(
+  const { voteService } = useHeliumVsrState();
+  const { data: resultPaged, isLoading } = useInfiniteQuery(
     proxiesQuery({
       search: debouncedInput || "",
       amountPerPage: 20,
+      voteService,
     })
   );
 
@@ -38,7 +43,7 @@ export const ProxySearch: React.FC<{
   }, [resultPaged, debouncedInput]);
   const selectedOption = useMemo(() => {
     return result?.find((r) => r.value == value);
-  }, [result, value])
+  }, [result, value]);
 
   if (value && !selectedOption) {
     return <Loader2 className="w-4 h-4 animate-spin" />;
