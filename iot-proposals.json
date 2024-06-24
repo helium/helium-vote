@@ -79,5 +79,15 @@
       { "uri": null, "name": "For HIP 116" },
       { "uri": null, "name": "Against HIP 116" }
     ]
+  },
+  {
+    "name": "HIP 123: Redefining IOT Data-Only Hotspot Onboarding and Assertion Fees\n",
+    "uri": "https://gist.githubusercontent.com/hiptron/ec5917a4c2435861935faa186d96fa4b/raw/d352218f5357c6f853d4585e4ad2a56f95f643c0/HIP-123-Vote-Summary.md",
+    "maxChoicesPerVoter": 1,
+    "tags": ["HIP", "Economic", "Technical"],
+    "choices": [
+      { "uri": null, "name": "For HIP 123" },
+      { "uri": null, "name": "Against HIP 123" }
+    ]
   }
 ]
