@@ -6,21 +6,15 @@ import { organizationKey } from "@helium/organization-sdk";
 import { HNT_MINT, IOT_MINT, MOBILE_MINT } from "@helium/spl-utils";
 import {
   HeliumVsrStateProvider,
-  getRegistrarKey,
   getSubDaos,
   useHeliumVsrState,
   useRegistrar,
   useSubDaos,
 } from "@helium/voter-stake-registry-hooks";
+import { getRegistrarKey } from "@helium/voter-stake-registry-sdk";
 import { PublicKey } from "@solana/web3.js";
 import { useParams } from "next/navigation";
-import React, {
-  FC,
-  ReactNode,
-  createContext,
-  useContext,
-  useMemo,
-} from "react";
+import { FC, ReactNode, createContext, useContext, useMemo } from "react";
 import { useAsync } from "react-async-hook";
 
 type GovNetwork = "hnt" | "mobile" | "iot";
@@ -110,6 +104,7 @@ const GovernanceProvider: FC<{ children: ReactNode }> = ({ children }) => {
         mint={mint}
         wallet={anchorProvider?.wallet as Wallet}
         connection={anchorProvider?.connection}
+        heliumVoteUri={process.env.NEXT_PUBLIC_HELIUM_VOTE_URI}
       >
         {children}
       </HeliumVsrStateProvider>

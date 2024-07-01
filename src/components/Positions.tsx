@@ -56,26 +56,34 @@ export const Positions: FC = () => {
     [positions, loadingGov]
   );
 
+  const proxiedPositions = useMemo(
+    () => sortedPositions?.filter((p) => p.isProxiedToMe),
+    [sortedPositions]
+  );
+  const unProxiedPositions = useMemo(
+    () => sortedPositions?.filter((p) => !p.isProxiedToMe),
+    [sortedPositions]
+  );
   const decayedPositions = useMemo(
     () =>
-      sortedPositions
+      unProxiedPositions
         ?.filter((p) => p.lockup.kind.cliff)
         .filter((p) => p.lockup.endTs.lte(new BN(Date.now() / 1000))),
-    [sortedPositions]
+    [unProxiedPositions]
   );
 
   const notDecayedPositions = useMemo(
     () =>
-      sortedPositions?.filter(
+      unProxiedPositions?.filter(
         (p) =>
           p.lockup.kind.constant || p.lockup.endTs.gt(new BN(Date.now() / 1000))
       ),
-    [sortedPositions]
+    [unProxiedPositions]
   );
 
   const positionsWithRewards = useMemo(
-    () => positions?.filter((p) => p.hasRewards),
-    [positions]
+    () => unProxiedPositions?.filter((p) => p.hasRewards),
+    [unProxiedPositions]
   );
 
   const { loading: claimingAllRewards, claimAllPositionsRewards } =
@@ -132,21 +140,24 @@ export const Positions: FC = () => {
       <section className="flex flex-col flex-1 gap-4">
         <div className="flex flex-col gap-2 md:gap-0 md:flex-row md:justify-between md:items-center">
           <h4>All Positions</h4>
-          {network === "hnt" && (
-            <Button
-              variant="default"
-              className="text-foreground flex flex-row gap-2 items-center"
-              disabled={!hasRewards || claimingAllRewards}
-              onClick={handleClaimRewards}
-            >
-              {claimingAllRewards ? (
-                <Loader2 className="size-4 animate-spin" />
-              ) : (
-                <FaStar className="size-4" />
-              )}
-              {claimingAllRewards ? "Claiming Rewards..." : "Claim Rewards"}
-            </Button>
-          )}
+          <div className="flex max-md:flex-col gap-2">
+            <CreatePositionButton showText />
+            {network === "hnt" && (
+              <Button
+                variant="default"
+                className="text-foreground flex flex-row gap-2 items-center"
+                disabled={!hasRewards || claimingAllRewards}
+                onClick={handleClaimRewards}
+              >
+                {claimingAllRewards ? (
+                  <Loader2 className="size-4 animate-spin" />
+                ) : (
+                  <FaStar className="size-4" />
+                )}
+                {claimingAllRewards ? "Claiming Rewards..." : "Claim Rewards"}
+              </Button>
+            )}
+          </div>
         </div>
         {!notDecayedPositions?.length && !decayedPositions?.length && (
           <Card className="flex flex-col flex-1">
@@ -201,6 +212,22 @@ export const Positions: FC = () => {
             <CardContent className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 py-4">
               {notDecayedPositions.map((position) => (
                 <PositionCard
+                  key={position.pubkey.toBase58()}
+                  position={position}
+                />
+              ))}
+            </CardContent>
+          </Card>
+        )}
+        {proxiedPositions && proxiedPositions.length > 0 && (
+          <Card className="flex flex-col flex-grow bg-card/45 overflow-hidden border border-slate-900">
+            <CardHeader className="flex flex-row justify-between items-center bg-card border-b border-slate-900">
+              <CardTitle>Proxied to Me</CardTitle>
+            </CardHeader>
+            <CardContent className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 py-4">
+              {proxiedPositions.map((position) => (
+                <PositionCard
+                  canDelegate={false}
                   key={position.pubkey.toBase58()}
                   position={position}
                 />

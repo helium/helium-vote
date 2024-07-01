@@ -1,15 +1,8 @@
 "use client";
 
-import { ProposalV0 } from "@/lib/types";
-import { getDerivedProposalState, humanReadable } from "@/lib/utils";
+import { useProposalInfo } from "@/hooks/useProposalInfo";
+import { humanReadable } from "@/lib/utils";
 import { useGovernance } from "@/providers/GovernanceProvider";
-import { useMint } from "@helium/helium-react-hooks";
-import {
-  useProposal,
-  useProposalConfig,
-  useResolutionSettings,
-} from "@helium/modular-governance-hooks";
-import { useRegistrar, useVote } from "@helium/voter-stake-registry-hooks";
 import { Separator } from "@radix-ui/react-separator";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { PublicKey } from "@solana/web3.js";
@@ -18,20 +11,19 @@ import classNames from "classnames";
 import { format } from "date-fns";
 import Image from "next/image";
 import Link from "next/link";
-import React, { FC, useMemo, useRef, useState } from "react";
+import { FC, useMemo } from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import {
   FaArrowLeft,
-  FaChevronDown,
   FaCopy,
   FaDiscord,
   FaGithub,
-  FaXTwitter,
+  FaXTwitter
 } from "react-icons/fa6";
-import Markdown from "react-markdown";
 import { toast } from "sonner";
 import { ContentSection } from "./ContentSection";
 import { CountdownTimer } from "./CountdownTimer";
+import { Markdown } from "./Markdown";
 import { VoteBreakdown } from "./VoteBreakdown";
 import { VoteOptions } from "./VoteOptions";
 import { VoteResults } from "./VoteResults";
@@ -195,73 +187,26 @@ export const Proposal: FC<{
   proposalKey: string;
 }> = ({ name: initName, content, proposalKey }) => {
   const { connected, connecting } = useWallet();
-  const markdownRef = useRef<HTMLDivElement>(null);
-  const [markdownExpanded, setMarkdownExpanded] = useState(false);
-  const { loading: loadingGov, amountLocked, network } = useGovernance();
+  const {
+    loading: loadingGov,
+    amountLocked,
+    amountProxyLocked,
+    network,
+  } = useGovernance();
   const pKey = useMemo(() => new PublicKey(proposalKey), [proposalKey]);
-  const { loading: loadingProposal, info: proposal } = useProposal(pKey);
-  const { loading: loadingVote, voteWeights } = useVote(pKey);
+  const {
+    voted,
+    completed,
+    isCancelled,
+    noVotingPower,
+    timeExpired,
+    isLoading,
+    votingResults,
+    proposal,
+    decimals,
+    endTs,
+  } = useProposalInfo(pKey);
   const name = proposal?.name || initName;
-  const { info: proposalConfig } = useProposalConfig(proposal?.proposalConfig);
-  const { info: registrar } = useRegistrar(proposalConfig?.voteController);
-  const decimals = useMint(registrar?.votingMints[0].mint)?.info?.decimals;
-  const { info: resolution } = useResolutionSettings(
-    proposalConfig?.stateController
-  );
-
-  const votingResults = useMemo(() => {
-    const totalVotes: BN = [...(proposal?.choices || [])].reduce(
-      (acc, { weight }) => weight.add(acc) as BN,
-      new BN(0)
-    );
-
-    const results = proposal?.choices.map((r, index) => ({
-      ...r,
-      index,
-      percent: totalVotes?.isZero()
-        ? 100 / proposal?.choices.length
-        : // Calculate with 4 decimals of precision
-          r.weight.mul(new BN(10000)).div(totalVotes).toNumber() *
-          (100 / 10000),
-    }));
-
-    return { results, totalVotes };
-  }, [proposal]);
-
-  const markdownHeight = useMemo(
-    () => markdownRef.current?.clientHeight || 0,
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [markdownRef.current]
-  );
-
-  const derivedState = useMemo(
-    () => getDerivedProposalState(proposal as ProposalV0),
-    [proposal]
-  );
-
-  const endTs =
-    resolution &&
-    (proposal?.state.resolved
-      ? proposal?.state.resolved.endTs
-      : proposal?.state.voting?.startTs.add(
-          resolution.settings.nodes.find(
-            (node) => typeof node.offsetFromStartTs !== "undefined"
-          )?.offsetFromStartTs?.offset ?? new BN(0)
-        ));
-
-  const isLoading = useMemo(
-    () => connecting || loadingGov || loadingProposal || !proposal,
-    [connecting, loadingGov, loadingProposal, proposal]
-  );
-  const timeExpired = endTs && endTs.toNumber() <= Date.now().valueOf() / 1000;
-  const noVotingPower = !isLoading && (!amountLocked || amountLocked.isZero());
-  const isActive = derivedState === "active";
-  const isCancelled = derivedState === "cancelled";
-  const isFailed = derivedState === "failed";
-  const completed =
-    timeExpired || (timeExpired && isActive) || isCancelled || isFailed;
-
-  const voted = !loadingVote && voteWeights?.some((n) => n.gt(new BN(0)));
 
   const twitterUrl = useMemo(() => {
     if (endTs) {
@@ -282,22 +227,6 @@ export const Proposal: FC<{
     }
   }, [proposalKey, endTs, network, completed, name]);
 
-  const rewriteLinks = () => {
-    const visit = require("unist-util-visit");
-
-    return function transformer(tree: any) {
-      visit.visit(tree, "link", (node: any) => {
-        node.data = {
-          ...node.data,
-          hProperties: {
-            ...(node.data || {}).hProperties,
-            target: "_blank",
-          },
-        };
-      });
-    };
-  };
-
   if (isLoading) return <ProposalSkeleton />;
   return (
     <>
@@ -317,7 +246,7 @@ export const Proposal: FC<{
             : "Voting has been Cancelled"}
         </p>
       </div>
-      <ContentSection className="py-8 max-md:py-0 max-md:px-0">
+      <ContentSection className="py-12 max-md:py-0 max-md:px-0 max-sm:px-0">
         <Card className="p-2 rounded-md max-md:rounded-none">
           <CardHeader className="gap-2">
             <Link
@@ -374,14 +303,18 @@ export const Proposal: FC<{
                     </div>
                   </div>
                 )}
-                {connected && !noVotingPower && !completed && (
-                  <VoteOptions
-                    choices={votingResults.results}
-                    maxChoicesPerVoter={proposal!.maxChoicesPerVoter}
-                    proposalKey={pKey}
-                  />
-                )}
-                {(completed || (connected && !noVotingPower && voted)) &&
+                {connected &&
+                  !noVotingPower &&
+                  !completed &&
+                  proposal &&
+                  votingResults && (
+                    <VoteOptions
+                      choices={votingResults.results}
+                      maxChoicesPerVoter={proposal!.maxChoicesPerVoter}
+                      proposalKey={pKey}
+                    />
+                  )}
+                {(completed || (connected && !noVotingPower && voted)) && votingResults &&
                   votingResults?.totalVotes.gt(new BN(0)) && (
                     <div className="flex-col gap-2 mt-6">
                       <VoteResults
@@ -407,41 +340,9 @@ export const Proposal: FC<{
                     isCancelled={isCancelled}
                   />
                 </div>
-                <div
-                  className="w-full flex flex-col mt-5 pb-5"
-                  ref={markdownRef}
-                >
-                  <div
-                    style={{
-                      maxHeight:
-                        markdownExpanded || !completed
-                          ? undefined
-                          : MARKDOWN_MAX + "px",
-                      overflow: "hidden",
-                    }}
-                  >
-                    <Markdown
-                      remarkPlugins={[rewriteLinks]}
-                      className="prose prose-headings:m-0 prose-headings:font-normal prose-hr:my-8 prose-p:text-foreground clear-both dark:prose-invert"
-                    >
-                      {content.replace(name, "")}
-                    </Markdown>
-                  </div>
-
-                  {completed &&
-                    markdownHeight > MARKDOWN_MAX &&
-                    !markdownExpanded && (
-                      <div className="w-full flex flex-row justify-center items-center bg-card py-2">
-                        <Button
-                          variant="secondary"
-                          onClick={() => setMarkdownExpanded(true)}
-                          className="gap-2 w-full md:w-auto"
-                        >
-                          Show More <FaChevronDown />
-                        </Button>
-                      </div>
-                    )}
-                </div>
+                <Markdown initialExpanded={completed}>
+                  {content.replace(name, "")}
+                </Markdown>
               </div>
               <div className="flex flex-col gap-4 w-4/12 lg:w-3/12 max-md:hidden">
                 <ProposalHipBlurb network={network} />

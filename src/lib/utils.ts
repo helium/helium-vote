@@ -4,10 +4,9 @@ import {
   HELIUM_COMMON_LUT,
   HELIUM_COMMON_LUT_DEVNET,
   batchInstructionsToTxsWithPriorityFee,
-  batchParallelInstructionsWithPriorityFee,
   bulkSendTransactions,
   sendAndConfirmWithRetry,
-  toVersionedTx,
+  toVersionedTx
 } from "@helium/spl-utils";
 import { PositionWithMeta } from "@helium/voter-stake-registry-hooks";
 import { Mint } from "@solana/spl-token";
@@ -35,6 +34,14 @@ export const MINS_PER_HOUR = 60;
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
+
+export const ellipsisMiddle = (wallet: string): string => {
+  const length = wallet.length;
+  const start = wallet.slice(0, 5);
+  const end = wallet.slice(length - 5, length);
+  const middle = "...";
+  return start + middle + end;
+};
 
 export const formMetaTags = (args?: {
   title?: string;
@@ -339,7 +346,6 @@ export const onInstructions =
             ],
           }
         );
-        console.log("hehe")
 
         await bulkSendTransactions(
           provider,
@@ -385,3 +391,17 @@ export const getProposalContent = async (proposalKey: PublicKey) => {
   const content = await res.text();
   return { content, name: proposal.name };
 };
+
+export function debounce<T extends unknown[], U>(
+  callback: (...args: T) => PromiseLike<U> | U,
+  wait: number
+) {
+  let timer: any;
+
+  return (...args: T): Promise<U> => {
+    clearTimeout(timer);
+    return new Promise((resolve) => {
+      timer = setTimeout(() => resolve(callback(...args)), wait);
+    });
+  };
+}
