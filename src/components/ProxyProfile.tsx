@@ -70,10 +70,9 @@ export function ProxyProfile({ wallet: walletRaw }: { wallet: string }) {
   );
 
   const path = usePathname();
-  const currentPath = path.split("/")[0] || "hnt";
+  const currentPath = path.split("/")[1] || "hnt";
   function getNetworkPath(network: string) {
-    const split = path.split("/");
-    split.shift();
+    const [_firstSlash, _network, ...split] = path.split("/");
     return "/" + [network, ...split].join("/");
   }
 
@@ -272,7 +271,7 @@ export function ProxyProfile({ wallet: walletRaw }: { wallet: string }) {
                     </ToggleGroupItem>
                   )}
                   {networks?.has("iot") && (
-                    <ToggleGroupItem value="mobile" aria-label="IOT">
+                    <ToggleGroupItem value="iot" aria-label="IOT">
                       <Link
                         className="flex items-center gap-2 p-2"
                         href={`${getNetworkPath("iot")}`}
