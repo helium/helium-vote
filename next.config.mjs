@@ -23,7 +23,7 @@ const nextConfig = {
       },
       {
         protocol: "https",
-        hostname: "test-helium.com",
+        hostname: "*.test-helium.com",
         port: "",
         pathname: "/**/**",
       },

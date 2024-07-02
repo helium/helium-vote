@@ -74,7 +74,7 @@ export function ProxyProfile({ wallet: walletRaw }: { wallet: string }) {
   function getNetworkPath(network: string) {
     const split = path.split("/");
     split.shift();
-    return [network, ...split].join("/");
+    return "/" + [network, ...split].join("/");
   }
 
   const infoCard = (

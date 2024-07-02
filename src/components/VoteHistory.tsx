@@ -1,21 +1,20 @@
 import { useProposalStatus } from "@/hooks/useProposalStatus";
 import { cn } from "@/lib/utils";
 import { useGovernance } from "@/providers/GovernanceProvider";
-import { ProposalWithVotes } from "@helium/voter-stake-registry-sdk";
-import { PublicKey } from "@solana/web3.js";
-import BN from "bn.js";
-import { useEffect, useMemo, useState } from "react";
-import InfiniteScroll from "react-infinite-scroll-component";
-import { CountdownTimer } from "./CountdownTimer";
-import { toNumber } from "@helium/spl-utils";
-import { Pill } from "./Pill";
-import { Loader2 } from "lucide-react";
-import Link from "next/link";
 import {
   useHeliumVsrState,
   votesForWalletQuery,
 } from "@helium/voter-stake-registry-hooks";
+import { ProposalWithVotes } from "@helium/voter-stake-registry-sdk";
+import { PublicKey } from "@solana/web3.js";
 import { useInfiniteQuery } from "@tanstack/react-query";
+import BN from "bn.js";
+import { Loader2 } from "lucide-react";
+import Link from "next/link";
+import { useMemo } from "react";
+import InfiniteScroll from "react-infinite-scroll-component";
+import { CountdownTimer } from "./CountdownTimer";
+import { Pill } from "./Pill";
 
 export default function VoteHistory({ wallet }: { wallet: PublicKey }) {
   const { voteService } = useHeliumVsrState();
