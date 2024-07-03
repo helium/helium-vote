@@ -216,14 +216,14 @@ export const PositionCard: FC<{
           </div>
           <div className="hidden max-md:flex">{renderTags()}</div>
         </CardHeader>
-        <CardContent className="bg-slate-950 flex flex-grow p-4 items-center max-md:flex-col max-md:items-start max-md:p-0">
+        <CardContent className="bg-slate-950 flex flex-grow p-4 max-md:flex-col max-md:items-start max-md:p-0">
           <div className="flex w-6/12 lg:w-4/12 max-md:w-full max-md:p-4">
             <div className="flex flex-col w-6/12 gap-2">
               <p className="text-muted-foreground text-xs">VOTING POWER</p>
-              <div className="flex flex-row gap-1">
+              <div className="flex flex-row gap-1 relative">
                 <p className="text-sm">{votingPower}</p>
-                {hasGenesisMultiplier && (
-                  <Pill variant="purple" className="px-1 py-0">
+                {!hasGenesisMultiplier && (
+                  <Pill variant="purple" className="absolute">
                     x3
                   </Pill>
                 )}
@@ -245,7 +245,7 @@ export const PositionCard: FC<{
           <div
             className={classNames(
               "flex flex-col w-3/12 lg:w-2/12 max-md:p-4 max-md:w-full max-md:flex-row max-md:items-center max-md:justify-between",
-              !position.proxy ? "gap-1" : "gap-2"
+              !position.proxy ? "gap-1" : "gap-1.5"
             )}
           >
             <p className="text-muted-foreground text-xs">PROXIED TO</p>
@@ -254,7 +254,7 @@ export const PositionCard: FC<{
               <Link
                 href={`/${network}/proxies/${position.proxy.nextVoter.toBase58()}`}
               >
-                <Pill variant="pink">
+                <Pill variant="pink" className="hover:bg-pink/70">
                   {knownProxy?.name ||
                     ellipsisMiddle(position.proxy.nextVoter.toBase58())}
                 </Pill>
