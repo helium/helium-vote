@@ -143,10 +143,10 @@ export function Proxies() {
                       <CardDetail
                         title="Total Voting Power"
                         value={
-                          proxy.delegatedVeTokens && decimals
+                          proxy.proxiedVeTokens && decimals
                             ? // force 2 decimals
                               humanReadable(
-                                new BN(proxy.delegatedVeTokens).div(
+                                new BN(proxy.proxiedVeTokens).div(
                                   new BN(Math.pow(10, (decimals || 0) - 2))
                                 ),
                                 2

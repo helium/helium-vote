@@ -160,7 +160,7 @@ export const Positions: FC = () => {
           </div>
         </div>
         {!notDecayedPositions?.length && !decayedPositions?.length && (
-          <Card className="flex flex-col flex-1">
+          <Card className="flex flex-col flex-1 p-8">
             <div className="flex flex-col flex-grow items-center justify-center gap-4">
               <div className="flex flex-col items-center">
                 <h4 className="text-xl text-muted-foreground">No positions</h4>

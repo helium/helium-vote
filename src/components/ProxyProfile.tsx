@@ -88,10 +88,10 @@ export function ProxyProfile({ wallet: walletRaw }: { wallet: string }) {
               TOTAL POWER
             </div>
             <div className="text-white text-base font-medium leading-normal">
-              {proxy.delegatedVeTokens && decimals
+              {proxy.proxiedVeTokens && decimals
                 ? // Force 2 decimals
                   humanReadable(
-                    new BN(proxy.delegatedVeTokens).div(
+                    new BN(proxy.proxiedVeTokens).div(
                       new BN(Math.pow(10, decimals - 2))
                     ),
                     2
