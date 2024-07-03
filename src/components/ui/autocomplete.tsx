@@ -143,7 +143,7 @@ export const AutoComplete = ({
             ) : null}
             {options.length > 0 && !isLoading ? (
               <CommandGroup className="flex flex-col gap-4">
-                {[...options, ...options].map((option) => {
+                {options.map((option) => {
                   const isSelected = selected?.value === option.value;
                   return (
                     <CommandItem
