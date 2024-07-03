@@ -1,15 +1,10 @@
 import { Command as CommandPrimitive } from "cmdk";
-import {
-  useCallback,
-  useRef,
-  useState,
-  type KeyboardEvent
-} from "react";
+import { useCallback, useRef, useState, type KeyboardEvent } from "react";
 import {
   CommandGroup,
   CommandInput,
   CommandItem,
-  CommandList
+  CommandList,
 } from "./command";
 
 import { Skeleton } from "./skeleton";
@@ -131,14 +126,14 @@ export const AutoComplete = ({
         />
       </div>
 
-      <div className={cn("relative mt-1", { hidden: !isOpen })}>
+      <div className={cn("relative mt-0", { hidden: !isOpen })}>
         <div
           className={cn(
-            "animate-in fade-in-0 zoom-in-95 absolute top-0 z-10 w-full rounded-xl bg-black outline-none",
+            "animate-in fade-in-0 zoom-in-95 absolute top-0 z-10 w-full rounded-xl",
             isOpen ? "block" : "hidden"
           )}
         >
-          <CommandList className="rounded-lg ring-1 ring-slate-800">
+          <CommandList className="mt-1 rounded-lg bg-slate-850">
             {isLoading ? (
               <CommandPrimitive.Loading>
                 <div className="p-1">
@@ -147,8 +142,8 @@ export const AutoComplete = ({
               </CommandPrimitive.Loading>
             ) : null}
             {options.length > 0 && !isLoading ? (
-              <CommandGroup>
-                {options.map((option) => {
+              <CommandGroup className="flex flex-col gap-4">
+                {[...options, ...options].map((option) => {
                   const isSelected = selected?.value === option.value;
                   return (
                     <CommandItem
@@ -160,7 +155,7 @@ export const AutoComplete = ({
                       }}
                       onSelect={() => handleSelectOption(option)}
                       className={cn(
-                        "flex w-full items-center gap-2",
+                        "flex w-full items-center gap-2 cursor-pointer !bg-transparent hover:!bg-gray-700",
                         !isSelected ? "pl-8" : null
                       )}
                     >

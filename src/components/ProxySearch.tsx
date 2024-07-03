@@ -53,7 +53,7 @@ export const ProxySearch: React.FC<{
     <AutoComplete
       options={result || []}
       emptyMessage="No results."
-      placeholder="Find proxy voter"
+      placeholder="Find proxy voter..."
       isLoading={isLoading}
       onValueChange={(v) => onValueChange(v.value)}
       value={selectedOption}
