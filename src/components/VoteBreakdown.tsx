@@ -133,35 +133,32 @@ export const VoteBreakdown: FC<{
   return (
     <div className="flex flex-col flex-grow gap-4">
       <div className="flex flex-row justify-between">
-        <h5>Voter Breakdown</h5>
-        <span
-          className="cursor-pointer hover:underline max-md:hidden"
-          onClick={handleCSVDownload}
-        >
+        <h4>Voter Breakdown</h4>
+        <span className="cursor-pointer underline" onClick={handleCSVDownload}>
           Download as CSV
         </span>
       </div>
-      <p className="w-12/12 md:w-8/12 text-sm">
+      <p className="text-sm">
         Note: For MOBILE/IOT subnetworks, this is shown as 1/10 of your vote
         power becuase the underlying contracts in spl-governance onlysupport
         64-bits of precision
       </p>
-      <span
-        className="flex flex-row justify-center py-6 cursor-pointer hover:underline md:hidden "
-        onClick={handleCSVDownload}
-      >
-        Download as CSV
-      </span>
-      <Table className="border-2 border-slate-600 text-base mt-4">
+      <Table className="text-base mt-4">
         {groupedSortedMarkers && groupedSortedMarkers.length > displayCount && (
           <TableCaption></TableCaption>
         )}
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[100px] text-foreground">OWNER</TableHead>
-            <TableHead className="text-foreground">CHOICES</TableHead>
-            <TableHead className="text-foreground">VOTE POWER</TableHead>
-            <TableHead className="text-right text-foreground">
+            <TableHead className="bg-slate-900 rounded-tl-md w-[100px] text-muted-foreground">
+              OWNER
+            </TableHead>
+            <TableHead className="bg-slate-900 text-muted-foreground">
+              CHOICES
+            </TableHead>
+            <TableHead className="bg-slate-900 text-muted-foreground">
+              VOTE POWER
+            </TableHead>
+            <TableHead className="bg-slate-900 rounded-tr-md text-muted-foreground">
               PERCENTAGE
             </TableHead>
           </TableRow>
@@ -212,7 +209,8 @@ export const VoteBreakdown: FC<{
         <Button
           variant="secondary"
           onClick={() => setDisplayCount(displayCount + 6)}
-          className="flex-grow gap-2"
+          size="sm"
+          className="gap-2 w-full md:w-auto rounded-full"
         >
           Show More
           <FaChevronDown />

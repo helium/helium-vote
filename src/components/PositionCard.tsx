@@ -222,7 +222,7 @@ export const PositionCard: FC<{
               <p className="text-muted-foreground text-xs">VOTING POWER</p>
               <div className="flex flex-row gap-1 relative">
                 <p className="text-sm">{votingPower}</p>
-                {!hasGenesisMultiplier && (
+                {hasGenesisMultiplier && (
                   <Pill variant="purple" className="absolute">
                     x3
                   </Pill>

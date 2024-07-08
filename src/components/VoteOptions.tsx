@@ -23,7 +23,13 @@ export const VoteOptions: FC<{
   proposalKey: PublicKey;
 }> = ({ choices = [], maxChoicesPerVoter, proposalKey }) => {
   const [currVote, setCurrVote] = useState(0);
-  const { voteWeights, canVote, vote, loading: voting, voters } = useVote(proposalKey);
+  const {
+    voteWeights,
+    canVote,
+    vote,
+    loading: voting,
+    voters,
+  } = useVote(proposalKey);
 
   const { positions } = useGovernance();
 
@@ -79,22 +85,23 @@ export const VoteOptions: FC<{
     }
   };
 
-  const { assignProxies } = useAssignProxies();
+  const { mutateAsync: assignProxies } = useAssignProxies();
 
   return (
     <div className="flex flex-col gap-2">
-      <h5>Voting Options</h5>
-      <div className="flex flex-col px-4 py-2 bg-gray-700 rounded-sm">
-        <p className="text-sm">
-          To vote, click on any option. To remove your vote, click the option
-          again.{" "}
+      <div className="flex flex-col">
+        <h5>Voting Options</h5>
+        <p className="text-xs text-muted-foreground">
+          (Vote for up to {maxChoicesPerVoter} of {choices.length} options)
         </p>
+      </div>
+      <div className="flex flex-col p-4 bg-gray-700 rounded-sm gap-2">
         <p className="text-sm">
-          Vote for up to {maxChoicesPerVoter} of {choices.length} options.
+          Vote by clicking on an option below. Click again to remove your vote.
         </p>
         {canProxy && (
           <>
-            <div className="relative flex py-3 items-center">
+            <div className="relative flex items-center">
               <div className="flex-grow border-t border-slate-500"></div>
               <span className="flex-shrink mx-4 text-sm font-semibold text-slate-500">
                 OR
@@ -106,11 +113,9 @@ export const VoteOptions: FC<{
               You can override any active votes anytime - your vote takes
               precedence over a proxy.
             </p>
-            <div className="py-2">
-              <AssignProxyModal onSubmit={assignProxies}>
-                <ProxyButton onClick={() => {}} isLoading={false} />
-              </AssignProxyModal>
-            </div>
+            <AssignProxyModal onSubmit={assignProxies}>
+              <ProxyButton />
+            </AssignProxyModal>
           </>
         )}
       </div>

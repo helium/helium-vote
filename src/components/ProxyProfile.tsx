@@ -292,10 +292,10 @@ export function ProxyProfile({ wallet: walletRaw }: { wallet: string }) {
             </div>
             <div className="max-md:hidden flex flex-col gap-3 mt-3">
               <AssignProxyModal onSubmit={assignProxies} wallet={wallet}>
-                <ProxyButton onClick={() => {}} isLoading={false} />
+                <ProxyButton />
               </AssignProxyModal>
               <RevokeProxyModal onSubmit={unassignProxies} wallet={wallet}>
-                <RevokeProxyButton onClick={() => {}} isLoading={false} />
+                <RevokeProxyButton />
               </RevokeProxyModal>
               <div className="min-w-[300px]">{infoCard}</div>
             </div>
