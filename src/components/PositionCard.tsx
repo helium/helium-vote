@@ -20,13 +20,7 @@ import { usePathname } from "next/navigation";
 import React, { FC, useMemo } from "react";
 import { Pill } from "./Pill";
 import { Button } from "./ui/button";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "./ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Skeleton } from "./ui/skeleton";
 import { PublicKey } from "@solana/web3.js";
 
@@ -73,8 +67,10 @@ export const PositionCard: FC<{
   compact?: boolean;
   onClick?: () => void;
   canDelegate?: boolean;
+  isProxy?: boolean;
 }> = ({
   canDelegate: canDelegateIn = true,
+  isProxy: isProxyIn = false,
   position,
   className = "",
   compact = false,
@@ -197,7 +193,11 @@ export const PositionCard: FC<{
   );
 
   return (
-    <Link href={`${path}/${position.pubkey.toBase58()}`}>
+    <Link
+      href={`${path}/${position.pubkey.toBase58()}${
+        isProxyIn ? "?action=proxy&isProxy=true" : ""
+      }`}
+    >
       <Card className="flex cursor-pointer hover:opacity-80 active:opacity-60 overflow-hidden max-md:flex-col">
         <CardHeader className="gap-2 space-y-0 w-3/12 max-md:w-full">
           <div className="flex flex-row flex-1 gap-4">
