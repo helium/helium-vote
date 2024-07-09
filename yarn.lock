@@ -231,10 +231,10 @@
     bn.js "^5.2.0"
     bs58 "^4.0.1"
 
-"@helium/helium-react-hooks@^0.5.0", "@helium/helium-react-hooks@^0.9.0-alpha.2":
-  version "0.9.0-alpha.2"
-  resolved "https://registry.yarnpkg.com/@helium/helium-react-hooks/-/helium-react-hooks-0.9.0-alpha.2.tgz#f853c7109d53e399d2de037b1a2d45d694a4a043"
-  integrity sha512-1ksNYJvUd24sJhmm49Mt2kPZfM7WUQ4/EIWAT25Y7iCaLPbpZI/7Mfh6NVUzcW1T5WfCEKcvCmCvaHpPseoxeA==
+"@helium/helium-react-hooks@^0.5.0", "@helium/helium-react-hooks@^0.9.0-alpha.3":
+  version "0.9.0-alpha.3"
+  resolved "https://registry.yarnpkg.com/@helium/helium-react-hooks/-/helium-react-hooks-0.9.0-alpha.3.tgz#d17222abd09b179ce0385c5f5a0786aa55d6c210"
+  integrity sha512-gTs7tyh+wDoblTq41xy0N0QNMIwX4+wu0elj89v1HgNxtgirDSU9b7Njn1SNqzKlqILjDotnDQe4wdp84+9eEQ==
   dependencies:
     "@coral-xyz/anchor" "^0.28.0"
     "@helium/account-fetch-cache" "^0.9.0-alpha.1"
@@ -245,16 +245,16 @@
     pako "^2.0.3"
     react-async-hook "^4.0.0"
 
-"@helium/helium-sub-daos-sdk@^0.9.0-alpha.2":
-  version "0.9.0-alpha.2"
-  resolved "https://registry.yarnpkg.com/@helium/helium-sub-daos-sdk/-/helium-sub-daos-sdk-0.9.0-alpha.2.tgz#11178f5fb894d12233f35ad6901d36862227a423"
-  integrity sha512-olCTIBR7A6F/dgkpmvfEdwNgkw268zPBMnXf8SGdGPPbuG23UB0/BrorXRl29MDKAJdFsd6nm/Nxmm6BhVIC6Q==
+"@helium/helium-sub-daos-sdk@^0.9.0-alpha.3":
+  version "0.9.0-alpha.3"
+  resolved "https://registry.yarnpkg.com/@helium/helium-sub-daos-sdk/-/helium-sub-daos-sdk-0.9.0-alpha.3.tgz#cd957bfddde93de07fa48824d341e2a9d4a1338d"
+  integrity sha512-gsYXbOhc7GBMyB7OvgPfLaRyP0EfK86bxh5mNDliOpJx3oJ1149lJmCxwAhshX9MZtzr9I4wG+xrKYfejLrTLQ==
   dependencies:
     "@coral-xyz/anchor" "^0.28.0"
     "@helium/anchor-resolvers" "^0.9.0-alpha.1"
     "@helium/circuit-breaker-sdk" "^0.9.0-alpha.2"
-    "@helium/treasury-management-sdk" "^0.9.0-alpha.2"
-    "@helium/voter-stake-registry-sdk" "^0.9.0-alpha.2"
+    "@helium/treasury-management-sdk" "^0.9.0-alpha.3"
+    "@helium/voter-stake-registry-sdk" "^0.9.0-alpha.3"
     bn.js "^5.2.0"
     bs58 "^4.0.1"
 
@@ -354,10 +354,10 @@
     "@helium/anchor-resolvers" "^0.5.0"
     "@helium/modular-governance-idls" "^0.0.8"
 
-"@helium/treasury-management-sdk@^0.9.0-alpha.2":
-  version "0.9.0-alpha.2"
-  resolved "https://registry.yarnpkg.com/@helium/treasury-management-sdk/-/treasury-management-sdk-0.9.0-alpha.2.tgz#498992115e0b4e3f9eecfdb7484c243209c34fa9"
-  integrity sha512-eo1h7qb4/g1UFc/nxh0Kh/g7VrydPLue6a+vSE+VkCwTKPXSZGPiLomZ+eNhzu89k7nyhmhsoB9nL6hPsduTdA==
+"@helium/treasury-management-sdk@^0.9.0-alpha.3":
+  version "0.9.0-alpha.3"
+  resolved "https://registry.yarnpkg.com/@helium/treasury-management-sdk/-/treasury-management-sdk-0.9.0-alpha.3.tgz#45de517c441944594bb7f81c40db9867f4303023"
+  integrity sha512-kInSvyXmlnaEzkFXJ+oPsaH16+wzMlil+m1FUeWLjkLHuXRvMlopxjtr/WkMiCLx84aMF6JP1gMKAhEbhZF+Hg==
   dependencies:
     "@coral-xyz/anchor" "^0.28.0"
     "@helium/anchor-resolvers" "^0.9.0-alpha.1"
@@ -366,21 +366,21 @@
     bn.js "^5.2.0"
     bs58 "^4.0.1"
 
-"@helium/voter-stake-registry-hooks@^0.9.0-alpha.2":
-  version "0.9.0-alpha.2"
-  resolved "https://registry.yarnpkg.com/@helium/voter-stake-registry-hooks/-/voter-stake-registry-hooks-0.9.0-alpha.2.tgz#8c4de7c640970efe7e332e7bbf9e5469f5dd2282"
-  integrity sha512-o3LkOsdoj5c/BYtd5dhyfzZC//tvLh/4rnwYY9SVWuzdIAER3bpwAiszmWehmjgAXYQtR4oHwua8McA6bQh7Ug==
+"@helium/voter-stake-registry-hooks@^0.9.0-alpha.3":
+  version "0.9.0-alpha.3"
+  resolved "https://registry.yarnpkg.com/@helium/voter-stake-registry-hooks/-/voter-stake-registry-hooks-0.9.0-alpha.3.tgz#1e566deebbd781b25661ffa827bf9d1d985cc49d"
+  integrity sha512-0mX3pCr5Sjn6+VtyiykK8feEkln6cEQyl0Jfv9Y7yrdCYrOpYDKobr8nnmY1cYgyDo/iNSgngLiIQOf7w+4AEw==
   dependencies:
     "@coral-xyz/anchor" "^0.28.0"
     "@helium/account-fetch-cache" "^0.9.0-alpha.1"
     "@helium/account-fetch-cache-hooks" "^0.9.0-alpha.2"
     "@helium/circuit-breaker-sdk" "^0.9.0-alpha.2"
-    "@helium/helium-react-hooks" "^0.9.0-alpha.2"
-    "@helium/helium-sub-daos-sdk" "^0.9.0-alpha.2"
+    "@helium/helium-react-hooks" "^0.9.0-alpha.3"
+    "@helium/helium-sub-daos-sdk" "^0.9.0-alpha.3"
     "@helium/modular-governance-hooks" "^0.0.8"
     "@helium/modular-governance-idls" "0.0.8-next.19+4fa4c6b"
     "@helium/spl-utils" "^0.9.0-alpha.2"
-    "@helium/voter-stake-registry-sdk" "^0.9.0-alpha.2"
+    "@helium/voter-stake-registry-sdk" "^0.9.0-alpha.3"
     "@solana/wallet-adapter-base" "^0.9.22"
     "@solana/wallet-adapter-react" "^0.15.32"
     "@solana/web3.js" "^1.78.8"
@@ -389,10 +389,10 @@
     bs58 "^4.0.1"
     react-async-hook "^4.0.0"
 
-"@helium/voter-stake-registry-sdk@^0.9.0-alpha.2":
-  version "0.9.0-alpha.2"
-  resolved "https://registry.yarnpkg.com/@helium/voter-stake-registry-sdk/-/voter-stake-registry-sdk-0.9.0-alpha.2.tgz#cc502f094ccddcc8df5753575810055b498d749d"
-  integrity sha512-SfUPPsZGMooesh2UhmCEgygirpq+Lx4hLD9tUA3wbCc6iHPa/NMANsSk2bXadS27hKmCx20zOgyFysv08Vxhvw==
+"@helium/voter-stake-registry-sdk@^0.9.0-alpha.3":
+  version "0.9.0-alpha.3"
+  resolved "https://registry.yarnpkg.com/@helium/voter-stake-registry-sdk/-/voter-stake-registry-sdk-0.9.0-alpha.3.tgz#f9c74a2c043cbc13fd692919a0def073adc71f1a"
+  integrity sha512-4L4zddlcYZFUAxwhvMcROSyotNQl13BO8vCNLOs4pizWOWHlL6kndYeH8K5CVZJm6WSwrTyeq56kzis+2YeUxA==
   dependencies:
     "@coral-xyz/anchor" "^0.28.0"
     "@helium/anchor-resolvers" "^0.9.0-alpha.1"
