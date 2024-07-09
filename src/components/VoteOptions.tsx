@@ -23,7 +23,13 @@ export const VoteOptions: FC<{
   proposalKey: PublicKey;
 }> = ({ choices = [], maxChoicesPerVoter, proposalKey }) => {
   const [currVote, setCurrVote] = useState(0);
-  const { voteWeights, canVote, vote, loading: voting, voters } = useVote(proposalKey);
+  const {
+    voteWeights,
+    canVote,
+    vote,
+    loading: voting,
+    voters,
+  } = useVote(proposalKey);
 
   const { positions } = useGovernance();
 
@@ -49,7 +55,9 @@ export const VoteOptions: FC<{
         setCurrVote(choice.index);
         await vote({
           choice: choice.index,
-          onInstructions: onInstructions(provider),
+          onInstructions: onInstructions(provider, {
+            useFirstEstimateForAll: true,
+          }),
         });
         toast("Vote submitted");
       } catch (e: any) {
@@ -67,7 +75,9 @@ export const VoteOptions: FC<{
         setCurrVote(choice.index);
         await relinquishVote({
           choice: choice.index,
-          onInstructions: onInstructions(provider),
+          onInstructions: onInstructions(provider, {
+            useFirstEstimateForAll: true,
+          }),
         });
         toast("Vote relinquished");
       } catch (e: any) {
@@ -79,7 +89,7 @@ export const VoteOptions: FC<{
     }
   };
 
-  const { assignProxies } = useAssignProxies();
+  const { mutateAsync: assignProxies } = useAssignProxies();
 
   return (
     <div className="flex flex-col gap-2">

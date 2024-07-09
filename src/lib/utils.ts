@@ -6,7 +6,7 @@ import {
   batchInstructionsToTxsWithPriorityFee,
   bulkSendTransactions,
   sendAndConfirmWithRetry,
-  toVersionedTx
+  toVersionedTx,
 } from "@helium/spl-utils";
 import { PositionWithMeta } from "@helium/voter-stake-registry-hooks";
 import { Mint } from "@solana/spl-token";
@@ -294,7 +294,12 @@ export const precision = (a: number) => {
 };
 
 export const onInstructions =
-  (provider?: AnchorProvider) =>
+  (
+    provider?: AnchorProvider,
+    {
+      useFirstEstimateForAll = false,
+    }: { useFirstEstimateForAll?: boolean } = {}
+  ) =>
   async (instructions: TransactionInstruction[], sigs?: Keypair[]) => {
     if (provider) {
       if (sigs) {
@@ -309,6 +314,7 @@ export const onInstructions =
                 ? HELIUM_COMMON_LUT_DEVNET
                 : HELIUM_COMMON_LUT,
             ],
+            useFirstEstimateForAll,
           }
         );
         const asVersionedTx = transactions.map(toVersionedTx);
@@ -344,6 +350,7 @@ export const onInstructions =
                 ? HELIUM_COMMON_LUT_DEVNET
                 : HELIUM_COMMON_LUT,
             ],
+            useFirstEstimateForAll,
           }
         );
 
