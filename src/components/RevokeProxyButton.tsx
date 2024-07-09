@@ -10,11 +10,12 @@ import { cn } from "@/lib/utils";
 export const RevokeProxyButton = React.forwardRef<
   HTMLButtonElement,
   {
-  className?: string;
-  onClick: () => void;
-  isLoading?: boolean;
-  wallet?: PublicKey;
-}>(({ wallet, className = "", onClick, isLoading = false }) => {
+    className?: string;
+    onClick?: () => void;
+    isLoading?: boolean;
+    wallet?: PublicKey;
+  }
+>(({ wallet, className = "", onClick, isLoading = false }) => {
   const { connected } = useWallet();
   const { loading, positions } = useGovernance();
 
@@ -26,7 +27,7 @@ export const RevokeProxyButton = React.forwardRef<
           !p.proxy.nextVoter.equals(PublicKey.default) &&
           (!wallet || p.proxy.nextVoter.equals(wallet))
       ),
-    [positions]
+    [wallet, positions]
   );
 
   const disabled = !connected || loading || !proxiedPositions?.length;

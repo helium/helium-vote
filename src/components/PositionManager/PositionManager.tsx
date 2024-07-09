@@ -108,6 +108,7 @@ export const PositionManager: FC<PositionManagerProps> = ({
   } = useGovernance();
   const router = useRouter();
   const { lockup } = position;
+
   const isConstant = Object.keys(lockup.kind)[0] === "constant";
   const unixNow = useSolanaUnixNow() || Date.now() / 1000;
   const isDecayed = !isConstant && lockup.endTs.lte(new BN(unixNow));
@@ -117,7 +118,6 @@ export const PositionManager: FC<PositionManagerProps> = ({
       return [];
     }
 
-    const { lockup } = position;
     const lockupKind = Object.keys(lockup.kind)[0];
     const positionLockupPeriodInDays = secsToDays(
       lockupKind === "constant"
@@ -144,6 +144,7 @@ export const PositionManager: FC<PositionManagerProps> = ({
         lockupPeriodInDays >= positionLockupPeriodInDays
       );
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [position, unixNow, positions]);
 
   const maxActionableAmount = mintAcc
@@ -155,9 +156,11 @@ export const PositionManager: FC<PositionManagerProps> = ({
     setAction(undefined);
   }, [refetchState, setAction]);
 
-  const { isPending: isAssigningProxy, mutateAsync: assignProxies } = useAssignProxies();
-  const { isPending: isRevokingProxy, mutateAsync: unassignProxies } = useUnassignProxies();
-  const isUpdatingProxy = isAssigningProxy || isRevokingProxy
+  const { isPending: isAssigningProxy, mutateAsync: assignProxies } =
+    useAssignProxies();
+  const { isPending: isRevokingProxy, mutateAsync: unassignProxies } =
+    useUnassignProxies();
+  const isUpdatingProxy = isAssigningProxy || isRevokingProxy;
   const { loading: isFlipping, flipPositionLockupKind } =
     useFlipPositionLockupKind();
   const { loading: isClaiming, claimPositionRewards } =
@@ -376,56 +379,58 @@ export const PositionManager: FC<PositionManagerProps> = ({
                 handleClaimRewards={handleClaimPositionRewards}
               />
             </div>
-            <div className="flex flex-col py-10 px-4 gap-12 min-w-[465px] max-md:min-w-full max-md:py-4 max-md:gap-4">
-              <div className="flex flex-row justify-center items-center">
-                <span className="flex flex-grow h-[1px] bg-foreground/30 mx-2" />
-                <span>Position Actions</span>
-                <span className="flex flex-grow h-[1px] bg-foreground/30 mx-2" />
-              </div>
-              <div className="flex flex-col gap-4 max-md:gap-2">
-                <PositionAction
-                  active={action === "proxy"}
-                  Icon={() => <RiUserSharedFill size={24}/>}
-                  onClick={() => setAction("proxy")}
-                >
-                  Update Proxy
-                </PositionAction>
-                {canDelegate && (
+            {!position.isProxiedToMe && (
+              <div className="flex flex-col py-10 px-4 gap-12 min-w-[465px] max-md:min-w-full max-md:py-4 max-md:gap-4">
+                <div className="flex flex-row justify-center items-center">
+                  <span className="flex flex-grow h-[1px] bg-foreground/30 mx-2" />
+                  <span>Position Actions</span>
+                  <span className="flex flex-grow h-[1px] bg-foreground/30 mx-2" />
+                </div>
+                <div className="flex flex-col gap-4 max-md:gap-2">
                   <PositionAction
-                    active={action === "delegate"}
-                    disabled={!position.delegatedSubDao && isDecayed}
-                    Icon={CheckCheck}
-                    onClick={() => setAction("delegate")}
+                    active={action === "proxy"}
+                    Icon={() => <RiUserSharedFill size={24} />}
+                    onClick={() => setAction("proxy")}
                   >
-                    Update Delegation
+                    Update Proxy
                   </PositionAction>
-                )}
-                <PositionAction
-                  active={action === "extend"}
-                  Icon={() => (
-                    <ArrowUpFromDot className="transform rotate-90" />
+                  {canDelegate && (
+                    <PositionAction
+                      active={action === "delegate"}
+                      disabled={!position.delegatedSubDao && isDecayed}
+                      Icon={CheckCheck}
+                      onClick={() => setAction("delegate")}
+                    >
+                      Update Delegation
+                    </PositionAction>
                   )}
-                  onClick={() => setAction("extend")}
-                >
-                  Extend Position
-                </PositionAction>
-                <PositionAction
-                  active={action === "split"}
-                  Icon={Split}
-                  onClick={() => setAction("split")}
-                >
-                  Split Position
-                </PositionAction>
-                <PositionAction
-                  active={action === "merge"}
-                  Icon={Merge}
-                  onClick={() => setAction("merge")}
-                >
-                  Merge Position
-                </PositionAction>
+                  <PositionAction
+                    active={action === "extend"}
+                    Icon={() => (
+                      <ArrowUpFromDot className="transform rotate-90" />
+                    )}
+                    onClick={() => setAction("extend")}
+                  >
+                    Extend Position
+                  </PositionAction>
+                  <PositionAction
+                    active={action === "split"}
+                    Icon={Split}
+                    onClick={() => setAction("split")}
+                  >
+                    Split Position
+                  </PositionAction>
+                  <PositionAction
+                    active={action === "merge"}
+                    Icon={Merge}
+                    onClick={() => setAction("merge")}
+                  >
+                    Merge Position
+                  </PositionAction>
+                </div>
+                <span className="flex flex-grow h-[1px] bg-foreground/30 mx-2" />
               </div>
-              <span className="flex flex-grow h-[1px] bg-foreground/30 mx-2" />
-            </div>
+            )}
           </div>
           <div
             className={classNames(

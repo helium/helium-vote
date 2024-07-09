@@ -1,7 +1,10 @@
 "use client";
 
 import { useGovernance } from "@/providers/GovernanceProvider";
-import { PositionWithMeta, useKnownProxy } from "@helium/voter-stake-registry-hooks";
+import {
+  PositionWithMeta,
+  useKnownProxy,
+} from "@helium/voter-stake-registry-hooks";
 import { PublicKey } from "@solana/web3.js";
 import { Loader2, X } from "lucide-react";
 import Link from "next/link";
@@ -15,7 +18,15 @@ export const ProxyPositionPrompt: FC<{
   position: PositionWithMeta;
   isSubmitting?: boolean;
   onCancel: () => void;
-  onConfirm: ({ proxy, expirationTime, isRevoke }: { proxy?: string, expirationTime?: number; isRevoke?: boolean }) => Promise<void>;
+  onConfirm: ({
+    proxy,
+    expirationTime,
+    isRevoke,
+  }: {
+    proxy?: string;
+    expirationTime?: number;
+    isRevoke?: boolean;
+  }) => Promise<void>;
 }> = ({ position, isSubmitting, onCancel, onConfirm }) => {
   const isProxied =
     position.proxy?.nextVoter &&
@@ -34,7 +45,7 @@ export const ProxyPositionPrompt: FC<{
     7,
     1
   );
-  const maxDate = augustFirst - 1000
+  const maxDate = augustFirst - 1000;
   const maxDays = Math.floor(
     (maxDate - today.getTime()) / (1000 * 60 * 60 * 24)
   );
@@ -71,8 +82,8 @@ export const ProxyPositionPrompt: FC<{
               precedence over a proxy.
             </p>
             <div className="w-full flex flex-row justify-center mt-4 mb-2">
-              <Link href={`/${network}/proxies`}>
-                <Button variant="secondary">
+              <Link href={`/${network}/proxies`} className="w-full">
+                <Button variant="secondary" className="gap-2 w-full">
                   <RiUserSharedFill className="size-4" />
                   Browse Proxies
                 </Button>

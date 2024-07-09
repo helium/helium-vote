@@ -3,15 +3,14 @@ import { PositionWithMeta } from "@helium/voter-stake-registry-hooks";
 import { PublicKey } from "@solana/web3.js";
 import BN from "bn.js";
 import { Loader2 } from "lucide-react";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { toast } from "sonner";
+import { ExpirationTimeSlider } from "./ExpirationTimeSlider";
 import { NetworkSelect } from "./NetworkSelect";
 import { PositionPreview } from "./PositionPreview";
 import { ProxySearch } from "./ProxySearch";
 import { Button } from "./ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
-import { Slider } from "./ui/slider";
-import { ExpirationTimeSlider } from "./ExpirationTimeSlider";
 
 interface AssignProxyModalProps {
   onSubmit: (args: {
@@ -66,14 +65,9 @@ export const AssignProxyModal: React.FC<
         : new Date().valueOf() / 1000 + selectedDays * (24 * 60 * 60),
     [selectedDays, maxDays, maxDate]
   );
-  useEffect(() => {
-    if (selectedDays > maxDays) {
-      setSelectedDays(maxDays);
-    }
-  }, [maxDays, selectedDays]);
 
-  const changeRecipient = (e: any) => {
-    setRecipient(e.target.value);
+  const handleSelectedDays = (days: number) => {
+    setSelectedDays(days > maxDays ? maxDays : days);
   };
 
   const handleOnSubmit = async () => {
@@ -195,7 +189,7 @@ export const AssignProxyModal: React.FC<
               </div>
               <ExpirationTimeSlider
                 maxDays={maxDays}
-                setSelectedDays={setSelectedDays}
+                setSelectedDays={handleSelectedDays}
                 selectedDays={selectedDays}
                 expirationTime={expirationTime}
               />
@@ -217,7 +211,7 @@ export const AssignProxyModal: React.FC<
             <Button
               className="flex-1 text-white"
               onClick={handleOnSubmit}
-              disabled={isSubmitting || !selectedPositions.size}
+              disabled={isSubmitting || !selectedPositions.size || !recipient}
             >
               {isSubmitting && <Loader2 className="size-5 animate-spin" />}
               {!isSubmitting && "Confirm"}

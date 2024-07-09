@@ -1,19 +1,16 @@
 "use client";
 
-import { ProposalV0 } from "@/lib/types";
-import { getDerivedProposalState } from "@/lib/utils";
 import { useGovernance } from "@/providers/GovernanceProvider";
 import { useMint } from "@helium/helium-react-hooks";
 import {
   useProposal,
   useProposalConfig,
-  useResolutionSettings,
 } from "@helium/modular-governance-hooks";
 import { useRegistrar, useVote } from "@helium/voter-stake-registry-hooks";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { PublicKey } from "@solana/web3.js";
 import BN from "bn.js";
-import { useMemo } from "react";
+
 import { useProposalStatus } from "./useProposalStatus";
 
 export function useProposalInfo(pKey: PublicKey) {

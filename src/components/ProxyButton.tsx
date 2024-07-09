@@ -11,7 +11,7 @@ export const ProxyButton = React.forwardRef<
   HTMLButtonElement,
   {
     className?: string;
-    onClick: () => void;
+    onClick?: () => void;
     isLoading?: boolean;
   }
 >(({ className = "", onClick, isLoading = false }, ref) => {
@@ -48,4 +48,3 @@ export const ProxyButton = React.forwardRef<
 });
 
 ProxyButton.displayName = "ProxyButton";
-

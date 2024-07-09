@@ -10,7 +10,7 @@ import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { FaMagnifyingGlass } from "react-icons/fa6";
+import { FaMagnifyingGlass, FaX } from "react-icons/fa6";
 import { IoWarningOutline } from "react-icons/io5";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { ContentSection } from "./ContentSection";
@@ -91,13 +91,18 @@ export function Proxies() {
         <div className="flex flex-col gap-2 md:gap-0 md:flex-row md:justify-between md:items-center">
           <h4>Browse Proxies</h4>
           <div className="w-half flex-row relative justify-end md:w-2/3 lg:w-1/3">
-            <FaMagnifyingGlass className="absolute left-2.5 top-5 h-4 w-4 text-muted-foreground" />
+            <FaMagnifyingGlass className="size-6 absolute left-4 top-[calc(50%-0.75rem)] text-muted-foreground" />
+            {proxySearch ? (
+              <FaX
+                className="size-4 absolute right-4 top-[calc(50%-0.5rem)] text-muted-foreground cursor-pointer"
+                onClick={() => setProxySearch("")}
+              />
+            ) : null}
             <Input
               value={proxySearch}
               onChange={(e) => setProxySearch(e.target.value)}
-              type="search"
               placeholder="Search name or address..."
-              className="w-full appearance-none bg-secondary border-none pl-8 shadow-none"
+              className="w-full appearance-none bg-secondary border-none pl-12 pr-10 shadow-none"
             />
           </div>
         </div>

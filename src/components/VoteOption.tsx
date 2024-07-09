@@ -70,12 +70,16 @@ export const VoteOption: FC<{
       {myWeight && <FaCircleCheck className="size-5 fill-success-foreground" />}
     </div>
 
-    { voters.length > 0 && <div className="flex flex-wrap flex-row items-center gap-2">
-      <div className="text-right text-white text-xs leading-none">Voted by</div>
-      {voters.map((v) => (
-        <Voter key={v.toBase58()} voter={v} />
-      ))}
-    </div> }
+    {voters.length > 0 && (
+      <div className="flex flex-wrap flex-row items-center gap-2">
+        <div className="text-right text-white text-xs leading-none">
+          Voted by
+        </div>
+        {voters.map((v) => (
+          <Voter key={v.toBase58()} voter={v} />
+        ))}
+      </div>
+    )}
   </div>
 );
 
@@ -87,4 +91,3 @@ const Voter: FC<{ voter: PublicKey }> = ({ voter }) => {
     </Pill>
   );
 };
-

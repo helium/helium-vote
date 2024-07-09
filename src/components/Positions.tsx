@@ -124,7 +124,7 @@ export const Positions: FC = () => {
                 <Skeleton className="w-3/12 h-5 bg-slate-800" />
               </div>
             </CardHeader>
-            <CardContent className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 py-4">
+            <CardContent className="grid grid-cols-1 gap-2 py-4">
               {[...Array(5)].map((_, i) => (
                 <PositionCardSkeleton key={`placeholder-${i}`} />
               ))}
@@ -183,7 +183,7 @@ export const Positions: FC = () => {
                   Reclaim All
                 </button> */}
             </CardHeader>
-            <CardContent className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 py-4">
+            <CardContent className="grid grid-cols-1 gap-2 py-4">
               {decayedPositions.map((position) => (
                 <PositionCard
                   key={position.pubkey.toBase58()}
@@ -209,7 +209,7 @@ export const Positions: FC = () => {
                   </button>
                 </div> */}
             </CardHeader>
-            <CardContent className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 py-4">
+            <CardContent className="grid grid-cols-1 gap-2 py-4">
               {notDecayedPositions.map((position) => (
                 <PositionCard
                   key={position.pubkey.toBase58()}
@@ -224,7 +224,7 @@ export const Positions: FC = () => {
             <CardHeader className="flex flex-row justify-between items-center bg-card border-b border-slate-900">
               <CardTitle>Proxied to Me</CardTitle>
             </CardHeader>
-            <CardContent className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 py-4">
+            <CardContent className="grid grid-cols-1 gap-2 py-4">
               {proxiedPositions.map((position) => (
                 <PositionCard
                   canDelegate={false}

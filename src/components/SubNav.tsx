@@ -37,7 +37,7 @@ export const SubNav: React.FC = () => {
         <ToggleGroup
           variant="subNav"
           type="single"
-          className="py-2 pt-4"
+          className="py-4 gap-2"
           value={currentPath}
         >
           <ToggleGroupItem value="proposals" aria-label="Proposals">

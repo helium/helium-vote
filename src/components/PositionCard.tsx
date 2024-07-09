@@ -8,7 +8,10 @@ import {
 } from "@/lib/utils";
 import { useGovernance } from "@/providers/GovernanceProvider";
 import { useSolanaUnixNow } from "@helium/helium-react-hooks";
-import { PositionWithMeta, useKnownProxy } from "@helium/voter-stake-registry-hooks";
+import {
+  PositionWithMeta,
+  useKnownProxy,
+} from "@helium/voter-stake-registry-hooks";
 import BN from "bn.js";
 import classNames from "classnames";
 import Image from "next/image";
@@ -17,51 +20,43 @@ import { usePathname } from "next/navigation";
 import React, { FC, useMemo } from "react";
 import { Pill } from "./Pill";
 import { Button } from "./ui/button";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "./ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Skeleton } from "./ui/skeleton";
 import { PublicKey } from "@solana/web3.js";
-import { useAsync } from "react-async-hook";
-import { VoteService } from "@helium/voter-stake-registry-sdk";
 
 export const PositionCardSkeleton: FC<{ compact?: boolean }> = () => {
   const { network } = useGovernance();
   const canDelegate = network === "hnt";
 
   return (
-    <Card className="flex flex-col overflow-hidden">
-      <CardHeader className="flex flex-grow">
+    <Card className="flex max-md:flex-col overflow-hidden">
+      <CardHeader className="gap-2 space-y-0 w-3/12 max-md:w-full">
         <div className="flex flex-row justify-between items-center">
           <Skeleton className="size-8 bg-slate-800 rounded-full" />
           <Skeleton className="w-40 h-7 bg-slate-800 rounded-full" />
         </div>
         <Skeleton className="w-full h-7 bg-slate-800 rounded-sm" />
       </CardHeader>
-      <CardFooter className="bg-slate-950 flex flex-col p-0">
-        <div className="flex flex-row w-full gap-2 justify-between p-4">
+      <CardContent className="bg-slate-950 flex flex-grow p-4 items-center max-md:flex-col max-md:items-start max-md:p-0">
+        <div className="flex flex-row w-full gap-2 max-md:justify-between p-4">
           <div className="flex flex-col flex-1 gap-2">
             <Skeleton className="flex w-8/12 h-4 bg-slate-800 rounded-sm" />
             <Skeleton className="flex w-1/2 h-4 bg-slate-800 rounded-sm" />
           </div>
-          <div className="flex flex-col flex-1 gap-2  items-end">
+          <div className="flex flex-col flex-1 gap-2 max-md:items-end">
             <Skeleton className="flex w-8/12 h-4 bg-slate-800 rounded-sm" />
             <Skeleton className="flex w-1/2 h-4 bg-slate-800 rounded-sm" />
           </div>
         </div>
         {canDelegate && (
           <div className="flex-flex-row w-full p-1">
-            <div className="flex flex-row w-full bg-card flex-1 gap-2 p-4 rounded-b-sm">
+            <div className="flex flex-row w-full max-md:bg-card flex-1 gap-2 p-4 rounded-b-sm">
               <Skeleton className="flex w-8/12 h-4 bg-slate-800 rounded-sm" />
               <Skeleton className="flex w-1/2 h-4 bg-slate-800 rounded-sm" />
             </div>
           </div>
         )}
-      </CardFooter>
+      </CardContent>
     </Card>
   );
 };
@@ -81,13 +76,7 @@ export const PositionCard: FC<{
 }) => {
   const path = usePathname();
   const { lockup, hasGenesisMultiplier } = position;
-  const {
-    loading: loadingGov,
-    network,
-    mintAcc,
-    subDaos,
-    voteService,
-  } = useGovernance();
+  const { loading: loadingGov, network, mintAcc, subDaos } = useGovernance();
   const unixNow = useSolanaUnixNow() || Date.now() / 1000;
   const lockupKind = Object.keys(lockup.kind)[0] as string;
   const isConstant = lockupKind === "constant";
@@ -178,124 +167,148 @@ export const PositionCard: FC<{
     );
   }
 
+  const renderTags = () => (
+    <div className="flex flex-row gap-1">
+      {hasGenesisMultiplier && (
+        <Pill variant="purple" className="self-start">
+          Landrush
+        </Pill>
+      )}
+      {isDecayed && (
+        <Pill variant="success">
+          100%{" "}
+          <span className="flex sm:flex md:hidden lg:flex">&nbsp;Decayed</span>
+        </Pill>
+      )}
+      {isConstant && <Pill variant="info">Paused</Pill>}
+      {!isConstant && !isDecayed && (
+        <Pill variant="warning">
+          {decayedPercentage.toString()}%
+          <span className="flex sm:flex md:hidden lg:flex">&nbsp;Decayed</span>
+        </Pill>
+      )}
+    </div>
+  );
+
   return (
-    <Link href={`${path}/${position.pubkey.toBase58()}`}>
-      <Card className="flex flex-col cursor-pointer hover:opacity-80 active:opacity-60 overflow-hidden">
-        <CardHeader className="gap-2 space-y-0">
-          <div className="flex flex-row justify-between">
-            <div className="relative size-8">
+    <Link
+      href={`${path}/${position.pubkey.toBase58()}${
+        position.isProxiedToMe ? "?action=proxy" : ""
+      }`}
+    >
+      <Card className="flex cursor-pointer hover:opacity-80 active:opacity-60 overflow-hidden max-md:flex-col">
+        <CardHeader className="gap-2 space-y-0 w-3/12 max-md:w-full">
+          <div className="flex flex-row flex-1 gap-4">
+            <div className="flex flex-shrink-0 relative size-6">
               <Image alt={`%{network}`} src={`/images/${network}.svg`} fill />
             </div>
-            <div className="flex flex-row gap-1">
-              {isDecayed && <Pill variant="success">100% Decayed</Pill>}
-              {isConstant && <Pill variant="info">Paused</Pill>}
-              {!isConstant && !isDecayed && (
-                <Pill variant="warning">
-                  {decayedPercentage.toString()}% Decayed
-                </Pill>
-              )}
-            </div>
-          </div>
-          <CardTitle className="flex flex-row items-center justify-between">
-            <div className="flex flex-wrap gap-2 py-1">
-              {lockedTokens} for
-              <span className="font-light">
+            <CardTitle className="flex flex-col gap-1">
+              {`${lockedTokens} ${network.toUpperCase()}`}{" "}
+              <span className="font-light text-sm text-white/70">
                 {getMinDurationFmt(
                   position.lockup.startTs,
                   position.lockup.endTs
                 )}
               </span>
-            </div>
-            {hasGenesisMultiplier && (
-              <Pill variant="purple" className="self-start">
-                Landrush
-              </Pill>
-            )}
-          </CardTitle>
+            </CardTitle>
+          </div>
+          <div className="hidden max-md:flex">{renderTags()}</div>
         </CardHeader>
-        <CardContent className="bg-slate-950 flex flex-row flex-grow justify-between py-2 gap-8">
-          <div className="flex flex-col">
-            <p className="text-muted-foreground text-xs">VOTING POWER</p>
-            <div className="flex flex-row items-center gap-2">
-              <p className="text-sm">{votingPower}</p>
-              {hasGenesisMultiplier && (
-                <Pill variant="purple" className="border-0 px-2 py-0.5">
-                  x3
-                </Pill>
-              )}
-            </div>
-          </div>
-          <div className="flex flex-col flex-grow max-md:items-end">
-            <p className="text-muted-foreground text-xs">TIME LEFT</p>
-            <p className="text-sm">
-              {isConstant
-                ? getMinDurationFmt(
-                    position.lockup.startTs,
-                    position.lockup.endTs
-                  )
-                : getTimeLeftFromNowFmt(position.lockup.endTs)}
-            </p>
-          </div>
-        </CardContent>
-
-        <CardFooter className="flex flex-col p-0 bg-slate-950">
-          {canDelegate && (
-            <>
-              <div className="w-full px-2">
-                <div className="w-full border-b-[1px] border-slate-500" />
-              </div>
-              <div className="w-full py-2 px-3 flex flex-row flex-grow justify-between items-center gap-2 rounded-b-md min-h-14 ">
-                <p className="text-muted-foreground text-xs">DELEGATED TO</p>
-                {!isDecayed && delegatedSubDaoMetadata ? (
-                  <div className="flex flex-row justify-center items-center gap-2 py-1">
-                    <div className="relative size-6">
-                      <Image
-                        alt="delegated-subdao"
-                        src={delegatedSubDaoMetadata.json?.image}
-                        fill
-                      />
-                    </div>
-                    <p className="text-xs">{delegatedSubDaoMetadata.symbol}</p>
-                  </div>
-                ) : !isDecayed ? (
-                  <Link
-                    href={`${path}/${position.pubkey.toBase58()}?action=delegate`}
-                  >
-                    <Button
-                      variant="default"
-                      size="xs"
-                      className="text-foreground"
-                    >
-                      Delegate Now
-                    </Button>
-                  </Link>
-                ) : (
-                  <p className="text-xs">UNDELEGATED</p>
+        <CardContent className="bg-slate-950 flex flex-grow p-4 max-md:flex-col max-md:items-start max-md:p-0">
+          <div className="flex w-6/12 lg:w-4/12 max-md:w-full max-md:p-4">
+            <div className="flex flex-col w-6/12 gap-2">
+              <p className="text-muted-foreground text-xs">VOTING POWER</p>
+              <div className="flex flex-row gap-1 relative">
+                <p className="text-sm">{votingPower}</p>
+                {hasGenesisMultiplier && (
+                  <Pill variant="purple" className="absolute">
+                    x3
+                  </Pill>
                 )}
               </div>
-            </>
-          )}
-          <div className="w-full p-2 first-line:p-2 flex flex-row flex-grow justify-between items-center gap-2 py-2 border-4 border-slate-950 bg-card rounded-b-md min-h-14 ">
+            </div>
+            <div className="flex flex-col w-6/12 gap-2 max-md:items-end">
+              <p className="text-muted-foreground text-xs">TIME LEFT</p>
+              <p className="text-sm">
+                {isConstant
+                  ? getMinDurationFmt(
+                      position.lockup.startTs,
+                      position.lockup.endTs
+                    )
+                  : getTimeLeftFromNowFmt(position.lockup.endTs)}
+              </p>
+            </div>
+          </div>
+          <hr className="hidden max-md:flex h-0.5 w-full bg-slate-600" />
+          <div
+            className={classNames(
+              "flex flex-col w-3/12 lg:w-2/12 max-md:p-4 max-md:w-full max-md:flex-row max-md:items-center max-md:justify-between",
+              !position.proxy ? "gap-1" : "gap-1.5"
+            )}
+          >
             <p className="text-muted-foreground text-xs">PROXIED TO</p>
             {position.proxy &&
             !position.proxy.nextVoter.equals(PublicKey.default) ? (
               <Link
                 href={`/${network}/proxies/${position.proxy.nextVoter.toBase58()}`}
               >
-                <Pill variant="pink">
+                <Pill variant="pink" className="hover:bg-pink/70">
                   {knownProxy?.name ||
                     ellipsisMiddle(position.proxy.nextVoter.toBase58())}
                 </Pill>
               </Link>
             ) : (
               <Link href={`${path}/${position.pubkey.toBase58()}?action=proxy`}>
-                <Button variant="default" size="xs" className="text-foreground">
+                <Button
+                  variant="secondary"
+                  size="xxs"
+                  className="text-foreground"
+                >
                   Proxy Now
                 </Button>
               </Link>
             )}
           </div>
-        </CardFooter>
+          {canDelegate && (
+            <div
+              className={classNames(
+                "flex flex-col w-3/12 lg:w-2/12 max-md:w-full max-md:flex-row max-md:items-center max-md:justify-between max-md:bg-slate-850 max-md:p-4 max-md:border-4 max-md:border-slate-950 max-md:rounded-b-md",
+                !delegatedSubDaoMetadata ? "gap-1" : "gap-2"
+              )}
+            >
+              <p className="text-muted-foreground text-xs">DELEGATED TO</p>
+              {!isDecayed && delegatedSubDaoMetadata ? (
+                <div className="flex flex-row items-center gap-2">
+                  <div className="relative size-5">
+                    <Image
+                      alt="delegated-subdao"
+                      src={delegatedSubDaoMetadata.json?.image}
+                      fill
+                    />
+                  </div>
+                  <p className="text-xs">{delegatedSubDaoMetadata.symbol}</p>
+                </div>
+              ) : !isDecayed ? (
+                <Link
+                  href={`${path}/${position.pubkey.toBase58()}?action=delegate`}
+                >
+                  <Button
+                    variant="secondary"
+                    size="xxs"
+                    className="text-foreground"
+                  >
+                    Delegate Now
+                  </Button>
+                </Link>
+              ) : (
+                <p className="text-sm">Undelegated</p>
+              )}
+            </div>
+          )}
+          <div className="flex max-md:hidden flex-col flex-grow items-end">
+            {renderTags()}
+          </div>
+        </CardContent>
       </Card>
     </Link>
   );

@@ -60,7 +60,7 @@ export const PositionCallout: FC<{
 
   if (isLoading) {
     return (
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col w-full gap-3 min-w-80">
         <div className="flex flex-row justify-between items-center">
           <Skeleton className="size-14 bg-slate-800 rounded-full" />
           <div className="flex flex-col gap-2 flex-grow items-end">
@@ -133,7 +133,7 @@ export const PositionCallout: FC<{
           </div>
         )}
       </div>
-      <div className="flex flex-row max-md:justify-between">
+      <div className="flex flex-row max-md:justify-between gap-4">
         <div className="flex flex-col flex-1">
           <div className="flex flex-row gap-1 text-muted-foreground text-xs max-md:flex-col max-md:gap-0">
             <span>VOTING</span>
@@ -168,39 +168,43 @@ export const PositionCallout: FC<{
           </p>
         </div>
       </div>
-      {!isDecayed ? (
-        <div className="flex flex-row justify-between gap-2">
-          <Button
-            variant="secondary"
-            className="flex-1"
-            onClick={() => setManagerAction("flip")}
-          >
-            {isConstant ? "Decay Postion" : "Pause Position"}
-          </Button>
-          {canDelegate && (
-            <Button
-              variant="secondary"
-              className="flex-1 gap-2"
-              disabled={!position.hasRewards || isClaiming}
-              onClick={handleClaimRewards}
-            >
-              {isClaiming && <Loader2 className="size-5 animate-spin" />}
-              {isClaiming ? "Claiming Rewards..." : "Claim Rewards"}
-            </Button>
+      {!position.isProxiedToMe && (
+        <>
+          {!isDecayed ? (
+            <div className="flex flex-row justify-between gap-2">
+              <Button
+                variant="secondary"
+                className="flex-1"
+                onClick={() => setManagerAction("flip")}
+              >
+                {isConstant ? "Decay Postion" : "Pause Position"}
+              </Button>
+              {canDelegate && (
+                <Button
+                  variant="secondary"
+                  className="flex-1 gap-2"
+                  disabled={!position.hasRewards || isClaiming}
+                  onClick={handleClaimRewards}
+                >
+                  {isClaiming && <Loader2 className="size-5 animate-spin" />}
+                  {isClaiming ? "Claiming Rewards..." : "Claim Rewards"}
+                </Button>
+              )}
+            </div>
+          ) : (
+            <div className="flex flex-row justify-between gap-2">
+              <Button
+                className="flex-1 text-foreground gap-2"
+                disabled={isReclaiming}
+                onClick={() => setManagerAction("reclaim")}
+              >
+                {isReclaiming && <Loader2 className="size-5 animate-spin" />}
+                {!isReclaiming && <FaBolt className="size-4" />}
+                {isReclaiming ? "Reclaiming Position..." : "Reclaim Position"}
+              </Button>
+            </div>
           )}
-        </div>
-      ) : (
-        <div className="flex flex-row justify-between gap-2">
-          <Button
-            className="flex-1 text-foreground gap-2"
-            disabled={isReclaiming}
-            onClick={() => setManagerAction("reclaim")}
-          >
-            {isReclaiming && <Loader2 className="size-5 animate-spin" />}
-            {!isReclaiming && <FaBolt className="size-4" />}
-            {isReclaiming ? "Reclaiming Position..." : "Reclaim Position"}
-          </Button>
-        </div>
+        </>
       )}
     </div>
   );
