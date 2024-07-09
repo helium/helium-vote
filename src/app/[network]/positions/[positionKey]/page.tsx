@@ -15,10 +15,7 @@ export interface PositionsPageParams {
     network: string;
     positionKey: string;
   };
-  searchParams:
-    | { action: PositionAction; isProxy?: boolean }
-    | null
-    | undefined;
+  searchParams: { action: PositionAction } | null | undefined;
 }
 
 export default function PositionsPage({
@@ -26,7 +23,7 @@ export default function PositionsPage({
   searchParams,
 }: PositionsPageParams) {
   const { positionKey } = params;
-  const { action, isProxy = false } = searchParams || {};
+  const { action } = searchParams || {};
   const { positions } = useGovernance();
   const positionK = useMemo(() => new PublicKey(positionKey), [positionKey]);
   const position = useMemo(
@@ -39,11 +36,7 @@ export default function PositionsPage({
       <Header hideHero={true} route="/$network/positions" />
       <WalletBoundary>
         {position && (
-          <PositionManager
-            position={position}
-            initAction={action}
-            isProxy={isProxy}
-          />
+          <PositionManager position={position} initAction={action} />
         )}
       </WalletBoundary>
     </>

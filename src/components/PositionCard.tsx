@@ -67,10 +67,8 @@ export const PositionCard: FC<{
   compact?: boolean;
   onClick?: () => void;
   canDelegate?: boolean;
-  isProxy?: boolean;
 }> = ({
   canDelegate: canDelegateIn = true,
-  isProxy: isProxyIn = false,
   position,
   className = "",
   compact = false,
@@ -195,7 +193,7 @@ export const PositionCard: FC<{
   return (
     <Link
       href={`${path}/${position.pubkey.toBase58()}${
-        isProxyIn ? "?action=proxy&isProxy=true" : ""
+        position.isProxiedToMe ? "?action=proxy" : ""
       }`}
     >
       <Card className="flex cursor-pointer hover:opacity-80 active:opacity-60 overflow-hidden max-md:flex-col">

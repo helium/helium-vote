@@ -227,7 +227,6 @@ export const Positions: FC = () => {
             <CardContent className="grid grid-cols-1 gap-2 py-4">
               {proxiedPositions.map((position) => (
                 <PositionCard
-                  isProxy={true}
                   canDelegate={false}
                   key={position.pubkey.toBase58()}
                   position={position}

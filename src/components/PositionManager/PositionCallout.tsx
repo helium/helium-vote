@@ -23,14 +23,12 @@ export const PositionCallout: FC<{
   position: PositionWithMeta;
   isClaiming?: boolean;
   isReclaiming?: boolean;
-  isProxy?: boolean;
   setManagerAction: (action: PositionAction) => void;
   handleClaimRewards: () => Promise<void>;
 }> = ({
   position,
   isClaiming,
   isReclaiming,
-  isProxy,
   setManagerAction,
   handleClaimRewards,
 }) => {
@@ -170,7 +168,7 @@ export const PositionCallout: FC<{
           </p>
         </div>
       </div>
-      {!isProxy && (
+      {!position.isProxiedToMe && (
         <>
           {!isDecayed ? (
             <div className="flex flex-row justify-between gap-2">

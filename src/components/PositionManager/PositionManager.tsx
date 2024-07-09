@@ -60,7 +60,6 @@ export type PositionAction =
   | "proxy";
 
 export interface PositionManagerProps {
-  isProxy?: boolean;
   initAction?: PositionAction;
   position: PositionWithMeta;
 }
@@ -97,7 +96,6 @@ const PositionAction: FC<
 export const PositionManager: FC<PositionManagerProps> = ({
   position,
   initAction,
-  isProxy = false,
 }) => {
   const [action, setAction] = useState<PositionAction | undefined>(initAction);
   const provider = useAnchorProvider();
@@ -377,12 +375,11 @@ export const PositionManager: FC<PositionManagerProps> = ({
                 position={position}
                 isClaiming={isClaiming}
                 isReclaiming={isReclaiming}
-                isProxy={isProxy}
                 setManagerAction={setAction}
                 handleClaimRewards={handleClaimPositionRewards}
               />
             </div>
-            {!isProxy && (
+            {!position.isProxiedToMe && (
               <div className="flex flex-col py-10 px-4 gap-12 min-w-[465px] max-md:min-w-full max-md:py-4 max-md:gap-4">
                 <div className="flex flex-row justify-center items-center">
                   <span className="flex flex-grow h-[1px] bg-foreground/30 mx-2" />
