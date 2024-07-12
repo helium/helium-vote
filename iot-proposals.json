@@ -89,5 +89,16 @@
       { "uri": null, "name": "For HIP 123" },
       { "uri": null, "name": "Against HIP 123" }
     ]
+  },
+  {
+    "name": "IOT Working Group Elections - Q2 2024",
+    "uri": "https://gist.githubusercontent.com/hiptron/57e4e1b70369675df31d862061114bad/raw/e3fbf2aae460f0bd25dd58ff700e0d197dc3c75b/2024Q2-IOT-Election-Summary.md",
+    "maxChoicesPerVoter": 3,
+    "tags": ["working-group"],
+    "choices": [
+      { "uri": null, "name": "gradoj" },
+      { "uri": null, "name": "RTFC Zyle/zyle1632" },
+      { "uri": null, "name": "tteague" }
+    ]
   }
 ]
