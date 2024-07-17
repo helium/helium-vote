@@ -315,6 +315,7 @@ export const onInstructions =
                 : HELIUM_COMMON_LUT,
             ],
             useFirstEstimateForAll,
+            computeScaleUp: useFirstEstimateForAll ? 1.4 : 1.1
           }
         );
         const asVersionedTx = transactions.map(toVersionedTx);

@@ -7,6 +7,8 @@ import { toast } from "sonner";
 import { PositionItem } from "./AssignProxyModal";
 import { Button } from "./ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
+import { useSolanaUnixNow } from "@helium/helium-react-hooks";
+import BN from "bn.js";
 
 interface RevokeProxyModalProps {
   onSubmit: (args: { positions: PositionWithMeta[] }) => Promise<void>;

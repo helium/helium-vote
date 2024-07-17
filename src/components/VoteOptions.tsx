@@ -117,7 +117,16 @@ export const VoteOptions: FC<{
               You can override any active votes anytime - your vote takes
               precedence over a proxy.
             </p>
-            <AssignProxyModal onSubmit={assignProxies}>
+            <AssignProxyModal
+              onSubmit={(args) => {
+                return assignProxies({
+                  ...args,
+                  onInstructions: onInstructions(provider, {
+                    useFirstEstimateForAll: true,
+                  }),
+                });
+              }}
+            >
               <ProxyButton />
             </AssignProxyModal>
           </>

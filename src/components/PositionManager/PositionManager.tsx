@@ -186,14 +186,18 @@ export const PositionManager: FC<PositionManagerProps> = ({
       if (isRevoke) {
         await unassignProxies({
           positions: [position],
-          onInstructions: onInstructions(provider),
+          onInstructions: onInstructions(provider, {
+            useFirstEstimateForAll: true
+          }),
         });
       } else {
         await assignProxies({
           positions: [position],
           recipient: new PublicKey(proxy || ""),
           expirationTime: new BN(expirationTime || 0),
-          onInstructions: onInstructions(provider),
+          onInstructions: onInstructions(provider, {
+            useFirstEstimateForAll: true
+          }),
         });
       }
       toast(`Proxy ${isRevoke ? "revoked" : "assigned"}`);

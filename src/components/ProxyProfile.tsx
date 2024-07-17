@@ -1,9 +1,9 @@
 "use client";
 
 import { networksToMint } from "@/lib/constants";
-import { ellipsisMiddle, humanReadable } from "@/lib/utils";
+import { ellipsisMiddle, humanReadable, onInstructions } from "@/lib/utils";
 import { useGovernance } from "@/providers/GovernanceProvider";
-import { useMint } from "@helium/helium-react-hooks";
+import { useAnchorProvider, useMint } from "@helium/helium-react-hooks";
 import {
   proxyQuery,
   useAssignProxies,
@@ -166,6 +166,8 @@ export function ProxyProfile({ wallet: walletRaw }: { wallet: string }) {
     </div>
   );
 
+  const provider = useAnchorProvider()
+
   return (
     <ContentSection className="flex-1 py-8 max-md:py-0 max-md:!px-0">
       <Card className="max-md:flex-1 max-md:rounded-none">
@@ -213,14 +215,34 @@ export function ProxyProfile({ wallet: walletRaw }: { wallet: string }) {
             </div>
           </div>
 
-          <AssignProxyModal onSubmit={assignProxies} wallet={wallet}>
+          <AssignProxyModal
+            onSubmit={(args) => {
+              return assignProxies({
+                ...args,
+                onInstructions: onInstructions(provider, {
+                  useFirstEstimateForAll: true,
+                }),
+              });
+            }}
+            wallet={wallet}
+          >
             <ProxyButton
               className="md:hidden"
               onClick={() => {}}
               isLoading={false}
             />
           </AssignProxyModal>
-          <RevokeProxyModal onSubmit={unassignProxies} wallet={wallet}>
+          <RevokeProxyModal
+            onSubmit={(args) =>
+              unassignProxies({
+                ...args,
+                onInstructions: onInstructions(provider, {
+                  useFirstEstimateForAll: true,
+                }),
+              })
+            }
+            wallet={wallet}
+          >
             <RevokeProxyButton
               className="md:hidden"
               onClick={() => {}}
@@ -291,10 +313,30 @@ export function ProxyProfile({ wallet: walletRaw }: { wallet: string }) {
               <VoteHistory wallet={wallet} />
             </div>
             <div className="max-md:hidden flex flex-col gap-3 mt-3">
-              <AssignProxyModal onSubmit={assignProxies} wallet={wallet}>
+              <AssignProxyModal
+                onSubmit={(args) => {
+                  return assignProxies({
+                    ...args,
+                    onInstructions: onInstructions(provider, {
+                      useFirstEstimateForAll: true,
+                    }),
+                  });
+                }}
+                wallet={wallet}
+              >
                 <ProxyButton />
               </AssignProxyModal>
-              <RevokeProxyModal onSubmit={unassignProxies} wallet={wallet}>
+              <RevokeProxyModal
+                onSubmit={(args) =>
+                  unassignProxies({
+                    ...args,
+                    onInstructions: onInstructions(provider, {
+                      useFirstEstimateForAll: true,
+                    }),
+                  })
+                }
+                wallet={wallet}
+              >
                 <RevokeProxyButton />
               </RevokeProxyModal>
               <div className="min-w-[300px]">{infoCard}</div>

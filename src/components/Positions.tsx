@@ -14,7 +14,7 @@ import { toast } from "sonner";
 import { Skeleton } from "./ui/skeleton";
 import { CreatePositionButton } from "./CreatePositionButton";
 import { onInstructions } from "@/lib/utils";
-import { useAnchorProvider } from "@helium/helium-react-hooks";
+import { useAnchorProvider, useSolanaUnixNow } from "@helium/helium-react-hooks";
 import { ContentSection } from "./ContentSection";
 import { WalletSignTransactionError } from "@solana/wallet-adapter-base";
 
