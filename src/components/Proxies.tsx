@@ -9,7 +9,7 @@ import BN from "bn.js";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { FaMagnifyingGlass, FaX } from "react-icons/fa6";
 import { IoWarningOutline } from "react-icons/io5";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -20,7 +20,7 @@ import { Input } from "./ui/input";
 import { Skeleton } from "./ui/skeleton";
 import { useDebounce } from "@uidotdev/usehooks";
 
-const DECENTRALIZATION_RISK_INDEX = 6;
+const DECENTRALIZATION_RISK_PERCENT = 10;
 
 function CardDetail({ title, value }: { title: string; value: string }) {
   return (
@@ -84,6 +84,14 @@ export function Proxies() {
     })
   );
   const proxies = voters?.pages.flat() || [];
+
+  const renderBelowIndex = useMemo(
+    () =>
+      proxies.findIndex(
+        (proxy) => Number(proxy.percent) < DECENTRALIZATION_RISK_PERCENT
+      ),
+    [proxies]
+  );
 
   return (
     <ContentSection className="flex-1 py-4">
@@ -170,7 +178,7 @@ export function Proxies() {
                     </div>
                   </Card>
                 </Link>
-                {index == DECENTRALIZATION_RISK_INDEX ? (
+                {renderBelowIndex > 0 && index === renderBelowIndex ? (
                   <div className="py-2 px-4 text-sm w-full bg-accent/30 rounded-lg flex flex-row gap-2 items-center">
                     <IoWarningOutline
                       className="size-8"
