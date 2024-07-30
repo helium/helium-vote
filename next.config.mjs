@@ -27,14 +27,14 @@ const nextConfig = {
         port: "",
         pathname: "/**/**",
       },
-      ...(process.env.NODE_ENV === "development" && [
+      ...(process.env.NODE_ENV === "development" ? [
         {
           protocol: "http",
           hostname: "localhost",
           port: "8082",
           pathname: "/**/**",
         },
-      ]),
+      ] : []),
     ],
   },
   logging: {
