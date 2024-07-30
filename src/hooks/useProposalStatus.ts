@@ -63,6 +63,7 @@ export function useProposalStatus(proposal?: ProposalV0 | ProposalWithVotes) {
 
     const results = proposal?.choices.map((r, index) => ({
       ...r,
+      weight: new BN(r.weight),
       index,
       percent: totalVotes?.isZero()
         ? 100 / proposal?.choices.length
