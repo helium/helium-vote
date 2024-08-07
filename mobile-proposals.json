@@ -286,5 +286,15 @@
       { "uri": null, "name": "For HIP 125" },
       { "uri": null, "name": "Against HIP 125" }
     ]
+  },
+  {
+    "name": "HIP 129: MOBILE Carrier Beta",
+    "uri": "https://gist.githubusercontent.com/hiptron/86c12d44ec55a1c9779b3b5669c70831/raw/9115a1ffa5d8af7913ebe72f88852f28ee43b7b5/HIP-129-Vote-Summary.md",
+    "maxChoicesPerVoter": 1,
+    "tags": ["HIP", "Economic", "Technical"],
+    "choices": [
+      { "uri": null, "name": "For HIP 129" },
+      { "uri": null, "name": "Against HIP 129" }
+    ]
   }
 ]
