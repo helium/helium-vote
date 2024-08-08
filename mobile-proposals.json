@@ -289,7 +289,7 @@
   },
   {
     "name": "HIP 129: MOBILE Carrier Beta",
-    "uri": "https://gist.githubusercontent.com/hiptron/86c12d44ec55a1c9779b3b5669c70831/raw/9115a1ffa5d8af7913ebe72f88852f28ee43b7b5/HIP-129-Vote-Summary.md",
+    "uri": "https://gist.githubusercontent.com/hiptron/86c12d44ec55a1c9779b3b5669c70831/raw/a65f531a0620f97f89f21d67a3ed24826ed6f992/HIP-129-Vote-Summary.md",
     "maxChoicesPerVoter": 1,
     "tags": ["HIP", "Economic", "Technical"],
     "choices": [
