@@ -56,5 +56,15 @@
       { "uri": null, "name": "For HIP 110" },
       { "uri": null, "name": "Against HIP 110" }
     ]
+  },
+  {
+    "name": "HIP 128: Energy Subnetwork",
+    "uri": "https://gist.githubusercontent.com/hiptron/9f3a40097cface8f86beebeaab645547/raw/3bfe545249d0411f9104fe6a1369196cd467a459/HIP-128-Vote-Summary.md",
+    "maxChoicesPerVoter": 1,
+    "tags": ["HIP", "Economic", "Technical"],
+    "choices": [
+      { "uri": null, "name": "For HIP 128" },
+      { "uri": null, "name": "Against HIP 128" }
+    ]
   }
 ]
