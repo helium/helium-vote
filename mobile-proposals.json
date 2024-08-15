@@ -296,5 +296,21 @@
       { "uri": null, "name": "For HIP 129" },
       { "uri": null, "name": "Against HIP 129" }
     ]
+  },
+  {
+    "name": "MOBILE Working Group (Even Class) Elections - Q3 2024",
+    "uri": "https://gist.githubusercontent.com/hiptron/d2fd0d7804ae99324b3d2a5b92c7a3ee/raw/82293b1f7303be2eee1e9b2d6f11c977a0aaebd5/2024Q3-MOBILE-Election-Summary.md",
+    "maxChoicesPerVoter": 5,
+    "tags": ["working-group"],
+    "choices": [
+      { "uri": null, "name": "IMU / inertialmeasurementunit" },
+      { "uri": null, "name": "JD - Moken / cryptojd" },
+      { "uri": null, "name": "jhella" },
+      { "uri": null, "name": "Jay M. / jaym2518" },
+      { "uri": null, "name": "Fizzy / Fizzy99" },
+      { "uri": null, "name": "JMbroadband / JMbroadband#2135" },
+      { "uri": null, "name": "Keefe / keefe007" },
+      { "uri": null, "name": "zer0tweets" }
+    ]
   }
 ]
