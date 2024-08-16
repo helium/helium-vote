@@ -312,5 +312,15 @@
       { "uri": null, "name": "Keefe / keefe007" },
       { "uri": null, "name": "zer0tweets" }
     ]
+  },
+  {
+    "name": "HIP 130: Data-Only MOBILE Hotspots",
+    "uri": "https://gist.githubusercontent.com/hiptron/c599769f66053728662cb261c22b0ddd/raw/7686eaf6b41d599210c915c10f9f209a1b2f9dff/HIP-130-Vote-Summary.md",
+    "maxChoicesPerVoter": 1,
+    "tags": ["HIP", "Economic", "Technical"],
+    "choices": [
+      { "uri": null, "name": "For HIP 130" },
+      { "uri": null, "name": "Against HIP 130" }
+    ]
   }
 ]
