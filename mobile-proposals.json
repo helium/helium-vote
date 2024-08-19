@@ -322,5 +322,15 @@
       { "uri": null, "name": "For HIP 130" },
       { "uri": null, "name": "Against HIP 130" }
     ]
+  },
+  {
+    "name": "HIP 131: Bridging Gap Between Verification Mappers and Anti-Gaming Measures",
+    "uri": "https://gist.githubusercontent.com/hiptron/74fc7b1444d9d6360996f90916390f9b/raw/edc71fec22e599a61796547320919966998bb3cc/HIP-131-Vote-Summary.md",
+    "maxChoicesPerVoter": 1,
+    "tags": ["HIP", "Economic", "Technical"],
+    "choices": [
+      { "uri": null, "name": "For HIP 131" },
+      { "uri": null, "name": "Against HIP 131" }
+    ]
   }
 ]
