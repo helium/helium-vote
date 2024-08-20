@@ -325,7 +325,7 @@
   },
   {
     "name": "HIP 131: Bridging Gap Between Verification Mappers and Anti-Gaming Measures",
-    "uri": "https://gist.githubusercontent.com/hiptron/74fc7b1444d9d6360996f90916390f9b/raw/edc71fec22e599a61796547320919966998bb3cc/HIP-131-Vote-Summary.md",
+    "uri": "https://gist.githubusercontent.com/hiptron/74fc7b1444d9d6360996f90916390f9b/raw/0d849541cae733d26a62a5576c66d9996758e773/HIP-131-Vote-Summary.md",
     "maxChoicesPerVoter": 1,
     "tags": ["HIP", "Economic", "Technical"],
     "choices": [
