@@ -105,7 +105,7 @@
     "name": "HIP 124: Securing IOT Governance Through Staking Rewards",
     "uri": "https://gist.githubusercontent.com/hiptron/5d2bc58d01152c098118cd4acee33fcd/raw/497af88eaf76563334dc44cf870ff0e8023bae63/HIP-124-Vote-Summary.md",
     "maxChoicesPerVoter": 1,
-    "tags": ["HIP", "Governance", "Economic", "Technical"],
+    "tags": ["HIP", "Economic", "Governance"],
     "choices": [
       { "uri": null, "name": "For HIP 124" },
       { "uri": null, "name": "Against HIP 124" }
