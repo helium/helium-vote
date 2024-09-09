@@ -29,6 +29,7 @@ import { RevokeProxyModal } from "./RevokeProxyModal";
 import VoteHistory from "./VoteHistory";
 import { Card, CardContent, CardHeader } from "./ui/card";
 import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 export function ProxyProfile({ wallet: walletRaw }: { wallet: string }) {
   const wallet = useMemo(() => new PublicKey(walletRaw), [walletRaw]);
@@ -181,14 +182,10 @@ export function ProxyProfile({ wallet: walletRaw }: { wallet: string }) {
           </Link>
           <div className="flex flex-col md:flex-row gap-4">
             <div className="grow flex flex-row items-center gap-2">
-              <Image
-                className="w-24 h-24 rounded-full"
-                src={image || ""}
-                alt="Profile"
-                width={48}
-                height={48}
-                style={{ width: "48px", height: "48px" }}
-              />
+              <Avatar>
+                <AvatarImage src={proxy.image} alt={proxy.name} />
+                <AvatarFallback>{proxy.name}</AvatarFallback>
+              </Avatar>
               <div className="flex flex-col gap-1">
                 <h1 className="text-2xl font-semibold">{proxy.name}</h1>
                 <span className="text-xs">
