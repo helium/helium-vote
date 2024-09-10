@@ -35,6 +35,12 @@ export const RevokeProxyModal: React.FC<
       ),
     [positions, wallet]
   );
+  React.useEffect(() => {
+    console.log("proxiedPositions", proxiedPositions?.map(p => ({
+      pubkey: p.pubkey.toBase58(),
+      proxy: p.proxy
+    })));
+  }, [proxiedPositions]);
 
   const handleOnSubmit = async () => {
     try {
@@ -52,8 +58,10 @@ export const RevokeProxyModal: React.FC<
       }
 
       setOpen(false);
+      setSelectedPositions(new Set([]));
     } catch (e: any) {
       setIsSubmitting(false);
+      console.error(e)
       toast(e.message || "Unable to Revoke proxy");
     }
   };

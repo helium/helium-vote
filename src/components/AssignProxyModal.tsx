@@ -88,6 +88,7 @@ export const AssignProxyModal: React.FC<
             Math.min(expirationTime, maxDate.valueOf() / 1000)
           ),
         });
+        setSelectedPositions(new Set([]));
         setOpen(false);
       }
     } catch (e: any) {
