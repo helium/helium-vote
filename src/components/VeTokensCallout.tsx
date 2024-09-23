@@ -2,6 +2,7 @@
 
 import { usePrevious } from "@/hooks/usePrevious";
 import { abbreviateNumber } from "@/lib/utils";
+import { useGovernance } from "@/providers/GovernanceProvider";
 import {
   useAnchorProvider,
   useMint,
@@ -10,16 +11,15 @@ import {
 import { HNT_MINT, IOT_MINT, MOBILE_MINT, toNumber } from "@helium/spl-utils";
 import {
   calcPositionVotingPower,
-  getPositionKeys,
-  getRegistrarKey,
+  usePositionKeysAndProxies,
   usePositions,
-  useRegistrar,
+  useRegistrar
 } from "@helium/voter-stake-registry-hooks";
+import { getRegistrarKey } from "@helium/voter-stake-registry-sdk";
 import { PublicKey } from "@solana/web3.js";
 import BN from "bn.js";
 import Image from "next/image";
-import React, { FC, useMemo } from "react";
-import { useAsync } from "react-async-hook";
+import { FC, useMemo } from "react";
 
 const VeTokenItem: FC<{ mint: PublicKey }> = ({ mint }) => {
   const provider = useAnchorProvider();
@@ -33,30 +33,35 @@ const VeTokenItem: FC<{ mint: PublicKey }> = ({ mint }) => {
   );
   const { info: registrar } = useRegistrar(registrarKey);
 
-  const args = useMemo(
-    () =>
-      wallet &&
-      mint &&
-      connection && {
-        wallet: wallet.publicKey,
-        mint,
-        provider,
-      },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [wallet?.publicKey?.toBase58(), mint.toBase58(), connection, provider]
-  );
+  const { voteService } = useGovernance();
+  const {
+    positionKeys,
+    proxiedPositionKeys,
+    isLoading: loadingPositionKeys,
+  } = usePositionKeysAndProxies({
+    wallet: wallet?.publicKey,
+    provider,
+    voteService,
+  });
 
-  const { result, loading: loadingPositionKeys } = useAsync(
-    async (args: any | undefined) => {
-      if (args) {
-        return getPositionKeys(args);
+  // Assume that my positions are a small amount, so we don't need to say they're static
+  const { accounts: myPositions, loading: loadingMyPositions } =
+    usePositions(positionKeys);
+  // Proxied positions may be a lot, set to static
+  const { accounts: proxiedPositions, loading: loadingProxyPositions } =
+    usePositions(proxiedPositionKeys, true);
+  const loadingFetchedPositions = loadingMyPositions || loadingProxyPositions
+  const fetchedPositions = useMemo(() => {
+    const uniquePositions = new Map();
+    [...(myPositions || []), ...(proxiedPositions || [])].forEach(
+      (position) => {
+        if (position) {
+          uniquePositions.set(position.publicKey.toBase58(), position);
+        }
       }
-    },
-    [args]
-  );
-
-  const { loading: loadingFetchedPositions, accounts: fetchedPositions } =
-    usePositions(result?.positionKeys);
+    );
+    return Array.from(uniquePositions.values());
+  }, [myPositions, proxiedPositions]);
 
   const positions = useMemo(
     () => fetchedPositions?.map((fetched) => fetched.info),

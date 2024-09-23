@@ -15,6 +15,26 @@ const nextConfig = {
         port: "",
         pathname: "/**/**",
       },
+      {
+        protocol: "https",
+        hostname: "helium.io",
+        port: "",
+        pathname: "/**/**",
+      },
+      {
+        protocol: "https",
+        hostname: "*.test-helium.com",
+        port: "",
+        pathname: "/**/**",
+      },
+      ...(process.env.NODE_ENV === "development" ? [
+        {
+          protocol: "http",
+          hostname: "localhost",
+          port: "8082",
+          pathname: "/**/**",
+        },
+      ] : []),
     ],
   },
   logging: {
@@ -1272,122 +1292,146 @@ const nextConfig = {
       },
       {
         source: "/147pXvGVcLKU76D7Hdi7iTTLvLw9qX8jXsCgNkKSHqo3rnfzkby",
-        destination: "/legacy/147pXvGVcLKU76D7Hdi7iTTLvLw9qX8jXsCgNkKSHqo3rnfzkby",
+        destination:
+          "/legacy/147pXvGVcLKU76D7Hdi7iTTLvLw9qX8jXsCgNkKSHqo3rnfzkby",
         permanent: true,
       },
       {
         source: "/14rmHKjpZhsnrA2j24KiGzg8teA1zAMRhVGcWVUdmTAomTrJJQf",
-        destination: "/legacy/14rmHKjpZhsnrA2j24KiGzg8teA1zAMRhVGcWVUdmTAomTrJJQf",
+        destination:
+          "/legacy/14rmHKjpZhsnrA2j24KiGzg8teA1zAMRhVGcWVUdmTAomTrJJQf",
         permanent: true,
       },
       {
         source: "/146pksPcH7C3Wz8hN5NxL544k1VVq6Z4W2iB14e1yJ1HFJ3Wtf3",
-        destination: "/legacy/146pksPcH7C3Wz8hN5NxL544k1VVq6Z4W2iB14e1yJ1HFJ3Wtf3",
+        destination:
+          "/legacy/146pksPcH7C3Wz8hN5NxL544k1VVq6Z4W2iB14e1yJ1HFJ3Wtf3",
         permanent: true,
       },
       {
         source: "/144wSVHr4cuVSjxEC62X1bHuLsc5Hcpq6XBhfSY8BQwiyMborFZ",
-        destination: "/legacy/144wSVHr4cuVSjxEC62X1bHuLsc5Hcpq6XBhfSY8BQwiyMborFZ",
+        destination:
+          "/legacy/144wSVHr4cuVSjxEC62X1bHuLsc5Hcpq6XBhfSY8BQwiyMborFZ",
         permanent: true,
       },
       {
         source: "/143vgVpLgC3LcXLZCyXYZiHCFcsH9UNz3vR8CL6SDxTLPL5tWtr",
-        destination: "/legacy/143vgVpLgC3LcXLZCyXYZiHCFcsH9UNz3vR8CL6SDxTLPL5tWtr",
+        destination:
+          "/legacy/143vgVpLgC3LcXLZCyXYZiHCFcsH9UNz3vR8CL6SDxTLPL5tWtr",
         permanent: true,
       },
       {
         source: "/14jH67zhctwb3B5NmwiAjaXQuyF7jZMZCAnfyBYhSpRS3L22sQE",
-        destination: "/legacy/14jH67zhctwb3B5NmwiAjaXQuyF7jZMZCAnfyBYhSpRS3L22sQE",
+        destination:
+          "/legacy/14jH67zhctwb3B5NmwiAjaXQuyF7jZMZCAnfyBYhSpRS3L22sQE",
         permanent: true,
       },
       {
         source: "/13Z3p82AX8H1EUQF74cP2qq7RmmhbKBAiGWWsyA7WLxQ9NENTVW",
-        destination: "/legacy/13Z3p82AX8H1EUQF74cP2qq7RmmhbKBAiGWWsyA7WLxQ9NENTVW",
+        destination:
+          "/legacy/13Z3p82AX8H1EUQF74cP2qq7RmmhbKBAiGWWsyA7WLxQ9NENTVW",
         permanent: true,
       },
       {
         source: "/13Y79HnMVt4Epug2rbLYivMPvrcpC2wYUNbZK5Dga3tw3VBpBjk",
-        destination: "/legacy/13Y79HnMVt4Epug2rbLYivMPvrcpC2wYUNbZK5Dga3tw3VBpBjk",
+        destination:
+          "/legacy/13Y79HnMVt4Epug2rbLYivMPvrcpC2wYUNbZK5Dga3tw3VBpBjk",
         permanent: true,
       },
       {
         source: "/13Y79HnMVt4Epug2rbLYivMPvrcpC2wYUNbZK5Dga3tw3VBpBjk",
-        destination: "/legacy/13Y79HnMVt4Epug2rbLYivMPvrcpC2wYUNbZK5Dga3tw3VBpBjk",
+        destination:
+          "/legacy/13Y79HnMVt4Epug2rbLYivMPvrcpC2wYUNbZK5Dga3tw3VBpBjk",
         permanent: true,
       },
       {
         source: "/13KaGoC2ED8kEh2sXLZ7eGWrqDUMyFH5k48VQ3LLjU5QoQidMV4",
-        destination: "/legacy/13KaGoC2ED8kEh2sXLZ7eGWrqDUMyFH5k48VQ3LLjU5QoQidMV4",
+        destination:
+          "/legacy/13KaGoC2ED8kEh2sXLZ7eGWrqDUMyFH5k48VQ3LLjU5QoQidMV4",
         permanent: true,
       },
       {
         source: "/13rA4AXq5ME5s9FEyZrE4BMjxiAF9W3kU2tnmUH8FkFGsV97jEp",
-        destination: "/legacy/13rA4AXq5ME5s9FEyZrE4BMjxiAF9W3kU2tnmUH8FkFGsV97jEp",
+        destination:
+          "/legacy/13rA4AXq5ME5s9FEyZrE4BMjxiAF9W3kU2tnmUH8FkFGsV97jEp",
         permanent: true,
       },
       {
         source: "/14cXnMdXYcS7WKNh33dYUaPeo8bZmRFn5AoPA78AZtAgfFXu9jf",
-        destination: "/legacy/14cXnMdXYcS7WKNh33dYUaPeo8bZmRFn5AoPA78AZtAgfFXu9jf",
+        destination:
+          "/legacy/14cXnMdXYcS7WKNh33dYUaPeo8bZmRFn5AoPA78AZtAgfFXu9jf",
         permanent: true,
       },
       {
         source: "/14KhDJUdvAXNVVP5m5cqEaLGNC859sXvpHtxWX9r999pZKC8xAs",
-        destination: "/legacy/14KhDJUdvAXNVVP5m5cqEaLGNC859sXvpHtxWX9r999pZKC8xAs",
+        destination:
+          "/legacy/14KhDJUdvAXNVVP5m5cqEaLGNC859sXvpHtxWX9r999pZKC8xAs",
         permanent: true,
       },
       {
         source: "/13UrtNApGd3NbeP3NyyTejqNEPAv3NGxkGjvtwTVdaRs24NT7Wy",
-        destination: "/legacy/13UrtNApGd3NbeP3NyyTejqNEPAv3NGxkGjvtwTVdaRs24NT7Wy",
+        destination:
+          "/legacy/13UrtNApGd3NbeP3NyyTejqNEPAv3NGxkGjvtwTVdaRs24NT7Wy",
         permanent: true,
       },
       {
         source: "/14Rjhhz1DXLVmSRdzappqWgD6rfgu6XYxmdaSCvWLyLH8ZWbciK",
-        destination: "/legacy/14Rjhhz1DXLVmSRdzappqWgD6rfgu6XYxmdaSCvWLyLH8ZWbciK",
+        destination:
+          "/legacy/14Rjhhz1DXLVmSRdzappqWgD6rfgu6XYxmdaSCvWLyLH8ZWbciK",
         permanent: true,
       },
       {
         source: "/14me3X7jpEmn3eeFfnAkMvUoFU3cN6GAS3CDomqCikr7VQfHWrU",
-        destination: "/legacy/14me3X7jpEmn3eeFfnAkMvUoFU3cN6GAS3CDomqCikr7VQfHWrU",
+        destination:
+          "/legacy/14me3X7jpEmn3eeFfnAkMvUoFU3cN6GAS3CDomqCikr7VQfHWrU",
         permanent: true,
       },
       {
         source: "/14hfi6Vs9YmwYLwVHKygqyEqwTERRrx5kfQkVoX1uqMTxiE5EgJ",
-        destination: "/legacy/14hfi6Vs9YmwYLwVHKygqyEqwTERRrx5kfQkVoX1uqMTxiE5EgJ",
+        destination:
+          "/legacy/14hfi6Vs9YmwYLwVHKygqyEqwTERRrx5kfQkVoX1uqMTxiE5EgJ",
         permanent: true,
       },
       {
         source: "/14XDEkg1t398kvqvgxMMKH8qzVGNBb1mgHhTjNmc5KkC3XJxu8p",
-        destination: "/legacy/14XDEkg1t398kvqvgxMMKH8qzVGNBb1mgHhTjNmc5KkC3XJxu8p",
+        destination:
+          "/legacy/14XDEkg1t398kvqvgxMMKH8qzVGNBb1mgHhTjNmc5KkC3XJxu8p",
         permanent: true,
       },
       {
         source: "/14rifUhocpzdwsrWaG5PDbdREDkzyesKe1hXuWzibv8h9DdqKLe",
-        destination: "/legacy/14rifUhocpzdwsrWaG5PDbdREDkzyesKe1hXuWzibv8h9DdqKLe",
+        destination:
+          "/legacy/14rifUhocpzdwsrWaG5PDbdREDkzyesKe1hXuWzibv8h9DdqKLe",
         permanent: true,
       },
       {
         source: "/13NyqFtVKsifrh6HQ7DjSBKXRDi7qLHDoATHogoSgvBh56oZJv8",
-        destination: "/legacy/13NyqFtVKsifrh6HQ7DjSBKXRDi7qLHDoATHogoSgvBh56oZJv8",
+        destination:
+          "/legacy/13NyqFtVKsifrh6HQ7DjSBKXRDi7qLHDoATHogoSgvBh56oZJv8",
         permanent: true,
       },
       {
         source: "/14MnuexopPfDg3bmq8JdCm7LMDkUBoqhqanD9QzLrUURLZxFHBx",
-        destination: "/legacy/14MnuexopPfDg3bmq8JdCm7LMDkUBoqhqanD9QzLrUURLZxFHBx",
+        destination:
+          "/legacy/14MnuexopPfDg3bmq8JdCm7LMDkUBoqhqanD9QzLrUURLZxFHBx",
         permanent: true,
       },
       {
         source: "/13wCuq7XGnc4xgxPAc9n9ragKsRfmH9t9jB3c1smfKPZWSikZkd",
-        destination: "/legacy/13wCuq7XGnc4xgxPAc9n9ragKsRfmH9t9jB3c1smfKPZWSikZkd",
+        destination:
+          "/legacy/13wCuq7XGnc4xgxPAc9n9ragKsRfmH9t9jB3c1smfKPZWSikZkd",
         permanent: true,
       },
       {
         source: "/14iwaexUYUe5taFgb5hx2BZw74z3TSyonRLYyZU1RbddV4bJest",
-        destination: "/legacy/14iwaexUYUe5taFgb5hx2BZw74z3TSyonRLYyZU1RbddV4bJest",
+        destination:
+          "/legacy/14iwaexUYUe5taFgb5hx2BZw74z3TSyonRLYyZU1RbddV4bJest",
         permanent: true,
       },
       {
         source: "/13F5AWLhxwTjhDMnZ6ww4oJWgRkBoW9ji4JnDzwQXjsQhiT2kcX",
-        destination: "/legacy/13F5AWLhxwTjhDMnZ6ww4oJWgRkBoW9ji4JnDzwQXjsQhiT2kcX",
+        destination:
+          "/legacy/13F5AWLhxwTjhDMnZ6ww4oJWgRkBoW9ji4JnDzwQXjsQhiT2kcX",
         permanent: true,
       },
     ];

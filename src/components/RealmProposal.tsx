@@ -44,77 +44,83 @@ export const RealmProposal: FC<{
       <div className="flex flex-row flex-shrink-0 w-full h-12 items-center justify-center bg-primary">
         <p className="text-foreground font-medium">Voting is Closed</p>
       </div>
-      <ContentSection className="py-8 max-md:py-0 max-md:px-0">
-        <Card className="p-2 rounded-md max-md:rounded-none">
-          <CardHeader className="gap-2">
-            <Link
-              href={`/${network}`}
-              className="flex flex-row items-center text-sm gap-2"
-            >
-              <FaArrowLeft />
-              Back to Votes
-            </Link>
-            <div className="flex flex-row mb-12">
-              {Object.values(tags)
-                .filter((tag) => tag !== "tags")
-                .map((tag, i) => (
-                  <Badge
-                    key={tag}
-                    className={classNames(
-                      "mr-1 rounded-sm font-normal py-1.5 border-2",
-                      { "bg-foreground": i === 0 },
-                      {
-                        "bg-transparent border-background text-foreground":
-                          i > 0,
-                      }
-                    )}
+      <div className="flex flex-col w-full h-full bg-slate-900">
+        <ContentSection className="py-8 max-md:py-0 max-md:!px-0 max-sm:!px-0">
+          <div className="flex flex-row w-full gap-4 justify-center">
+            <div className="flex flex-col gap-4 max-md:gap-0 w-7/12 max-md:w-full">
+              <Card className="p-2 rounded-md max-md:rounded-none bg-slate-850">
+                <CardHeader className="gap-2">
+                  <Link
+                    href={`/${network}`}
+                    className="flex flex-row items-center text-sm gap-2"
                   >
-                    {tag}
-                  </Badge>
-                ))}
+                    <FaArrowLeft />
+                    Back to Votes
+                  </Link>
+                  <div className="flex flex-row mb-12">
+                    {Object.values(tags)
+                      .filter((tag) => tag !== "tags")
+                      .map((tag, i) => (
+                        <Badge
+                          key={tag}
+                          className={classNames(
+                            "mr-1 rounded-sm font-normal py-1.5 border-2",
+                            { "bg-foreground": i === 0 },
+                            {
+                              "bg-transparent border-background text-foreground":
+                                i > 0,
+                            }
+                          )}
+                        >
+                          {tag}
+                        </Badge>
+                      ))}
+                  </div>
+                  <h1>{name}</h1>
+                </CardHeader>
+                <CardContent className="flex flex-col gap-4">
+                  <div className="flex flex-row gap-4">
+                    <div className="flex flex-col w-full">
+                      <VoteResults results={votingResults} decimals={0} />
+                      <div className="flex-col gap-2 mt-6 hidden max-md:flex">
+                        <ProposalBreakdown
+                          timeExpired={true}
+                          endTs={new BN(endTs)}
+                          decimals={0}
+                        />
+                        <ProposalSocial
+                          network={network}
+                          proposalKey={proposalKey}
+                          githubUrl={proposal.github}
+                          twitterUrl={twitterUrl}
+                        />
+                      </div>
+                      <div className="w-full flex flex-col mt-5">
+                        <Markdown className="prose prose-headings:m-0 prose-headings:font-normal prose-hr:my-8 prose-p:text-foreground clear-both dark:prose-invert">
+                          {content.replace(name, "")}
+                        </Markdown>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
-            <h1>{name}</h1>
-          </CardHeader>
-          <CardContent className="flex flex-col gap-4 h-full">
-            <div className="flex flex-row gap-4 justify-between">
-              <div className="flex flex-col w-auto lg:w-6/12 max-md:w-12/12">
-                <VoteResults results={votingResults} decimals={0} />
-                <div className="flex-col gap-2 mt-6 hidden max-md:flex">
-                  <ProposalBreakdown
-                    timeExpired={true}
-                    endTs={new BN(endTs)}
-                    decimals={0}
-                  />
-                  <ProposalSocial
-                    network={network}
-                    proposalKey={proposalKey}
-                    githubUrl={proposal.github}
-                    twitterUrl={twitterUrl}
-                  />
-                </div>
-                <div className="w-full flex flex-col mt-5">
-                  <Markdown className="prose prose-headings:m-0 prose-headings:font-normal prose-hr:my-8 prose-p:text-foreground clear-both dark:prose-invert">
-                    {content.replace(name, "")}
-                  </Markdown>
-                </div>
-              </div>
-              <div className="flex flex-col gap-4 w-4/12 lg:w-3/12 max-md:hidden">
-                <ProposalBreakdown
-                  timeExpired={true}
-                  endTs={new BN(endTs)}
-                  decimals={0}
-                />
-                <ProposalSocial
-                  network={network}
-                  proposalKey={proposalKey}
-                  githubUrl={proposal.github}
-                  twitterUrl={twitterUrl}
-                />
-              </div>
+            <div className="flex flex-col gap-4 w-3/12 max-md:hidden">
+              <ProposalBreakdown
+                timeExpired={true}
+                endTs={new BN(endTs)}
+                decimals={0}
+              />
+              <ProposalSocial
+                network={network}
+                proposalKey={proposalKey}
+                githubUrl={proposal.github}
+                twitterUrl={twitterUrl}
+              />
             </div>
-          </CardContent>
-        </Card>
-      </ContentSection>
+          </div>
+        </ContentSection>
+      </div>
     </>
   );
 };

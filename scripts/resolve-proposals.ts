@@ -37,6 +37,7 @@ export async function run(args: any = process.argv) {
     connection: provider.connection,
     commitment: "confirmed",
     extendConnection: true,
+    enableLogging: true
   });
   const orgProgram = await initOrg(provider);
   const stateProgram = await initState(provider);
