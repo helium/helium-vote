@@ -332,5 +332,15 @@
       { "uri": null, "name": "For HIP 131" },
       { "uri": null, "name": "Against HIP 131" }
     ]
+  },
+  {
+    "name": "HIP 135: Transitioning to Templated MOBILE Coverage",
+    "uri": "https://gist.githubusercontent.com/hiptron/956e04d78984b18298770887dde3d10c/raw/25bd82d259772cbc81e45de8e3f25ae22e06c688/HIP-135-Vote-Summary.md",
+    "maxChoicesPerVoter": 1,
+    "tags": ["HIP", "Economic", "Technical"],
+    "choices": [
+      { "uri": null, "name": "For HIP 135" },
+      { "uri": null, "name": "Against HIP 135" }
+    ]
   }
 ]
