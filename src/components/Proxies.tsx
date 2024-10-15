@@ -19,6 +19,7 @@ import { Card } from "./ui/card";
 import { Input } from "./ui/input";
 import { Skeleton } from "./ui/skeleton";
 import { useDebounce } from "@uidotdev/usehooks";
+import { EnhancedProxy } from "@helium/voter-stake-registry-sdk";
 
 const DECENTRALIZATION_RISK_PERCENT = 10;
 
@@ -80,10 +81,10 @@ export function Proxies() {
     proxiesQuery({
       search: searchDebounced,
       amountPerPage: 100,
-      voteService: voteService,
+      voteService,
     })
   );
-  const proxies = voters?.pages.flat() || [];
+  const proxies = useMemo(() => voters?.pages.flat() || [], [voters]);
 
   const renderBelowIndex = useMemo(
     () =>

@@ -23,15 +23,13 @@ export default async function ProxyPage({
 }: {
   params: { wallet: string; network: string };
 }) {
-  const voteService = useMemo(
-    () => getVoteService({ mint: networksToMint[network] }),
-    [network]
-  );
-  const wallet = useMemo(() => new PublicKey(walletRaw), [walletRaw]);
+  const voteService = getVoteService({ mint: networksToMint[network] });
+  const wallet = new PublicKey(walletRaw);
   const queryClient = new QueryClient();
 
   // Do not use prefetch here, because we want to error when it errors
   const result = await queryClient.fetchQuery(
+    // @ts-ignore
     proxyQuery({
       wallet,
       voteService,

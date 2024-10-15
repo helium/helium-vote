@@ -9,7 +9,7 @@ import { useRegistrar } from "@helium/voter-stake-registry-hooks";
 import { useMint } from "@helium/helium-react-hooks";
 import BN from "bn.js";
 import { useVotes } from "@/hooks/useVotes";
-import { toNumber } from "@helium/spl-utils";
+import { toNumber, truthy } from "@helium/spl-utils";
 import {
   Table,
   TableBody,
@@ -72,13 +72,14 @@ export const VoteBreakdown: FC<{
   }, [markers, decimals]);
 
   const csvData = useMemo(() => {
-    const rows = [];
+    const rows: string[][] = [];
     rows.push(["Owner", "Choices", "Vote Power", "Percentage"]);
 
     (groupedSortedMarkers || []).forEach((marker) => {
       const owner = marker.voter.toBase58();
       const choices = marker.choices
         .map((c) => proposal?.choices[c].name)
+        .filter(truthy)
         .join(", ");
 
       const voteWeight = humanReadable(marker.totalWeight, decimals);
@@ -89,7 +90,7 @@ export const VoteBreakdown: FC<{
         .toNumber()
         .toFixed(2);
 
-      rows.push([owner, choices, voteWeight, percentage]);
+      rows.push([owner, choices, voteWeight || "", percentage]);
     });
 
     const csvContent = rows

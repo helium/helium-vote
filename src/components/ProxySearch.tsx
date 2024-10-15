@@ -9,6 +9,7 @@ import {
   proxiesQuery,
   useHeliumVsrState,
 } from "@helium/voter-stake-registry-hooks";
+import { EnhancedProxy } from "@helium/voter-stake-registry-sdk";
 
 export const ProxySearch: React.FC<{
   value: string;
