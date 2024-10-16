@@ -244,8 +244,7 @@ export const LockTokensForm: FC<{
                   className={classNames(
                     "flex flex-row flex-1 justify-center items-center py-4 rounded-md  bg-slate-600 cursor-pointer border-2 border-transparent hover:bg-opacity-80 active:bg-opacity-70",
                     lockupPeriodOptions[0].value === lockupPeriod.value
-                      ? "surfaceSecondaryText" &&
-                          "!bg-info !border-info-foreground font-medium"
+                      ? "surfaceSecondaryText !bg-info !border-info-foreground font-medium"
                       : "primaryText"
                   )}
                   onClick={() => {

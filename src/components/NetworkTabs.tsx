@@ -25,7 +25,11 @@ const NetworkTab: FC<{
       </div>
       <p className="text-md font-normal">{name}</p>
     </div>
-    <div className={classNames("flex h-1 mt-3", { "bg-primary": active })} />
+    <div
+      className={classNames("flex h-1 mt-5 max-md:mt-3", {
+        "bg-primary": active,
+      })}
+    />
   </Link>
 );
 

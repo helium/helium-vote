@@ -4,7 +4,6 @@ import {
   HELIUM_COMMON_LUT,
   HELIUM_COMMON_LUT_DEVNET,
   batchInstructionsToTxsWithPriorityFee,
-  batchParallelInstructionsWithPriorityFee,
   bulkSendTransactions,
   sendAndConfirmWithRetry,
   toVersionedTx,
@@ -35,6 +34,14 @@ export const MINS_PER_HOUR = 60;
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
+
+export const ellipsisMiddle = (wallet: string): string => {
+  const length = wallet.length;
+  const start = wallet.slice(0, 5);
+  const end = wallet.slice(length - 5, length);
+  const middle = "...";
+  return start + middle + end;
+};
 
 export const formMetaTags = (args?: {
   title?: string;
@@ -287,7 +294,12 @@ export const precision = (a: number) => {
 };
 
 export const onInstructions =
-  (provider?: AnchorProvider) =>
+  (
+    provider?: AnchorProvider,
+    {
+      useFirstEstimateForAll = false,
+    }: { useFirstEstimateForAll?: boolean } = {}
+  ) =>
   async (instructions: TransactionInstruction[], sigs?: Keypair[]) => {
     if (provider) {
       if (sigs) {
@@ -302,6 +314,8 @@ export const onInstructions =
                 ? HELIUM_COMMON_LUT_DEVNET
                 : HELIUM_COMMON_LUT,
             ],
+            useFirstEstimateForAll,
+            computeScaleUp: useFirstEstimateForAll ? 1.4 : 1.1
           }
         );
         const asVersionedTx = transactions.map(toVersionedTx);
@@ -337,9 +351,9 @@ export const onInstructions =
                 ? HELIUM_COMMON_LUT_DEVNET
                 : HELIUM_COMMON_LUT,
             ],
+            useFirstEstimateForAll,
           }
         );
-        console.log("hehe")
 
         await bulkSendTransactions(
           provider,
@@ -385,3 +399,17 @@ export const getProposalContent = async (proposalKey: PublicKey) => {
   const content = await res.text();
   return { content, name: proposal.name };
 };
+
+export function debounce<T extends unknown[], U>(
+  callback: (...args: T) => PromiseLike<U> | U,
+  wait: number
+) {
+  let timer: any;
+
+  return (...args: T): Promise<U> => {
+    clearTimeout(timer);
+    return new Promise((resolve) => {
+      timer = setTimeout(() => resolve(callback(...args)), wait);
+    });
+  };
+}

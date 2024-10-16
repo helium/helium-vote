@@ -121,6 +121,7 @@ export async function run(args: any = process.argv) {
       voteController,
       stateController: resolutionSettings!,
       onVoteHook: stateProgram.programId,
+      authority: wallet.publicKey,
     }
   );
   const proposalConfig = (await initProposalConfig.pubkeys()).proposalConfig!;

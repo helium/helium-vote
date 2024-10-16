@@ -46,6 +46,7 @@ const config = {
           600: "hsl(215, 19%, 40%)",
           700: "hsl(213, 19%, 32%)",
           800: "hsl(214, 19%, 24%)",
+          850: "hsl(215, 19%, 19%)",
           900: "hsl(214, 19%, 15%)",
           950: "hsl(214, 17%, 8%)",
         },
@@ -97,6 +98,10 @@ const config = {
         purple: {
           DEFAULT: "hsl(var(--purple))",
           foreground: "hsl(var(--purple-foreground))",
+        },
+        pink: {
+          DEFAULT: "hsl(var(--pink))",
+          foreground: "hsl(var(--pink-foreground))",
         },
         muted: {
           DEFAULT: "hsl(var(--muted))",

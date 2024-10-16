@@ -36,7 +36,6 @@ const RealmProposalPage = async ({
   const proposal: IRealmProposal = fetchRealmProposal(proposalKey);
   const content = await getContent(proposal.gist);
 
-  console.log(content);
   return (
     <>
       <Header hideHero={true} hideNav={true} />

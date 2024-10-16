@@ -22,7 +22,7 @@ export const Proposals: FC<React.PropsWithChildren<{ className?: string }>> = ({
   const { loading, accounts: proposalsWithDups } =
     useOrganizationProposals(organization);
 
-  const undupedProposals = useMemo(() => {
+  const dedupedProposals = useMemo(() => {
     const seen = new Set();
     return (proposalsWithDups || [])
       .filter((p) => {
@@ -35,20 +35,20 @@ export const Proposals: FC<React.PropsWithChildren<{ className?: string }>> = ({
 
   const activeProposals = useMemo(
     () =>
-      undupedProposals.filter(
+      dedupedProposals.filter(
         (proposal) =>
           getDerivedProposalState(proposal.info as ProposalV0) === "active"
       ),
-    [undupedProposals]
+    [dedupedProposals]
   );
 
   const inactiveProposals = useMemo(
     () =>
-      undupedProposals.filter(
+      dedupedProposals.filter(
         (proposal) =>
           getDerivedProposalState(proposal.info as ProposalV0) !== "active"
       ),
-    [undupedProposals]
+    [dedupedProposals]
   );
 
   const isLoading = useMemo(() => loading || loadingGov, [loading, loadingGov]);

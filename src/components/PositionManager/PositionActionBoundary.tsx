@@ -28,7 +28,7 @@ export const PositionActionBoundary: FC<
   const { hasRewards, isDelegated, numActiveVotes } = position;
   const hasVotes = numActiveVotes > 0;
   const hasBlockers = hasRewards || isDelegated || hasVotes;
-  const tryingToUnblock = !hasRewards && action === "delegate";
+  const canDoWhileBlocked = !hasRewards && action === "delegate" || action == "proxy";
 
   if (!action) {
     return children;
@@ -36,7 +36,7 @@ export const PositionActionBoundary: FC<
 
   return (
     <div className="relative h-full">
-      {hasBlockers && !tryingToUnblock && (
+      {hasBlockers && !canDoWhileBlocked && (
         <div className="flex flex-col justify-center items-center backdrop-blur-md absolute inset-0 z-10 overscroll-contain">
           <X
             className="flex size-6 absolute top-6 right-6 cursor-pointer"
