@@ -9,9 +9,9 @@ import {
   getSubDaos,
   useHeliumVsrState,
   useRegistrar,
+  useRegistrarForMint,
   useSubDaos,
 } from "@helium/voter-stake-registry-hooks";
-import { getRegistrarKey } from "@helium/voter-stake-registry-sdk";
 import { PublicKey } from "@solana/web3.js";
 import { useParams } from "next/navigation";
 import { FC, ReactNode, createContext, useContext, useMemo } from "react";
@@ -54,7 +54,7 @@ const GovernanceProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const network: GovNetwork = (params.network as GovNetwork) || "hnt";
   const networkName = useMemo(() => networkToName[network], [network]);
   const mint = useMemo(() => networksToMint[network], [network]);
-  const registrarKey = useMemo(() => mint && getRegistrarKey(mint), [mint]);
+  const { registrarKey, subDao, dao } = useRegistrarForMint(mint);
   const { loading: loadingMint, info: mintAcc } = useMint(mint);
   const { loading: loadingRegistrar, info: registrar } =
     useRegistrar(registrarKey);
@@ -85,6 +85,8 @@ const GovernanceProvider: FC<{ children: ReactNode }> = ({ children }) => {
       organization,
       registrar,
       subDaos,
+      subDao,
+      dao
     }),
     [
       loading,
@@ -95,6 +97,8 @@ const GovernanceProvider: FC<{ children: ReactNode }> = ({ children }) => {
       organization,
       registrar,
       subDaos,
+      subDao,
+      dao
     ]
   );
 

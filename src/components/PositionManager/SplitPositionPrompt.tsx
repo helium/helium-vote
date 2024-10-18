@@ -12,16 +12,18 @@ import { useSolanaUnixNow } from "@helium/helium-react-hooks";
 import {
   PositionWithMeta,
   calcLockupMultiplier,
+  useEnrolledPosition,
 } from "@helium/voter-stake-registry-hooks";
 import BN from "bn.js";
 import { Loader2, X } from "lucide-react";
-import React, { FC, useCallback, useState } from "react";
+import React, { FC, useCallback, useMemo, useState } from "react";
 import { FaCircleArrowDown } from "react-icons/fa6";
 import { LockTokensForm, LockTokensFormValues } from "../LockTokensForm";
 import { PositionCard } from "../PositionCard";
 import { StepIndicator } from "../StepIndicator";
 import { Button } from "../ui/button";
 import { ConfirmationItem } from "./ConfirmationItem";
+import { enrolledPositionKey } from "@helium/position-voting-rewards-sdk";
 
 export const SplitPositionPrompt: FC<{
   position: PositionWithMeta;
@@ -44,6 +46,14 @@ export const SplitPositionPrompt: FC<{
         )
       : secsToDays(position.lockup.endTs.sub(new BN(unixNow)).toNumber())
   );
+
+  const enrolledPositionK = useMemo(
+    () => enrolledPositionKey(position.pubkey)[0],
+    [position.pubkey]
+  );
+  const enrolledPosition = useEnrolledPosition(enrolledPositionK);
+  const numVotedProposals =
+    (enrolledPosition && enrolledPosition.info?.recentProposals.length) || 0;
 
   const handleCalcLockupMultiplier = useCallback(
     (lockupPeriodInDays: number) =>
@@ -94,19 +104,30 @@ export const SplitPositionPrompt: FC<{
         )}
       </div>
       {step === 1 && (
-        <LockTokensForm
-          initValues={formValues}
-          mode="split"
-          submitText="Next"
-          maxLockupAmount={maxActionableAmount}
-          minLockupTimeInDays={minLockupTimeInDays}
-          maxLockupTimeInDays={secsToDays(
-            votingMint.lockupSaturationSecs.toNumber()
+        <div className="flex flex-col gap-2">
+          {numVotedProposals > 0 && (
+            <span className="text-red-500">
+              You have voted on {numVotedProposals} proposal
+              {numVotedProposals > 1 ? "s" : ""}. Splitting your position resets
+              your voting progress. If you split this position, you will need
+              to vote on 2 more proposals before they are eligible for rewards
+              again.
+            </span>
           )}
-          calcMultiplierFn={handleCalcLockupMultiplier}
-          onCancel={onCancel}
-          onSubmit={handleFormSubmit}
-        />
+          <LockTokensForm
+            initValues={formValues}
+            mode="split"
+            submitText="Next"
+            maxLockupAmount={maxActionableAmount}
+            minLockupTimeInDays={minLockupTimeInDays}
+            maxLockupTimeInDays={secsToDays(
+              votingMint.lockupSaturationSecs.toNumber()
+            )}
+            calcMultiplierFn={handleCalcLockupMultiplier}
+            onCancel={onCancel}
+            onSubmit={handleFormSubmit}
+          />
+        </div>
       )}
       {step === 2 && formValues && (
         <>

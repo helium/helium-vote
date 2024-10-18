@@ -8,18 +8,19 @@ import {
   precision,
 } from "@/lib/utils";
 import { useGovernance } from "@/providers/GovernanceProvider";
-import { PositionWithMeta } from "@helium/voter-stake-registry-hooks";
+import { PositionWithMeta, useEnrolledPosition } from "@helium/voter-stake-registry-hooks";
 import { Mint } from "@solana/spl-token";
 import { PublicKey } from "@solana/web3.js";
 import classNames from "classnames";
 import { Loader2, X } from "lucide-react";
-import React, { FC, useState } from "react";
+import React, { FC, useMemo, useState } from "react";
 import { FaCircleArrowRight } from "react-icons/fa6";
 import { PositionCard } from "../PositionCard";
 import { StepIndicator } from "../StepIndicator";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { ConfirmationItem } from "./ConfirmationItem";
+import { enrolledPositionKey } from "@helium/position-voting-rewards-sdk";
 
 const PositionBlurb = ({
   position,
@@ -76,6 +77,14 @@ export const MergePositionPrompt: FC<{
   const { mintAcc, network } = useGovernance();
   const mintMinAmount = mintAcc ? getMintMinAmountAsDecimal(mintAcc) : 1;
   const currentPrecision = precision(mintMinAmount);
+
+  const enrolledPositionK = useMemo(
+    () => enrolledPositionKey(position.pubkey)[0],
+    [position.pubkey]
+  );
+  const enrolledPosition = useEnrolledPosition(enrolledPositionK);
+  const numVotedProposals =
+    (enrolledPosition && enrolledPosition.info?.recentProposals.length) || 0;
 
   const selectedPosition =
     selectedPosPk && positions.find((pos) => pos.pubkey.equals(selectedPosPk))!;
@@ -192,6 +201,15 @@ export const MergePositionPrompt: FC<{
                 );
               })}
             </div>
+            {numVotedProposals > 0 && (
+              <span className="text-red-500">
+                You have voted on {numVotedProposals} proposal
+                {numVotedProposals > 1 ? "s" : ""}. Merging your positions
+                resets your voting progress. If you merge these positions, you
+                will need to vote on 2 more proposals before they are
+                eligible for rewards again.
+              </span>
+            )}
             <div className="flex flex-row flex-1 gap-2 w-full">
               <Button variant="secondary" className="flex-1" onClick={onCancel}>
                 Cancel

@@ -1,22 +1,22 @@
 "use client";
 
-import { useGovernance } from "@/providers/GovernanceProvider";
-import React, { FC, useMemo } from "react";
-import { Button } from "./ui/button";
-import { FaStar } from "react-icons/fa6";
-import { Loader2 } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
-import BN from "bn.js";
-import { useClaimAllPositionsRewards } from "@helium/voter-stake-registry-hooks";
-import { PositionCard, PositionCardSkeleton } from "./PositionCard";
-import { useWallet } from "@solana/wallet-adapter-react";
-import { toast } from "sonner";
-import { Skeleton } from "./ui/skeleton";
-import { CreatePositionButton } from "./CreatePositionButton";
 import { onInstructions } from "@/lib/utils";
-import { useAnchorProvider, useSolanaUnixNow } from "@helium/helium-react-hooks";
-import { ContentSection } from "./ContentSection";
+import { useGovernance } from "@/providers/GovernanceProvider";
+import { useAnchorProvider } from "@helium/helium-react-hooks";
+import { useClaimAllPositionsRewards } from "@helium/voter-stake-registry-hooks";
 import { WalletSignTransactionError } from "@solana/wallet-adapter-base";
+import { useWallet } from "@solana/wallet-adapter-react";
+import BN from "bn.js";
+import { Loader2 } from "lucide-react";
+import { FC, useMemo } from "react";
+import { FaStar } from "react-icons/fa6";
+import { toast } from "sonner";
+import { ContentSection } from "./ContentSection";
+import { CreatePositionButton } from "./CreatePositionButton";
+import { PositionCard, PositionCardSkeleton } from "./PositionCard";
+import { Button } from "./ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { Skeleton } from "./ui/skeleton";
 
 export const Positions: FC = () => {
   const provider = useAnchorProvider();
@@ -142,21 +142,19 @@ export const Positions: FC = () => {
           <h4>All Positions</h4>
           <div className="flex max-md:flex-col gap-2">
             <CreatePositionButton showText />
-            {network === "hnt" && (
-              <Button
-                variant="default"
-                className="text-foreground flex flex-row gap-2 items-center"
-                disabled={!hasRewards || claimingAllRewards}
-                onClick={handleClaimRewards}
-              >
-                {claimingAllRewards ? (
-                  <Loader2 className="size-4 animate-spin" />
-                ) : (
-                  <FaStar className="size-4" />
-                )}
-                {claimingAllRewards ? "Claiming Rewards..." : "Claim Rewards"}
-              </Button>
-            )}
+            <Button
+              variant="default"
+              className="text-foreground flex flex-row gap-2 items-center"
+              disabled={!hasRewards || claimingAllRewards}
+              onClick={handleClaimRewards}
+            >
+              {claimingAllRewards ? (
+                <Loader2 className="size-4 animate-spin" />
+              ) : (
+                <FaStar className="size-4" />
+              )}
+              {claimingAllRewards ? "Claiming Rewards..." : "Claim Rewards"}
+            </Button>
           </div>
         </div>
         {!notDecayedPositions?.length && !decayedPositions?.length && (

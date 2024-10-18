@@ -3,8 +3,9 @@
 import {
   PositionWithMeta,
   calcLockupMultiplier,
+  useEnrolledPosition,
 } from "@helium/voter-stake-registry-hooks";
-import React, { FC, useCallback, useState } from "react";
+import React, { FC, useCallback, useMemo, useState } from "react";
 import { LockTokensForm, LockTokensFormValues } from "../LockTokensForm";
 import { StepIndicator } from "../StepIndicator";
 import { useGovernance } from "@/providers/GovernanceProvider";
@@ -19,6 +20,7 @@ import { Button } from "../ui/button";
 import { Loader2, X } from "lucide-react";
 import { FaCircleArrowRight } from "react-icons/fa6";
 import { ConfirmationItem } from "./ConfirmationItem";
+import { enrolledPositionKey } from "@helium/position-voting-rewards-sdk";
 
 export const ExtendPositionPrompt: FC<{
   position: PositionWithMeta;
@@ -41,6 +43,13 @@ export const ExtendPositionPrompt: FC<{
         )
       : secsToDays(position.lockup.endTs.sub(new BN(unixNow)).toNumber())
   );
+  const enrolledPositionK = useMemo(
+    () => enrolledPositionKey(position.pubkey)[0],
+    [position.pubkey]
+  );
+  const enrolledPosition = useEnrolledPosition(enrolledPositionK);
+  const numVotedProposals =
+    (enrolledPosition && enrolledPosition.info?.recentProposals.length) || 0;
 
   const handleCalcLockupMultiplier = useCallback(
     (lockupPeriodInDays: number) =>
@@ -88,19 +97,28 @@ export const ExtendPositionPrompt: FC<{
         )}
       </div>
       {step === 1 && (
-        <LockTokensForm
-          initValues={formValues}
-          mode="extend"
-          submitText="Next"
-          maxLockupAmount={maxActionableAmount}
-          minLockupTimeInDays={minLockupTimeInDays}
-          maxLockupTimeInDays={secsToDays(
-            votingMint.lockupSaturationSecs.toNumber()
+        <div className="flex flex-col gap-2">
+          {numVotedProposals > 0 && (
+            <span className="text-red-500">
+              You have voted on {numVotedProposals} proposal{numVotedProposals > 1 ? "s" : ""}. Extending your
+              position resets your voting progress. If you extend this position, you will need to vote on 2
+              more proposals before this position is eligible for rewards again.
+            </span>
           )}
-          calcMultiplierFn={handleCalcLockupMultiplier}
-          onCancel={onCancel}
-          onSubmit={handleFormSubmit}
-        />
+          <LockTokensForm
+            initValues={formValues}
+            mode="extend"
+            submitText="Next"
+            maxLockupAmount={maxActionableAmount}
+            minLockupTimeInDays={minLockupTimeInDays}
+            maxLockupTimeInDays={secsToDays(
+              votingMint.lockupSaturationSecs.toNumber()
+            )}
+            calcMultiplierFn={handleCalcLockupMultiplier}
+            onCancel={onCancel}
+            onSubmit={handleFormSubmit}
+          />
+        </div>
       )}
       {step === 2 && (
         <>
@@ -141,6 +159,7 @@ export const ExtendPositionPrompt: FC<{
               >
                 Go Back
               </Button>
+
               <Button
                 className="flex-1 text-foreground gap-2"
                 disabled={isSubmitting}

@@ -24,7 +24,7 @@ export async function run(args: any = process.argv) {
     },
     realmName: {
       type: "string",
-      default: "Helium",
+      required: true,
     },
     name: {
       type: "string",
