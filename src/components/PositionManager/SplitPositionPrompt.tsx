@@ -107,11 +107,10 @@ export const SplitPositionPrompt: FC<{
         <div className="flex flex-col gap-2">
           {numVotedProposals > 0 && (
             <span className="text-red-500">
-              You have voted on {numVotedProposals} proposal
-              {numVotedProposals > 1 ? "s" : ""}. Splitting your position resets
-              your voting progress. If you split this position, you will need
-              to vote on 2 more proposals before they are eligible for rewards
-              again.
+              {numVotedProposals >= 2 &&
+                "Position is currently eligible for voting rewards. If you extend this position, you will need to vote on 2 more proposals to gain eligibility again."}
+              {numVotedProposals === 1 &&
+                "You have voted on 1 proposal. Extending your position resets your voting progress. If you extend this position, you will need to vote on 2 more proposals before this position is eligible for rewards."}
             </span>
           )}
           <LockTokensForm
