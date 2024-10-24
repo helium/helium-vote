@@ -13,9 +13,10 @@ import {
   calcPositionVotingPower,
   usePositionKeysAndProxies,
   usePositions,
-  useRegistrar
+  useRegistrar,
+  useRegistrarForMint
 } from "@helium/voter-stake-registry-hooks";
-import { getRegistrarKey } from "@helium/voter-stake-registry-sdk";
+import { VoteService } from "@helium/voter-stake-registry-sdk";
 import { PublicKey } from "@solana/web3.js";
 import BN from "bn.js";
 import Image from "next/image";
@@ -26,14 +27,17 @@ const VeTokenItem: FC<{ mint: PublicKey }> = ({ mint }) => {
   const { wallet, connection } = provider || {};
   const unixNow = useSolanaUnixNow() || Date.now() / 1000;
   const decimals = useMint(mint)?.info?.decimals;
-  const registrarKey = useMemo(
-    () => mint && getRegistrarKey(mint),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [mint?.toBase58()]
-  );
+  const { registrarKey } = useRegistrarForMint(mint);
   const { info: registrar } = useRegistrar(registrarKey);
-
   const { voteService } = useGovernance();
+  const urlVoteService = useMemo(() => {
+    return registrarKey
+      ? new VoteService({
+          baseURL: process.env.NEXT_PUBLIC_HELIUM_VOTE_URI,
+          registrar: registrarKey,
+        })
+      : undefined;
+  }, [registrarKey]);
   const {
     positionKeys,
     proxiedPositionKeys,
@@ -41,7 +45,7 @@ const VeTokenItem: FC<{ mint: PublicKey }> = ({ mint }) => {
   } = usePositionKeysAndProxies({
     wallet: wallet?.publicKey,
     provider,
-    voteService,
+    voteService: urlVoteService,
   });
 
   // Assume that my positions are a small amount, so we don't need to say they're static

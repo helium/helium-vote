@@ -61,6 +61,7 @@ export const VoteOptions: FC<{
         });
         toast("Vote submitted");
       } catch (e: any) {
+        console.error(e)
         if (!(e instanceof WalletSignTransactionError)) {
           setCurrVote(0);
           toast(e.message || "Vote failed, please try again");
@@ -81,6 +82,7 @@ export const VoteOptions: FC<{
         });
         toast("Vote relinquished");
       } catch (e: any) {
+        console.error(e)
         if (!(e instanceof WalletSignTransactionError)) {
           setCurrVote(0);
           toast(e.message || "Relinquish vote failed, please try again");

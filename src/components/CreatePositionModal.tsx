@@ -143,6 +143,7 @@ export const CreatePositionModal: FC<React.PropsWithChildren<{}>> = ({
       }
     } catch (e: any) {
       setIsSubmitting(false);
+      console.error(e)
       if (!(e instanceof WalletSignTransactionError)) {
         toast(e.message || "Position creation failed, please try again");
       }
