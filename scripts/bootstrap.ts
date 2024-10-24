@@ -80,15 +80,17 @@ export async function run(args: any = process.argv) {
   // Must have 100,000,000 veHNT, 67% of the vote. Choose the top one as the winner.
   const nodes = settings()
     .and(
+      settings().offsetFromStartTs(new anchor.BN(60 * 60 * 24 * 7)),
       settings().and(
-        settings().top(1),
         settings().and(
-          settings().choicePercentage(67),
-          //  100,000,000 veHNT
-          settings().choiceVoteWeight(new anchor.BN(argv.threshold))
-        )
-      ),
-      settings().offsetFromStartTs(new anchor.BN(60 * 60 * 24 * 7))
+          settings().totalWeight(new anchor.BN(argv.threshold)),
+          settings().and(
+            settings().not("Abstain"),
+            settings().choicePercentageOfCurrent(67)
+          )
+        ),
+        settings().top(1)
+      )
     )
     .build();
 
