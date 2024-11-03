@@ -110,5 +110,20 @@
       { "uri": null, "name": "For HIP 124" },
       { "uri": null, "name": "Against HIP 124" }
     ]
+  },
+  {
+    "name": "IOT Working Group Elections - Q4 2024",
+    "uri": "https://gist.githubusercontent.com/hiptron/622ac5aca9a9293b40cb4d596e88e8e2/raw/44ab5d32633ff588547fed2b231c7ff2f38b2045/2024Q4-IOT-Election-Summary.md",
+    "maxChoicesPerVoter": 6,
+    "tags": ["working-group"],
+    "choices": [
+      { "uri": null, "name": "SuburbanCrypto" },
+      { "uri": null, "name": "Frenchman" },
+      { "uri": null, "name": "No One at All" },
+      { "uri": null, "name": "hackNthisNthat" },
+      { "uri": null, "name": "Jerm" },
+      { "uri": null, "name": "Starwatcher" },
+      { "uri": null, "name": "Nosmaster89" }
+    ]
   }
 ]
