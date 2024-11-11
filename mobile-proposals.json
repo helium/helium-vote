@@ -342,5 +342,35 @@
       { "uri": null, "name": "For HIP 135" },
       { "uri": null, "name": "Against HIP 135" }
     ]
+  },
+  {
+    "name": "HIP 132: Scaling MOBILE Mappers",
+    "uri": "https://gist.githubusercontent.com/hiptron/62799a02429d99ad22a58e161a672c17/raw/1efd040ed3eee32c2ff7f70657172f1f6c32c878/HIP-132-Vote-Summary.md",
+    "maxChoicesPerVoter": 1,
+    "tags": ["HIP", "Economic", "Technical"],
+    "choices": [
+      { "uri": null, "name": "For HIP 132" },
+      { "uri": null, "name": "Against HIP 132" }
+    ]
+  },
+  {
+    "name": "HIP 133: Bridging Gap for Anti-Gaming Measures Phase 2",
+    "uri": "https://gist.githubusercontent.com/hiptron/63eb73a74bd0b53a017e714b4370823a/raw/163650f33bd7d468db5bef368a1df42362b82c33/HIP-133-Vote-Summary.md",
+    "maxChoicesPerVoter": 1,
+    "tags": ["HIP", "Economic", "Technical"],
+    "choices": [
+      { "uri": null, "name": "For HIP 133" },
+      { "uri": null, "name": "Against HIP 133" }
+    ]
+  },
+  {
+    "name": "HIP 134: Reward MOBILE Carrier Offload Hotspots",
+    "uri": "https://gist.githubusercontent.com/hiptron/4be15649b84a69f5fc23d5243094cdef/raw/14fc259ac3f49ab3822494090e5e5df1bf7ce755/HIP-134-Vote-Summary.md",
+    "maxChoicesPerVoter": 1,
+    "tags": ["HIP", "Economic", "Technical"],
+    "choices": [
+      { "uri": null, "name": "For HIP 134" },
+      { "uri": null, "name": "Against HIP 134" }
+    ]
   }
 ]
