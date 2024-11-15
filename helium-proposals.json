@@ -66,5 +66,15 @@
       { "uri": null, "name": "For HIP 128" },
       { "uri": null, "name": "Against HIP 128" }
     ]
+  },
+  {
+    "name": "HIP 138: Return to HNT",
+    "uri": "https://gist.githubusercontent.com/hiptron/86a0f8cc79f2571544ca7d43ec4c68d5/raw/3cd380820c9bce78984b9ac5671129352ec2af95/HIP-138-HNT-Vote-Summary.md",
+    "maxChoicesPerVoter": 1,
+    "tags": ["HIP", "Economic", "Technical", "Governance"],
+    "choices": [
+      { "uri": null, "name": "For HIP 138" },
+      { "uri": null, "name": "Against HIP 138" }
+    ]
   }
 ]
