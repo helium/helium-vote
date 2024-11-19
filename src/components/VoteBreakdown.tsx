@@ -5,11 +5,14 @@ import {
   useProposal,
   useProposalConfig,
 } from "@helium/modular-governance-hooks";
-import { useRegistrar } from "@helium/voter-stake-registry-hooks";
+import {
+  useRegistrar,
+  useHeliumVsrState,
+  votesForProposalQuery,
+} from "@helium/voter-stake-registry-hooks";
 import { useMint } from "@helium/helium-react-hooks";
 import BN from "bn.js";
-import { useVotes } from "@/hooks/useVotes";
-import { toNumber, truthy } from "@helium/spl-utils";
+import { toNumber } from "@helium/spl-utils";
 import {
   Table,
   TableBody,
@@ -23,12 +26,19 @@ import { Button } from "./ui/button";
 import { FaChevronDown } from "react-icons/fa6";
 import classNames from "classnames";
 import Link from "next/link";
+import { useQuery } from "@tanstack/react-query";
 
 export const VoteBreakdown: FC<{
   proposalKey: PublicKey;
 }> = ({ proposalKey }) => {
+  const { voteService } = useHeliumVsrState();
   const [displayCount, setDisplayCount] = useState(6);
-  const { markers, loading: loadingMarkers } = useVotes(proposalKey);
+  const { data: votes, isLoading: loadingVotes } = useQuery(
+    votesForProposalQuery({
+      voteService,
+      proposal: proposalKey,
+    })
+  );
   const { info: proposal, loading: loadingProp } = useProposal(proposalKey);
   const { info: proposalConfig, loading: loadingConf } = useProposalConfig(
     proposal?.proposalConfig
@@ -45,22 +55,23 @@ export const VoteBreakdown: FC<{
     [proposal?.choices]
   );
 
-  const groupedSortedMarkers = useMemo(() => {
+  const groupedSortedVotes = useMemo(() => {
     if (decimals) {
       const grouped = Object.values(
-        (markers || []).reduce((acc, marker) => {
-          const key = marker.voter.toBase58() + marker.choices.join(",");
+        (votes || []).reduce((acc, vote) => {
+          const key = vote.voter;
           if (!acc[key]) {
             acc[key] = {
-              voter: marker.voter,
+              voter: vote.voter,
               choices: [],
               totalWeight: new BN(0),
             };
           }
-          acc[key].choices = marker.choices;
-          acc[key].totalWeight = acc[key].totalWeight.add(marker.weight);
+
+          acc[key].choices.push(vote.choiceName);
+          acc[key].totalWeight = acc[key].totalWeight.add(new BN(vote.weight));
           return acc;
-        }, {} as Record<string, { voter: PublicKey; choices: number[]; totalWeight: BN }>)
+        }, {} as Record<string, { voter: string; choices: string[]; totalWeight: BN }>)
       );
 
       const sortedMarkers = grouped.sort((a, b) =>
@@ -69,21 +80,17 @@ export const VoteBreakdown: FC<{
 
       return sortedMarkers;
     }
-  }, [markers, decimals]);
+  }, [votes, decimals]);
 
   const csvData = useMemo(() => {
     const rows: string[][] = [];
     rows.push(["Owner", "Choices", "Vote Power", "Percentage"]);
 
-    (groupedSortedMarkers || []).forEach((marker) => {
-      const owner = marker.voter.toBase58();
-      const choices = marker.choices
-        .map((c) => proposal?.choices[c].name)
-        .filter(truthy)
-        .join(", ");
-
-      const voteWeight = humanReadable(marker.totalWeight, decimals);
-      const percentage = marker.totalWeight
+    (groupedSortedVotes || []).forEach((vote) => {
+      const owner = vote.voter;
+      const choices = vote.choices.join(" ");
+      const voteWeight = humanReadable(vote.totalWeight, decimals);
+      const percentage = vote.totalWeight
         .mul(new BN(100000))
         .div(totalVotes)
         .div(new BN(1000))
@@ -97,11 +104,11 @@ export const VoteBreakdown: FC<{
       .map((row) => row.map((r) => `"${r.toString()}"`).join(","))
       .join("\n");
     return csvContent;
-  }, [groupedSortedMarkers, proposal?.choices, decimals, totalVotes]);
+  }, [groupedSortedVotes, decimals, totalVotes]);
 
-  const displayedMarkers = useMemo(
-    () => (groupedSortedMarkers || []).slice(0, displayCount),
-    [groupedSortedMarkers, displayCount]
+  const displayedVotes = useMemo(
+    () => (groupedSortedVotes || []).slice(0, displayCount),
+    [groupedSortedVotes, displayCount]
   );
 
   const handleCSVDownload = () => {
@@ -127,8 +134,8 @@ export const VoteBreakdown: FC<{
   };
 
   const isLoading = useMemo(
-    () => loadingMarkers || loadingProp || loadingConf || loadingReg,
-    [loadingMarkers, loadingProp, loadingConf, loadingReg]
+    () => loadingVotes || loadingProp || loadingConf || loadingReg,
+    [loadingVotes, loadingProp, loadingConf, loadingReg]
   );
 
   return (
@@ -145,7 +152,7 @@ export const VoteBreakdown: FC<{
         64-bits of precision
       </p>
       <Table className="text-base mt-4">
-        {groupedSortedMarkers && groupedSortedMarkers.length > displayCount && (
+        {groupedSortedVotes && groupedSortedVotes.length > displayCount && (
           <TableCaption></TableCaption>
         )}
         <TableHeader>
@@ -166,9 +173,9 @@ export const VoteBreakdown: FC<{
         </TableHeader>
         {!isLoading && (
           <TableBody>
-            {displayedMarkers.map((marker, i) => (
+            {displayedVotes.map((vote, i) => (
               <TableRow
-                key={marker.voter.toBase58()}
+                key={vote.voter}
                 className={classNames(
                   "!hover:bg-initial",
                   i % 2 === 0 ? "bg-slate-700" : "bg-slate-800"
@@ -178,22 +185,18 @@ export const VoteBreakdown: FC<{
                   <Link
                     className="text-success-foreground"
                     target="_blank"
-                    href={`https://explorer.solana.com/address/${marker.voter.toBase58()}`}
+                    href={`https://explorer.solana.com/address/${vote.voter}`}
                   >
-                    {ellipsisMiddle(marker.voter.toBase58())}
+                    {ellipsisMiddle(vote.voter)}
                   </Link>
                 </TableCell>
+                <TableCell>{vote.choices.join(", ")}</TableCell>
                 <TableCell>
-                  {marker.choices
-                    .map((c) => proposal?.choices[c].name)
-                    .join(", ")}
-                </TableCell>
-                <TableCell>
-                  {humanReadable(marker.totalWeight, decimals)}
+                  {humanReadable(vote.totalWeight, decimals)}
                 </TableCell>
                 <TableCell className="text-right">
                   {/* Add two decimals precision */}
-                  {marker.totalWeight
+                  {vote.totalWeight
                     .mul(new BN(100000))
                     .div(totalVotes)
                     .div(new BN(1000))
