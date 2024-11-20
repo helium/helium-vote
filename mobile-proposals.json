@@ -382,5 +382,21 @@
       { "uri": null, "name": "For HIP 138" },
       { "uri": null, "name": "Against HIP 138" }
     ]
+  },
+  {
+    "name": "MOBILE Working Group (Odd Class) Elections - Q4 2024",
+    "uri": "https://gist.githubusercontent.com/hiptron/b1de5fbe5c7511059358b750b123497c/raw/494b39e38921acf74b7ad21fe89b090a8edfa95b/2024Q4-MOBILE-Election-Summary.md",
+    "maxChoicesPerVoter": 5,
+    "tags": ["working-group"],
+    "choices": [
+      { "uri": null, "name": "lnjenkins/lnjenkins#9205 - Lukas Jenkins" },
+      { "uri": null, "name": "L3onSag3 - Leon Rowe" },
+      { "uri": null, "name": "KeithR / keith_rettig" },
+      { "uri": null, "name": "MaknBank - Omar Henry" },
+      { "uri": null, "name": "Brainstormer" },
+      { "uri": null, "name": "Max Gold/capc0m" },
+      { "uri": null, "name": "Kennyy/Kennyy6399" },
+      { "uri": null, "name": "Bowen Li/0xbowen" }
+    ]
   }
 ]
