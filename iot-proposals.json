@@ -135,5 +135,15 @@
       { "uri": null, "name": "For HIP 138" },
       { "uri": null, "name": "Against HIP 138" }
     ]
+  },
+  {
+    "name": "HIP 137: Remove CN470 from IOT PoC",
+    "uri": "https://gist.githubusercontent.com/hiptron/ea53e842a2f2515547a6b34dae6f190f/raw/161fb887e898a56fc08c0ed8fa478acc6daf7055/HIP-137-Vote-Summary.md",
+    "maxChoicesPerVoter": 1,
+    "tags": ["HIP", "Economic"],
+    "choices": [
+      { "uri": null, "name": "For HIP 137" },
+      { "uri": null, "name": "Against HIP 137" }
+    ]
   }
 ]
