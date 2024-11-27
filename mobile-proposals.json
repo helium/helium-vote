@@ -398,5 +398,15 @@
       { "uri": null, "name": "Kennyy/Kennyy6399" },
       { "uri": null, "name": "Bowen Li/0xbowen" }
     ]
+  },
+  {
+    "name": "HIP 139: Phase out CBRS",
+    "uri": "https://gist.githubusercontent.com/hiptron/03904e6871edc1826775417f81ca5846/raw/50704eb696f12f5d9c1327c56582faddff42d282/HIP-139-Vote-Summary.md",
+    "maxChoicesPerVoter": 1,
+    "tags": ["HIP", "Economic", "Technical"],
+    "choices": [
+      { "uri": null, "name": "For HIP 139" },
+      { "uri": null, "name": "Against HIP 139" }
+    ]
   }
 ]
