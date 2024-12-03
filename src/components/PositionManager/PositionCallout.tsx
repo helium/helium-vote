@@ -177,7 +177,7 @@ export const PositionCallout: FC<{
                 className="flex-1"
                 onClick={() => setManagerAction("flip")}
               >
-                {isConstant ? "Decay Postion" : "Pause Position"}
+                {isConstant ? "Decay Position" : "Pause Position"}
               </Button>
               {canDelegate && (
                 <Button
