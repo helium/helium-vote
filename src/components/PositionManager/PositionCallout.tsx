@@ -47,7 +47,7 @@ export const PositionCallout: FC<{
       : lockup.endTs.lte(new BN(unixNow)));
   const elapsedTime = new BN(unixNow).sub(lockup.startTs);
   const totalTime = isDelegated
-    ? lockup.endTs.add(new BN(EPOCH_LENGTH).sub(lockup.startTs))
+    ? lockup.endTs.add(new BN(EPOCH_LENGTH)).sub(lockup.startTs)
     : lockup.endTs.sub(lockup.startTs);
   const decayedPercentage = elapsedTime.muln(100).div(totalTime);
   const canDelegate = network === "hnt";
