@@ -315,7 +315,7 @@ export const onInstructions =
                 : HELIUM_COMMON_LUT,
             ],
             useFirstEstimateForAll,
-            computeScaleUp: useFirstEstimateForAll ? 1.4 : 1.1
+            computeScaleUp: useFirstEstimateForAll ? 1.4 : 1.1,
           }
         );
         const asVersionedTx = transactions.map(toVersionedTx);
@@ -413,3 +413,5 @@ export function debounce<T extends unknown[], U>(
     });
   };
 }
+
+export const EPOCH_LENGTH = 60 * 60 * 24;

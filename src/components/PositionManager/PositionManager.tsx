@@ -1,6 +1,6 @@
 "use client";
 
-import { onInstructions, secsToDays } from "@/lib/utils";
+import { EPOCH_LENGTH, onInstructions, secsToDays } from "@/lib/utils";
 import { useGovernance } from "@/providers/GovernanceProvider";
 import {
   useAnchorProvider,
@@ -97,6 +97,7 @@ export const PositionManager: FC<PositionManagerProps> = ({
   position,
   initAction,
 }) => {
+  const unixNow = useSolanaUnixNow() || Date.now() / 1000;
   const [action, setAction] = useState<PositionAction | undefined>(initAction);
   const provider = useAnchorProvider();
   const {
@@ -107,11 +108,15 @@ export const PositionManager: FC<PositionManagerProps> = ({
     refetch: refetchState,
   } = useGovernance();
   const router = useRouter();
-  const { lockup } = position;
-
+  const { lockup, isDelegated } = position;
   const isConstant = Object.keys(lockup.kind)[0] === "constant";
-  const unixNow = useSolanaUnixNow() || Date.now() / 1000;
-  const isDecayed = !isConstant && lockup.endTs.lte(new BN(unixNow));
+  const decayedEpoch = lockup.endTs.div(new BN(EPOCH_LENGTH));
+  const currentEpoch = new BN(unixNow).div(new BN(EPOCH_LENGTH));
+  const isDecayed =
+    !isConstant &&
+    (isDelegated
+      ? currentEpoch.gt(decayedEpoch)
+      : lockup.endTs.lte(new BN(unixNow)));
   const canDelegate = network === "hnt";
   const mergablePositions: PositionWithMeta[] = useMemo(() => {
     if (!unixNow || !positions || !positions.length) {
@@ -187,7 +192,7 @@ export const PositionManager: FC<PositionManagerProps> = ({
         await unassignProxies({
           positions: [position],
           onInstructions: onInstructions(provider, {
-            useFirstEstimateForAll: true
+            useFirstEstimateForAll: true,
           }),
         });
       } else {
@@ -196,7 +201,7 @@ export const PositionManager: FC<PositionManagerProps> = ({
           recipient: new PublicKey(proxy || ""),
           expirationTime: new BN(expirationTime || 0),
           onInstructions: onInstructions(provider, {
-            useFirstEstimateForAll: true
+            useFirstEstimateForAll: true,
           }),
         });
       }
