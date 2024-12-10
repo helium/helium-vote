@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  EPOCH_LENGTH,
   getMinDurationFmt,
   getPositionVoteMultiplier,
   getTimeLeftFromNowFmt,
@@ -32,14 +33,22 @@ export const PositionCallout: FC<{
   setManagerAction,
   handleClaimRewards,
 }) => {
-  const { lockup, hasGenesisMultiplier } = position;
+  const { lockup, isDelegated, hasGenesisMultiplier } = position;
   const { loading: loadingGov, network, mintAcc, subDaos } = useGovernance();
   const unixNow = useSolanaUnixNow() || Date.now() / 1000;
   const lockupKind = Object.keys(lockup.kind)[0] as string;
   const isConstant = lockupKind === "constant";
-  const isDecayed = !isConstant && lockup.endTs.lte(new BN(unixNow));
+  const decayedEpoch = lockup.endTs.div(new BN(EPOCH_LENGTH));
+  const currentEpoch = new BN(unixNow).div(new BN(EPOCH_LENGTH));
+  const isDecayed =
+    !isConstant &&
+    (isDelegated
+      ? currentEpoch.gt(decayedEpoch)
+      : lockup.endTs.lte(new BN(unixNow)));
   const elapsedTime = new BN(unixNow).sub(lockup.startTs);
-  const totalTime = lockup.endTs.sub(lockup.startTs);
+  const totalTime = isDelegated
+    ? decayedEpoch.add(new BN(1)).mul(new BN(EPOCH_LENGTH)).sub(lockup.startTs)
+    : lockup.endTs.sub(lockup.startTs);
   const decayedPercentage = elapsedTime.muln(100).div(totalTime);
   const canDelegate = network === "hnt";
 
@@ -93,11 +102,10 @@ export const PositionCallout: FC<{
         <div className="flex flex-col gap-1">
           <p className="text-base font-normal text-right">
             {isConstant
-              ? getMinDurationFmt(
-                  position.lockup.startTs,
-                  position.lockup.endTs
-                )
-              : getTimeLeftFromNowFmt(position.lockup.endTs)}{" "}
+              ? getMinDurationFmt(lockup.startTs, lockup.endTs)
+              : isDelegated
+              ? getTimeLeftFromNowFmt(lockup.endTs.add(new BN(EPOCH_LENGTH)))
+              : getTimeLeftFromNowFmt(lockup.endTs)}{" "}
             time left
           </p>
           <div className="flex flex-row justify-end gap-2">
