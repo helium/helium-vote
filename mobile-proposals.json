@@ -418,5 +418,15 @@
       { "uri": null, "name": "For HIP 139" },
       { "uri": null, "name": "Against HIP 139" }
     ]
+  },
+  {
+    "name": "HIP 140: Adjust Service Provider Boost Qualifiers",
+    "uri": "https://gist.githubusercontent.com/hiptron/ecddc5a66b165f76a72e0b4525a71e82/raw/b6ab59caa63dccc9f8f20c5567844787208b2245/HIP-140-Vote-Summary.md",
+    "maxChoicesPerVoter": 1,
+    "tags": ["HIP", "Economic", "Technical"],
+    "choices": [
+      { "uri": null, "name": "For HIP 140" },
+      { "uri": null, "name": "Against HIP 140" }
+    ]
   }
 ]
