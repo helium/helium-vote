@@ -76,5 +76,15 @@
       { "uri": null, "name": "For HIP 138" },
       { "uri": null, "name": "Against HIP 138" }
     ]
+  },
+  {
+    "name": "HIP 141: Single-Token Governance and Helium Release Proposals",
+    "uri": "https://gist.githubusercontent.com/hiptron/245620771e2e1fbf1b2e534d69ce775f/raw/a57bc342be68b1182424d6c487a575095e44bbae/HIP-141-Vote-Summary.md",
+    "maxChoicesPerVoter": 1,
+    "tags": ["HIP", "Economic", "Technical", "Governance"],
+    "choices": [
+      { "uri": null, "name": "For HIP 141" },
+      { "uri": null, "name": "Against HIP 141" }
+    ]
   }
 ]
