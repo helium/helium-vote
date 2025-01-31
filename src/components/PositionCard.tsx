@@ -77,6 +77,7 @@ export const PositionCard: FC<{
   const path = usePathname();
   const { lockup, hasGenesisMultiplier } = position;
   const { loading: loadingGov, network, mintAcc, subDaos } = useGovernance();
+  const isHNT = network === "hnt";
   const unixNow = useSolanaUnixNow() || Date.now() / 1000;
   const lockupKind = Object.keys(lockup.kind)[0] as string;
   const isConstant = lockupKind === "constant";
@@ -84,7 +85,7 @@ export const PositionCard: FC<{
   const elapsedTime = new BN(unixNow).sub(lockup.startTs);
   const totalTime = lockup.endTs.sub(lockup.startTs);
   const decayedPercentage = elapsedTime.muln(100).div(totalTime);
-  const canDelegate = canDelegateIn && network === "hnt";
+  const canDelegate = canDelegateIn && isHNT;
   const { knownProxy } = useKnownProxy(position?.proxy?.nextVoter);
 
   const lockedTokens =
@@ -240,35 +241,39 @@ export const PositionCard: FC<{
             </div>
           </div>
           <hr className="hidden max-md:flex h-0.5 w-full bg-slate-600" />
-          <div
-            className={classNames(
-              "flex flex-col w-3/12 lg:w-2/12 max-md:p-4 max-md:w-full max-md:flex-row max-md:items-center max-md:justify-between",
-              !position.proxy ? "gap-1" : "gap-1.5"
-            )}
-          >
-            <p className="text-muted-foreground text-xs">PROXIED TO</p>
-            {position.proxy &&
-            !position.proxy.nextVoter.equals(PublicKey.default) ? (
-              <Link
-                href={`/${network}/proxies/${position.proxy.nextVoter.toBase58()}`}
-              >
-                <Pill variant="pink" className="hover:bg-pink/70">
-                  {knownProxy?.name ||
-                    ellipsisMiddle(position.proxy.nextVoter.toBase58())}
-                </Pill>
-              </Link>
-            ) : (
-              <Link href={`${path}/${position.pubkey.toBase58()}?action=proxy`}>
-                <Button
-                  variant="secondary"
-                  size="xxs"
-                  className="text-foreground"
+          {isHNT && (
+            <div
+              className={classNames(
+                "flex flex-col w-3/12 lg:w-2/12 max-md:p-4 max-md:w-full max-md:flex-row max-md:items-center max-md:justify-between",
+                !position.proxy ? "gap-1" : "gap-1.5"
+              )}
+            >
+              <p className="text-muted-foreground text-xs">PROXIED TO</p>
+              {position.proxy &&
+              !position.proxy.nextVoter.equals(PublicKey.default) ? (
+                <Link
+                  href={`/${network}/proxies/${position.proxy.nextVoter.toBase58()}`}
                 >
-                  Proxy Now
-                </Button>
-              </Link>
-            )}
-          </div>
+                  <Pill variant="pink" className="hover:bg-pink/70">
+                    {knownProxy?.name ||
+                      ellipsisMiddle(position.proxy.nextVoter.toBase58())}
+                  </Pill>
+                </Link>
+              ) : (
+                <Link
+                  href={`${path}/${position.pubkey.toBase58()}?action=proxy`}
+                >
+                  <Button
+                    variant="secondary"
+                    size="xxs"
+                    className="text-foreground"
+                  >
+                    Proxy Now
+                  </Button>
+                </Link>
+              )}
+            </div>
+          )}
           {canDelegate && (
             <div
               className={classNames(

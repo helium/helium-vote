@@ -107,6 +107,7 @@ export const PositionManager: FC<PositionManagerProps> = ({
     organization,
     refetch: refetchState,
   } = useGovernance();
+  const isHNT = network === "hnt";
   const router = useRouter();
   const { lockup, isDelegated } = position;
   const isConstant = Object.keys(lockup.kind)[0] === "constant";
@@ -117,7 +118,6 @@ export const PositionManager: FC<PositionManagerProps> = ({
     (isDelegated
       ? currentEpoch.gt(decayedEpoch)
       : lockup.endTs.lte(new BN(unixNow)));
-  const canDelegate = network === "hnt";
   const mergablePositions: PositionWithMeta[] = useMemo(() => {
     if (!unixNow || !positions || !positions.length) {
       return [];
@@ -388,7 +388,7 @@ export const PositionManager: FC<PositionManagerProps> = ({
                 handleClaimRewards={handleClaimPositionRewards}
               />
             </div>
-            {!position.isProxiedToMe && (
+            {!position.isProxiedToMe && isHNT && (
               <div className="flex flex-col py-10 px-4 gap-12 min-w-[465px] max-md:min-w-full max-md:py-4 max-md:gap-4">
                 <div className="flex flex-row justify-center items-center">
                   <span className="flex flex-grow h-[1px] bg-foreground/30 mx-2" />
@@ -403,16 +403,14 @@ export const PositionManager: FC<PositionManagerProps> = ({
                   >
                     Update Proxy
                   </PositionAction>
-                  {canDelegate && (
-                    <PositionAction
-                      active={action === "delegate"}
-                      disabled={!position.delegatedSubDao && isDecayed}
-                      Icon={CheckCheck}
-                      onClick={() => setAction("delegate")}
-                    >
-                      Update Delegation
-                    </PositionAction>
-                  )}
+                  <PositionAction
+                    active={action === "delegate"}
+                    disabled={!position.delegatedSubDao && isDecayed}
+                    Icon={CheckCheck}
+                    onClick={() => setAction("delegate")}
+                  >
+                    Update Delegation
+                  </PositionAction>
                   <PositionAction
                     active={action === "extend"}
                     Icon={() => (

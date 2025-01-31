@@ -2,7 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { FC } from "react";
 import { ContentSection } from "./ContentSection";
-import { CreatePositionButton } from "./CreatePositionButton";
 import { NetworkTabs } from "./NetworkTabs";
 import { SubNav } from "./SubNav";
 import { VeTokensCallout } from "./VeTokensCallout";

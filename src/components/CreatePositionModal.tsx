@@ -2,13 +2,17 @@
 
 import { daysToSecs, onInstructions } from "@/lib/utils";
 import { useGovernance } from "@/providers/GovernanceProvider";
-import { useAnchorProvider, useMint, useOwnedAmount } from "@helium/helium-react-hooks";
+import {
+  useAnchorProvider,
+  useMint,
+  useOwnedAmount,
+} from "@helium/helium-react-hooks";
 import { HNT_MINT, toBN, toNumber } from "@helium/spl-utils";
 import {
   Position,
   PositionWithMeta,
   calcLockupMultiplier,
-  useCreatePosition
+  useCreatePosition,
 } from "@helium/voter-stake-registry-hooks";
 import { WalletSignTransactionError } from "@solana/wallet-adapter-base";
 import { useWallet } from "@solana/wallet-adapter-react";
@@ -79,21 +83,25 @@ export const CreatePositionModal: FC<React.PropsWithChildren<{}>> = ({
   const { info: mintAcc } = useMint(mint);
 
   const draftPosition: Partial<PositionWithMeta> | undefined = useMemo(
-    () => formValues && ({
-      lockup: {
-        startTs: new BN(new Date().getTime() / 1000),
-        endTs: new BN(
-          new Date().setDate(
-            new Date().getDate() + formValues.lockupPeriodInDays
-          ) / 1000
-        ),
-        kind: formValues!.lockupKind == LockupKind.cliff ? { cliff: {} } as any : { decay: {} } as any,
+    () =>
+      formValues && {
+        lockup: {
+          startTs: new BN(new Date().getTime() / 1000),
+          endTs: new BN(
+            new Date().setDate(
+              new Date().getDate() + formValues.lockupPeriodInDays
+            ) / 1000
+          ),
+          kind:
+            formValues!.lockupKind == LockupKind.cliff
+              ? ({ cliff: {} } as any)
+              : ({ decay: {} } as any),
+        },
+        amountDepositedNative: toBN(formValues!.amount, mintAcc?.decimals || 6),
+        delegatedSubDao: selectedSubDaoPk,
+        // @ts-ignore
+        registrar: registrar?.pubkey,
       },
-      amountDepositedNative: toBN(formValues!.amount, mintAcc?.decimals || 6),
-      delegatedSubDao: selectedSubDaoPk,
-      // @ts-ignore
-      registrar: registrar?.pubkey,
-    }),
     [formValues, mintAcc, selectedSubDaoPk, registrar]
   );
 
@@ -244,7 +252,7 @@ export const CreatePositionModal: FC<React.PropsWithChildren<{}>> = ({
         )}
         {step === steps && (
           <>
-            { draftPosition && <PositionPreview position={draftPosition} /> }
+            {draftPosition && <PositionPreview position={draftPosition} />}
             <div className="flex flex-col flex-grow justify-end">
               <div className="flex flex-row gap-2">
                 <Button

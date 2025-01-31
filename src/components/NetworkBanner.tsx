@@ -15,6 +15,7 @@ import { WalletConnectButton } from "./WalletConnectButton";
 export const NetworkBanner: FC = () => {
   const { connected } = useWallet();
   const { network } = useGovernance();
+  const isHNT = network === "hnt";
 
   return (
     <ContentSection className="flex-1">
@@ -37,10 +38,9 @@ export const NetworkBanner: FC = () => {
           </div>
           <div className="flex flex-col flex-grow gap-1">
             <p>How proposals work:</p>
-            <h5>Voting is enabled by locking tokens within this network</h5>
+            <h5>Voting is enabled by locking tokens</h5>
             <p className="text-sm text-slate-100">
-              Create a vote escrow position using either HNT, MOBILE, or IOT
-              tokens
+              Create a vote escrow position using HNT
             </p>
           </div>
           <div className="flex flex-row gap-4 max-md:w-full max-md:gap-12">
@@ -49,7 +49,7 @@ export const NetworkBanner: FC = () => {
                 <WalletConnectButton />
               </div>
             )}
-            {connected && (
+            {connected && isHNT && (
               <>
                 <div className="flex flex-col flex-1 gap-2 max-md:flex-none">
                   <Button
