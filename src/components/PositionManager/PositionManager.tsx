@@ -388,7 +388,7 @@ export const PositionManager: FC<PositionManagerProps> = ({
                 handleClaimRewards={handleClaimPositionRewards}
               />
             </div>
-            {!position.isProxiedToMe && (
+            {!position.isProxiedToMe && isHNT && (
               <div className="flex flex-col py-10 px-4 gap-12 min-w-[465px] max-md:min-w-full max-md:py-4 max-md:gap-4">
                 <div className="flex flex-row justify-center items-center">
                   <span className="flex flex-grow h-[1px] bg-foreground/30 mx-2" />
