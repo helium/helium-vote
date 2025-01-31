@@ -77,7 +77,7 @@ const PositionAction: FC<
       "flex flex-row flex-1 items-center py-3 px-4 rounded-md bg-slate-600 cursor-pointer border-2 border-transparent hover:bg-opacity-80 active:bg-opacity-70",
       active && "!bg-info !border-info-foreground font-medium",
       disabled &&
-        "cursor-default opacity-50 hover:bg-opacity-100 active:bg-opacity-100"
+        "!cursor-not-allowed !opacity-50 hover:!bg-opacity-100 active:!bg-opacity-100"
     )}
     onClick={!disabled ? onClick : () => {}}
   >
@@ -388,7 +388,7 @@ export const PositionManager: FC<PositionManagerProps> = ({
                 handleClaimRewards={handleClaimPositionRewards}
               />
             </div>
-            {!position.isProxiedToMe && isHNT && (
+            {!position.isProxiedToMe && (
               <div className="flex flex-col py-10 px-4 gap-12 min-w-[465px] max-md:min-w-full max-md:py-4 max-md:gap-4">
                 <div className="flex flex-row justify-center items-center">
                   <span className="flex flex-grow h-[1px] bg-foreground/30 mx-2" />
@@ -400,12 +400,15 @@ export const PositionManager: FC<PositionManagerProps> = ({
                     active={action === "proxy"}
                     Icon={() => <RiUserSharedFill size={24} />}
                     onClick={() => setAction("proxy")}
+                    disabled={!isHNT}
                   >
                     Update Proxy
                   </PositionAction>
                   <PositionAction
                     active={action === "delegate"}
-                    disabled={!position.delegatedSubDao && isDecayed}
+                    disabled={
+                      (!position.delegatedSubDao && isDecayed) || !isHNT
+                    }
                     Icon={CheckCheck}
                     onClick={() => setAction("delegate")}
                   >
@@ -417,6 +420,7 @@ export const PositionManager: FC<PositionManagerProps> = ({
                       <ArrowUpFromDot className="transform rotate-90" />
                     )}
                     onClick={() => setAction("extend")}
+                    disabled={!isHNT}
                   >
                     Extend Position
                   </PositionAction>
@@ -424,6 +428,7 @@ export const PositionManager: FC<PositionManagerProps> = ({
                     active={action === "split"}
                     Icon={Split}
                     onClick={() => setAction("split")}
+                    disabled={!isHNT}
                   >
                     Split Position
                   </PositionAction>
@@ -431,6 +436,7 @@ export const PositionManager: FC<PositionManagerProps> = ({
                     active={action === "merge"}
                     Icon={Merge}
                     onClick={() => setAction("merge")}
+                    disabled={!isHNT}
                   >
                     Merge Position
                   </PositionAction>

@@ -176,7 +176,7 @@ export const PositionCallout: FC<{
           </p>
         </div>
       </div>
-      {!position.isProxiedToMe && isHNT && (
+      {!position.isProxiedToMe && (
         <>
           {!isDecayed ? (
             <div className="flex flex-row justify-between gap-2">
@@ -184,13 +184,14 @@ export const PositionCallout: FC<{
                 variant="secondary"
                 className="flex-1"
                 onClick={() => setManagerAction("flip")}
+                disabled={!isHNT}
               >
                 {isConstant ? "Decay Position" : "Pause Position"}
               </Button>
               <Button
                 variant="secondary"
                 className="flex-1 gap-2"
-                disabled={!position.hasRewards || isClaiming}
+                disabled={!position.hasRewards || isClaiming || !isHNT}
                 onClick={handleClaimRewards}
               >
                 {isClaiming && <Loader2 className="size-5 animate-spin" />}

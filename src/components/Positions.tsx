@@ -145,7 +145,7 @@ export const Positions: FC = () => {
         <div className="flex flex-col gap-2 md:gap-0 md:flex-row md:justify-between md:items-center">
           <h4>All Positions</h4>
           <div className="flex max-md:flex-col gap-2">
-            {isHNT && <CreatePositionButton showText />}
+            <CreatePositionButton showText disabled={!isHNT} />
             {network === "hnt" && (
               <Button
                 variant="default"
@@ -187,7 +187,7 @@ export const Positions: FC = () => {
                   </>
                 )}
               </div>
-              {isHNT && <CreatePositionButton className="m-0" />}
+              <CreatePositionButton className="m-0" disabled={!isHNT} />
             </div>
           </Card>
         )}
