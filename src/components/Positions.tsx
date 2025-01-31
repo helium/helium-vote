@@ -14,7 +14,10 @@ import { toast } from "sonner";
 import { Skeleton } from "./ui/skeleton";
 import { CreatePositionButton } from "./CreatePositionButton";
 import { onInstructions } from "@/lib/utils";
-import { useAnchorProvider, useSolanaUnixNow } from "@helium/helium-react-hooks";
+import {
+  useAnchorProvider,
+  useSolanaUnixNow,
+} from "@helium/helium-react-hooks";
 import { ContentSection } from "./ContentSection";
 import { WalletSignTransactionError } from "@solana/wallet-adapter-base";
 
@@ -27,6 +30,7 @@ export const Positions: FC = () => {
     refetch: refetchState,
     network,
   } = useGovernance();
+  const isHNT = network === "hnt";
 
   const sortedPositions = useMemo(
     () =>
@@ -141,7 +145,7 @@ export const Positions: FC = () => {
         <div className="flex flex-col gap-2 md:gap-0 md:flex-row md:justify-between md:items-center">
           <h4>All Positions</h4>
           <div className="flex max-md:flex-col gap-2">
-            <CreatePositionButton showText />
+            {isHNT && <CreatePositionButton showText />}
             {network === "hnt" && (
               <Button
                 variant="default"
@@ -163,13 +167,27 @@ export const Positions: FC = () => {
           <Card className="flex flex-col flex-1 p-8">
             <div className="flex flex-col flex-grow items-center justify-center gap-4">
               <div className="flex flex-col items-center">
-                <h4 className="text-xl text-muted-foreground">No positions</h4>
-                <p className="text-sm text-center text-muted-foreground">
-                  You have no active positions, create one to participate in
-                  voting
-                </p>
+                {isHNT && (
+                  <>
+                    <h4 className="text-xl text-muted-foreground">
+                      No positions
+                    </h4>
+                    <p className="text-sm text-center text-muted-foreground">
+                      You have no active positions, create one to participate in
+                      voting
+                    </p>
+                  </>
+                )}
+                {!isHNT && (
+                  <>
+                    <p className="text-sm text-center text-muted-foreground">
+                      As of January 30th 2025, only new HNT positions can be
+                      created
+                    </p>
+                  </>
+                )}
               </div>
-              <CreatePositionButton className="m-0" />
+              {isHNT && <CreatePositionButton className="m-0" />}
             </div>
           </Card>
         )}
