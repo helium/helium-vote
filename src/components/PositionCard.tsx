@@ -85,7 +85,7 @@ export const PositionCard: FC<{
   const elapsedTime = new BN(unixNow).sub(lockup.startTs);
   const totalTime = lockup.endTs.sub(lockup.startTs);
   const decayedPercentage = elapsedTime.muln(100).div(totalTime);
-  const canDelegate = canDelegateIn && network === "hnt";
+  const canDelegate = canDelegateIn && isHNT;
   const { knownProxy } = useKnownProxy(position?.proxy?.nextVoter);
 
   const lockedTokens =

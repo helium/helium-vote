@@ -35,6 +35,7 @@ export const PositionCallout: FC<{
 }) => {
   const { lockup, isDelegated, hasGenesisMultiplier } = position;
   const { loading: loadingGov, network, mintAcc, subDaos } = useGovernance();
+  const isHNT = network === "hnt";
   const unixNow = useSolanaUnixNow() || Date.now() / 1000;
   const lockupKind = Object.keys(lockup.kind)[0] as string;
   const isConstant = lockupKind === "constant";
@@ -50,7 +51,6 @@ export const PositionCallout: FC<{
     ? decayedEpoch.add(new BN(1)).mul(new BN(EPOCH_LENGTH)).sub(lockup.startTs)
     : lockup.endTs.sub(lockup.startTs);
   const decayedPercentage = elapsedTime.muln(100).div(totalTime);
-  const canDelegate = network === "hnt";
 
   const delegatedSubDaoMetadata = position.delegatedSubDao
     ? subDaos?.find((sd) => sd.pubkey.equals(position.delegatedSubDao!))
@@ -176,7 +176,7 @@ export const PositionCallout: FC<{
           </p>
         </div>
       </div>
-      {!position.isProxiedToMe && (
+      {!position.isProxiedToMe && isHNT && (
         <>
           {!isDecayed ? (
             <div className="flex flex-row justify-between gap-2">
@@ -187,17 +187,15 @@ export const PositionCallout: FC<{
               >
                 {isConstant ? "Decay Position" : "Pause Position"}
               </Button>
-              {canDelegate && (
-                <Button
-                  variant="secondary"
-                  className="flex-1 gap-2"
-                  disabled={!position.hasRewards || isClaiming}
-                  onClick={handleClaimRewards}
-                >
-                  {isClaiming && <Loader2 className="size-5 animate-spin" />}
-                  {isClaiming ? "Claiming Rewards..." : "Claim Rewards"}
-                </Button>
-              )}
+              <Button
+                variant="secondary"
+                className="flex-1 gap-2"
+                disabled={!position.hasRewards || isClaiming}
+                onClick={handleClaimRewards}
+              >
+                {isClaiming && <Loader2 className="size-5 animate-spin" />}
+                {isClaiming ? "Claiming Rewards..." : "Claim Rewards"}
+              </Button>
             </div>
           ) : (
             <div className="flex flex-row justify-between gap-2">

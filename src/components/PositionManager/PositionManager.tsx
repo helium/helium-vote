@@ -118,7 +118,6 @@ export const PositionManager: FC<PositionManagerProps> = ({
     (isDelegated
       ? currentEpoch.gt(decayedEpoch)
       : lockup.endTs.lte(new BN(unixNow)));
-  const canDelegate = network === "hnt";
   const mergablePositions: PositionWithMeta[] = useMemo(() => {
     if (!unixNow || !positions || !positions.length) {
       return [];
@@ -404,16 +403,14 @@ export const PositionManager: FC<PositionManagerProps> = ({
                   >
                     Update Proxy
                   </PositionAction>
-                  {canDelegate && (
-                    <PositionAction
-                      active={action === "delegate"}
-                      disabled={!position.delegatedSubDao && isDecayed}
-                      Icon={CheckCheck}
-                      onClick={() => setAction("delegate")}
-                    >
-                      Update Delegation
-                    </PositionAction>
-                  )}
+                  <PositionAction
+                    active={action === "delegate"}
+                    disabled={!position.delegatedSubDao && isDecayed}
+                    Icon={CheckCheck}
+                    onClick={() => setAction("delegate")}
+                  >
+                    Update Delegation
+                  </PositionAction>
                   <PositionAction
                     active={action === "extend"}
                     Icon={() => (
