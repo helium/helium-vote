@@ -17,6 +17,7 @@ export const CreatePositionButton: FC<CreatePositionButtonProps> = ({
   hideIcon = false,
   showText = false,
   className = "",
+  disabled = false,
   ...rest
 }) => {
   const { connected } = useWallet();
@@ -25,7 +26,7 @@ export const CreatePositionButton: FC<CreatePositionButtonProps> = ({
     <CreatePositionModal>
       <Button
         variant="secondary"
-        disabled={!connected}
+        disabled={!connected || disabled}
         className={classNames("gap-2 px-4 sm:px-6", className)}
         {...rest}
       >
