@@ -88,7 +88,7 @@ export async function run(args: any = process.argv) {
           settings().choiceVoteWeight(new anchor.BN(argv.threshold))
         )
       ),
-      settings().offsetFromStartTs(new anchor.BN(30 * 60))
+      settings().offsetFromStartTs(new anchor.BN(60 * 60 * 24 * 7))
     )
     .build();
 
@@ -117,7 +117,7 @@ export async function run(args: any = process.argv) {
   const voteController = registrarK;
   const initProposalConfig = proposalProgram.methods.initializeProposalConfigV0(
     {
-      name: `${argv.name} Short ${argv.ver}`,
+      name: `${argv.name} Default ${argv.ver}`,
       voteController,
       stateController: resolutionSettings!,
       onVoteHook: stateProgram.programId,
