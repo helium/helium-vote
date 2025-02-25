@@ -90,6 +90,11 @@ export async function run(args: any = process.argv) {
   const fileData = fs.readFileSync(argv.file, "utf8");
   const proposals: Proposal[] = JSON.parse(fileData);
 
+  const queueAuthority = queueAuthorityKey()[0];
+  console.log(
+    `Queue authority: ${queueAuthority.toBase58()} (Fund with Sol to pay task rent)`
+  );
+
   const instructions: TransactionInstruction[] = [];
   const organizationK = organizationKey(argv.orgName)[0];
   const organization = await orgProgram.account.organizationV0.fetch(
@@ -156,7 +161,7 @@ export async function run(args: any = process.argv) {
           stateController: proposalConfigAcc.stateController,
           payer: authority,
           systemProgram: SystemProgram.programId,
-          queueAuthority: queueAuthorityKey()[0],
+          queueAuthority,
           tuktukProgram: tuktukProgram.programId,
         })
         .instruction();

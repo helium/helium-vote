@@ -120,6 +120,10 @@ export async function run(args: any = process.argv) {
   const proposalConfigAcc = await stateProgram.account.proposalConfigV0.fetch(
     proposalConfig
   );
+  const queueAuthority = queueAuthorityKey()[0];
+  console.log(
+    `Queue authority: ${queueAuthority.toBase58()} (Fund with Sol to pay task rent)`
+  );
   const { instruction: setState } = await stateProgram.methods
     // @ts-ignore
     .updateStateV0({
@@ -149,7 +153,7 @@ export async function run(args: any = process.argv) {
       stateController: proposalConfigAcc.stateController,
       payer: authority,
       systemProgram: SystemProgram.programId,
-      queueAuthority: queueAuthorityKey()[0],
+      queueAuthority,
       tuktukProgram: tuktukProgram.programId,
     })
     .instruction();
