@@ -57,7 +57,7 @@ export async function run(args: any = process.argv) {
 
   const resolveIxs = await Promise.all(openProposals.map(async p => {
     return await stateProgram.methods.resolveV0()
-    .accounts({
+    .accountsPartial({
       proposal: p.pubkey,
     })
     .instruction()
