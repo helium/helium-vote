@@ -1,12 +1,23 @@
 import * as anchor from "@coral-xyz/anchor";
-import { init as initOrg, organizationKey, proposalKey } from "@helium/organization-sdk";
+import {
+  init as initOrg,
+  organizationKey,
+  proposalKey,
+} from "@helium/organization-sdk";
 import os from "os";
 import yargs from "yargs/yargs";
 import { init as initState } from "@helium/state-controller-sdk";
 import Squads from "@sqds/sdk";
-import { PublicKey, TransactionInstruction } from "@solana/web3.js";
+import { PublicKey, SystemProgram, TransactionInstruction } from "@solana/web3.js";
 import { loadKeypair, sendInstructionsOrSquads } from "./utils";
 import fs from "fs";
+import { init as initTuktuk, taskKey } from "@helium/tuktuk-sdk";
+import {
+  nextAvailableTaskIds,
+  TASK_QUEUE_ID,
+  init as initHplCrons,
+  queueAuthorityKey,
+} from "@helium/hpl-crons-sdk";
 
 interface Choice {
   uri: string;
@@ -84,6 +95,21 @@ export async function run(args: any = process.argv) {
   const organization = await orgProgram.account.organizationV0.fetch(
     organizationK
   );
+  const tuktukProgram = await initTuktuk(provider);
+  const hplCronsProgram = await initHplCrons(provider);
+
+  const queue = await tuktukProgram.account.taskQueueV0.fetch(TASK_QUEUE_ID);
+  const freeTasks = nextAvailableTaskIds(
+    queue.taskBitmap,
+    proposals.length - organization.numProposals
+  )[0];
+  let freeTaskIdx = 0;
+  const proposalConfig = argv.proposalConfig
+    ? new PublicKey(argv.proposalConfig)
+    : organization.defaultProposalConfig;
+  const proposalConfigAcc = await stateProgram.account.proposalConfigV0.fetch(
+    proposalConfig
+  );
 
   let i = 0;
   for (const proposalData of proposals) {
@@ -93,7 +119,7 @@ export async function run(args: any = process.argv) {
         pubkeys: { proposal },
       } = await orgProgram.methods
         .initializeProposalV0(proposalData)
-        .accounts({
+        .accountsPartial({
           organization: organizationK,
           owner: authority,
           authority,
@@ -103,10 +129,11 @@ export async function run(args: any = process.argv) {
         .prepare();
 
       const { instruction: setState } = await stateProgram.methods
+        // @ts-ignore
         .updateStateV0({
           newState: { voting: {} },
         })
-        .accounts({
+        .accountsPartial({
           proposal,
           owner: authority,
           proposalConfig: proposalData.proposalConfig
@@ -116,6 +143,25 @@ export async function run(args: any = process.argv) {
         })
         .prepare();
 
+      const resolveIx = await hplCronsProgram.methods
+        .queueResolveProposalV0({
+          freeTaskId: freeTasks[freeTaskIdx],
+        })
+        .accountsPartial({
+          proposal: proposal!,
+          taskQueue: TASK_QUEUE_ID,
+          namespace: organizationK,
+          task: taskKey(TASK_QUEUE_ID, freeTasks[freeTaskIdx])[0],
+          proposalConfig,
+          stateController: proposalConfigAcc.stateController,
+          payer: authority,
+          systemProgram: SystemProgram.programId,
+          queueAuthority: queueAuthorityKey()[0],
+          tuktukProgram: tuktukProgram.programId,
+        })
+        .instruction();
+
+      freeTaskIdx++;
       instructions.push(instruction, setState);
     }
     i++;

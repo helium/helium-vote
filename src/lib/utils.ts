@@ -300,7 +300,7 @@ export const onInstructions =
       useFirstEstimateForAll = false,
     }: { useFirstEstimateForAll?: boolean } = {}
   ) =>
-  async (instructions: TransactionInstruction[], sigs?: Keypair[]) => {
+  async (instructions: TransactionInstruction[] | TransactionInstruction[][], sigs?: Keypair[]) => {
     if (provider) {
       if (sigs) {
         const transactions = await batchInstructionsToTxsWithPriorityFee(

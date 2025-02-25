@@ -21,6 +21,7 @@ export const Proposals: FC<React.PropsWithChildren<{ className?: string }>> = ({
   );
   const { loading, accounts: proposalsWithDups } =
     useOrganizationProposals(organization);
+  console.log(loading, proposalsWithDups);
 
   const dedupedProposals = useMemo(() => {
     const seen = new Set();

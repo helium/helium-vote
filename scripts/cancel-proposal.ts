@@ -61,7 +61,7 @@ export async function run(args: any = process.argv) {
     .updateStateV0({
       newState: { cancelled: {} },
     })
-    .accounts({
+    .accountsPartial({
       proposal,
       owner,
     })
