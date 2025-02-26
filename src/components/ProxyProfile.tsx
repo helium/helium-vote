@@ -40,10 +40,8 @@ export function ProxyProfile({ wallet: walletRaw }: { wallet: string }) {
       voteService,
     })
   );
-  // Due to hydration, should always be present
   const proxy = proxyRaw!;
   const detail = proxy.detail;
-  const image = proxy.image;
   const { info: mintAcc } = useMint(mint);
   const decimals = mintAcc?.decimals;
   const { mutateAsync: assignProxies } = useAssignProxies();

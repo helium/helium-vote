@@ -11,7 +11,7 @@ import {
   useRegistrar,
   useSubDaos,
 } from "@helium/voter-stake-registry-hooks";
-import { getRegistrarKey } from "@helium/voter-stake-registry-sdk";
+import { getRegistrarKey, VoteService } from "@helium/voter-stake-registry-sdk";
 import { PublicKey } from "@solana/web3.js";
 import { useParams } from "next/navigation";
 import { FC, ReactNode, createContext, useContext, useMemo } from "react";
@@ -118,7 +118,7 @@ const useGovernance = () => {
     throw new Error("useGovernance must be used within a GovernanceProvider");
   }
 
-  const { mint, positions, ...heliumVsrState } = useHeliumVsrState();
+  const { mint, positions, voteService, ...heliumVsrState } = useHeliumVsrState();
 
   const numActiveVotes = useMemo(
     () => positions?.reduce((acc, p) => acc + p.numActiveVotes, 0) || 0,
@@ -133,6 +133,13 @@ const useGovernance = () => {
   return {
     ...context,
     ...heliumVsrState,
+    // Ensure voteService is always defined.
+    voteService:
+      voteService ??
+      new VoteService({
+        baseURL: process.env.NEXT_PUBLIC_HELIUM_VOTE_URI,
+        registrar: getRegistrarKey(HNT_MINT),
+      }),
     numActiveVotes,
     positions,
     loading,
