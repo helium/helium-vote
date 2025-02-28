@@ -1,8 +1,12 @@
 import { networksToMint } from "@/lib/constants";
+import { getTimeLeftFromNowFmt } from "@/lib/dateTools";
 import { getMinDurationFmt, humanReadable } from "@/lib/utils";
 import { useGovernance } from "@/providers/GovernanceProvider";
 import { useMint } from "@helium/helium-react-hooks";
-import { PositionWithMeta, useRegistrar } from "@helium/voter-stake-registry-hooks";
+import {
+  PositionWithMeta,
+  useRegistrar,
+} from "@helium/voter-stake-registry-hooks";
 import BN from "bn.js";
 import Image from "next/image";
 import { useMemo } from "react";
@@ -10,15 +14,20 @@ import { useMemo } from "react";
 export const PositionPreview: React.FC<{
   position: Partial<PositionWithMeta>;
 }> = ({ position }) => {
+  const {
+    lockup,
+    hasGenesisMultiplier,
+    votingMint: positionVotingMint,
+  } = position;
   const { info: registrar } = useRegistrar(position.registrar);
   const votingMint = registrar?.votingMints[0].mint;
   const network =
     Object.entries(networksToMint).find(
       ([_, mint]) => votingMint && mint.equals(votingMint)
     )?.[0] || "hnt";
-  const { info: mint } = useMint(votingMint)
+  const { info: mint } = useMint(votingMint);
   const amount = humanReadable(position.amountDepositedNative, mint?.decimals);
-  const { subDaos } = useGovernance()
+  const { subDaos } = useGovernance();
   const subDao = useMemo(
     () =>
       subDaos?.find(
@@ -34,17 +43,28 @@ export const PositionPreview: React.FC<{
         <Image alt={`${network} icon`} src={`/images/${network}.svg`} fill />
       </div>
       <div className="flex flex-col flex-1 text-xs">
+        {position.lockup && hasGenesisMultiplier && (
+          <div className="flex flex-row flex-wrap gap-1 font-light">
+            <span className="font-medium">Landrush</span>
+            <span className="font-medium">
+              {positionVotingMint?.genesisVotePowerMultiplier || 3}x (
+              {getTimeLeftFromNowFmt(position.lockup.endTs)})
+            </span>
+          </div>
+        )}
         <div className="flex flex-row flex-wrap gap-1 font-light">
           <span className="font-medium">
             {amount} {network.toUpperCase()}
           </span>
           <span className="text-foreground/80">for</span>
           <span className="font-medium">
-            {position.lockup?.endTs
-              ? getMinDurationFmt(
-                  new BN(Date.now() / 1000),
-                  position.lockup?.endTs
-                )
+            {position.lockup
+              ? (Object.keys(position.lockup.kind)[0] as string) === "constant"
+                ? getMinDurationFmt(
+                    position.lockup.startTs,
+                    position.lockup.endTs
+                  )
+                : getTimeLeftFromNowFmt(position.lockup.endTs)
               : null}
           </span>
           <span className="text-foreground/80">
@@ -68,4 +88,3 @@ export const PositionPreview: React.FC<{
     </div>
   );
 };
-
