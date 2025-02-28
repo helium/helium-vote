@@ -86,5 +86,55 @@
       { "uri": null, "name": "For HIP 141" },
       { "uri": null, "name": "Against HIP 141" }
     ]
+  },
+  {
+    "name": "MOBILE Working Group (Even Class) Elections - Q1 2025",
+    "uri": "https://gist.githubusercontent.com/hiptron/acbb65ab1f5f8543760db71703a3d205/raw/77a00d4b6a2136f4a1a6248bcf49e1f7622b159f/2025Q1-MOBILE-Election-Summary.md",
+    "maxChoicesPerVoter": 5,
+    "tags": ["working-group"],
+    "choices": [
+      { "uri": null, "name": "@Unstableatom (zanz3r) - Adam Schuh" },
+      { "uri": null, "name": "@Wilson (thecrazymillionaire) - Wilson Santos" },
+      { "uri": null, "name": "@Jay M (jaym2518) - Jeremy Mahrle" },
+      { "uri": null, "name": "@Fizzy (Fizzy99)" },
+      { "uri": null, "name": "@jhella - LongFi Solutions" },
+      { "uri": null, "name": "@ferebee - Chris Ferebee" },
+      { "uri": null, "name": "@JB(not JD) (jhbr821) - Jacob Brady" },
+      { "uri": null, "name": "@Goaltender_bobby - Charles Pidgeon" }
+    ]
+  },
+  {
+    "name": "IOT Working Group (Even Class) Elections - Q1 2025",
+    "uri": "https://gist.githubusercontent.com/hiptron/1ffb75901fea2aca6a99de77d02b1eec/raw/29b7abd2147705293612bee054d2a87717adc136/2025Q1-IOT-Election-Summary.md",
+    "maxChoicesPerVoter": 5,
+    "tags": ["working-group"],
+    "choices": [
+      { "uri": null, "name": "@BFGNeil" },
+      { "uri": null, "name": "@tteague" },
+      { "uri": null, "name": "@Joey" },
+      { "uri": null, "name": "@gradoj" },
+      { "uri": null, "name": "@Miroslav/miroslav_heliotics" },
+      { "uri": null, "name": "@Jubin/jubin3253" }
+    ]
+  },
+  {
+    "name": "HIP 142: Add Inversion Capital as an International Service Provider to the Helium Mobile Network",
+    "uri": "https://gist.githubusercontent.com/hiptron/207947227d0b5bfc527c8106257e6af7/raw/6ae752b413eed6b7ac6bd986d9aea08f907f3dcb/HIP-142-Vote-Summary.md",
+    "maxChoicesPerVoter": 1,
+    "tags": ["HIP", "Governance"],
+    "choices": [
+      { "uri": null, "name": "For HIP 142" },
+      { "uri": null, "name": "Against HIP 142" }
+    ]
+  },
+  {
+    "name": "Helium Release Proposal: 2025-03",
+    "uri": "https://gist.githubusercontent.com/hiptron/3605839cea8abcdef5fcaad7c8f85d3b/raw/06422902600787d75dae3f892c4e80eda5c631d5/HRP-2025-03-Vote-Summary.md",
+    "maxChoicesPerVoter": 1,
+    "tags": ["Release"],
+    "choices": [
+      { "uri": null, "name": "For Helium Release 2025-03" },
+      { "uri": null, "name": "Against Helium Release 2025-03" }
+    ]
   }
 ]
