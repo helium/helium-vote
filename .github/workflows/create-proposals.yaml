@@ -17,20 +17,14 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
 
-      - uses: actions/cache@v2
-        name: Cache Typescript node_modules
-        id: cache-typescript-node-modules
-        with:
-          path: |
-            ./node_modules/
-          key: node-modules-${{ runner.os }}-v0000-${{ env.NODE_VERSION }}-${{ hashFiles('./yarn.lock') }}
       - run: yarn install
         shell: bash
 
