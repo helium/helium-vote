@@ -221,7 +221,9 @@ export const PositionManager: FC<PositionManagerProps> = ({
       await relinquishPositionVotes({
         position,
         organization,
-        onInstructions: onInstructions(provider),
+        onInstructions: onInstructions(provider, {
+          useFirstEstimateForAll: true,
+        }),
       });
 
       toast("Votes Relinquished");
