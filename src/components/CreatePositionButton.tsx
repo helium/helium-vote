@@ -4,7 +4,7 @@ import { FaBolt } from "react-icons/fa6";
 import React, { FC } from "react";
 import { Button, ButtonProps } from "./ui/button";
 import { CreatePositionModal } from "./CreatePositionModal";
-import { useWallet } from "@solana/wallet-adapter-react";
+import { useWallet } from "@/hooks/useWallet";
 import classNames from "classnames";
 
 interface CreatePositionButtonProps extends ButtonProps {

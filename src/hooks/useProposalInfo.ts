@@ -7,7 +7,7 @@ import {
   useProposalConfig,
 } from "@helium/modular-governance-hooks";
 import { useRegistrar, useVote } from "@helium/voter-stake-registry-hooks";
-import { useWallet } from "@solana/wallet-adapter-react";
+import { useWallet } from "@/hooks/useWallet";
 import { PublicKey } from "@solana/web3.js";
 import BN from "bn.js";
 

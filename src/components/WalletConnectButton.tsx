@@ -3,7 +3,7 @@
 import { Button } from "./ui/button";
 import React, { FC } from "react";
 import classNames from "classnames";
-import { useWallet } from "@solana/wallet-adapter-react";
+import { useWallet } from "@/hooks/useWallet";
 import { FaWallet } from "react-icons/fa6";
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";

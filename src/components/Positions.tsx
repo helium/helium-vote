@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import BN from "bn.js";
 import { useClaimAllPositionsRewards } from "@helium/voter-stake-registry-hooks";
 import { PositionCard, PositionCardSkeleton } from "./PositionCard";
-import { useWallet } from "@solana/wallet-adapter-react";
+import { useWallet } from "@/hooks/useWallet";
 import { toast } from "sonner";
 import { Skeleton } from "./ui/skeleton";
 import { CreatePositionButton } from "./CreatePositionButton";
