@@ -75,7 +75,6 @@ const ProposalItem: React.FC<{
   const { network } = useGovernance();
   // @ts-ignore
   const choices = proposal.state?.resolved?.choices;
-  console.log(proposal.votes[0].weight);
 
   return (
     <Link
