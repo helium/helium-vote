@@ -4,7 +4,7 @@ import { useProposalInfo } from "@/hooks/useProposalInfo";
 import { humanReadable } from "@/lib/utils";
 import { useGovernance } from "@/providers/GovernanceProvider";
 import { Separator } from "@radix-ui/react-separator";
-import { useWallet } from "@solana/wallet-adapter-react";
+import { useWallet } from "@/hooks/useWallet";
 import { PublicKey } from "@solana/web3.js";
 import BN from "bn.js";
 import classNames from "classnames";

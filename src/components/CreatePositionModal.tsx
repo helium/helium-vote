@@ -15,7 +15,7 @@ import {
   useCreatePosition,
 } from "@helium/voter-stake-registry-hooks";
 import { WalletSignTransactionError } from "@solana/wallet-adapter-base";
-import { useWallet } from "@solana/wallet-adapter-react";
+import { useWallet } from "@/hooks/useWallet";
 import { PublicKey } from "@solana/web3.js";
 import BN from "bn.js";
 import { Loader2 } from "lucide-react";
