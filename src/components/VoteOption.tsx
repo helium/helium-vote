@@ -12,7 +12,7 @@ import { useKnownProxy } from "@helium/voter-stake-registry-hooks";
 
 export const VoteOption: FC<{
   option: VoteChoiceWithMeta;
-  myWeight?: BN;
+  didVote?: boolean;
   canVote: boolean;
   voters: PublicKey[];
   canRelinquishVote: boolean;
@@ -22,7 +22,7 @@ export const VoteOption: FC<{
   onRelinquishVote?: () => Promise<void>;
 }> = ({
   option,
-  myWeight,
+  didVote,
   voters,
   canVote,
   canRelinquishVote,
@@ -38,7 +38,7 @@ export const VoteOption: FC<{
     className={cn(
       "flex flex-col gap-2 px-4 rounded-sm bg-slate-500 border-2 border-background cursor-pointer hover:bg-slate-500/80 active:bg-slate-500/60",
       voting && "bg-primary/15 border-primary hover:bg-inherit",
-      myWeight && "bg-slate-500/25 border-slate-500",
+      didVote && "bg-slate-500/25 border-slate-500",
       className,
       voters.length > 0 ? "pt-4 pb-2" : "py-6"
     )}
@@ -46,7 +46,7 @@ export const VoteOption: FC<{
     <div className="flex flex-row gap-2  items-center">
       {voting ? (
         <Loader2 className="size-5 animate-spin" />
-      ) : !myWeight ? (
+      ) : !didVote ? (
         <div
           className={cn("size-5 rounded-full border-2", {
             "border-vote-0": option.index === 0,

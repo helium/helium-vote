@@ -24,7 +24,7 @@ export const VoteOptions: FC<{
 }> = ({ choices = [], maxChoicesPerVoter, proposalKey }) => {
   const [currVote, setCurrVote] = useState(0);
   const {
-    voteWeights,
+    didVote,
     canVote,
     vote,
     loading: voting,
@@ -138,7 +138,7 @@ export const VoteOptions: FC<{
           voting={currVote === r.index && (voting || relinquishing)}
           option={r}
           voters={voters?.[index] || []}
-          myWeight={voteWeights?.[r.index]}
+          didVote={didVote?.[r.index]}
           canVote={canVote(r.index)}
           canRelinquishVote={canRelinquishVote(r.index)}
           onVote={handleVote(r)}
