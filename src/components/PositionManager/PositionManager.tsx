@@ -200,9 +200,13 @@ export const PositionManager: FC<PositionManagerProps> = ({
           positions: [position],
           recipient: new PublicKey(proxy || ""),
           expirationTime: new BN(expirationTime || 0),
-          onInstructions: onInstructions(provider, {
-            useFirstEstimateForAll: true,
-          }),
+          onInstructions: async (instructionArrays) => {
+            for (const instructions of instructionArrays) {
+              await onInstructions(provider, {
+                useFirstEstimateForAll: true,
+              })(instructions);
+            }
+          },
         });
       }
       toast(`Proxy ${isRevoke ? "revoked" : "assigned"}`);
