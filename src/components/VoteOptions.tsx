@@ -121,9 +121,13 @@ export const VoteOptions: FC<{
               onSubmit={(args) => {
                 return assignProxies({
                   ...args,
-                  onInstructions: onInstructions(provider, {
-                    useFirstEstimateForAll: true,
-                  }),
+                  onInstructions: async (instructionArrays) => {
+                    for (const instructions of instructionArrays) {
+                      await onInstructions(provider, {
+                        useFirstEstimateForAll: true,
+                      })(instructions);
+                    }
+                  },
                 });
               }}
             >
