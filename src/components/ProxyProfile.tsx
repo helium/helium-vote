@@ -165,7 +165,7 @@ export function ProxyProfile({ wallet: walletRaw }: { wallet: string }) {
     </div>
   );
 
-  const provider = useAnchorProvider()
+  const provider = useAnchorProvider();
 
   return (
     <ContentSection className="flex-1 py-8 max-md:py-0 max-md:!px-0">
@@ -214,9 +214,13 @@ export function ProxyProfile({ wallet: walletRaw }: { wallet: string }) {
             onSubmit={(args) => {
               return assignProxies({
                 ...args,
-                onInstructions: onInstructions(provider, {
-                  useFirstEstimateForAll: true,
-                }),
+                onInstructions: async (instructionArrays) => {
+                  for (const instructions of instructionArrays) {
+                    await onInstructions(provider, {
+                      useFirstEstimateForAll: true,
+                    })(instructions);
+                  }
+                },
               });
             }}
             wallet={wallet}
@@ -312,9 +316,13 @@ export function ProxyProfile({ wallet: walletRaw }: { wallet: string }) {
                 onSubmit={(args) => {
                   return assignProxies({
                     ...args,
-                    onInstructions: onInstructions(provider, {
-                      useFirstEstimateForAll: true,
-                    }),
+                    onInstructions: async (instructionArrays) => {
+                      for (const instructions of instructionArrays) {
+                        await onInstructions(provider, {
+                          useFirstEstimateForAll: true,
+                        })(instructions);
+                      }
+                    },
                   });
                 }}
                 wallet={wallet}
