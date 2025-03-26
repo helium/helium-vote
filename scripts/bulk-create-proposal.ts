@@ -8,7 +8,11 @@ import os from "os";
 import yargs from "yargs/yargs";
 import { init as initState } from "@helium/state-controller-sdk";
 import Squads from "@sqds/sdk";
-import { PublicKey, SystemProgram, TransactionInstruction } from "@solana/web3.js";
+import {
+  PublicKey,
+  SystemProgram,
+  TransactionInstruction,
+} from "@solana/web3.js";
 import { loadKeypair, sendInstructionsOrSquads } from "./utils";
 import fs from "fs";
 import { init as initTuktuk, taskKey } from "@helium/tuktuk-sdk";
@@ -18,6 +22,8 @@ import {
   init as initHplCrons,
   queueAuthorityKey,
 } from "@helium/hpl-crons-sdk";
+import { init as initHsd, daoKey } from "@helium/helium-sub-daos-sdk";
+import { HNT_MINT } from "@helium/spl-utils";
 
 interface Choice {
   uri: string;
@@ -77,6 +83,8 @@ export async function run(args: any = process.argv) {
   const wallet = new anchor.Wallet(walletKP);
   const orgProgram = await initOrg(provider);
   const stateProgram = await initState(provider);
+  const hsdProgram = await initHsd(provider);
+  const dao = daoKey(HNT_MINT)[0];
 
   const squads = Squads.endpoint(process.env.ANCHOR_PROVIDER_URL, wallet, {
     commitmentOrConfig: "finalized",
@@ -166,8 +174,21 @@ export async function run(args: any = process.argv) {
         })
         .instruction();
 
+      const addRecentProposalToDaoIx = await hsdProgram.methods
+        .addRecentProposalToDaoV0()
+        .accounts({
+          dao,
+          proposal: proposal!,
+        })
+        .instruction();
+
       freeTaskIdx++;
-      instructions.push(instruction, setState);
+      instructions.push(
+        instruction,
+        setState,
+        resolveIx,
+        addRecentProposalToDaoIx
+      );
     }
     i++;
   }

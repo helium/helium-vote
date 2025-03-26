@@ -7,12 +7,14 @@ import Squads from "@sqds/sdk";
 import { PublicKey, SystemProgram } from "@solana/web3.js";
 import { loadKeypair, sendInstructionsOrSquads } from "./utils";
 import { init as initTuktuk, taskKey } from "@helium/tuktuk-sdk";
+import { init as initHsd, daoKey } from "@helium/helium-sub-daos-sdk";
 import {
   nextAvailableTaskIds,
   queueAuthorityKey,
   TASK_QUEUE_ID,
 } from "@helium/hpl-crons-sdk";
 import { init as initHplCrons } from "@helium/hpl-crons-sdk";
+import { HNT_MINT } from "@helium/spl-utils";
 
 export async function run(args: any = process.argv) {
   const yarg = yargs(args).options({
@@ -78,6 +80,7 @@ export async function run(args: any = process.argv) {
   const stateProgram = await initState(provider);
   const tuktukProgram = await initTuktuk(provider);
   const hplCronsProgram = await initHplCrons(provider);
+  const hsdProgram = await initHsd(provider);
   const organizationK = organizationKey(argv.orgName)[0];
   const organization = await orgProgram.account.organizationV0.fetch(
     organizationK
@@ -158,9 +161,17 @@ export async function run(args: any = process.argv) {
     })
     .instruction();
 
+  const addRecentProposalToDaoIx = await hsdProgram.methods
+    .addRecentProposalToDaoV0()
+    .accounts({
+      dao: daoKey(HNT_MINT)[0],
+      proposal: proposal!,
+    })
+    .instruction();
+
   await sendInstructionsOrSquads({
     provider,
-    instructions: [instruction, setState, resolveIx],
+    instructions: [instruction, setState, resolveIx, addRecentProposalToDaoIx],
     executeTransaction: false,
     squads,
     multisig: argv.multisig ? new PublicKey(argv.multisig) : undefined,
