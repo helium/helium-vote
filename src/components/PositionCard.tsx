@@ -10,8 +10,10 @@ import { useGovernance } from "@/providers/GovernanceProvider";
 import { useSolanaUnixNow } from "@helium/helium-react-hooks";
 import {
   PositionWithMeta,
+  useDao,
   useKnownProxy,
 } from "@helium/voter-stake-registry-hooks";
+import { daoKey } from "@helium/helium-sub-daos-sdk";
 import BN from "bn.js";
 import classNames from "classnames";
 import Image from "next/image";
@@ -23,6 +25,7 @@ import { Button } from "./ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Skeleton } from "./ui/skeleton";
 import { PublicKey } from "@solana/web3.js";
+import { HNT_MINT } from "@helium/spl-utils";
 
 export const PositionCardSkeleton: FC<{ compact?: boolean }> = () => {
   const { network } = useGovernance();
@@ -61,6 +64,7 @@ export const PositionCardSkeleton: FC<{ compact?: boolean }> = () => {
   );
 };
 
+const DAO = daoKey(HNT_MINT)[0]
 export const PositionCard: FC<{
   position: PositionWithMeta;
   className?: string;
@@ -74,7 +78,13 @@ export const PositionCard: FC<{
   compact = false,
   onClick,
 }) => {
+  const { info: dao } = useDao(DAO)
   const path = usePathname();
+  // @ts-ignore
+  const myProposals = new Set(position.recentProposals.map(p => p.proposal.toBase58()))
+  const numVotedProposals = dao?.recentProposals.filter(p => myProposals.has(p.proposal.toBase58())).length
+  const votesCount = numVotedProposals || 0;
+  const isEligibleForRewards = votesCount >= 2;
   const { lockup, hasGenesisMultiplier } = position;
   const { loading: loadingGov, network, mintAcc, subDaos } = useGovernance();
   const isHNT = network === "hnt";
@@ -175,6 +185,12 @@ export const PositionCard: FC<{
           Landrush
         </Pill>
       )}
+      <Pill 
+        variant={isEligibleForRewards ? "success" : "warning"} 
+        className="self-start"
+      >
+        {votesCount}/4 Votes
+      </Pill>
       {isDecayed && (
         <Pill variant="success">
           100%{" "}
