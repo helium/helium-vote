@@ -98,7 +98,9 @@ export const Positions: FC = () => {
       try {
         await claimAllPositionsRewards({
           positions: positionsWithRewards,
-          onInstructions: onInstructions(provider),
+          onInstructions: onInstructions(provider, {
+            useFirstEstimateForAll: true,
+          }),
         });
 
         toast("Rewards claimed!");

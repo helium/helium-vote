@@ -298,11 +298,11 @@ export const onInstructions =
     provider?: AnchorProvider,
     {
       useFirstEstimateForAll = false,
-    }: { useFirstEstimateForAll?: boolean } = {}
+    }: { useFirstEstimateForAll?: boolean; computeScaleUp?: Number } = {}
   ) =>
   async (instructions: TransactionInstruction[], sigs?: Keypair[]) => {
     if (provider) {
-      const computeScaleUp = useFirstEstimateForAll ? 1.6 : 1.2;
+      const computeScaleUp = useFirstEstimateForAll ? 1.4 : 1.2;
 
       if (sigs) {
         const transactions = await batchInstructionsToTxsWithPriorityFee(
