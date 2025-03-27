@@ -277,7 +277,9 @@ export const PositionManager: FC<PositionManagerProps> = ({
     try {
       await claimPositionRewards({
         position,
-        onInstructions: onInstructions(provider),
+        onInstructions: onInstructions(provider, {
+          useFirstEstimateForAll: true,
+        }),
       });
 
       toast("Rewards claimed");
