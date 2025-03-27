@@ -298,7 +298,7 @@ export const onInstructions =
     provider?: AnchorProvider,
     {
       useFirstEstimateForAll = false,
-    }: { useFirstEstimateForAll?: boolean; computeScaleUp?: Number } = {}
+    }: { useFirstEstimateForAll?: boolean } = {}
   ) =>
   async (instructions: TransactionInstruction[], sigs?: Keypair[]) => {
     if (provider) {
