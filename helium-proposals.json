@@ -136,5 +136,25 @@
       { "uri": null, "name": "For Helium Release 2025-03" },
       { "uri": null, "name": "Against Helium Release 2025-03" }
     ]
+  },
+  {
+    "name": "HIP 143: Decoupling Service Provider Pricing from Governance",
+    "uri": "https://gist.githubusercontent.com/hiptron/fdf4f4e6ff15ccb9f4980be192e90260/raw/7bd931b65674c3e308ca8393d116f46bf8ed7478/HIP-143-Vote-Summary.md",
+    "maxChoicesPerVoter": 1,
+    "tags": ["HIP", "Economic", "Technical"],
+    "choices": [
+      { "uri": null, "name": "For HIP 143" },
+      { "uri": null, "name": "Against HIP 143" }
+    ]
+  },
+  {
+    "name": "Helium Release Proposal: 2025-04",
+    "uri": "https://gist.githubusercontent.com/hiptron/73d2bb29b06b353d92b7f08092248828/raw/fba63173f8f512fe9efcd844ca70a302b7e57010/HRP-2025-04-Vote-Summary.md",
+    "maxChoicesPerVoter": 1,
+    "tags": ["Release"],
+    "choices": [
+      { "uri": null, "name": "For Helium Release 2025-04" },
+      { "uri": null, "name": "Against Helium Release 2025-04" }
+    ]
   }
 ]
