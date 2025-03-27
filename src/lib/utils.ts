@@ -302,7 +302,7 @@ export const onInstructions =
   ) =>
   async (instructions: TransactionInstruction[], sigs?: Keypair[]) => {
     if (provider) {
-      const computeScaleUp = useFirstEstimateForAll ? 1.4 : 1.2;
+      const computeScaleUp = 1.4;
 
       if (sigs) {
         const transactions = await batchInstructionsToTxsWithPriorityFee(

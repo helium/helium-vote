@@ -55,9 +55,7 @@ export const VoteOptions: FC<{
         setCurrVote(choice.index);
         await vote({
           choice: choice.index,
-          onInstructions: onInstructions(provider, {
-            useFirstEstimateForAll: true,
-          }),
+          onInstructions: onInstructions(provider),
         });
         toast("Vote submitted");
       } catch (e: any) {
