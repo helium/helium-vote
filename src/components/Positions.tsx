@@ -100,6 +100,7 @@ export const Positions: FC = () => {
           positions: positionsWithRewards,
           onInstructions: onInstructions(provider, {
             useFirstEstimateForAll: true,
+            maxInstructionsPerTx: 8,
           }),
         });
 

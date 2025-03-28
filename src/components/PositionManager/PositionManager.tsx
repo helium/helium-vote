@@ -279,6 +279,7 @@ export const PositionManager: FC<PositionManagerProps> = ({
         position,
         onInstructions: onInstructions(provider, {
           useFirstEstimateForAll: true,
+          maxInstructionsPerTx: 8,
         }),
       });
 

@@ -297,8 +297,9 @@ export const onInstructions =
   (
     provider?: AnchorProvider,
     {
+      maxInstructionsPerTx,
       useFirstEstimateForAll = false,
-    }: { useFirstEstimateForAll?: boolean } = {}
+    }: { maxInstructionsPerTx?: number; useFirstEstimateForAll?: boolean } = {}
   ) =>
   async (instructions: TransactionInstruction[], sigs?: Keypair[]) => {
     if (provider) {
@@ -318,6 +319,7 @@ export const onInstructions =
             ],
             useFirstEstimateForAll,
             computeScaleUp,
+            maxInstructionsPerTx,
           }
         );
         const asVersionedTx = transactions.map(toVersionedTx);
@@ -355,6 +357,7 @@ export const onInstructions =
             ],
             useFirstEstimateForAll,
             computeScaleUp,
+            maxInstructionsPerTx,
           }
         );
 
