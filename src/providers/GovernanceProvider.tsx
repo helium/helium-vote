@@ -1,5 +1,6 @@
 "use client";
 
+import { useWallet } from "@/hooks/useWallet";
 import { Wallet } from "@coral-xyz/anchor";
 import { useAnchorProvider, useMint } from "@helium/helium-react-hooks";
 import { organizationKey } from "@helium/organization-sdk";
@@ -11,10 +12,10 @@ import {
   useRegistrar,
   useSubDaos,
 } from "@helium/voter-stake-registry-hooks";
-import { getRegistrarKey } from "@helium/voter-stake-registry-sdk";
+import { getRegistrarKey, VoteService } from "@helium/voter-stake-registry-sdk";
 import { PublicKey } from "@solana/web3.js";
 import { useParams } from "next/navigation";
-import { FC, ReactNode, createContext, useContext, useMemo } from "react";
+import { FC, ReactNode, createContext, useContext, useEffect, useMemo } from "react";
 import { useAsync } from "react-async-hook";
 
 type GovNetwork = "hnt" | "mobile" | "iot";
@@ -50,6 +51,7 @@ const GovernanceContext = createContext<IGovernanceContextState>(
 
 const GovernanceProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const anchorProvider = useAnchorProvider();
+  const { publicKey } = useWallet();
   const params = useParams();
   const network: GovNetwork = (params.network as GovNetwork) || "hnt";
   const networkName = useMemo(() => networkToName[network], [network]);
@@ -98,11 +100,35 @@ const GovernanceProvider: FC<{ children: ReactNode }> = ({ children }) => {
     ]
   );
 
+  // So that we can use viewAs
+  const wallet = useMemo(() => {
+    if (
+      anchorProvider &&
+      anchorProvider.wallet &&
+      anchorProvider.wallet.publicKey &&
+      publicKey &&
+      !publicKey.equals(anchorProvider.wallet.publicKey)
+    ) {
+      // Create a new wallet wrapper that matches the anchor Wallet interface
+      const wallet = {
+        publicKey: publicKey,
+        signTransaction: anchorProvider.wallet.signTransaction.bind(
+          anchorProvider.wallet
+        ),
+        signAllTransactions: anchorProvider.wallet.signAllTransactions.bind(
+          anchorProvider.wallet
+        ),
+      };
+      return wallet as Wallet;
+    }
+    return anchorProvider?.wallet as Wallet;
+  }, [publicKey, anchorProvider]);
+
   return (
     <GovernanceContext.Provider value={ret}>
       <HeliumVsrStateProvider
         mint={mint}
-        wallet={anchorProvider?.wallet as Wallet}
+        wallet={wallet}
         connection={anchorProvider?.connection}
         heliumVoteUri={process.env.NEXT_PUBLIC_HELIUM_VOTE_URI}
       >
@@ -118,7 +144,8 @@ const useGovernance = () => {
     throw new Error("useGovernance must be used within a GovernanceProvider");
   }
 
-  const { mint, positions, ...heliumVsrState } = useHeliumVsrState();
+  const { mint, positions, voteService, ...heliumVsrState } =
+    useHeliumVsrState();
 
   const numActiveVotes = useMemo(
     () => positions?.reduce((acc, p) => acc + p.numActiveVotes, 0) || 0,
@@ -133,6 +160,13 @@ const useGovernance = () => {
   return {
     ...context,
     ...heliumVsrState,
+    // Ensure voteService is always defined.
+    voteService:
+      voteService ??
+      new VoteService({
+        baseURL: process.env.NEXT_PUBLIC_HELIUM_VOTE_URI,
+        registrar: getRegistrarKey(HNT_MINT),
+      }),
     numActiveVotes,
     positions,
     loading,

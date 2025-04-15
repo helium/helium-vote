@@ -76,15 +76,15 @@
   "resolutions": {
     "@tanstack/react-query": "5.45.1",
     "@solana/web3.js": "^1.90.0",
-    "@helium/account-fetch-cache": "^0.10.3",
-    "@helium/account-fetch-cache-hooks": "^0.10.3",
-    "@helium/helium-react-hooks": "^0.10.3",
-    "@helium/voter-stake-registry-hooks": "^0.10.3",
+    "@helium/account-fetch-cache": "^0.10.6",
+    "@helium/account-fetch-cache-hooks": "^0.10.6",
+    "@helium/helium-react-hooks": "^0.10.6",
+    "@helium/voter-stake-registry-hooks": "^0.10.6",
     "@helium/modular-governance-idls": "^0.1.5",
-    "@helium/spl-utils": "^0.10.3",
+    "@helium/spl-utils": "^0.10.6",
     "@helium/modular-governance-hooks": "^0.1.5",
     "@solana/wallet-adapter-react": "^0.15.35",
-    "@helium/voter-stake-registry-sdk": "^0.10.3"
+    "@helium/voter-stake-registry-sdk": "^0.10.6"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.10",

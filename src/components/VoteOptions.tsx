@@ -24,7 +24,7 @@ export const VoteOptions: FC<{
 }> = ({ choices = [], maxChoicesPerVoter, proposalKey }) => {
   const [currVote, setCurrVote] = useState(0);
   const {
-    voteWeights,
+    didVote,
     canVote,
     vote,
     loading: voting,
@@ -55,9 +55,7 @@ export const VoteOptions: FC<{
         setCurrVote(choice.index);
         await vote({
           choice: choice.index,
-          onInstructions: onInstructions(provider, {
-            useFirstEstimateForAll: true,
-          }),
+          onInstructions: onInstructions(provider),
         });
         toast("Vote submitted");
       } catch (e: any) {
@@ -123,9 +121,13 @@ export const VoteOptions: FC<{
               onSubmit={(args) => {
                 return assignProxies({
                   ...args,
-                  onInstructions: onInstructions(provider, {
-                    useFirstEstimateForAll: true,
-                  }),
+                  onInstructions: async (instructionArrays) => {
+                    for (const instructions of instructionArrays) {
+                      await onInstructions(provider, {
+                        useFirstEstimateForAll: true,
+                      })(instructions);
+                    }
+                  },
                 });
               }}
             >
@@ -140,7 +142,7 @@ export const VoteOptions: FC<{
           voting={currVote === r.index && (voting || relinquishing)}
           option={r}
           voters={voters?.[index] || []}
-          myWeight={voteWeights?.[r.index]}
+          didVote={didVote?.[r.index]}
           canVote={canVote(r.index)}
           canRelinquishVote={canRelinquishVote(r.index)}
           onVote={handleVote(r)}

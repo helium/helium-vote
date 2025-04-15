@@ -176,9 +176,9 @@ export const PositionCallout: FC<{
           </p>
         </div>
       </div>
-      {!position.isProxiedToMe && isHNT && (
+      {!position.isProxiedToMe && (
         <>
-          {!isDecayed ? (
+          {!isDecayed && isHNT ? (
             <div className="flex flex-row justify-between gap-2">
               <Button
                 variant="secondary"

@@ -1,5 +1,5 @@
 import { useGovernance } from "@/providers/GovernanceProvider";
-import { useWallet } from "@solana/wallet-adapter-react";
+import { useWallet } from "@/hooks/useWallet";
 import { PublicKey } from "@solana/web3.js";
 import { Loader2 } from "lucide-react";
 import React, { useMemo } from "react";

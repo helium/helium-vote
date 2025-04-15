@@ -297,8 +297,9 @@ export const onInstructions =
   (
     provider?: AnchorProvider,
     {
+      maxInstructionsPerTx,
       useFirstEstimateForAll = false,
-    }: { useFirstEstimateForAll?: boolean } = {}
+    }: { maxInstructionsPerTx?: number; useFirstEstimateForAll?: boolean } = {}
   ) =>
   async (
     instructions: TransactionInstruction[] | TransactionInstruction[][],
@@ -321,6 +322,8 @@ export const onInstructions =
     });
 
     if (provider) {
+      const computeScaleUp = 1.4;
+
       if (sigs) {
         const transactions = await batchInstructionsToTxsWithPriorityFee(
           provider,
@@ -334,7 +337,8 @@ export const onInstructions =
                 : HELIUM_COMMON_LUT,
             ],
             useFirstEstimateForAll,
-            computeScaleUp: useFirstEstimateForAll ? 1.4 : 1.1,
+            computeScaleUp,
+            maxInstructionsPerTx,
           }
         );
         const asVersionedTx = transactions.map(toVersionedTx);
@@ -371,6 +375,8 @@ export const onInstructions =
                 : HELIUM_COMMON_LUT,
             ],
             useFirstEstimateForAll,
+            computeScaleUp,
+            maxInstructionsPerTx,
           }
         );
 

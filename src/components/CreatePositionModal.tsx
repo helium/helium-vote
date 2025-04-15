@@ -15,7 +15,7 @@ import {
   useCreatePosition,
 } from "@helium/voter-stake-registry-hooks";
 import { WalletSignTransactionError } from "@solana/wallet-adapter-base";
-import { useWallet } from "@solana/wallet-adapter-react";
+import { useWallet } from "@/hooks/useWallet";
 import { PublicKey } from "@solana/web3.js";
 import BN from "bn.js";
 import { Loader2 } from "lucide-react";
@@ -207,11 +207,8 @@ export const CreatePositionModal: FC<React.PropsWithChildren<{}>> = ({
                   </span>
                   <ul className="flex flex-col px-6 list-disc font-light">
                     <li>You believe in that subnetwork</li>
-                    <li>
-                      You wish to receive either MOBILE or IOT tokens as rewards
-                      (which can be claimed on a daily basis)
-                    </li>
-                    <li>You help increase the DAO Utility Score</li>
+                    <li>You want to help increase the subnetworks Protocol Score</li>
+                    <li>You are willing to be an active participant in governance in order to receive HNT rewards (which can be claimed on a daily basis)</li>
                   </ul>
                 </div>
                 <div>

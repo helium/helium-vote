@@ -200,9 +200,13 @@ export const PositionManager: FC<PositionManagerProps> = ({
           positions: [position],
           recipient: new PublicKey(proxy || ""),
           expirationTime: new BN(expirationTime || 0),
-          onInstructions: onInstructions(provider, {
-            useFirstEstimateForAll: true,
-          }),
+          onInstructions: async (instructionArrays) => {
+            for (const instructions of instructionArrays) {
+              await onInstructions(provider, {
+                useFirstEstimateForAll: true,
+              })(instructions);
+            }
+          },
         });
       }
       toast(`Proxy ${isRevoke ? "revoked" : "assigned"}`);
@@ -221,7 +225,9 @@ export const PositionManager: FC<PositionManagerProps> = ({
       await relinquishPositionVotes({
         position,
         organization,
-        onInstructions: onInstructions(provider),
+        onInstructions: onInstructions(provider, {
+          useFirstEstimateForAll: true,
+        }),
       });
 
       toast("Votes Relinquished");
@@ -271,7 +277,10 @@ export const PositionManager: FC<PositionManagerProps> = ({
     try {
       await claimPositionRewards({
         position,
-        onInstructions: onInstructions(provider),
+        onInstructions: onInstructions(provider, {
+          useFirstEstimateForAll: true,
+          maxInstructionsPerTx: 8,
+        }),
       });
 
       toast("Rewards claimed");

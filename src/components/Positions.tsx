@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import BN from "bn.js";
 import { useClaimAllPositionsRewards } from "@helium/voter-stake-registry-hooks";
 import { PositionCard, PositionCardSkeleton } from "./PositionCard";
-import { useWallet } from "@solana/wallet-adapter-react";
+import { useWallet } from "@/hooks/useWallet";
 import { toast } from "sonner";
 import { Skeleton } from "./ui/skeleton";
 import { CreatePositionButton } from "./CreatePositionButton";
@@ -98,7 +98,10 @@ export const Positions: FC = () => {
       try {
         await claimAllPositionsRewards({
           positions: positionsWithRewards,
-          onInstructions: onInstructions(provider),
+          onInstructions: onInstructions(provider, {
+            useFirstEstimateForAll: true,
+            maxInstructionsPerTx: 8,
+          }),
         });
 
         toast("Rewards claimed!");

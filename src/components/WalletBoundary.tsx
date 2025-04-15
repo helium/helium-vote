@@ -1,6 +1,6 @@
 "use client";
 
-import { useWallet } from "@solana/wallet-adapter-react";
+import { useWallet } from "@/hooks/useWallet";
 import React, { FC } from "react";
 import { ContentSection } from "./ContentSection";
 import { Card } from "./ui/card";

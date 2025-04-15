@@ -4,7 +4,7 @@ import { VoteChoiceWithMeta } from "@/lib/types";
 import { cn, ellipsisMiddle } from "@/lib/utils";
 import BN from "bn.js";
 import React, { FC } from "react";
-import { FaCircle, FaCircleCheck } from "react-icons/fa6";
+import { FaCircleCheck } from "react-icons/fa6";
 import { Loader2 } from "lucide-react";
 import { PublicKey } from "@solana/web3.js";
 import { Pill } from "./Pill";
@@ -12,7 +12,7 @@ import { useKnownProxy } from "@helium/voter-stake-registry-hooks";
 
 export const VoteOption: FC<{
   option: VoteChoiceWithMeta;
-  myWeight?: BN;
+  didVote?: boolean;
   canVote: boolean;
   voters: PublicKey[];
   canRelinquishVote: boolean;
@@ -22,7 +22,7 @@ export const VoteOption: FC<{
   onRelinquishVote?: () => Promise<void>;
 }> = ({
   option,
-  myWeight,
+  didVote,
   voters,
   canVote,
   canRelinquishVote,
@@ -38,7 +38,7 @@ export const VoteOption: FC<{
     className={cn(
       "flex flex-col gap-2 px-4 rounded-sm bg-slate-500 border-2 border-background cursor-pointer hover:bg-slate-500/80 active:bg-slate-500/60",
       voting && "bg-primary/15 border-primary hover:bg-inherit",
-      myWeight && "bg-slate-500/25 border-slate-500",
+      didVote && "bg-slate-500/25 border-slate-500",
       className,
       voters.length > 0 ? "pt-4 pb-2" : "py-6"
     )}
@@ -46,9 +46,28 @@ export const VoteOption: FC<{
     <div className="flex flex-row gap-2  items-center">
       {voting ? (
         <Loader2 className="size-5 animate-spin" />
+      ) : !didVote ? (
+        <div
+          className={cn("size-5 rounded-full border-2", {
+            "border-vote-0": option.index === 0,
+            "border-vote-1": option.index === 1,
+            "border-vote-2": option.index === 2,
+            "border-vote-3": option.index === 3,
+            "border-vote-4": option.index === 4,
+            "border-vote-5": option.index === 5,
+            "border-vote-6": option.index === 6,
+            "border-vote-7": option.index === 7,
+            "border-vote-8": option.index === 8,
+            "border-vote-9": option.index === 9,
+            "border-vote-10": option.index === 10,
+            "border-vote-11": option.index === 11,
+            "border-vote-12": option.index === 12,
+            "border-vote-13": option.index === 13,
+          })}
+        />
       ) : (
-        <FaCircle
-          className={cn("size-5 border rounded-full", {
+        <FaCircleCheck
+          className={cn("size-5", {
             "fill-vote-0": option.index === 0,
             "fill-vote-1": option.index === 1,
             "fill-vote-2": option.index === 2,
@@ -67,7 +86,6 @@ export const VoteOption: FC<{
         />
       )}
       <p className="font-normal flex-grow">{option.name}</p>
-      {myWeight && <FaCircleCheck className="size-5 fill-success-foreground" />}
     </div>
 
     {voters.length > 0 && (
