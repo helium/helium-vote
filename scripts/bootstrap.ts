@@ -180,7 +180,7 @@ export async function run(args: any = process.argv) {
           uri: null,
           authority,
         })
-        .accounts({ organization, authority: organizationAcc.authority })
+        .accountsPartial({ organization, authority: organizationAcc.authority })
         .instruction();
 
       await sendInstructionsOrSquads({

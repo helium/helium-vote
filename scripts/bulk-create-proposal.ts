@@ -1,12 +1,29 @@
 import * as anchor from "@coral-xyz/anchor";
-import { init as initOrg, organizationKey, proposalKey } from "@helium/organization-sdk";
+import {
+  init as initOrg,
+  organizationKey,
+  proposalKey,
+} from "@helium/organization-sdk";
 import os from "os";
 import yargs from "yargs/yargs";
 import { init as initState } from "@helium/state-controller-sdk";
 import Squads from "@sqds/sdk";
-import { PublicKey, TransactionInstruction } from "@solana/web3.js";
+import {
+  PublicKey,
+  SystemProgram,
+  TransactionInstruction,
+} from "@solana/web3.js";
 import { loadKeypair, sendInstructionsOrSquads } from "./utils";
 import fs from "fs";
+import { init as initTuktuk, taskKey } from "@helium/tuktuk-sdk";
+import {
+  nextAvailableTaskIds,
+  TASK_QUEUE_ID,
+  init as initHplCrons,
+  queueAuthorityKey,
+} from "@helium/hpl-crons-sdk";
+import { init as initHsd, daoKey } from "@helium/helium-sub-daos-sdk";
+import { HNT_MINT } from "@helium/spl-utils";
 
 interface Choice {
   uri: string;
@@ -66,6 +83,8 @@ export async function run(args: any = process.argv) {
   const wallet = new anchor.Wallet(walletKP);
   const orgProgram = await initOrg(provider);
   const stateProgram = await initState(provider);
+  const hsdProgram = await initHsd(provider);
+  const dao = daoKey(HNT_MINT)[0];
 
   const squads = Squads.endpoint(process.env.ANCHOR_PROVIDER_URL, wallet, {
     commitmentOrConfig: "finalized",
@@ -79,10 +98,30 @@ export async function run(args: any = process.argv) {
   const fileData = fs.readFileSync(argv.file, "utf8");
   const proposals: Proposal[] = JSON.parse(fileData);
 
+  const queueAuthority = queueAuthorityKey()[0];
+  console.log(
+    `Queue authority: ${queueAuthority.toBase58()} (Fund with Sol to pay task rent)`
+  );
+
   const instructions: TransactionInstruction[] = [];
   const organizationK = organizationKey(argv.orgName)[0];
   const organization = await orgProgram.account.organizationV0.fetch(
     organizationK
+  );
+  const tuktukProgram = await initTuktuk(provider);
+  const hplCronsProgram = await initHplCrons(provider);
+
+  const queue = await tuktukProgram.account.taskQueueV0.fetch(TASK_QUEUE_ID);
+  const freeTasks = nextAvailableTaskIds(
+    queue.taskBitmap,
+    proposals.length - organization.numProposals
+  )[0];
+  let freeTaskIdx = 0;
+  const proposalConfig = argv.proposalConfig
+    ? new PublicKey(argv.proposalConfig)
+    : organization.defaultProposalConfig;
+  const proposalConfigAcc = await stateProgram.account.proposalConfigV0.fetch(
+    proposalConfig
   );
 
   let i = 0;
@@ -93,7 +132,7 @@ export async function run(args: any = process.argv) {
         pubkeys: { proposal },
       } = await orgProgram.methods
         .initializeProposalV0(proposalData)
-        .accounts({
+        .accountsPartial({
           organization: organizationK,
           owner: authority,
           authority,
@@ -103,10 +142,11 @@ export async function run(args: any = process.argv) {
         .prepare();
 
       const { instruction: setState } = await stateProgram.methods
+        // @ts-ignore
         .updateStateV0({
           newState: { voting: {} },
         })
-        .accounts({
+        .accountsPartial({
           proposal,
           owner: authority,
           proposalConfig: proposalData.proposalConfig
@@ -116,7 +156,39 @@ export async function run(args: any = process.argv) {
         })
         .prepare();
 
-      instructions.push(instruction, setState);
+      const resolveIx = await hplCronsProgram.methods
+        .queueResolveProposalV0({
+          freeTaskId: freeTasks[freeTaskIdx],
+        })
+        .accountsPartial({
+          proposal: proposal!,
+          taskQueue: TASK_QUEUE_ID,
+          namespace: organizationK,
+          task: taskKey(TASK_QUEUE_ID, freeTasks[freeTaskIdx])[0],
+          proposalConfig,
+          stateController: proposalConfigAcc.stateController,
+          payer: authority,
+          systemProgram: SystemProgram.programId,
+          queueAuthority,
+          tuktukProgram: tuktukProgram.programId,
+        })
+        .instruction();
+
+      const addRecentProposalToDaoIx = await hsdProgram.methods
+        .addRecentProposalToDaoV0()
+        .accounts({
+          dao,
+          proposal: proposal!,
+        })
+        .instruction();
+
+      freeTaskIdx++;
+      instructions.push(
+        instruction,
+        setState,
+        resolveIx,
+        addRecentProposalToDaoIx
+      );
     }
     i++;
   }

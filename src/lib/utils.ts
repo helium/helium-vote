@@ -301,7 +301,26 @@ export const onInstructions =
       useFirstEstimateForAll = false,
     }: { maxInstructionsPerTx?: number; useFirstEstimateForAll?: boolean } = {}
   ) =>
-  async (instructions: TransactionInstruction[], sigs?: Keypair[]) => {
+  async (
+    instructions: TransactionInstruction[] | TransactionInstruction[][],
+    sigs?: Keypair[]
+  ) => {
+    if (useFirstEstimateForAll) {
+      // Sort instructions array so longest groups are first
+      instructions.sort((a, b) => {
+        const lengthA = Array.isArray(a) ? a.length : 1;
+        const lengthB = Array.isArray(b) ? b.length : 1;
+        return lengthB - lengthA;
+      });
+    }
+
+    // Sort instructions array so longest groups are first
+    instructions.sort((a, b) => {
+      const lengthA = Array.isArray(a) ? a.length : 1;
+      const lengthB = Array.isArray(b) ? b.length : 1;
+      return lengthB - lengthA;
+    });
+
     if (provider) {
       const computeScaleUp = 1.4;
 
