@@ -9,7 +9,6 @@ import {
 } from "@helium/helium-react-hooks";
 import { HNT_MINT, toBN, toNumber } from "@helium/spl-utils";
 import {
-  Position,
   PositionWithMeta,
   calcLockupMultiplier,
   useCreatePosition,
@@ -19,7 +18,7 @@ import { useWallet } from "@/hooks/useWallet";
 import { PublicKey } from "@solana/web3.js";
 import BN from "bn.js";
 import { Loader2 } from "lucide-react";
-import React, { FC, useCallback, useMemo, useState } from "react";
+import React, { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import {
   LockTokensForm,
@@ -31,6 +30,7 @@ import { SubDaoSelection } from "./SubDaoSelection";
 import { Button } from "./ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
 import { PositionPreview } from "./PositionPreview";
+import { MOBILE_SUB_DAO_KEY } from "@/lib/constants";
 
 export const CreatePositionModal: FC<React.PropsWithChildren<{}>> = ({
   children,
@@ -42,28 +42,24 @@ export const CreatePositionModal: FC<React.PropsWithChildren<{}>> = ({
   const [formValues, setFormValues] = useState<LockTokensFormValues>();
   const [selectedSubDaoPk, setSelectedSubDaoPk] = useState<PublicKey>();
   const { publicKey: wallet } = useWallet();
-  const {
-    network,
-    mint,
-    subDaos,
-    registrar,
-    refetch: refetchState,
-  } = useGovernance();
+  const { mint, subDaos, registrar, refetch: refetchState } = useGovernance();
   const { amount: ownedAmount, decimals } = useOwnedAmount(wallet, mint);
   const { error: createPositionError, createPosition } = useCreatePosition();
   const steps = useMemo(() => (mint.equals(HNT_MINT) ? 3 : 2), [mint]);
+
+  useEffect(() => {
+    if (subDaos && !selectedSubDaoPk) {
+      setSelectedSubDaoPk(
+        subDaos.find((subDao) => subDao.pubkey.equals(MOBILE_SUB_DAO_KEY))
+          ?.pubkey || undefined
+      );
+    }
+  }, [subDaos, selectedSubDaoPk, setSelectedSubDaoPk]);
 
   const maxLockupAmount =
     ownedAmount && decimals
       ? toNumber(new BN(ownedAmount.toString()), decimals)
       : 0;
-
-  const selectedSubDao = useMemo(
-    () =>
-      selectedSubDaoPk &&
-      subDaos?.find((subDao) => subDao.pubkey.equals(selectedSubDaoPk!))!,
-    [selectedSubDaoPk, subDaos]
-  );
 
   const handleCalcLockupMultiplier = useCallback(
     (lockupPeriodInDays: number) =>
@@ -165,9 +161,7 @@ export const CreatePositionModal: FC<React.PropsWithChildren<{}>> = ({
   const subheading =
     (step === 1 &&
       "Boost your voting power by strategically locking your tokens for a specified period, opting for either a constant or decaying lockup") ||
-    (steps > 2 &&
-      step === 2 &&
-      "Choose whether to delegate your tokens to a subnetwork for rewards") ||
+    (steps > 2 && step === 2 && "Choose a subnetwork to delegate to") ||
     (step === steps && "Review your position before creating it");
 
   return (
@@ -196,21 +190,18 @@ export const CreatePositionModal: FC<React.PropsWithChildren<{}>> = ({
         {steps > 2 && step === 2 && (
           <>
             <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-4 p-4 text-sm bg-slate-600 rounded">
+                Delegating your position to a subnetwork and voting regularly
+                earns you HNT rewards. Select the subnetwork you believe offers
+                the greatest potential for growth and impact. This choice does
+                not affect the rewarded amount.
+              </div>
               <SubDaoSelection
+                hideNoneOption
                 selectedSubDaoPk={selectedSubDaoPk}
                 onSelect={setSelectedSubDaoPk}
               />
               <div className="flex flex-col gap-4 p-4 text-sm bg-slate-600 rounded">
-                <div>
-                  <span className="font-medium">
-                    By selecting a subnetwork, you indicate that:
-                  </span>
-                  <ul className="flex flex-col px-6 list-disc font-light">
-                    <li>You believe in that subnetwork</li>
-                    <li>You want to help increase the subnetworks Protocol Score</li>
-                    <li>You are willing to be an active participant in governance in order to receive HNT rewards (which can be claimed on a daily basis)</li>
-                  </ul>
-                </div>
                 <div>
                   <span className="font-medium">
                     Remember the following before you delegate:
