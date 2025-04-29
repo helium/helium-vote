@@ -6,6 +6,8 @@ import classNames from "classnames";
 import Image from "next/image";
 import React, { FC } from "react";
 import { Skeleton } from "./ui/skeleton";
+import { truthy } from "@helium/spl-utils";
+import { MOBILE_SUB_DAO_KEY } from "@/lib/constants";
 
 export const SubDaoSelection: FC<{
   hideNoneOption?: boolean;
@@ -64,7 +66,7 @@ export const SubDaoSelection: FC<{
                 )}
                 onClick={() => onSelect(subDao.pubkey)}
               >
-                <div className="flex flex-col gap-1 justify-center items-center">
+                <div className="flex flex-col justify-center items-center">
                   <div className="size-12 rounded-full relative">
                     <Image
                       alt={subDao.dntMetadata.json?.name}
@@ -72,7 +74,9 @@ export const SubDaoSelection: FC<{
                       fill
                     />
                   </div>
-                  {subDao.dntMetadata.symbol}
+                  {subDao.dntMetadata.symbol
+                    ? subDao.dntMetadata.symbol.replace(/\u0000/g, "")
+                    : ""}
                 </div>
               </div>
             ))}
