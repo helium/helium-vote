@@ -38,7 +38,7 @@ jobs:
         if: github.ref == 'refs/heads/main'
         run: |
           ./node_modules/.bin/ts-node ./bin/helium-vote.ts bulk-create-proposal \
-            -u "https://solana-rpc.web.helium.io?session-key=Pluto" \
+            -u "https://solana-rpc.web.helium.io" \
             --file ./helium-proposals.json \
             --wallet ./deploy-keypair.json \
             --orgName Helium \
