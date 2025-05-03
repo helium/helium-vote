@@ -156,5 +156,25 @@
       { "uri": null, "name": "For Helium Release 2025-04" },
       { "uri": null, "name": "Against Helium Release 2025-04" }
     ]
+  },
+  {
+    "name": "HIP 144: Mobile Hotspot Rewards Escrow",
+    "uri": "https://gist.githubusercontent.com/hiptron/e2eaf6f39824359171623aa1de31941a/raw/ff4e8fd7543ee3c40593f643b2549f1af4acf0ec/HIP-144-Vote-Summary.md",
+    "maxChoicesPerVoter": 1,
+    "tags": ["HIP", "Economic"],
+    "choices": [
+      { "uri": null, "name": "For HIP 144" },
+      { "uri": null, "name": "Against HIP 144" }
+    ]
+  },
+  {
+    "name": "Helium Release Proposal: 2025-05",
+    "uri": "http://gist.githubusercontent.com/hiptron/f7fb8f0c05fcc2e317a682e025847067/raw/8b0633044bf87c0bf9400a19d37c5427d20fad2e/HRP-2025-05-Vote-Summary.md",
+    "maxChoicesPerVoter": 1,
+    "tags": ["Release"],
+    "choices": [
+      { "uri": null, "name": "For Helium Release 2025-05" },
+      { "uri": null, "name": "Against Helium Release 2025-05" }
+    ]
   }
 ]
