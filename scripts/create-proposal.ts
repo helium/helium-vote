@@ -129,7 +129,11 @@ export async function run(args: any = process.argv) {
   const { instruction: setState } = await stateProgram.methods
     // @ts-ignore
     .updateStateV0({
-      newState: { voting: {} },
+      newState: {
+        voting: {
+          startTs: new anchor.BN(Date.now() / 1000).toNumber()
+        }
+      },
     })
     .accountsStrict({
       proposal: proposal!,

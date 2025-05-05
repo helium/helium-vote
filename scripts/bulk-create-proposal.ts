@@ -23,6 +23,7 @@ import {
 } from "@helium/hpl-crons-sdk";
 import { init as initHsd, daoKey } from "@helium/helium-sub-daos-sdk";
 import { HNT_MINT } from "@helium/spl-utils";
+import { BN } from "@coral-xyz/anchor";
 
 interface Choice {
   uri: string;
@@ -144,7 +145,11 @@ export async function run(args: any = process.argv) {
       const { instruction: setState } = await stateProgram.methods
         // @ts-ignore
         .updateStateV0({
-          newState: { voting: {} },
+          newState: {
+            voting: {
+              startTs: new BN(Date.now() / 1000).toNumber()
+            }
+          },
         })
         .accountsPartial({
           proposal,
