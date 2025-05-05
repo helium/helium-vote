@@ -6,10 +6,9 @@ import { init as initState } from "@helium/state-controller-sdk";
 import Squads from "@sqds/sdk";
 import { PublicKey, SystemProgram } from "@solana/web3.js";
 import { loadKeypair, sendInstructionsOrSquads } from "./utils";
-import { init as initTuktuk, taskKey } from "@helium/tuktuk-sdk";
+import { init as initTuktuk, taskKey, nextAvailableTaskIds } from "@helium/tuktuk-sdk";
 import { init as initHsd, daoKey } from "@helium/helium-sub-daos-sdk";
 import {
-  nextAvailableTaskIds,
   queueAuthorityKey,
   TASK_QUEUE_ID,
 } from "@helium/hpl-crons-sdk";
