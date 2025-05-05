@@ -15,9 +15,8 @@ import {
 } from "@solana/web3.js";
 import { loadKeypair, sendInstructionsOrSquads } from "./utils";
 import fs from "fs";
-import { init as initTuktuk, taskKey } from "@helium/tuktuk-sdk";
+import { init as initTuktuk, taskKey, nextAvailableTaskIds } from "@helium/tuktuk-sdk";
 import {
-  nextAvailableTaskIds,
   TASK_QUEUE_ID,
   init as initHplCrons,
   queueAuthorityKey,
