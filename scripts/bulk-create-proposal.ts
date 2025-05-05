@@ -114,7 +114,7 @@ export async function run(args: any = process.argv) {
   const freeTasks = nextAvailableTaskIds(
     queue.taskBitmap,
     proposals.length - organization.numProposals
-  )[0];
+  );
   let freeTaskIdx = 0;
   const proposalConfig = argv.proposalConfig
     ? new PublicKey(argv.proposalConfig)
@@ -126,6 +126,7 @@ export async function run(args: any = process.argv) {
   let i = 0;
   for (const proposalData of proposals) {
     if (i >= organization.numProposals) {
+      console.log(`Creating proposal ${i}`);
       const {
         instruction,
         pubkeys: { proposal },
