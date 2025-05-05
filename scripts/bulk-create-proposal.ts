@@ -147,7 +147,7 @@ export async function run(args: any = process.argv) {
         .updateStateV0({
           newState: {
             voting: {
-              startTs: new BN(Date.now() / 1000).toNumber()
+              startTs: new BN(Date.now() / 1000)
             }
           },
         })
