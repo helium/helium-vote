@@ -6,6 +6,7 @@ import { NetworkTabs } from "./NetworkTabs";
 import { SubNav } from "./SubNav";
 import { VeTokensCallout } from "./VeTokensCallout";
 import { WalletConnectButton } from "./WalletConnectButton";
+import { DataSplitSection } from "./DataSplitSection";
 
 export const Header: FC<{
   hideHero?: boolean;
@@ -43,30 +44,7 @@ export const Header: FC<{
     </div>
     {!hideHero && (
       <ContentSection>
-        <div className="flex flex-row h-[342px] py-6 justify-between items-start max-md:py-12 max-md:h-auto">
-          <div className="flex justify-center items-center">
-            <div>
-              <h1 className="max-md:text-5xl text-7xl">
-                Helium
-                <br />
-                Governance
-              </h1>
-              <p className="max-w-lg mt-4 text-slate-50 text-lg leading-5">
-                Where the community comes together to make decisions on
-                the network.
-              </p>
-            </div>
-          </div>
-
-          <div className="size-40 max-md:hidden">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              className="max-sm:hidden"
-              src="/images/hero.png"
-              alt="hero-image"
-            />
-          </div>
-        </div>
+        <DataSplitSection />
       </ContentSection>
     )}
     {!hideNav && (

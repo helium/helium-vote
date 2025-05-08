@@ -6,8 +6,6 @@ import classNames from "classnames";
 import Image from "next/image";
 import React, { FC } from "react";
 import { Skeleton } from "./ui/skeleton";
-import { truthy } from "@helium/spl-utils";
-import { MOBILE_SUB_DAO_KEY } from "@/lib/constants";
 
 export const SubDaoSelection: FC<{
   hideNoneOption?: boolean;

@@ -28,7 +28,7 @@ export const PositionActionBoundary: FC<
   const { hasRewards, isDelegated, numActiveVotes } = position;
   const hasVotes = numActiveVotes > 0;
   const hasBlockers = hasRewards || isDelegated || hasVotes;
-  const canDoWhileBlocked = !hasRewards && action === "delegate" || action == "proxy";
+  const canDoWhileBlocked = action === "delegate" || action == "proxy";
 
   if (!action) {
     return children;
@@ -62,20 +62,18 @@ export const PositionActionBoundary: FC<
                     <span className="font-bold">Claim</span> your rewards
                   </span>
                 </div>
-                {action !== "delegate" && (
-                  <div className="flex flex-row gap-2 items-center">
-                    {isDelegated && (
-                      <FaCircle className="text-slate-500 size-5" />
-                    )}
-                    {!isDelegated && (
-                      <FaCircleCheck className="text-success-foreground size-5" />
-                    )}
-                    <span>
-                      <span className="font-bold">Undelegate</span> from
-                      subnetwork
-                    </span>
-                  </div>
-                )}
+                <div className="flex flex-row gap-2 items-center">
+                  {isDelegated && (
+                    <FaCircle className="text-slate-500 size-5" />
+                  )}
+                  {!isDelegated && (
+                    <FaCircleCheck className="text-success-foreground size-5" />
+                  )}
+                  <span>
+                    <span className="font-bold">Undelegate</span> from
+                    subnetwork
+                  </span>
+                </div>
                 <div className="flex flex-col">
                   <div className="flex flex-row gap-2 items-center">
                     {hasVotes && <FaCircle className="text-slate-500 size-5" />}
@@ -107,14 +105,12 @@ export const PositionActionBoundary: FC<
                     </Button>
                   </div>
                 )}
-                {isDelegated && action !== "delegate" && (
-                  <Button
-                    onClick={() => setManagerAction("delegate")}
-                    className="flex-1 text-foreground"
-                  >
-                    Update Delegation
-                  </Button>
-                )}
+                <Button
+                  onClick={() => setManagerAction("delegate")}
+                  className="flex-1 text-foreground"
+                >
+                  Update Delegation
+                </Button>
                 {hasVotes && (
                   <div className="flex flex-row bg-background rounded-md flex-1">
                     <Button
