@@ -5,32 +5,56 @@ import { useSolanaUnixNow } from "@helium/helium-react-hooks";
 import {
   PositionWithMeta,
   SubDaoWithMeta,
+  useDataBurnSplit,
+  useSubDaoDelegationSplit,
 } from "@helium/voter-stake-registry-hooks";
 import { PublicKey } from "@solana/web3.js";
 import BN from "bn.js";
 import classNames from "classnames";
 import { Loader2, X } from "lucide-react";
-import React, { FC, useState } from "react";
+import React, { FC, useCallback, useMemo, useState } from "react";
 import { FaCircleArrowRight } from "react-icons/fa6";
 import { StepIndicator } from "../StepIndicator";
 import { SubDaoSelection } from "../SubDaoSelection";
 import { Button } from "../ui/button";
 import { ConfirmationItem } from "./ConfirmationItem";
+import { DataSplitBars } from "../DataSplitBars";
+import { AutomationSettings } from "../AutomationSettings";
+import { humanReadable } from "@/lib/utils";
 
 export const UpdatePositionDelegationPrompt: FC<{
   position: PositionWithMeta;
   isSubmitting?: boolean;
   onCancel: () => void;
   onConfirm: (subDao?: SubDaoWithMeta) => Promise<void>;
-}> = ({ position, isSubmitting, onCancel, onConfirm }) => {
+  automationEnabled: boolean;
+  setAutomationEnabled: (automationEnabled: boolean) => void;
+  subDao: SubDaoWithMeta | null;
+  setSubDao: (subDao: SubDaoWithMeta | null) => void;
+  solFees?: number;
+  prepaidTxFees?: number;
+}> = ({
+  position,
+  isSubmitting,
+  onCancel,
+  onConfirm,
+  subDao,
+  setSubDao,
+  automationEnabled,
+  setAutomationEnabled,
+  solFees = 0,
+  prepaidTxFees = 0,
+}) => {
   const [step, setStep] = useState(1);
-  const [selectedSubDaoPk, setSelectedSubDaoPk] = useState<PublicKey>();
-  const { subDaos } = useGovernance();
+  const { subDaos, voteService } = useGovernance();
   const unixNow = useSolanaUnixNow() || Date.now() / 1000;
   const { lockup, isDelegated, delegatedSubDao } = position;
   const lockupKind = Object.keys(lockup.kind)[0] as string;
   const isConstant = lockupKind === "constant";
   const isDecayed = !isConstant && lockup.endTs.lte(new BN(unixNow));
+  const selectedSubDaoPk = useMemo(() => {
+    return subDao?.pubkey;
+  }, [subDao]);
 
   const hasSelectedSubDao =
     (selectedSubDaoPk && !delegatedSubDao) ||
@@ -47,9 +71,60 @@ export const UpdatePositionDelegationPrompt: FC<{
     subDaos?.find((sd) => sd.pubkey.equals(position.delegatedSubDao!))
       ?.dntMetadata;
 
+  const { data: revData, isLoading: revLoading } = useDataBurnSplit({
+    voteService,
+  });
+  const { iot: iotDataUsageRev = 0, mobile: mobileDataUsageRev = 0 } =
+    (revData || {}) as { iot: number; mobile: number };
+  const { data: delegationData, isLoading: delegationLoading } =
+    useSubDaoDelegationSplit({
+      voteService,
+    });
+  const {
+    iot: iotDelegation = new BN(0),
+    mobile: mobileDelegation = new BN(0),
+  } = (delegationData || {}) as { iot: BN; mobile: BN };
+
+  const totalDataUsage = Number(mobileDataUsageRev) + Number(iotDataUsageRev);
+  const totalVetokens =
+    mobileDelegation && iotDelegation
+      ? new BN(mobileDelegation).add(new BN(iotDelegation))
+      : new BN(0);
+
+  const mobileDelegationPercentage =
+    mobileDelegation && totalVetokens.gt(new BN(0))
+      ? new BN(mobileDelegation)
+          .mul(new BN(10000))
+          .div(totalVetokens)
+          .toNumber() / 100
+      : 0;
+
+  const iotDelegationPercentage =
+    iotDelegation && totalVetokens.gt(new BN(0))
+      ? new BN(iotDelegation).mul(new BN(10000)).div(totalVetokens).toNumber() /
+        100
+      : 0;
+
+  const mobileDataUsagePercentage =
+    totalDataUsage > 0
+      ? (Number(mobileDataUsageRev) / totalDataUsage) * 100
+      : 0;
+
+  const iotDataUsagePercentage =
+    totalDataUsage > 0 ? (Number(iotDataUsageRev) / totalDataUsage) * 100 : 0;
+
   const handleSubmit = async () => {
     await onConfirm(selectedSubDao);
   };
+
+  const setSelectedSubDaoPk = useCallback(
+    (pkey: PublicKey | undefined) => {
+      setSubDao(
+        pkey ? subDaos?.find((s) => s.pubkey.equals(pkey)) || null : null
+      );
+    },
+    [subDaos, setSubDao]
+  );
 
   return (
     <div className="flex flex-col h-full justify-center max-md:justify-normal p-8 max-md:p-4 max-w-2xl mx-auto overflow-auto">
@@ -65,9 +140,12 @@ export const UpdatePositionDelegationPrompt: FC<{
             </div>
             {step === 1 ? (
               <p className="text-base">
-                In order to take any action (such as decaying, pausing,
-                extending, splitting, or merging it) you&apos;ll need to
-                undelegate it first
+                Delegating your position to a subnetwork and voting regularly
+                earns you HNT rewards. Select the subnetwork you believe offers
+                the greatest potential for future revenue. This choice does not
+                affect your HNT rewards for this delegation. Delegation
+                percentages drive the amount of HNT emissions that go towards
+                each subnetwork&apos;s growth.
               </p>
             ) : (
               <p className="text-base">
@@ -77,11 +155,21 @@ export const UpdatePositionDelegationPrompt: FC<{
           </div>
           {step === 1 && (
             <>
+              <DataSplitBars />
+
               <SubDaoSelection
                 hideNoneOption
                 onSelect={setSelectedSubDaoPk}
                 selectedSubDaoPk={selectedSubDaoPk || delegatedSubDao}
               />
+
+              <AutomationSettings
+                automationEnabled={automationEnabled}
+                setAutomationEnabled={setAutomationEnabled}
+                solFees={solFees}
+                prepaidTxFees={prepaidTxFees}
+              />
+
               <div className="flex flex-col gap-2 w-full">
                 <div className="flex flex-row justify-between items-center gap-2">
                   <Button
@@ -96,8 +184,8 @@ export const UpdatePositionDelegationPrompt: FC<{
                     Undelegate
                   </Button>
                   <Button
-                    variant={hasSelectedSubDao ? "default" : "secondary"}
-                    disabled={!hasSelectedSubDao || isDecayed}
+                    variant="default"
+                    disabled={isDecayed}
                     className="flex-1 text-foreground"
                     onClick={() => setStep(step + 1)}
                   >
@@ -152,12 +240,12 @@ export const UpdatePositionDelegationPrompt: FC<{
                       alt: delegatedSubDaoMetadata?.json?.name,
                       src: delegatedSubDaoMetadata?.json?.image,
                     }}
-                    title="Delegating from..."
+                    title="Updating delegation"
                     description={delegatedSubDaoMetadata?.symbol.toUpperCase()}
                   />
                 )}
               </div>
-              <div className="flex flex-col gap-2 w-full">
+              <div className="flex flex-col gap-2 w-full mt-4">
                 <div className="flex flex-row justify-between items-center gap-2">
                   <Button
                     variant="secondary"

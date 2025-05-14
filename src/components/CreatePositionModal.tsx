@@ -31,6 +31,8 @@ import { Button } from "./ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
 import { PositionPreview } from "./PositionPreview";
 import { MOBILE_SUB_DAO_KEY } from "@/lib/constants";
+import { DataSplitBars } from "./DataSplitBars";
+import { AutomationSettings } from "./AutomationSettings";
 
 export const CreatePositionModal: FC<React.PropsWithChildren<{}>> = ({
   children,
@@ -41,10 +43,13 @@ export const CreatePositionModal: FC<React.PropsWithChildren<{}>> = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formValues, setFormValues] = useState<LockTokensFormValues>();
   const [selectedSubDaoPk, setSelectedSubDaoPk] = useState<PublicKey>();
+  const [automationEnabled, setAutomationEnabled] = useState(true);
   const { publicKey: wallet } = useWallet();
   const { mint, subDaos, registrar, refetch: refetchState } = useGovernance();
   const { amount: ownedAmount, decimals } = useOwnedAmount(wallet, mint);
-  const { error: createPositionError, createPosition } = useCreatePosition();
+  const { error: createPositionError, createPosition, rentFee, prepaidTxFees, insufficientBalance } = useCreatePosition({
+    automationEnabled,
+  });
   const steps = useMemo(() => (mint.equals(HNT_MINT) ? 3 : 2), [mint]);
 
   useEffect(() => {
@@ -193,14 +198,27 @@ export const CreatePositionModal: FC<React.PropsWithChildren<{}>> = ({
               <div className="flex flex-col gap-4 p-4 text-sm bg-slate-600 rounded">
                 Delegating your position to a subnetwork and voting regularly
                 earns you HNT rewards. Select the subnetwork you believe offers
-                the greatest potential for growth and impact. This choice does
-                not affect the rewarded amount.
+                the greatest potential for future revenue. This choice does not
+                affect your HNT rewards for this delegation. Delegation
+                percentages drive the amount of HNT emissions that go towards
+                each subnetwork&apos;s growth.
               </div>
+
+              <DataSplitBars />
+
               <SubDaoSelection
                 hideNoneOption
                 selectedSubDaoPk={selectedSubDaoPk}
                 onSelect={setSelectedSubDaoPk}
               />
+
+              <AutomationSettings
+                automationEnabled={automationEnabled}
+                setAutomationEnabled={setAutomationEnabled}
+                solFees={rentFee}
+                prepaidTxFees={prepaidTxFees}
+              />
+
               <div className="flex flex-col gap-4 p-4 text-sm bg-slate-600 rounded">
                 <div>
                   <span className="font-medium">
@@ -232,8 +250,9 @@ export const CreatePositionModal: FC<React.PropsWithChildren<{}>> = ({
               <Button
                 className="flex-grow text-foreground gap-2"
                 onClick={() => setStep(step + 1)}
+                disabled={!!insufficientBalance}
               >
-                Review
+                {insufficientBalance ? "Insufficient SOL" : "Review"}
               </Button>
             </div>
           </>

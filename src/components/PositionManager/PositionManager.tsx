@@ -19,6 +19,7 @@ import {
   useFlipPositionLockupKind,
   useRelinquishPositionVotes,
   useSplitPosition,
+  useSubDaos,
   useTransferPosition,
   useUnassignProxies,
 } from "@helium/voter-stake-registry-hooks";
@@ -31,6 +32,7 @@ import React, {
   FC,
   PropsWithChildren,
   useCallback,
+  useEffect,
   useMemo,
   useState,
 } from "react";
@@ -49,6 +51,7 @@ import { SplitPositionPrompt } from "./SplitPositionPrompt";
 import { UpdatePositionDelegationPrompt } from "./UpdatePositionDelegationPrompt";
 import { ProxyPositionPrompt } from "./ProxyPositionPrompt";
 import { PublicKey } from "@solana/web3.js";
+import { MOBILE_SUB_DAO_KEY } from "@/lib/constants";
 
 export type PositionAction =
   | "flip"
@@ -170,7 +173,28 @@ export const PositionManager: FC<PositionManagerProps> = ({
     useFlipPositionLockupKind();
   const { loading: isClaiming, claimPositionRewards } =
     useClaimPositionRewards();
-  const { loading: isDelegating, delegatePosition } = useDelegatePosition();
+  const { result: subDaos } = useSubDaos();
+  const [automationEnabled, setAutomationEnabled] = useState(true);
+  const [subDao, setSubDao] = useState<SubDaoWithMeta | null>(
+    subDaos?.find((sd) => sd.pubkey.equals(MOBILE_SUB_DAO_KEY)) || null
+  );
+  useEffect(() => {
+    if (subDaos && !subDao) {
+      setSubDao(
+        subDaos.find((sd) => sd.pubkey.equals(MOBILE_SUB_DAO_KEY)) || null
+      );
+    }
+  }, [subDaos, subDao]);
+  const {
+    loading: isDelegating,
+    delegatePosition,
+    rentFee: solFees,
+    prepaidTxFees,
+  } = useDelegatePosition({
+    automationEnabled,
+    position,
+    subDao: subDao || undefined,
+  });
   const { loading: isTransfering, transferPosition } = useTransferPosition();
   const { loading: isSplitting, splitPosition } = useSplitPosition();
   const { loading: isExtending, extendPosition } = useExtendPosition();
@@ -291,11 +315,9 @@ export const PositionManager: FC<PositionManagerProps> = ({
     }
   };
 
-  const handleDelegatePosition = async (subDao?: SubDaoWithMeta) => {
+  const handleDelegatePosition = async () => {
     try {
       await delegatePosition({
-        position,
-        subDao,
         onInstructions: onInstructions(provider),
       });
 
@@ -512,6 +534,12 @@ export const PositionManager: FC<PositionManagerProps> = ({
                   isSubmitting={isDelegating}
                   onCancel={() => setAction(undefined)}
                   onConfirm={handleDelegatePosition}
+                  automationEnabled={automationEnabled}
+                  setAutomationEnabled={setAutomationEnabled}
+                  subDao={subDao}
+                  setSubDao={setSubDao}
+                  solFees={solFees}
+                  prepaidTxFees={prepaidTxFees}
                 />
               )}
               {action === "extend" && (
