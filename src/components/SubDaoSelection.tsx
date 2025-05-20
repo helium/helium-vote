@@ -6,6 +6,7 @@ import classNames from "classnames";
 import Image from "next/image";
 import React, { FC } from "react";
 import { Skeleton } from "./ui/skeleton";
+import { removeNullBytes } from "@/lib/utils";
 
 export const SubDaoSelection: FC<{
   hideNoneOption?: boolean;
@@ -72,9 +73,7 @@ export const SubDaoSelection: FC<{
                       fill
                     />
                   </div>
-                  {subDao.dntMetadata.symbol
-                    ? subDao.dntMetadata.symbol.replace(/\u0000/g, "")
-                    : ""}
+                  {removeNullBytes(subDao.dntMetadata.symbol)}
                 </div>
               </div>
             ))}

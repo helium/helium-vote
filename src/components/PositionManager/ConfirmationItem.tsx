@@ -18,7 +18,7 @@ export const ConfirmationItem: FC<{
       <div className="size-12 rounded-full relative">
         <Image alt={img.alt} src={img.src} fill />
       </div>
-      <div className="flex flex-col items-center">
+      <div className="flex flex-col text-center items-center">
         <span className="text-sm">{title}</span>
         <span className="font-medium">{description}</span>
       </div>
