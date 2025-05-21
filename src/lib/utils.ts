@@ -440,3 +440,7 @@ export function debounce<T extends unknown[], U>(
 }
 
 export const EPOCH_LENGTH = 60 * 60 * 24;
+
+export const removeNullBytes = (str?: string): string => {
+  return str ? str.replace(/\u0000/g, "") : "";
+};

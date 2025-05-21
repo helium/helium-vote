@@ -22,6 +22,7 @@ import {
   useSubDaos,
   useTransferPosition,
   useUnassignProxies,
+  useUndelegatePosition,
 } from "@helium/voter-stake-registry-hooks";
 import { WalletSignTransactionError } from "@solana/wallet-adapter-base";
 import BN from "bn.js";
@@ -56,6 +57,7 @@ import { MOBILE_SUB_DAO_KEY } from "@/lib/constants";
 export type PositionAction =
   | "flip"
   | "delegate"
+  | "undelegate"
   | "extend"
   | "split"
   | "merge"
@@ -178,6 +180,7 @@ export const PositionManager: FC<PositionManagerProps> = ({
   const [subDao, setSubDao] = useState<SubDaoWithMeta | null>(
     subDaos?.find((sd) => sd.pubkey.equals(MOBILE_SUB_DAO_KEY)) || null
   );
+
   useEffect(() => {
     if (subDaos && !subDao) {
       setSubDao(
@@ -185,6 +188,7 @@ export const PositionManager: FC<PositionManagerProps> = ({
       );
     }
   }, [subDaos, subDao]);
+
   const {
     loading: isDelegating,
     delegatePosition,
@@ -195,6 +199,13 @@ export const PositionManager: FC<PositionManagerProps> = ({
     position,
     subDao: subDao || undefined,
   });
+
+  const { loading: isUndelegating, undelegatePosition } = useUndelegatePosition(
+    {
+      position,
+    }
+  );
+
   const { loading: isTransfering, transferPosition } = useTransferPosition();
   const { loading: isSplitting, splitPosition } = useSplitPosition();
   const { loading: isExtending, extendPosition } = useExtendPosition();
@@ -326,6 +337,21 @@ export const PositionManager: FC<PositionManagerProps> = ({
     } catch (e: any) {
       if (!(e instanceof WalletSignTransactionError)) {
         toast(e.message || "Delegation failed, please try again");
+      }
+    }
+  };
+
+  const handleUndelegatePosition = async () => {
+    try {
+      await undelegatePosition({
+        onInstructions: onInstructions(provider),
+      });
+
+      toast("Position undelegated");
+      reset();
+    } catch (e: any) {
+      if (!(e instanceof WalletSignTransactionError)) {
+        toast(e.message || "Undelegation failed, please try again");
       }
     }
   };
@@ -531,9 +557,10 @@ export const PositionManager: FC<PositionManagerProps> = ({
               {action === "delegate" && (
                 <UpdatePositionDelegationPrompt
                   position={position}
-                  isSubmitting={isDelegating}
+                  isSubmitting={isDelegating || isUndelegating}
                   onCancel={() => setAction(undefined)}
                   onConfirm={handleDelegatePosition}
+                  onUndelegate={handleUndelegatePosition}
                   automationEnabled={automationEnabled}
                   setAutomationEnabled={setAutomationEnabled}
                   subDao={subDao}
@@ -542,6 +569,7 @@ export const PositionManager: FC<PositionManagerProps> = ({
                   prepaidTxFees={prepaidTxFees}
                 />
               )}
+              {action === "undelegate" && <div>Test</div>}
               {action === "extend" && (
                 <ExtendPositionPrompt
                   position={position}
