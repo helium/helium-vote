@@ -146,6 +146,7 @@ export const UpdatePositionDelegationPrompt: FC<{
                     disabled={!isDelegated}
                     className="flex-1"
                     onClick={() => {
+                      setSelectedSubDaoPk(undefined);
                       setIsUndelegating(true);
                       setStep(step + 1);
                     }}
