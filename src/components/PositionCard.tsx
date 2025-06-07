@@ -288,6 +288,23 @@ export const PositionCard: FC<{
                   </Button>
                 </Link>
               )}
+              {(position.isProxyRenewable || position.isProxyExpired) && (
+                <div className="flex flex-col gap-1 max-md:flex-row max-md:items-center max-md:gap-2">
+                  {position.isProxyExpired && <p className="text-xs text-yellow-500">Expired</p>}
+                  {position.isProxyRenewable && <p className="text-xs text-yellow-500">Expiring soon</p>}
+                  <Link
+                    href={`${path}/${position.pubkey.toBase58()}?action=proxy`}
+                  >
+                    <Button
+                      variant="secondary"
+                      size="xxs"
+                      className="text-foreground"
+                    >
+                      Renew Proxy
+                    </Button>
+                  </Link>
+                </div>
+              )}
             </div>
           )}
           {canDelegate && (
@@ -323,6 +340,23 @@ export const PositionCard: FC<{
                 </Link>
               ) : (
                 <p className="text-sm">Undelegated</p>
+              )}
+              {(position.isDelegationRenewable || position.isDelegationExpired) && !isDecayed && (
+                <div className="flex flex-col gap-1 max-md:flex-row max-md:items-center max-md:gap-2">
+                  { position.isDelegationExpired && <p className="text-xs text-yellow-500">Expired</p>}
+                  { position.isDelegationRenewable && <p className="text-xs text-yellow-500">Expiring soon</p>}
+                  <Link
+                    href={`${path}/${position.pubkey.toBase58()}?action=delegate`}
+                  >
+                    <Button
+                      variant="secondary"
+                      size="xxs"
+                      className="text-foreground"
+                    >
+                      Renew Delegation
+                    </Button>
+                  </Link>
+                </div>
               )}
             </div>
           )}

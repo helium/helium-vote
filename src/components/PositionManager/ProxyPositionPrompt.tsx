@@ -37,6 +37,7 @@ export const ProxyPositionPrompt: FC<{
       ? ""
       : position.proxy?.nextVoter.toBase58() || ""
   );
+  const [isRenewing, setIsRenewing] = useState(false);
   const { network } = useGovernance();
 
   const today = new Date();
@@ -58,8 +59,9 @@ export const ProxyPositionPrompt: FC<{
     [selectedDays, maxDays, maxDate]
   );
 
-  const handleSubmit = async () => {
-    await onConfirm({ proxy, expirationTime, isRevoke: isProxied });
+  const handleSubmit = async (isRevoke: boolean) => {
+    setIsRenewing(!isRevoke);
+    await onConfirm({ proxy, expirationTime, isRevoke });
   };
 
   return (
@@ -70,10 +72,22 @@ export const ProxyPositionPrompt: FC<{
       <div className="flex flex-col gap-1">
         <h3>Update Proxy</h3>
         {isProxied ? (
-          <p className="text-base">
-            Your position is currently proxied to{" "}
-            {knownProxy?.name || position?.proxy?.nextVoter.toBase58()}
-          </p>
+          <>
+            <p className="text-base">
+              Your position is currently proxied to{" "}
+              {knownProxy?.name || position?.proxy?.nextVoter.toBase58()}
+            </p>
+            {position.isProxyRenewable && (
+              <p className="text-sm text-yellow-500 mt-2">
+                Your proxy assignment is expiring soon
+              </p>
+            )}
+            {position.isProxyExpired && (
+              <p className="text-sm text-red-500 mt-2">
+                Your proxy assignment has expired
+              </p>
+            )}
+          </>
         ) : (
           <>
             <p className="text-base">
@@ -101,6 +115,35 @@ export const ProxyPositionPrompt: FC<{
       </div>
       {isProxied ? (
         <div className="flex flex-col max-md:flex-grow justify-end gap-2">
+          {(position.isProxyRenewable || position.isProxyExpired) && (
+            <>
+              <ExpirationTimeSlider
+                maxDays={maxDays}
+                setSelectedDays={setSelectedDays}
+                selectedDays={selectedDays}
+                expirationTime={expirationTime}
+              />
+              <div className="flex flex-row justify-between items-center gap-2">
+                <Button
+                  className="text-foreground gap-2 flex-1"
+                  disabled={isSubmitting}
+                  onClick={() => handleSubmit(false)}
+                >
+                  {isSubmitting && isRenewing && (
+                    <Loader2 className="size-5 animate-spin" />
+                  )}
+                  {isSubmitting && isRenewing ? "Renewing" : "Renew"}
+                </Button>
+              </div>
+              <div className="relative flex py-3 items-center">
+                <div className="flex-grow border-t border-slate-500"></div>
+                <span className="flex-shrink mx-4 text-sm font-semibold text-slate-500">
+                  OR
+                </span>
+                <div className="flex-grow border-t border-slate-500"></div>
+              </div>
+            </>
+          )}
           <div className="flex flex-row justify-between items-center gap-2">
             <Button variant="secondary" className="flex-1" onClick={onCancel}>
               Cancel
@@ -109,10 +152,12 @@ export const ProxyPositionPrompt: FC<{
               variant="destructive"
               className="text-foreground gap-2 flex-1"
               disabled={isSubmitting}
-              onClick={handleSubmit}
+              onClick={() => handleSubmit(true)}
             >
-              {isSubmitting && <Loader2 className="size-5 animate-spin" />}
-              {isSubmitting ? "Revoking" : "Revoke"}
+              {isSubmitting && !isRenewing && (
+                <Loader2 className="size-5 animate-spin" />
+              )}
+              {isSubmitting && !isRenewing ? "Revoking" : "Revoke"}
             </Button>
           </div>
           <div className="flex flex-row justify-center">
@@ -138,7 +183,7 @@ export const ProxyPositionPrompt: FC<{
               <Button
                 className="text-foreground gap-2 flex-1"
                 disabled={isSubmitting}
-                onClick={handleSubmit}
+                onClick={() => handleSubmit(false)}
               >
                 {isSubmitting && <Loader2 className="size-5 animate-spin" />}
                 {isSubmitting ? "Assigning" : "Assign"}
