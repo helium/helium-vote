@@ -13,8 +13,16 @@ export const ProxyButton = React.forwardRef<
     className?: string;
     onClick?: () => void;
     isLoading?: boolean;
+    size?: "md" | "sm";
+    children?: React.ReactNode;
   }
->(({ className = "", onClick, isLoading = false }, ref) => {
+>(({
+  className = "",
+  onClick,
+  isLoading = false,
+  size = "md",
+  children = "Assign Proxy",
+}, ref) => {
   const { connected } = useWallet();
   const { loading, positions } = useGovernance();
 
@@ -26,12 +34,15 @@ export const ProxyButton = React.forwardRef<
     [positions]
   );
 
+  const sizeClass = size === "sm" ? "p-3" : "p-6 w-full";
+
   return (
     <Button
       ref={ref}
       variant="secondary"
       className={cn(
-        "text-foreground flex flex-row gap-2 items-center p-6 w-full",
+        "text-foreground flex flex-row gap-2 items-center",
+        sizeClass,
         className
       )}
       disabled={!connected || loading || !unproxiedPositions?.length}
@@ -42,7 +53,7 @@ export const ProxyButton = React.forwardRef<
       ) : (
         <RiUserSharedFill className="size-4" />
       )}
-      Assign Proxy
+      {children}
     </Button>
   );
 });

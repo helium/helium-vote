@@ -44,8 +44,8 @@ export const Header: FC<{
     </div>
     {!hideHero && (
       <ContentSection>
-        {/* <DataSplitSection /> */}
-        <div className="flex flex-row h-[342px] py-6 justify-between items-start max-md:py-12 max-md:h-auto">
+        <DataSplitSection />
+        {/* <div className="flex flex-row h-[342px] py-6 justify-between items-start max-md:py-12 max-md:h-auto">
           <div className="flex justify-center items-center">
             <div>
               <h1 className="max-md:text-5xl text-7xl">
@@ -61,14 +61,13 @@ export const Header: FC<{
           </div>
 
           <div className="size-40 max-md:hidden">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               className="max-sm:hidden"
               src="/images/hero.png"
               alt="hero-image"
             />
           </div>
-        </div>
+        </div> */}
       </ContentSection>
     )}
     {!hideNav && (
