@@ -3,7 +3,7 @@
 import { useGovernance } from "@/providers/GovernanceProvider";
 import React, { FC, useMemo } from "react";
 import { Button } from "./ui/button";
-import { FaStar } from "react-icons/fa6";
+import { FaStar, FaCircleArrowRight } from "react-icons/fa6";
 import { Loader2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import BN from "bn.js";
@@ -20,6 +20,10 @@ import {
 } from "@helium/helium-react-hooks";
 import { ContentSection } from "./ContentSection";
 import { WalletSignTransactionError } from "@solana/wallet-adapter-base";
+import { useRouter } from "next/navigation";
+import { AssignProxyModal } from "./AssignProxyModal";
+import { ProxyButton } from "./ProxyButton";
+import { useAssignProxies } from "@helium/voter-stake-registry-hooks";
 
 export const Positions: FC = () => {
   const provider = useAnchorProvider();
@@ -31,6 +35,7 @@ export const Positions: FC = () => {
     network,
   } = useGovernance();
   const isHNT = network === "hnt";
+  const router = useRouter();
 
   const sortedPositions = useMemo(
     () =>
@@ -93,6 +98,8 @@ export const Positions: FC = () => {
   const { loading: claimingAllRewards, claimAllPositionsRewards } =
     useClaimAllPositionsRewards();
 
+  const { mutateAsync: assignProxies } = useAssignProxies();
+
   const handleClaimRewards = async () => {
     if (positionsWithRewards) {
       try {
@@ -119,6 +126,17 @@ export const Positions: FC = () => {
   const isLoading = useMemo(
     () => !connecting && loadingGov,
     [connecting, loadingGov]
+  );
+
+  const unexpiredPositions = useMemo(
+    () =>
+      positions?.filter(
+        (p) =>
+          (p.lockup.kind.constant ||
+            p.lockup.endTs.gt(new BN(Date.now() / 1000))) &&
+          !p.isProxiedToMe,
+      ),
+    [positions],
   );
 
   if (isLoading) {
@@ -151,19 +169,47 @@ export const Positions: FC = () => {
           <div className="flex max-md:flex-col gap-2">
             <CreatePositionButton showText disabled={!isHNT} />
             {network === "hnt" && (
-              <Button
-                variant="default"
-                className="text-foreground flex flex-row gap-2 items-center"
-                disabled={!hasRewards || claimingAllRewards}
-                onClick={handleClaimRewards}
-              >
-                {claimingAllRewards ? (
-                  <Loader2 className="size-4 animate-spin" />
-                ) : (
-                  <FaStar className="size-4" />
+              <>
+                {Array.isArray(unProxiedPositions) && unProxiedPositions.length > 0 && (
+                  <AssignProxyModal
+                    onSubmit={async (args) => {
+                      await assignProxies({
+                        ...args,
+                        onInstructions: onInstructions(provider, {
+                          useFirstEstimateForAll: true,
+                        }),
+                      });
+                      refetchState();
+                    }}
+                  >
+                    <ProxyButton size="sm">Proxy All</ProxyButton>
+                  </AssignProxyModal>
                 )}
-                {claimingAllRewards ? "Claiming Rewards..." : "Claim Rewards"}
-              </Button>
+                <Button
+                  variant="secondary"
+                  className="text-foreground flex flex-row gap-2 items-center"
+                  disabled={!unexpiredPositions?.length}
+                  onClick={() =>
+                    router.push(`/${network}/positions/delegate-all`)
+                  }
+                >
+                  <FaCircleArrowRight className="size-4" />
+                  Delegate All
+                </Button>
+                <Button
+                  variant="default"
+                  className="text-foreground flex flex-row gap-2 items-center"
+                  disabled={!hasRewards || claimingAllRewards}
+                  onClick={handleClaimRewards}
+                >
+                  {claimingAllRewards ? (
+                    <Loader2 className="size-4 animate-spin" />
+                  ) : (
+                    <FaStar className="size-4" />
+                  )}
+                  {claimingAllRewards ? "Claiming Rewards..." : "Claim Rewards"}
+                </Button>
+              </>
             )}
           </div>
         </div>
