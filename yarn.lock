@@ -645,8 +645,10 @@
     "@solana/spl-token" "^0.3.8"
     "@solana/web3.js" "^1.91.1"
 
-"@helium/automation-hooks@^0.10.16", "@helium/automation-hooks@file:.yalc/@helium/automation-hooks":
+"@helium/automation-hooks@^0.10.16":
   version "0.10.16"
+  resolved "https://registry.yarnpkg.com/@helium/automation-hooks/-/automation-hooks-0.10.16.tgz#90bc28813346a0bf5c003e0c1025331001454acc"
+  integrity sha512-gN7MzxCnHJvsdAjd4RnlTC6h+PfKrDdeCAL8GKBy+MOzacCnlK8sjnnBHBZF3xroTxs43VKf3WzQa1NvjLje7Q==
   dependencies:
     "@coral-xyz/anchor" "^0.31.0"
     "@helium/account-fetch-cache" "^0.10.16"
@@ -932,8 +934,10 @@
     "@helium/tuktuk-idls" "^0.0.8"
     js-sha256 "^0.11.0"
 
-"@helium/voter-stake-registry-hooks@file:.yalc/@helium/voter-stake-registry-hooks":
+"@helium/voter-stake-registry-hooks@^0.10.14":
   version "0.10.16"
+  resolved "https://registry.yarnpkg.com/@helium/voter-stake-registry-hooks/-/voter-stake-registry-hooks-0.10.16.tgz#b85b99c8d9ff9df86d4e6dd7140653864196c565"
+  integrity sha512-PaAvyQENSx/MPqhAXZRFJFwyixzDrIE2wKVhpflaRYZn421Q74YOneUiStSYPhUEu6a8Nu6Ji+htpoZqmfryuA==
   dependencies:
     "@coral-xyz/anchor" "^0.31.0"
     "@helium/account-fetch-cache" "^0.10.16"
