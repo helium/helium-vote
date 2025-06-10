@@ -141,7 +141,7 @@ export const VoteOptions: FC<{
           key={r.name}
           voting={currVote === r.index && (voting || relinquishing)}
           option={r}
-          voters={voters?.[index] || []}
+          voters={voters?.[r.index] || []}
           didVote={didVote?.[r.index]}
           canVote={canVote(r.index)}
           canRelinquishVote={canRelinquishVote(r.index)}
