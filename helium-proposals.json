@@ -176,5 +176,40 @@
       { "uri": null, "name": "For Helium Release 2025-05" },
       { "uri": null, "name": "Against Helium Release 2025-05" }
     ]
+  },
+  {
+    "name": "Helium Release Proposal: 2025-06 - No Changes",
+    "uri": "https://gist.githubusercontent.com/hiptron/76100558f375603d256b3b856b6c1e3b/raw/fb3b528d6f13052c9fd137883ea82592a5ea3725/HRP-2025-06-Vote-Summary.md",
+    "maxChoicesPerVoter": 1,
+    "tags": ["Release"],
+    "choices": [
+      { "uri": null, "name": "For Helium Release 2025-06" },
+      { "uri": null, "name": "Against Helium Release 2025-06" }
+    ]
+  },
+  {
+    "name": "IoT Working Group (Odd Class) Elections - Q2 2025",
+    "uri": "https://gist.githubusercontent.com/hiptron/a7e69c20a44ced1114b51f6f2ad3dd87/raw/82cbcd3498b67a4d95d1f2d90a2676b97abb8a36/2025Q2-IoT-Election-Summary.md",
+    "maxChoicesPerVoter": 3,
+    "tags": ["working-group"],
+    "choices": [
+      { "uri": null, "name": "@Starwatcher (starwatcher6115) - Dr. Matthew Patrick" },
+      { "uri": null, "name": "@jerm (the_real_jerm) - Jeremy Cooper" },
+      { "uri": null, "name": "@Frenchman (pierre.nova) - Nova Labs" }
+    ]
+  },
+  {
+    "name": "Mobile Working Group (Odd Class) Elections - Q2 2025",
+    "uri": "https://gist.githubusercontent.com/hiptron/b4296e3d60ef8b3d8736aa7e534b5ad8/raw/0f42650dc3b7e26f13ff077d39fa717fb7aa5bd8/2025Q2-Mobile-Election-Summary.md",
+    "maxChoicesPerVoter": 5,
+    "tags": ["working-group"],
+    "choices": [
+      { "uri": null, "name": "goaltender_bobby - Charles Pidgeon" },
+      { "uri": null, "name": "@KeithR (keith_rettig) - Keith Rettig" },
+      { "uri": null, "name": "@Brainstormer" },
+      { "uri": null, "name": "@lnjenkins - Lukas Jenkins" },
+      { "uri": null, "name": "@MaknBank" },
+      { "uri": null, "name": "@Max - Gold Hawks & Associates (capc0m) - Max Gold" }
+    ]
   }
 ]

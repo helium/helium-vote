@@ -40,6 +40,7 @@ export const AssignProxyModal: React.FC<
       ) || [],
     [positions]
   );
+  
   const today = new Date();
   const augustFirst = Date.UTC(
     today.getMonth() >= 7 ? today.getFullYear() + 1 : today.getFullYear(),
