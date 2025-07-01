@@ -103,7 +103,7 @@ export const UpdatePositionDelegationPrompt: FC<{
                   ? "Update Position"
                   : isUndelegating
                   ? "Undelegate Position"
-                  : "Update Delegation"}
+                  : "Change Delegation"}
               </h3>
               <StepIndicator steps={2} currentStep={step} />
             </div>

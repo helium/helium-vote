@@ -40,10 +40,10 @@ export const AssignProxyModal: React.FC<
       ) || [],
     [positions]
   );
-  
+
   const today = new Date();
   const augustFirst = Date.UTC(
-    today.getMonth() >= 7 ? today.getFullYear() + 1 : today.getFullYear(),
+    today.getMonth() >= 6 ? today.getFullYear() + 1 : today.getFullYear(),
     7,
     1
   );
@@ -114,8 +114,8 @@ export const AssignProxyModal: React.FC<
               Assign Proxy
             </h2>
             <div className="text-white text-base font-normal">
-              Enter the amount of voting power and cycle period you’d like to
-              assign the selected voter
+              Enter the amount of voting power and cycle period you&apos;d like
+              to assign the selected voter
             </div>
           </div>
 

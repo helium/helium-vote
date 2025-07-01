@@ -109,7 +109,7 @@ export const PositionActionBoundary: FC<
                   onClick={() => setManagerAction("delegate")}
                   className="flex-1 text-foreground"
                 >
-                  Update Delegation
+                  Change Delegation
                 </Button>
                 {hasVotes && (
                   <div className="flex flex-row bg-background rounded-md flex-1">
