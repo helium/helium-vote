@@ -469,7 +469,7 @@ export const PositionManager: FC<PositionManagerProps> = ({
                     Icon={CheckCheck}
                     onClick={() => setAction("delegate")}
                   >
-                    Update Delegation
+                    Change Delegation
                   </PositionAction>
                   <PositionAction
                     active={action === "extend"}
