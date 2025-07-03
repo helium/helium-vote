@@ -173,7 +173,7 @@ export const UpdatePositionDelegationPrompt: FC<{
           {step === 2 && (
             <>
               <div className="flex flex-row">
-                {hasSelectedSubDao && (
+                {hasSelectedSubDao && !isUndelegating && (
                   <div className="flex flex-row flex-1 relative">
                     {delegatedSubDaoMetadata && (
                       <>
@@ -207,7 +207,7 @@ export const UpdatePositionDelegationPrompt: FC<{
                     />
                   </div>
                 )}
-                {!hasSelectedSubDao && (
+                {(!hasSelectedSubDao || isUndelegating) && (
                   <ConfirmationItem
                     className="rounded-md bg-gradient-to-t from-background to-background/30"
                     img={{
