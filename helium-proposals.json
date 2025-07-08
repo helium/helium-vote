@@ -211,5 +211,15 @@
       { "uri": null, "name": "@MaknBank" },
       { "uri": null, "name": "@Max - Gold Hawks & Associates (capc0m) - Max Gold" }
     ]
+  },
+  {
+    "name": "Helium Release Proposal: 2025-07 - No Changes",
+    "uri": "https://gist.githubusercontent.com/hiptron/c19c11292d4672ad5c145db778a08462/raw/bf9b6b242b0c0346f6cb0ab13b1968099e74ae55/HRP-2025-07-Vote-Summary.md",
+    "maxChoicesPerVoter": 1,
+    "tags": ["Release"],
+    "choices": [
+      { "uri": null, "name": "For Helium Release 2025-07" },
+      { "uri": null, "name": "Against Helium Release 2025-07" }
+    ]
   }
 ]
