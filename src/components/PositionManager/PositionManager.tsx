@@ -178,16 +178,20 @@ export const PositionManager: FC<PositionManagerProps> = ({
   const { result: subDaos } = useSubDaos();
   const [automationEnabled, setAutomationEnabled] = useState(true);
   const [subDao, setSubDao] = useState<SubDaoWithMeta | null>(
-    subDaos?.find((sd) => sd.pubkey.equals(MOBILE_SUB_DAO_KEY)) || null
+    subDaos?.find((sd) =>
+      sd.pubkey.equals(position?.delegatedSubDao || MOBILE_SUB_DAO_KEY)
+    ) || null
   );
 
   useEffect(() => {
     if (subDaos && !subDao) {
       setSubDao(
-        subDaos.find((sd) => sd.pubkey.equals(MOBILE_SUB_DAO_KEY)) || null
+        subDaos.find((sd) =>
+          sd.pubkey.equals(position?.delegatedSubDao || MOBILE_SUB_DAO_KEY)
+        ) || null
       );
     }
-  }, [subDaos, subDao]);
+  }, [subDaos, subDao, position?.delegatedSubDao]);
 
   const {
     loading: isDelegating,
