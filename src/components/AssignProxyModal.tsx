@@ -19,11 +19,12 @@ interface AssignProxyModalProps {
     expirationTime: BN;
   }) => Promise<void>;
   wallet?: PublicKey;
+  includeProxied?: boolean;
 }
 
 export const AssignProxyModal: React.FC<
   React.PropsWithChildren<AssignProxyModalProps>
-> = ({ onSubmit, wallet, children }) => {
+> = ({ onSubmit, wallet, children, includeProxied }) => {
   const [open, setOpen] = useState(false);
   const { network: networkDefault } = useGovernance();
   const [network, setNetwork] = useState(networkDefault);
@@ -33,12 +34,15 @@ export const AssignProxyModal: React.FC<
     new Set<string>()
   );
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const unproxiedPositions = useMemo(
+  const selectablePositions = useMemo(
     () =>
       positions?.filter(
-        (p) => !p.proxy || p.proxy.nextVoter.equals(PublicKey.default)
+        (p) =>
+          includeProxied ||
+          !p.proxy ||
+          p.proxy.nextVoter.equals(PublicKey.default)
       ) || [],
-    [positions]
+    [positions, includeProxied]
   );
 
   const today = new Date();
@@ -49,7 +53,7 @@ export const AssignProxyModal: React.FC<
   );
   const maxDate = Math.min(
     augustFirst - 1000,
-    ...unproxiedPositions
+    ...selectablePositions
       .filter((p) => selectedPositions.has(p.pubkey.toBase58()) && p.proxy)
       // @ts-ignore
       .map((p) => p.proxy.expirationTime.toNumber() * 1000)
@@ -102,7 +106,7 @@ export const AssignProxyModal: React.FC<
     setOpen(!open);
   };
 
-  const selectedAll = unproxiedPositions.length === selectedPositions.size;
+  const selectedAll = selectablePositions.length === selectedPositions.size;
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
@@ -149,7 +153,7 @@ export const AssignProxyModal: React.FC<
                       } else {
                         setSelectedPositions(
                           new Set(
-                            unproxiedPositions.map((p) => p.pubkey.toBase58())
+                            selectablePositions.map((p) => p.pubkey.toBase58())
                           )
                         );
                       }
@@ -163,7 +167,7 @@ export const AssignProxyModal: React.FC<
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  {unproxiedPositions?.map((position) => {
+                  {selectablePositions?.map((position) => {
                     return (
                       <PositionItem
                         key={position.pubkey.toBase58()}

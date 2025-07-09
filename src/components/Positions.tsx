@@ -170,21 +170,23 @@ export const Positions: FC = () => {
             <CreatePositionButton showText disabled={!isHNT} />
             {network === "hnt" && (
               <>
-                {Array.isArray(unProxiedPositions) && unProxiedPositions.length > 0 && (
-                  <AssignProxyModal
-                    onSubmit={async (args) => {
-                      await assignProxies({
-                        ...args,
-                        onInstructions: onInstructions(provider, {
-                          useFirstEstimateForAll: true,
-                        }),
-                      });
-                      refetchState();
-                    }}
-                  >
-                    <ProxyButton size="sm">Proxy All</ProxyButton>
-                  </AssignProxyModal>
-                )}
+                {Array.isArray(sortedPositions) &&
+                  sortedPositions.length > 0 && (
+                    <AssignProxyModal
+                      includeProxied
+                      onSubmit={async (args) => {
+                        await assignProxies({
+                          ...args,
+                          onInstructions: onInstructions(provider, {
+                            useFirstEstimateForAll: true,
+                          }),
+                        });
+                        refetchState();
+                      }}
+                    >
+                      <ProxyButton includeProxied size="sm">Proxy All</ProxyButton>
+                    </AssignProxyModal>
+                  )}
                 <Button
                   variant="secondary"
                   className="text-foreground flex flex-row gap-2 items-center"

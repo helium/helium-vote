@@ -15,6 +15,7 @@ export const ProxyButton = React.forwardRef<
     isLoading?: boolean;
     size?: "md" | "sm";
     children?: React.ReactNode;
+    includeProxied?: boolean;
   }
 >(({
   className = "",
@@ -22,16 +23,20 @@ export const ProxyButton = React.forwardRef<
   isLoading = false,
   size = "md",
   children = "Assign Proxy",
+  includeProxied = false,
 }, ref) => {
   const { connected } = useWallet();
   const { loading, positions } = useGovernance();
 
-  const unproxiedPositions = useMemo(
+  const selectablePositions = useMemo(
     () =>
       positions?.filter(
-        (p) => !p.proxy || p.proxy.nextVoter.equals(PublicKey.default)
+        (p) =>
+          includeProxied ||
+          !p.proxy ||
+          p.proxy.nextVoter.equals(PublicKey.default)
       ),
-    [positions]
+    [positions, includeProxied]
   );
 
   const sizeClass = size === "sm" ? "p-3" : "p-6 w-full";
@@ -45,7 +50,7 @@ export const ProxyButton = React.forwardRef<
         sizeClass,
         className
       )}
-      disabled={!connected || loading || !unproxiedPositions?.length}
+      disabled={!connected || loading || !selectablePositions?.length}
       onClick={onClick}
     >
       {isLoading ? (
