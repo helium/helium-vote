@@ -51,12 +51,22 @@ export const AssignProxyModal: React.FC<
     7,
     1
   );
-  const maxDate = Math.min(
-    augustFirst - 1000,
-    ...selectablePositions
-      .filter((p) => selectedPositions.has(p.pubkey.toBase58()) && p.proxy)
-      // @ts-ignore
-      .map((p) => p.proxy.expirationTime.toNumber() * 1000)
+  const maxDate = useMemo(
+    () =>
+      Math.min(
+        augustFirst - 1000,
+        ...selectablePositions
+          .filter(
+            (p) =>
+              selectedPositions.has(p.pubkey.toBase58()) &&
+              p.proxy &&
+              // If there's recursive proxying going on, we can only proxy as far out as the first proxy
+              p.proxy.index > 0
+          )
+          // @ts-ignore
+          .map((p) => p.proxy.expirationTime.toNumber() * 1000)
+      ),
+    [augustFirst, selectablePositions, selectedPositions]
   );
   const maxDays = Math.floor(
     (maxDate - today.getTime()) / (1000 * 60 * 60 * 24)
