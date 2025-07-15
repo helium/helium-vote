@@ -2,10 +2,12 @@
 
 import { EPOCH_LENGTH, onInstructions, secsToDays } from "@/lib/utils";
 import { useGovernance } from "@/providers/GovernanceProvider";
+import { TASK_QUEUE, useDelegationClaimBot } from "@helium/automation-hooks";
 import {
   useAnchorProvider,
   useSolanaUnixNow,
 } from "@helium/helium-react-hooks";
+import { delegatedPositionKey } from "@helium/helium-sub-daos-sdk";
 import { RiUserSharedFill } from "react-icons/ri";
 import { toNumber } from "@helium/spl-utils";
 import {
@@ -53,6 +55,7 @@ import { UpdatePositionDelegationPrompt } from "./UpdatePositionDelegationPrompt
 import { ProxyPositionPrompt } from "./ProxyPositionPrompt";
 import { PublicKey } from "@solana/web3.js";
 import { MOBILE_SUB_DAO_KEY } from "@/lib/constants";
+import { delegationClaimBotKey } from "@helium/hpl-crons-sdk";
 
 export type PositionAction =
   | "flip"
@@ -176,7 +179,24 @@ export const PositionManager: FC<PositionManagerProps> = ({
   const { loading: isClaiming, claimPositionRewards } =
     useClaimPositionRewards();
   const { result: subDaos } = useSubDaos();
+  const delegationClaimBotK = useMemo(
+    () =>
+      delegationClaimBotKey(
+        TASK_QUEUE,
+        delegatedPositionKey(position.pubkey)[0]
+      )[0],
+    [position.pubkey]
+  );
+  const { info: delegationClaimBot } =
+    useDelegationClaimBot(delegationClaimBotK);
   const [automationEnabled, setAutomationEnabled] = useState(true);
+  useEffect(() => {
+    if (delegationClaimBot) {
+      setAutomationEnabled(true);
+    } else {
+      setAutomationEnabled(false);
+    }
+  }, [delegationClaimBot]);
   const [subDao, setSubDao] = useState<SubDaoWithMeta | null>(
     subDaos?.find((sd) =>
       sd.pubkey.equals(position?.delegatedSubDao || MOBILE_SUB_DAO_KEY)
