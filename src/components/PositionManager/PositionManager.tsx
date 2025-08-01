@@ -359,6 +359,7 @@ export const PositionManager: FC<PositionManagerProps> = ({
       toast("Delegation updated");
       reset();
     } catch (e: any) {
+      console.error(e)
       if (!(e instanceof WalletSignTransactionError)) {
         toast(e.message || "Delegation failed, please try again");
       }
