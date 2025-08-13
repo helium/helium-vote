@@ -1,37 +1,38 @@
 "use client";
 
-import { useGovernance } from "@/providers/GovernanceProvider";
-import { useRouter, useParams } from "next/navigation";
-import { useMemo, useState } from "react";
+import { ContentSection } from "@/components/ContentSection";
+import { Header } from "@/components/Header";
 import { DelegateAllPositionsPrompt } from "@/components/PositionManager/DelegateAllPositionsPrompt";
-import {
-  useDelegatePositions,
-  SubDaoWithMeta,
-} from "@helium/voter-stake-registry-hooks";
-import BN from "bn.js";
+import { IOT_SUB_DAO_KEY, MOBILE_SUB_DAO_KEY } from "@/lib/constants";
 import { onInstructions } from "@/lib/utils";
+import { useGovernance } from "@/providers/GovernanceProvider";
 import {
   useAnchorProvider,
   useSolanaUnixNow,
 } from "@helium/helium-react-hooks";
-import { Header } from "@/components/Header";
-import { ContentSection } from "@/components/ContentSection";
-import { sub } from "date-fns";
-import { MOBILE_SUB_DAO_KEY } from "@/lib/constants";
-import { toast } from "sonner";
+import {
+  SubDaoWithMeta,
+  useDelegatePositions,
+} from "@helium/voter-stake-registry-hooks";
 import { WalletSignTransactionError } from "@solana/wallet-adapter-base";
+import BN from "bn.js";
+import { useParams, useRouter } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
+import { toast } from "sonner";
 
 export default function DelegateAllPositionsPage() {
   const router = useRouter();
   const { network } = useParams() as { network: string };
   const { positions, subDaos } = useGovernance();
-  const [subDao, setSubDao] = useState<SubDaoWithMeta | null>(
-    subDaos?.find((sd) => sd.pubkey.equals(MOBILE_SUB_DAO_KEY)) || null
-  );
+  const [subDao, setSubDao] = useState<SubDaoWithMeta | null>(null);
   const [automationEnabled, setAutomationEnabled] = useState(true);
   const provider = useAnchorProvider();
 
   const now = useSolanaUnixNow();
+  const delegatedPositions = useMemo(
+    () => positions?.filter((p) => p.isDelegated) || [],
+    [positions]
+  );
   const unexpiredPositions = useMemo(
     () =>
       positions?.filter(
@@ -54,6 +55,44 @@ export default function DelegateAllPositionsPage() {
     positions: unexpiredPositions,
     subDao: subDao || undefined,
   });
+
+  useEffect(() => {
+    if (!subDaos || !delegatedPositions || subDao) return;
+    const mobileSubDao = subDaos.find((sd) =>
+      sd.pubkey.equals(MOBILE_SUB_DAO_KEY)
+    );
+    const iotSubDao = subDaos.find((sd) => sd.pubkey.equals(IOT_SUB_DAO_KEY));
+    if (!mobileSubDao) return;
+
+    let mobileDelegations = 0;
+    let iotDelegations = 0;
+    let totalDelegated = 0;
+
+    delegatedPositions?.forEach((position) => {
+      if (position.isDelegated && position.delegatedSubDao) {
+        totalDelegated += 1;
+        if (position.delegatedSubDao.equals(MOBILE_SUB_DAO_KEY)) {
+          mobileDelegations += 1;
+        } else if (position.delegatedSubDao.equals(IOT_SUB_DAO_KEY)) {
+          iotDelegations += 1;
+        }
+      }
+    });
+
+    if (totalDelegated === 0) {
+      setSubDao(mobileSubDao);
+    } else if (mobileDelegations === totalDelegated) {
+      setSubDao(mobileSubDao);
+    } else if (iotDelegations === totalDelegated && iotSubDao) {
+      setSubDao(iotSubDao);
+    } else if (mobileDelegations >= iotDelegations) {
+      setSubDao(mobileSubDao);
+    } else if (iotDelegations > mobileDelegations && iotSubDao) {
+      setSubDao(iotSubDao);
+    } else {
+      setSubDao(mobileSubDao);
+    }
+  }, [subDaos, delegatedPositions, subDao]);
 
   // Redirect if no unexpired positions
   if (positions && unexpiredPositions.length === 0) {
