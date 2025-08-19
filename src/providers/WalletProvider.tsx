@@ -9,7 +9,11 @@ import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
 import React, { FC, useMemo } from "react";
 import { clusterApiUrl } from "@solana/web3.js";
 import { toast } from "sonner";
-import { CoinbaseWalletAdapter, SolflareWalletAdapter } from "@solana/wallet-adapter-wallets";
+import {
+  CoinbaseWalletAdapter,
+  SolflareWalletAdapter,
+  WalletConnectWalletAdapter,
+} from "@solana/wallet-adapter-wallets";
 
 // Default styles that can be overridden by your app
 require("@solana/wallet-adapter-react-ui/styles.css");
@@ -28,6 +32,12 @@ export const WalletProvider: FC<React.PropsWithChildren> = ({ children }) => {
       // Ledger and backpack use wallet standard
       new SolflareWalletAdapter(),
       new CoinbaseWalletAdapter(),
+      new WalletConnectWalletAdapter({
+        network: WalletAdapterNetwork.Mainnet,
+        options: {
+          projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID,
+        },
+      }),
     ],
     []
   );
