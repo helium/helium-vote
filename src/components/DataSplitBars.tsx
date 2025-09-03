@@ -53,7 +53,7 @@ export const DataSplitBars = () => {
   return (
     <div className="flex flex-col gap-4 mb-4">
       <SplitBar
-        title="Data Usage Revenue (30 days)"
+        title="Network Revenue (30 days)"
         leftValue={`$${humanReadable(
           new BN(mobileDataUsageRev.toFixed(0)),
           0
