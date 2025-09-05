@@ -231,5 +231,51 @@
       { "uri": null, "name": "For Helium Release 2025-08" },
       { "uri": null, "name": "Against Helium Release 2025-08" }
     ]
+  },
+  {
+    "name": "IoT Working Group (Even Class) Elections - Q3 2025",
+    "uri": "https://gist.githubusercontent.com/hiptron/dc92160804629736b2c5e685b8cddc2f/raw/b666b41cb15049bbdee02b8fbfe466f2a72c3689/2025Q3-IOT-Election-Summary.md",
+    "maxChoicesPerVoter": 5,
+    "tags": ["working-group"],
+    "choices": [
+      { "uri": null, "name": "@BFGNeil - Trackpac.io" },
+      { "uri": null, "name": "@joey (joeyhiller) - Helium" },
+      { "uri": null, "name": "@Mario Albuja (marioalbuja_97475) - Mario Albuja Sáenz" },
+      { "uri": null, "name": "@Leo (leoshiroe) - WeatherXM" },
+      { "uri": null, "name": "@tteague" }
+    ]
+  },
+  {
+    "name": "Mobile Working Group (Even Class) Elections - Q3 2025",
+    "uri": "https://gist.githubusercontent.com/hiptron/f285256becb44ce900ad04bebc42d69e/raw/8e4e3c6a9d21cd1454f10e29951a63eb1a104fe2/2025Q3-MOBILE-Election-Summary.md",
+    "maxChoicesPerVoter": 5,
+    "tags": ["working-group"],
+    "choices": [
+      { "uri": null, "name": "@ferebee - Chris Ferebee" },
+      { "uri": null, "name": "@jhella - Josh Heller - Longfi" },
+      { "uri": null, "name": "@JB (jhbr821) - Jacob Brady" },
+      { "uri": null, "name": "@Fizzy (Fizzy99)" },
+      { "uri": null, "name": "@Jay M. (jaym2518) - Jeremy Mahrle" }
+    ]
+  },
+  {
+    "name": "HIP 147: Mobile Data Eats First",
+    "uri": "https://gist.githubusercontent.com/hiptron/c8239eb03009c3b1ce55369ebf14c33d/raw/8c742a7facecb68aa9287ef5590ec3cd69ed2e36/HIP-147-Vote-Summary.md",
+    "maxChoicesPerVoter": 1,
+    "tags": ["HIP", "Economic", "Technical"],
+    "choices": [
+      { "uri": null, "name": "For HIP 147" },
+      { "uri": null, "name": "Against HIP 147" }
+    ]
+  },
+  {
+    "name": "Helium Release Proposal: 2025-09",
+    "uri": "https://gist.githubusercontent.com/hiptron/5b2b99e5b508759f942fa2f1d0445652/raw/b91095df2585242ae18a82c232d6af02caea87a6/HRP-2025-09-Vote-Summary.md",
+    "maxChoicesPerVoter": 1,
+    "tags": ["Release"],
+    "choices": [
+      { "uri": null, "name": "For Helium Release 2025-09" },
+      { "uri": null, "name": "Against Helium Release 2025-09" }
+    ]
   }
 ]
