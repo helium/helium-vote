@@ -277,5 +277,25 @@
       { "uri": null, "name": "For Helium Release 2025-09" },
       { "uri": null, "name": "Against Helium Release 2025-09" }
     ]
+  },
+  {
+    "name": "HIP 148: Reallocate Mobile Mapping Rewards",
+    "uri": "https://gist.githubusercontent.com/hiptron/8a5a047253f1e85fb69c38ddfd5c155c/raw/f58b22f0d095e911773af47ca44b4cd1c2664a55/HIP-148-Vote-Summary.md",
+    "maxChoicesPerVoter": 1,
+    "tags": ["HIP", "Economic", "Technical"],
+    "choices": [
+      { "uri": null, "name": "For HIP 148" },
+      { "uri": null, "name": "Against HIP 148" }
+    ]
+  },
+  {
+    "name": "Helium Release Proposal: 2025-10",
+    "uri": "https://gist.githubusercontent.com/hiptron/437144060433694a343e2e9329009c09/raw/b67ac9a4054df2021c0fcd0e802e10337ca66fe4/HRP-2025-10-Vote-Summary.md",
+    "maxChoicesPerVoter": 1,
+    "tags": ["Release"],
+    "choices": [
+      { "uri": null, "name": "For Helium Release 2025-10" },
+      { "uri": null, "name": "Against Helium Release 2025-10" }
+    ]
   }
 ]
