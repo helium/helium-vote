@@ -27,11 +27,14 @@ import { FaChevronDown } from "react-icons/fa6";
 import classNames from "classnames";
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
+import { useGovernance } from "@/providers/GovernanceProvider";
+
 
 export const VoteBreakdown: FC<{
   proposalKey: PublicKey;
 }> = ({ proposalKey }) => {
   const { voteService } = useHeliumVsrState();
+  const { network } = useGovernance();
   const [displayCount, setDisplayCount] = useState(6);
   const { data: votes, isLoading: loadingVotes } = useQuery(
     votesForProposalQuery({
@@ -65,13 +68,14 @@ export const VoteBreakdown: FC<{
               voter: vote.voter,
               choices: [],
               totalWeight: new BN(0),
+              proxyName: (vote as any).proxyName,
             };
           }
 
           acc[key].choices.push(vote.choiceName);
           acc[key].totalWeight = acc[key].totalWeight.add(new BN(vote.weight));
           return acc;
-        }, {} as Record<string, { voter: string; choices: string[]; totalWeight: BN }>)
+        }, {} as Record<string, { voter: string; choices: string[]; totalWeight: BN; proxyName?: string }>)
       );
 
       const sortedMarkers = grouped.sort((a, b) =>
@@ -84,7 +88,7 @@ export const VoteBreakdown: FC<{
 
   const csvData = useMemo(() => {
     const rows: string[][] = [];
-    rows.push(["Owner", "Choices", "Vote Power", "Percentage"]);
+    rows.push(["Owner", "Choices", "Vote Power", "Percentage", "Proxy Name"]);
 
     (groupedSortedVotes || []).forEach((vote) => {
       const owner = vote.voter;
@@ -97,11 +101,12 @@ export const VoteBreakdown: FC<{
         .toNumber()
         .toFixed(2);
 
-      rows.push([owner, choices, voteWeight || "", percentage]);
+      // @ts-ignore
+      rows.push([owner, choices, voteWeight || "", percentage, vote.proxyName]);
     });
 
     const csvContent = rows
-      .map((row) => row.map((r) => `"${r.toString()}"`).join(","))
+      .map((row) => row.map((r) => `"${r?.toString()}"`).join(","))
       .join("\n");
     return csvContent;
   }, [groupedSortedVotes, decimals, totalVotes]);
@@ -166,8 +171,11 @@ export const VoteBreakdown: FC<{
             <TableHead className="bg-slate-900 text-muted-foreground">
               VOTE POWER
             </TableHead>
-            <TableHead className="bg-slate-900 rounded-tr-md text-muted-foreground">
+            <TableHead className="bg-slate-900 text-muted-foreground">
               PERCENTAGE
+            </TableHead>
+            <TableHead className="bg-slate-900 rounded-tr-md text-muted-foreground">
+              PROXY NAME
             </TableHead>
           </TableRow>
         </TableHeader>
@@ -203,6 +211,20 @@ export const VoteBreakdown: FC<{
                     .toNumber()
                     .toFixed(2)}
                   %
+                </TableCell>
+                <TableCell>
+                  {/* @ts-ignore */}
+                  {vote.proxyName ? (
+                    <Link
+                      className="text-success-foreground hover:underline"
+                      href={`/${network}/proxies/${vote.voter}`}
+                    >
+                      {/* @ts-ignore */}
+                      {vote.proxyName}
+                    </Link>
+                  ) : (
+                    <span className="text-muted-foreground">-</span>
+                  )}
                 </TableCell>
               </TableRow>
             ))}
