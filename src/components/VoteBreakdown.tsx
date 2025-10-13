@@ -68,7 +68,7 @@ export const VoteBreakdown: FC<{
               voter: vote.voter,
               choices: [],
               totalWeight: new BN(0),
-              proxyName: (vote as any).proxyName,
+              proxyName: vote.proxyName,
             };
           }
 
@@ -101,8 +101,7 @@ export const VoteBreakdown: FC<{
         .toNumber()
         .toFixed(2);
 
-      // @ts-ignore
-      rows.push([owner, choices, voteWeight || "", percentage, vote.proxyName]);
+      rows.push([owner, choices, voteWeight || "", percentage, vote.proxyName || ""]);
     });
 
     const csvContent = rows
@@ -213,13 +212,11 @@ export const VoteBreakdown: FC<{
                   %
                 </TableCell>
                 <TableCell>
-                  {/* @ts-ignore */}
                   {vote.proxyName ? (
                     <Link
                       className="text-success-foreground hover:underline"
                       href={`/${network}/proxies/${vote.voter}`}
                     >
-                      {/* @ts-ignore */}
                       {vote.proxyName}
                     </Link>
                   ) : (
