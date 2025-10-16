@@ -1,11 +1,11 @@
 import * as anchor from "@coral-xyz/anchor";
 import { init } from "@helium/proposal-sdk";
+import { init as initState } from "@helium/state-controller-sdk";
+import { PublicKey } from "@solana/web3.js";
+import Squads from "@sqds/sdk";
 import os from "os";
 import yargs from "yargs/yargs";
-import { init as initState } from "@helium/state-controller-sdk";
-import Squads from "@sqds/sdk";
-import { PublicKey } from "@solana/web3.js";
-import { loadKeypair, sendInstructionsOrSquads } from "./utils";
+import { loadKeypair, sendInstructionsOrSquadsV4 } from "./utils";
 
 export async function run(args: any = process.argv) {
   const yarg = yargs(args).options({
@@ -67,13 +67,10 @@ export async function run(args: any = process.argv) {
     })
     .instruction();
 
-  await sendInstructionsOrSquads({
+  await sendInstructionsOrSquadsV4({
     provider,
     instructions: [instruction],
-    executeTransaction: false,
-    squads,
     multisig: argv.multisig ? new PublicKey(argv.multisig) : undefined,
-    authorityIndex: argv.authorityIndex,
     signers: [],
   });
 
