@@ -1,29 +1,29 @@
 import * as anchor from "@coral-xyz/anchor";
-import {
-  init as initOrg,
-  organizationKey,
-  proposalKey,
-} from "@helium/organization-sdk";
-import os from "os";
-import yargs from "yargs/yargs";
-import { init as initState } from "@helium/state-controller-sdk";
-import Squads from "@sqds/sdk";
-import {
-  PublicKey,
-  SystemProgram,
-  TransactionInstruction,
-} from "@solana/web3.js";
-import { loadKeypair, sendInstructionsOrSquads } from "./utils";
-import fs from "fs";
-import { init as initTuktuk, taskKey, nextAvailableTaskIds } from "@helium/tuktuk-sdk";
+import { BN } from "@coral-xyz/anchor";
+import { daoKey, init as initHsd } from "@helium/helium-sub-daos-sdk";
 import {
   TASK_QUEUE_ID,
   init as initHplCrons,
   queueAuthorityKey,
 } from "@helium/hpl-crons-sdk";
-import { init as initHsd, daoKey } from "@helium/helium-sub-daos-sdk";
+import {
+  init as initOrg,
+  organizationKey,
+  proposalKey,
+} from "@helium/organization-sdk";
 import { HNT_MINT } from "@helium/spl-utils";
-import { BN } from "@coral-xyz/anchor";
+import { init as initState } from "@helium/state-controller-sdk";
+import { init as initTuktuk, nextAvailableTaskIds, taskKey } from "@helium/tuktuk-sdk";
+import {
+  PublicKey,
+  SystemProgram,
+  TransactionInstruction,
+} from "@solana/web3.js";
+import Squads from "@sqds/sdk";
+import fs from "fs";
+import os from "os";
+import yargs from "yargs/yargs";
+import { loadKeypair, sendInstructionsOrSquadsV4 } from "./utils";
 
 interface Choice {
   uri: string;
@@ -198,13 +198,10 @@ export async function run(args: any = process.argv) {
     i++;
   }
 
-  await sendInstructionsOrSquads({
+  await sendInstructionsOrSquadsV4({
     provider,
     instructions,
-    executeTransaction: false,
-    squads,
     multisig: argv.multisig ? new PublicKey(argv.multisig) : undefined,
-    authorityIndex: argv.authorityIndex,
     signers: [],
   });
 

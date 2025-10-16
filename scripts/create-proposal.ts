@@ -1,19 +1,19 @@
 import * as anchor from "@coral-xyz/anchor";
-import { init as initOrg, organizationKey } from "@helium/organization-sdk";
-import os from "os";
-import yargs from "yargs/yargs";
-import { init as initState } from "@helium/state-controller-sdk";
-import Squads from "@sqds/sdk";
-import { PublicKey, SystemProgram } from "@solana/web3.js";
-import { loadKeypair, sendInstructionsOrSquads } from "./utils";
-import { init as initTuktuk, taskKey, nextAvailableTaskIds } from "@helium/tuktuk-sdk";
-import { init as initHsd, daoKey } from "@helium/helium-sub-daos-sdk";
+import { daoKey, init as initHsd } from "@helium/helium-sub-daos-sdk";
 import {
+  init as initHplCrons,
   queueAuthorityKey,
   TASK_QUEUE_ID,
 } from "@helium/hpl-crons-sdk";
-import { init as initHplCrons } from "@helium/hpl-crons-sdk";
+import { init as initOrg, organizationKey } from "@helium/organization-sdk";
 import { HNT_MINT } from "@helium/spl-utils";
+import { init as initState } from "@helium/state-controller-sdk";
+import { init as initTuktuk, nextAvailableTaskIds, taskKey } from "@helium/tuktuk-sdk";
+import { PublicKey, SystemProgram } from "@solana/web3.js";
+import Squads from "@sqds/sdk";
+import os from "os";
+import yargs from "yargs/yargs";
+import { loadKeypair, sendInstructionsOrSquadsV4 } from "./utils";
 
 export async function run(args: any = process.argv) {
   const yarg = yargs(args).options({
@@ -172,13 +172,10 @@ export async function run(args: any = process.argv) {
     })
     .instruction();
 
-  await sendInstructionsOrSquads({
+  await sendInstructionsOrSquadsV4({
     provider,
     instructions: [instruction, setState, resolveIx, addRecentProposalToDaoIx],
-    executeTransaction: false,
-    squads,
     multisig: argv.multisig ? new PublicKey(argv.multisig) : undefined,
-    authorityIndex: argv.authorityIndex,
     signers: [],
   });
 

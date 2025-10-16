@@ -1,14 +1,14 @@
 import * as anchor from "@coral-xyz/anchor";
 import { init as initOrg } from "@helium/organization-sdk";
 import { init as initProp } from "@helium/proposal-sdk";
+import { sendInstructions, withPriorityFees } from "@helium/spl-utils";
 import { init as initState, settings } from "@helium/state-controller-sdk";
 import { registrarKey } from "@helium/voter-stake-registry-sdk";
 import { Connection, PublicKey } from "@solana/web3.js";
+import Squads from "@sqds/sdk";
 import os from "os";
 import yargs from "yargs";
-import Squads from "@sqds/sdk";
-import { loadKeypair, sendInstructionsOrSquads } from "./utils";
-import { sendInstructions, withPriorityFees } from "@helium/spl-utils";
+import { loadKeypair, sendInstructionsOrSquadsV4 } from "./utils";
 
 export async function run(args: any = process.argv) {
   const yarg = yargs(args).options({
@@ -183,13 +183,10 @@ export async function run(args: any = process.argv) {
         .accountsPartial({ organization, authority: organizationAcc.authority })
         .instruction();
 
-      await sendInstructionsOrSquads({
+      await sendInstructionsOrSquadsV4({
         provider,
         instructions: [instruction],
-        executeTransaction: false,
-        squads,
         multisig: argv.multisig ? new PublicKey(argv.multisig) : undefined,
-        authorityIndex: argv.authorityIndex,
         signers: [],
       });
     }
