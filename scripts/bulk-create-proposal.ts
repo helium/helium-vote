@@ -19,7 +19,7 @@ import {
   SystemProgram,
   TransactionInstruction,
 } from "@solana/web3.js";
-import Squads from "@sqds/sdk";
+import * as multisig from "@sqds/multisig";
 import fs from "fs";
 import os from "os";
 import yargs from "yargs/yargs";
@@ -86,15 +86,15 @@ export async function run(args: any = process.argv) {
   const hsdProgram = await initHsd(provider);
   const dao = daoKey(HNT_MINT)[0];
 
-  const squads = Squads.endpoint(process.env.ANCHOR_PROVIDER_URL, wallet, {
-    commitmentOrConfig: "finalized",
-  });
   let authority = provider.wallet.publicKey;
-  const multisig = argv.multisig ? new PublicKey(argv.multisig) : null;
-  if (multisig) {
-    authority = squads.getAuthorityPDA(multisig, argv.authorityIndex);
+  let multisigPda = argv.multisig ? new PublicKey(argv.multisig) : null;
+  if (multisigPda) {
+    const [vaultPda] = multisig.getVaultPda({
+      multisigPda,
+      index: 0,
+    });
+    authority = vaultPda;
   }
-
   const fileData = fs.readFileSync(argv.file, "utf8");
   const proposals: Proposal[] = JSON.parse(fileData);
 
