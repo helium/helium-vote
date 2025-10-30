@@ -5,7 +5,7 @@ import { sendInstructions, withPriorityFees } from "@helium/spl-utils";
 import { init as initState, settings } from "@helium/state-controller-sdk";
 import { registrarKey } from "@helium/voter-stake-registry-sdk";
 import { Connection, PublicKey } from "@solana/web3.js";
-import Squads from "@sqds/sdk";
+import * as multisig from "@sqds/multisig";
 import os from "os";
 import yargs from "yargs";
 import { loadKeypair, sendInstructionsOrSquadsV4 } from "./utils";
@@ -137,15 +137,14 @@ export async function run(args: any = process.argv) {
     );
   }
 
-  const squads = Squads.endpoint(process.env.ANCHOR_PROVIDER_URL, wallet, {
-    commitmentOrConfig: "finalized",
-  });
-  let authority = argv.authority
-    ? new PublicKey(argv.authority)
-    : provider.wallet.publicKey;
-  const multisig = argv.multisig ? new PublicKey(argv.multisig) : null;
-  if (multisig) {
-    authority = squads.getAuthorityPDA(multisig, argv.authorityIndex);
+  let authority = provider.wallet.publicKey;
+  let multisigPda = argv.multisig ? new PublicKey(argv.multisig) : null;
+  if (multisigPda) {
+    const [vaultPda] = multisig.getVaultPda({
+      multisigPda,
+      index: 0,
+    });
+    authority = vaultPda;
   }
 
   const initOrganization = orgProgram.methods.initializeOrganizationV0({

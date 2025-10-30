@@ -2,7 +2,7 @@ import * as anchor from "@coral-xyz/anchor";
 import { init } from "@helium/proposal-sdk";
 import { init as initState } from "@helium/state-controller-sdk";
 import { PublicKey } from "@solana/web3.js";
-import Squads from "@sqds/sdk";
+import * as multisig from "@sqds/multisig";
 import os from "os";
 import yargs from "yargs/yargs";
 import { loadKeypair, sendInstructionsOrSquadsV4 } from "./utils";
@@ -46,15 +46,15 @@ export async function run(args: any = process.argv) {
   const stateProgram = await initState(provider);
   const proposalProgram = await init(provider);
 
-  const squads = Squads.endpoint(process.env.ANCHOR_PROVIDER_URL, wallet, {
-    commitmentOrConfig: "finalized",
-  });
   let authority = provider.wallet.publicKey;
-  const multisig = argv.multisig ? new PublicKey(argv.multisig) : null;
-  if (multisig) {
-    authority = squads.getAuthorityPDA(multisig, argv.authorityIndex);
+  let multisigPda = argv.multisig ? new PublicKey(argv.multisig) : null;
+  if (multisigPda) {
+    const [vaultPda] = multisig.getVaultPda({
+      multisigPda,
+      index: 0,
+    });
+    authority = vaultPda;
   }
-
   const proposal = new PublicKey(argv.proposal);
   const owner = (await proposalProgram.account.proposalV0.fetch(proposal)).owner;
   const instruction = await stateProgram.methods

@@ -10,7 +10,7 @@ import { HNT_MINT } from "@helium/spl-utils";
 import { init as initState } from "@helium/state-controller-sdk";
 import { init as initTuktuk, nextAvailableTaskIds, taskKey } from "@helium/tuktuk-sdk";
 import { PublicKey, SystemProgram } from "@solana/web3.js";
-import Squads from "@sqds/sdk";
+import * as multisig from "@sqds/multisig";
 import os from "os";
 import yargs from "yargs/yargs";
 import { loadKeypair, sendInstructionsOrSquadsV4 } from "./utils";
@@ -85,13 +85,14 @@ export async function run(args: any = process.argv) {
     organizationK
   );
 
-  const squads = Squads.endpoint(process.env.ANCHOR_PROVIDER_URL, wallet, {
-    commitmentOrConfig: "finalized",
-  });
   let authority = provider.wallet.publicKey;
-  const multisig = argv.multisig ? new PublicKey(argv.multisig) : null;
-  if (multisig) {
-    authority = squads.getAuthorityPDA(multisig, argv.authorityIndex);
+  let multisigPda = argv.multisig ? new PublicKey(argv.multisig) : null;
+  if (multisigPda) {
+    const [vaultPda] = multisig.getVaultPda({
+      multisigPda,
+      index: 0,
+    });
+    authority = vaultPda;
   }
 
   const {
