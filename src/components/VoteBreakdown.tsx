@@ -29,7 +29,6 @@ import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import { useGovernance } from "@/providers/GovernanceProvider";
 
-
 export const VoteBreakdown: FC<{
   proposalKey: PublicKey;
 }> = ({ proposalKey }) => {
@@ -101,7 +100,13 @@ export const VoteBreakdown: FC<{
         .toNumber()
         .toFixed(2);
 
-      rows.push([owner, choices, voteWeight || "", percentage, vote.proxyName || ""]);
+      rows.push([
+        owner,
+        choices,
+        voteWeight || "",
+        percentage,
+        vote.proxyName || "",
+      ]);
     });
 
     const csvContent = rows
@@ -150,11 +155,6 @@ export const VoteBreakdown: FC<{
           Download as CSV
         </span>
       </div>
-      <p className="text-sm">
-        Note: For MOBILE/IOT subnetworks, this is shown as 1/10 of your vote
-        power becuase the underlying contracts in spl-governance onlysupport
-        64-bits of precision
-      </p>
       <Table className="text-base mt-4">
         {groupedSortedVotes && groupedSortedVotes.length > displayCount && (
           <TableCaption></TableCaption>
