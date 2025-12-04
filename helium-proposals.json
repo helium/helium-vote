@@ -307,5 +307,26 @@
       { "uri": null, "name": "For Helium Release 2025-11" },
       { "uri": null, "name": "Against Helium Release 2025-11" }
     ]
+  },
+  {
+    "name": "Mobile Working Group (Odd Class) Elections - Q4 2025",
+    "uri": "https://gist.githubusercontent.com/hiptron/ca6494fd0fab97e51e92bf8d1a702bb7/raw/ab22bbfafde5d0de89c254d884ec46f732b1be56/2025Q4-MOBILE-Election-Summary.md",
+    "maxChoicesPerVoter": 3,
+    "tags": ["working-group"],
+    "choices": [
+      { "uri": null, "name": "@lnjenkins - Lukas Jenkins - True Planet" },
+      { "uri": null, "name": "@aidan_builds - Aidan Curry - Meshly" },
+      { "uri": null, "name": "@keith_rettig - Keith Rettig - Paris Phoenix Group" }
+    ]
+  },
+  {
+    "name": "Helium Release Proposal: 2025-12",
+    "uri": "https://gist.githubusercontent.com/hiptron/817da8909cf6f1c535c06f4b7c7fd3a2/raw/1dbe2860124d5d5620a3cad2573dcd5581aa05e4/HRP-2025-12-Vote-Summary.md",
+    "maxChoicesPerVoter": 1,
+    "tags": ["Release"],
+    "choices": [
+      { "uri": null, "name": "For Helium Release 2025-12" },
+      { "uri": null, "name": "Against Helium Release 2025-12" }
+    ]
   }
 ]
