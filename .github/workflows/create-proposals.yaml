@@ -9,7 +9,7 @@ on:
       - main
 
 env:
-  NODE_VERSION: 18
+  NODE_VERSION: 20
 
 jobs:
   create:
@@ -23,7 +23,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: 'yarn'
 
       - run: yarn install
         shell: bash
