@@ -328,5 +328,15 @@
       { "uri": null, "name": "For Helium Release 2025-12" },
       { "uri": null, "name": "Against Helium Release 2025-12" }
     ]
+  },
+  {
+    "name": "Helium Release Proposal: 2026-02",
+    "uri": "https://gist.githubusercontent.com/hiptron/b86410d9e256194c09b29b39ebe487d8/raw/8f16d0a2aa19aae7c4d2936dd2cc56191d797e65/HRP-2026-02-Vote-Summary.md",
+    "maxChoicesPerVoter": 1,
+    "tags": ["Release"],
+    "choices": [
+      { "uri": null, "name": "For Helium Release 2026-02" },
+      { "uri": null, "name": "Against Helium Release 2026-02" }
+    ]
   }
 ]
