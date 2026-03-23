@@ -3,350 +3,734 @@
     "name": "Test Vote: Top IOT Sensor Solutions",
     "uri": "https://gist.githubusercontent.com/hiptron/9a017901a42c91bdb7e38a8ff9544600/raw/5dfe487568d0817d3e1e992c2c498d670639ebe2/Test%2520Vote:%2520Top%2520IOT%2520Sensor%2520Solutions.md",
     "maxChoicesPerVoter": 3,
-    "tags": ["test"],
+    "tags": [
+      "test"
+    ],
     "choices": [
-      { "uri": null, "name": "Tracking devices or people" },
-      { "uri": null, "name": "Location Temp/Humidity" },
-      { "uri": null, "name": "Location CO2/Air Quality" },
-      { "uri": null, "name": "Movement/Presence detection" },
-      { "uri": null, "name": "Soil quality/environment" }
+      {
+        "uri": null,
+        "name": "Tracking devices or people"
+      },
+      {
+        "uri": null,
+        "name": "Location Temp/Humidity"
+      },
+      {
+        "uri": null,
+        "name": "Location CO2/Air Quality"
+      },
+      {
+        "uri": null,
+        "name": "Movement/Presence detection"
+      },
+      {
+        "uri": null,
+        "name": "Soil quality/environment"
+      }
     ]
   },
   {
     "name": "Test Vote: Top IOT Sensor Solutions",
     "uri": "https://gist.githubusercontent.com/hiptron/9a017901a42c91bdb7e38a8ff9544600/raw/5dfe487568d0817d3e1e992c2c498d670639ebe2/Test%2520Vote:%2520Top%2520IOT%2520Sensor%2520Solutions.md",
     "maxChoicesPerVoter": 3,
-    "tags": ["test"],
+    "tags": [
+      "test"
+    ],
     "choices": [
-      { "uri": null, "name": "Tracking devices or people" },
-      { "uri": null, "name": "Location Temp/Humidity" },
-      { "uri": null, "name": "Location CO2/Air Quality" },
-      { "uri": null, "name": "Movement/Presence detection" },
-      { "uri": null, "name": "Soil quality/environment" }
+      {
+        "uri": null,
+        "name": "Tracking devices or people"
+      },
+      {
+        "uri": null,
+        "name": "Location Temp/Humidity"
+      },
+      {
+        "uri": null,
+        "name": "Location CO2/Air Quality"
+      },
+      {
+        "uri": null,
+        "name": "Movement/Presence detection"
+      },
+      {
+        "uri": null,
+        "name": "Soil quality/environment"
+      }
     ]
   },
   {
     "name": "Test Vote: Ice Cream",
     "uri": "https://gist.githubusercontent.com/hiptron/805fad6ae91c4681a5d0d1eadf3277ba/raw/7feb18b939a1ee824c732ed4f80d67cd9f2ccbce/gistfile1.txt",
     "maxChoicesPerVoter": 1,
-    "tags": ["test"],
+    "tags": [
+      "test"
+    ],
     "choices": [
-      { "uri": null, "name": "Vanilla" },
-      { "uri": null, "name": "Chocolate" },
-      { "uri": null, "name": "Cookies and cream" },
-      { "uri": null, "name": "Strawberry" }
+      {
+        "uri": null,
+        "name": "Vanilla"
+      },
+      {
+        "uri": null,
+        "name": "Chocolate"
+      },
+      {
+        "uri": null,
+        "name": "Cookies and cream"
+      },
+      {
+        "uri": null,
+        "name": "Strawberry"
+      }
     ]
   },
   {
     "name": "HIP 110: Proxy Voting",
     "uri": "https://gist.githubusercontent.com/hiptron/4404ea1e78ed8c92ba5001df45740386/raw/88adb21a40475dd7b6673e816492357fb425c72a/HIP-110-HNT-Vote-Summary.md",
     "maxChoicesPerVoter": 1,
-    "tags": ["HIP", "Technical", "Governance"],
+    "tags": [
+      "HIP",
+      "Technical",
+      "Governance"
+    ],
     "choices": [
-      { "uri": null, "name": "For HIP 110" },
-      { "uri": null, "name": "Against HIP 110" }
+      {
+        "uri": null,
+        "name": "For HIP 110"
+      },
+      {
+        "uri": null,
+        "name": "Against HIP 110"
+      }
     ]
   },
   {
     "name": "HIP 110: Proxy Voting - Revote",
     "uri": "https://gist.githubusercontent.com/hiptron/4404ea1e78ed8c92ba5001df45740386/raw/d56b1636d4e16450c97afc630d8acdf5d3e1f59f/HIP-110-HNT-Revote-Summary.md",
     "maxChoicesPerVoter": 1,
-    "tags": ["HIP", "Technical", "Governance"],
+    "tags": [
+      "HIP",
+      "Technical",
+      "Governance"
+    ],
     "choices": [
-      { "uri": null, "name": "For HIP 110" },
-      { "uri": null, "name": "Against HIP 110" }
+      {
+        "uri": null,
+        "name": "For HIP 110"
+      },
+      {
+        "uri": null,
+        "name": "Against HIP 110"
+      }
     ]
   },
   {
     "name": "HIP 128: Energy Subnetwork",
     "uri": "https://gist.githubusercontent.com/hiptron/9f3a40097cface8f86beebeaab645547/raw/425df856bd34361e528dfe3e1b26e9ed4f6a989e/HIP-128-Vote-Summary.md",
     "maxChoicesPerVoter": 1,
-    "tags": ["HIP", "Economic", "Technical"],
+    "tags": [
+      "HIP",
+      "Economic",
+      "Technical"
+    ],
     "choices": [
-      { "uri": null, "name": "For HIP 128" },
-      { "uri": null, "name": "Against HIP 128" }
+      {
+        "uri": null,
+        "name": "For HIP 128"
+      },
+      {
+        "uri": null,
+        "name": "Against HIP 128"
+      }
     ]
   },
   {
     "name": "HIP 138: Return to HNT",
     "uri": "https://gist.githubusercontent.com/hiptron/86a0f8cc79f2571544ca7d43ec4c68d5/raw/f94b4fcac16d8694bd75ded3cd180deb21ca34c1/HIP-138-HNT-Vote-Summary.md",
     "maxChoicesPerVoter": 1,
-    "tags": ["HIP", "Economic", "Technical", "Governance"],
+    "tags": [
+      "HIP",
+      "Economic",
+      "Technical",
+      "Governance"
+    ],
     "choices": [
-      { "uri": null, "name": "For HIP 138" },
-      { "uri": null, "name": "Against HIP 138" }
+      {
+        "uri": null,
+        "name": "For HIP 138"
+      },
+      {
+        "uri": null,
+        "name": "Against HIP 138"
+      }
     ]
   },
   {
     "name": "HIP 141: Single-Token Governance and Helium Release Proposals",
     "uri": "https://gist.githubusercontent.com/hiptron/245620771e2e1fbf1b2e534d69ce775f/raw/a57bc342be68b1182424d6c487a575095e44bbae/HIP-141-Vote-Summary.md",
     "maxChoicesPerVoter": 1,
-    "tags": ["HIP", "Economic", "Technical", "Governance"],
+    "tags": [
+      "HIP",
+      "Economic",
+      "Technical",
+      "Governance"
+    ],
     "choices": [
-      { "uri": null, "name": "For HIP 141" },
-      { "uri": null, "name": "Against HIP 141" }
+      {
+        "uri": null,
+        "name": "For HIP 141"
+      },
+      {
+        "uri": null,
+        "name": "Against HIP 141"
+      }
     ]
   },
   {
     "name": "MOBILE Working Group (Even Class) Elections - Q1 2025",
     "uri": "https://gist.githubusercontent.com/hiptron/acbb65ab1f5f8543760db71703a3d205/raw/77a00d4b6a2136f4a1a6248bcf49e1f7622b159f/2025Q1-MOBILE-Election-Summary.md",
     "maxChoicesPerVoter": 5,
-    "tags": ["working-group"],
+    "tags": [
+      "working-group"
+    ],
     "choices": [
-      { "uri": null, "name": "@Unstableatom (zanz3r) - Adam Schuh" },
-      { "uri": null, "name": "@Wilson (thecrazymillionaire) - Wilson Santos" },
-      { "uri": null, "name": "@Jay M (jaym2518) - Jeremy Mahrle" },
-      { "uri": null, "name": "@Fizzy (Fizzy99)" },
-      { "uri": null, "name": "@jhella - LongFi Solutions" },
-      { "uri": null, "name": "@ferebee - Chris Ferebee" },
-      { "uri": null, "name": "@JB(not JD) (jhbr821) - Jacob Brady" },
-      { "uri": null, "name": "@Goaltender_bobby - Charles Pidgeon" }
+      {
+        "uri": null,
+        "name": "@Unstableatom (zanz3r) - Adam Schuh"
+      },
+      {
+        "uri": null,
+        "name": "@Wilson (thecrazymillionaire) - Wilson Santos"
+      },
+      {
+        "uri": null,
+        "name": "@Jay M (jaym2518) - Jeremy Mahrle"
+      },
+      {
+        "uri": null,
+        "name": "@Fizzy (Fizzy99)"
+      },
+      {
+        "uri": null,
+        "name": "@jhella - LongFi Solutions"
+      },
+      {
+        "uri": null,
+        "name": "@ferebee - Chris Ferebee"
+      },
+      {
+        "uri": null,
+        "name": "@JB(not JD) (jhbr821) - Jacob Brady"
+      },
+      {
+        "uri": null,
+        "name": "@Goaltender_bobby - Charles Pidgeon"
+      }
     ]
   },
   {
     "name": "IOT Working Group (Even Class) Elections - Q1 2025",
     "uri": "https://gist.githubusercontent.com/hiptron/1ffb75901fea2aca6a99de77d02b1eec/raw/29b7abd2147705293612bee054d2a87717adc136/2025Q1-IOT-Election-Summary.md",
     "maxChoicesPerVoter": 5,
-    "tags": ["working-group"],
+    "tags": [
+      "working-group"
+    ],
     "choices": [
-      { "uri": null, "name": "@BFGNeil" },
-      { "uri": null, "name": "@tteague" },
-      { "uri": null, "name": "@Joey" },
-      { "uri": null, "name": "@gradoj" },
-      { "uri": null, "name": "@Miroslav/miroslav_heliotics" },
-      { "uri": null, "name": "@Jubin/jubin3253" }
+      {
+        "uri": null,
+        "name": "@BFGNeil"
+      },
+      {
+        "uri": null,
+        "name": "@tteague"
+      },
+      {
+        "uri": null,
+        "name": "@Joey"
+      },
+      {
+        "uri": null,
+        "name": "@gradoj"
+      },
+      {
+        "uri": null,
+        "name": "@Miroslav/miroslav_heliotics"
+      },
+      {
+        "uri": null,
+        "name": "@Jubin/jubin3253"
+      }
     ]
   },
   {
     "name": "HIP 142: Add Inversion Capital as an International Service Provider to the Helium Mobile Network",
     "uri": "https://gist.githubusercontent.com/hiptron/207947227d0b5bfc527c8106257e6af7/raw/6ae752b413eed6b7ac6bd986d9aea08f907f3dcb/HIP-142-Vote-Summary.md",
     "maxChoicesPerVoter": 1,
-    "tags": ["HIP", "Governance"],
+    "tags": [
+      "HIP",
+      "Governance"
+    ],
     "choices": [
-      { "uri": null, "name": "For HIP 142" },
-      { "uri": null, "name": "Against HIP 142" }
+      {
+        "uri": null,
+        "name": "For HIP 142"
+      },
+      {
+        "uri": null,
+        "name": "Against HIP 142"
+      }
     ]
   },
   {
     "name": "Helium Release Proposal: 2025-03",
     "uri": "https://gist.githubusercontent.com/hiptron/3605839cea8abcdef5fcaad7c8f85d3b/raw/06422902600787d75dae3f892c4e80eda5c631d5/HRP-2025-03-Vote-Summary.md",
     "maxChoicesPerVoter": 1,
-    "tags": ["Release"],
+    "tags": [
+      "Release"
+    ],
     "choices": [
-      { "uri": null, "name": "For Helium Release 2025-03" },
-      { "uri": null, "name": "Against Helium Release 2025-03" }
+      {
+        "uri": null,
+        "name": "For Helium Release 2025-03"
+      },
+      {
+        "uri": null,
+        "name": "Against Helium Release 2025-03"
+      }
     ]
   },
   {
     "name": "HIP 143: Decoupling Service Provider Pricing from Governance",
     "uri": "https://gist.githubusercontent.com/hiptron/fdf4f4e6ff15ccb9f4980be192e90260/raw/7bd931b65674c3e308ca8393d116f46bf8ed7478/HIP-143-Vote-Summary.md",
     "maxChoicesPerVoter": 1,
-    "tags": ["HIP", "Economic", "Technical"],
+    "tags": [
+      "HIP",
+      "Economic",
+      "Technical"
+    ],
     "choices": [
-      { "uri": null, "name": "For HIP 143" },
-      { "uri": null, "name": "Against HIP 143" }
+      {
+        "uri": null,
+        "name": "For HIP 143"
+      },
+      {
+        "uri": null,
+        "name": "Against HIP 143"
+      }
     ]
   },
   {
     "name": "Helium Release Proposal: 2025-04",
     "uri": "https://gist.githubusercontent.com/hiptron/73d2bb29b06b353d92b7f08092248828/raw/fba63173f8f512fe9efcd844ca70a302b7e57010/HRP-2025-04-Vote-Summary.md",
     "maxChoicesPerVoter": 1,
-    "tags": ["Release"],
+    "tags": [
+      "Release"
+    ],
     "choices": [
-      { "uri": null, "name": "For Helium Release 2025-04" },
-      { "uri": null, "name": "Against Helium Release 2025-04" }
+      {
+        "uri": null,
+        "name": "For Helium Release 2025-04"
+      },
+      {
+        "uri": null,
+        "name": "Against Helium Release 2025-04"
+      }
     ]
   },
   {
     "name": "HIP 144: Mobile Hotspot Rewards Escrow",
     "uri": "https://gist.githubusercontent.com/hiptron/e2eaf6f39824359171623aa1de31941a/raw/ff4e8fd7543ee3c40593f643b2549f1af4acf0ec/HIP-144-Vote-Summary.md",
     "maxChoicesPerVoter": 1,
-    "tags": ["HIP", "Economic"],
+    "tags": [
+      "HIP",
+      "Economic"
+    ],
     "choices": [
-      { "uri": null, "name": "For HIP 144" },
-      { "uri": null, "name": "Against HIP 144" }
+      {
+        "uri": null,
+        "name": "For HIP 144"
+      },
+      {
+        "uri": null,
+        "name": "Against HIP 144"
+      }
     ]
   },
   {
     "name": "Helium Release Proposal: 2025-05",
     "uri": "http://gist.githubusercontent.com/hiptron/f7fb8f0c05fcc2e317a682e025847067/raw/8b0633044bf87c0bf9400a19d37c5427d20fad2e/HRP-2025-05-Vote-Summary.md",
     "maxChoicesPerVoter": 1,
-    "tags": ["Release"],
+    "tags": [
+      "Release"
+    ],
     "choices": [
-      { "uri": null, "name": "For Helium Release 2025-05" },
-      { "uri": null, "name": "Against Helium Release 2025-05" }
+      {
+        "uri": null,
+        "name": "For Helium Release 2025-05"
+      },
+      {
+        "uri": null,
+        "name": "Against Helium Release 2025-05"
+      }
     ]
   },
   {
     "name": "Helium Release Proposal: 2025-06 - No Changes",
     "uri": "https://gist.githubusercontent.com/hiptron/76100558f375603d256b3b856b6c1e3b/raw/fb3b528d6f13052c9fd137883ea82592a5ea3725/HRP-2025-06-Vote-Summary.md",
     "maxChoicesPerVoter": 1,
-    "tags": ["Release"],
+    "tags": [
+      "Release"
+    ],
     "choices": [
-      { "uri": null, "name": "For Helium Release 2025-06" },
-      { "uri": null, "name": "Against Helium Release 2025-06" }
+      {
+        "uri": null,
+        "name": "For Helium Release 2025-06"
+      },
+      {
+        "uri": null,
+        "name": "Against Helium Release 2025-06"
+      }
     ]
   },
   {
     "name": "IoT Working Group (Odd Class) Elections - Q2 2025",
     "uri": "https://gist.githubusercontent.com/hiptron/a7e69c20a44ced1114b51f6f2ad3dd87/raw/82cbcd3498b67a4d95d1f2d90a2676b97abb8a36/2025Q2-IoT-Election-Summary.md",
     "maxChoicesPerVoter": 3,
-    "tags": ["working-group"],
+    "tags": [
+      "working-group"
+    ],
     "choices": [
-      { "uri": null, "name": "@Starwatcher (starwatcher6115) - Dr. Matthew Patrick" },
-      { "uri": null, "name": "@jerm (the_real_jerm) - Jeremy Cooper" },
-      { "uri": null, "name": "@Frenchman (pierre.nova) - Nova Labs" }
+      {
+        "uri": null,
+        "name": "@Starwatcher (starwatcher6115) - Dr. Matthew Patrick"
+      },
+      {
+        "uri": null,
+        "name": "@jerm (the_real_jerm) - Jeremy Cooper"
+      },
+      {
+        "uri": null,
+        "name": "@Frenchman (pierre.nova) - Nova Labs"
+      }
     ]
   },
   {
     "name": "Mobile Working Group (Odd Class) Elections - Q2 2025",
     "uri": "https://gist.githubusercontent.com/hiptron/b4296e3d60ef8b3d8736aa7e534b5ad8/raw/0f42650dc3b7e26f13ff077d39fa717fb7aa5bd8/2025Q2-Mobile-Election-Summary.md",
     "maxChoicesPerVoter": 5,
-    "tags": ["working-group"],
+    "tags": [
+      "working-group"
+    ],
     "choices": [
-      { "uri": null, "name": "goaltender_bobby - Charles Pidgeon" },
-      { "uri": null, "name": "@KeithR (keith_rettig) - Keith Rettig" },
-      { "uri": null, "name": "@Brainstormer" },
-      { "uri": null, "name": "@lnjenkins - Lukas Jenkins" },
-      { "uri": null, "name": "@MaknBank" },
-      { "uri": null, "name": "@Max - Gold Hawks & Associates (capc0m) - Max Gold" }
+      {
+        "uri": null,
+        "name": "goaltender_bobby - Charles Pidgeon"
+      },
+      {
+        "uri": null,
+        "name": "@KeithR (keith_rettig) - Keith Rettig"
+      },
+      {
+        "uri": null,
+        "name": "@Brainstormer"
+      },
+      {
+        "uri": null,
+        "name": "@lnjenkins - Lukas Jenkins"
+      },
+      {
+        "uri": null,
+        "name": "@MaknBank"
+      },
+      {
+        "uri": null,
+        "name": "@Max - Gold Hawks & Associates (capc0m) - Max Gold"
+      }
     ]
   },
   {
     "name": "Helium Release Proposal: 2025-07 - No Changes",
     "uri": "https://gist.githubusercontent.com/hiptron/c19c11292d4672ad5c145db778a08462/raw/bf9b6b242b0c0346f6cb0ab13b1968099e74ae55/HRP-2025-07-Vote-Summary.md",
     "maxChoicesPerVoter": 1,
-    "tags": ["Release"],
+    "tags": [
+      "Release"
+    ],
     "choices": [
-      { "uri": null, "name": "For Helium Release 2025-07" },
-      { "uri": null, "name": "Against Helium Release 2025-07" }
+      {
+        "uri": null,
+        "name": "For Helium Release 2025-07"
+      },
+      {
+        "uri": null,
+        "name": "Against Helium Release 2025-07"
+      }
     ]
   },
   {
     "name": "Helium Release Proposal: 2025-08",
     "uri": "https://gist.githubusercontent.com/hiptron/94c9cd135867dfeab53434bdf923d796/raw/4c3ba2cc79609de5de59d3b8469642507164dbaa/HRP-2025-08-Vote-Summary.md",
     "maxChoicesPerVoter": 1,
-    "tags": ["Release"],
+    "tags": [
+      "Release"
+    ],
     "choices": [
-      { "uri": null, "name": "For Helium Release 2025-08" },
-      { "uri": null, "name": "Against Helium Release 2025-08" }
+      {
+        "uri": null,
+        "name": "For Helium Release 2025-08"
+      },
+      {
+        "uri": null,
+        "name": "Against Helium Release 2025-08"
+      }
     ]
   },
   {
     "name": "IoT Working Group (Even Class) Elections - Q3 2025",
     "uri": "https://gist.githubusercontent.com/hiptron/dc92160804629736b2c5e685b8cddc2f/raw/b666b41cb15049bbdee02b8fbfe466f2a72c3689/2025Q3-IOT-Election-Summary.md",
     "maxChoicesPerVoter": 5,
-    "tags": ["working-group"],
+    "tags": [
+      "working-group"
+    ],
     "choices": [
-      { "uri": null, "name": "@BFGNeil - Trackpac.io" },
-      { "uri": null, "name": "@joey (joeyhiller) - Helium" },
-      { "uri": null, "name": "@Mario Albuja (marioalbuja_97475) - Mario Albuja Sáenz" },
-      { "uri": null, "name": "@Leo (leoshiroe) - WeatherXM" },
-      { "uri": null, "name": "@tteague" }
+      {
+        "uri": null,
+        "name": "@BFGNeil - Trackpac.io"
+      },
+      {
+        "uri": null,
+        "name": "@joey (joeyhiller) - Helium"
+      },
+      {
+        "uri": null,
+        "name": "@Mario Albuja (marioalbuja_97475) - Mario Albuja Sáenz"
+      },
+      {
+        "uri": null,
+        "name": "@Leo (leoshiroe) - WeatherXM"
+      },
+      {
+        "uri": null,
+        "name": "@tteague"
+      }
     ]
   },
   {
     "name": "Mobile Working Group (Even Class) Elections - Q3 2025",
     "uri": "https://gist.githubusercontent.com/hiptron/f285256becb44ce900ad04bebc42d69e/raw/8e4e3c6a9d21cd1454f10e29951a63eb1a104fe2/2025Q3-MOBILE-Election-Summary.md",
     "maxChoicesPerVoter": 5,
-    "tags": ["working-group"],
+    "tags": [
+      "working-group"
+    ],
     "choices": [
-      { "uri": null, "name": "@ferebee - Chris Ferebee" },
-      { "uri": null, "name": "@jhella - Josh Heller - Longfi" },
-      { "uri": null, "name": "@JB (jhbr821) - Jacob Brady" },
-      { "uri": null, "name": "@Fizzy (Fizzy99)" },
-      { "uri": null, "name": "@Jay M. (jaym2518) - Jeremy Mahrle" }
+      {
+        "uri": null,
+        "name": "@ferebee - Chris Ferebee"
+      },
+      {
+        "uri": null,
+        "name": "@jhella - Josh Heller - Longfi"
+      },
+      {
+        "uri": null,
+        "name": "@JB (jhbr821) - Jacob Brady"
+      },
+      {
+        "uri": null,
+        "name": "@Fizzy (Fizzy99)"
+      },
+      {
+        "uri": null,
+        "name": "@Jay M. (jaym2518) - Jeremy Mahrle"
+      }
     ]
   },
   {
     "name": "HIP 147: Mobile Data Eats First",
     "uri": "https://gist.githubusercontent.com/hiptron/c8239eb03009c3b1ce55369ebf14c33d/raw/8c742a7facecb68aa9287ef5590ec3cd69ed2e36/HIP-147-Vote-Summary.md",
     "maxChoicesPerVoter": 1,
-    "tags": ["HIP", "Economic", "Technical"],
+    "tags": [
+      "HIP",
+      "Economic",
+      "Technical"
+    ],
     "choices": [
-      { "uri": null, "name": "For HIP 147" },
-      { "uri": null, "name": "Against HIP 147" }
+      {
+        "uri": null,
+        "name": "For HIP 147"
+      },
+      {
+        "uri": null,
+        "name": "Against HIP 147"
+      }
     ]
   },
   {
     "name": "Helium Release Proposal: 2025-09",
     "uri": "https://gist.githubusercontent.com/hiptron/5b2b99e5b508759f942fa2f1d0445652/raw/b91095df2585242ae18a82c232d6af02caea87a6/HRP-2025-09-Vote-Summary.md",
     "maxChoicesPerVoter": 1,
-    "tags": ["Release"],
+    "tags": [
+      "Release"
+    ],
     "choices": [
-      { "uri": null, "name": "For Helium Release 2025-09" },
-      { "uri": null, "name": "Against Helium Release 2025-09" }
+      {
+        "uri": null,
+        "name": "For Helium Release 2025-09"
+      },
+      {
+        "uri": null,
+        "name": "Against Helium Release 2025-09"
+      }
     ]
   },
   {
     "name": "HIP 148: Reallocate Mobile Mapping Rewards",
     "uri": "https://gist.githubusercontent.com/hiptron/8a5a047253f1e85fb69c38ddfd5c155c/raw/f58b22f0d095e911773af47ca44b4cd1c2664a55/HIP-148-Vote-Summary.md",
     "maxChoicesPerVoter": 1,
-    "tags": ["HIP", "Economic", "Technical"],
+    "tags": [
+      "HIP",
+      "Economic",
+      "Technical"
+    ],
     "choices": [
-      { "uri": null, "name": "For HIP 148" },
-      { "uri": null, "name": "Against HIP 148" }
+      {
+        "uri": null,
+        "name": "For HIP 148"
+      },
+      {
+        "uri": null,
+        "name": "Against HIP 148"
+      }
     ]
   },
   {
     "name": "Helium Release Proposal: 2025-10",
     "uri": "https://gist.githubusercontent.com/hiptron/437144060433694a343e2e9329009c09/raw/b67ac9a4054df2021c0fcd0e802e10337ca66fe4/HRP-2025-10-Vote-Summary.md",
     "maxChoicesPerVoter": 1,
-    "tags": ["Release"],
+    "tags": [
+      "Release"
+    ],
     "choices": [
-      { "uri": null, "name": "For Helium Release 2025-10" },
-      { "uri": null, "name": "Against Helium Release 2025-10" }
+      {
+        "uri": null,
+        "name": "For Helium Release 2025-10"
+      },
+      {
+        "uri": null,
+        "name": "Against Helium Release 2025-10"
+      }
     ]
   },
   {
     "name": "Helium Release Proposal: 2025-11",
     "uri": "https://gist.githubusercontent.com/hiptron/75770d34a3fa8c756e53776392466af7/raw/5de810b6d04adf1bc75e116f492787ffc772d5e6/HRP-2025-11-Vote-Summary.md",
     "maxChoicesPerVoter": 1,
-    "tags": ["Release"],
+    "tags": [
+      "Release"
+    ],
     "choices": [
-      { "uri": null, "name": "For Helium Release 2025-11" },
-      { "uri": null, "name": "Against Helium Release 2025-11" }
+      {
+        "uri": null,
+        "name": "For Helium Release 2025-11"
+      },
+      {
+        "uri": null,
+        "name": "Against Helium Release 2025-11"
+      }
     ]
   },
   {
     "name": "Mobile Working Group (Odd Class) Elections - Q4 2025",
     "uri": "https://gist.githubusercontent.com/hiptron/ca6494fd0fab97e51e92bf8d1a702bb7/raw/3aece84a7797eddcea6b9084eabd5166fbe21adf/2025Q4-MOBILE-Election-Summary.md",
     "maxChoicesPerVoter": 3,
-    "tags": ["working-group"],
+    "tags": [
+      "working-group"
+    ],
     "choices": [
-      { "uri": null, "name": "@lnjenkins - Lukas Jenkins - True Planet" },
-      { "uri": null, "name": "@aidan_builds - Aidan Curry - Meshly" },
-      { "uri": null, "name": "@keith_rettig - Keith Rettig - Paris Phoenix Group" }
+      {
+        "uri": null,
+        "name": "@lnjenkins - Lukas Jenkins - True Planet"
+      },
+      {
+        "uri": null,
+        "name": "@aidan_builds - Aidan Curry - Meshly"
+      },
+      {
+        "uri": null,
+        "name": "@keith_rettig - Keith Rettig - Paris Phoenix Group"
+      }
     ]
   },
   {
     "name": "Helium Release Proposal: 2025-12",
     "uri": "https://gist.githubusercontent.com/hiptron/817da8909cf6f1c535c06f4b7c7fd3a2/raw/1dbe2860124d5d5620a3cad2573dcd5581aa05e4/HRP-2025-12-Vote-Summary.md",
     "maxChoicesPerVoter": 1,
-    "tags": ["Release"],
+    "tags": [
+      "Release"
+    ],
     "choices": [
-      { "uri": null, "name": "For Helium Release 2025-12" },
-      { "uri": null, "name": "Against Helium Release 2025-12" }
+      {
+        "uri": null,
+        "name": "For Helium Release 2025-12"
+      },
+      {
+        "uri": null,
+        "name": "Against Helium Release 2025-12"
+      }
     ]
   },
   {
     "name": "Helium Release Proposal: 2026-02",
     "uri": "https://gist.githubusercontent.com/hiptron/b86410d9e256194c09b29b39ebe487d8/raw/8f16d0a2aa19aae7c4d2936dd2cc56191d797e65/HRP-2026-02-Vote-Summary.md",
     "maxChoicesPerVoter": 1,
-    "tags": ["Release"],
+    "tags": [
+      "Release"
+    ],
     "choices": [
-      { "uri": null, "name": "For Helium Release 2026-02" },
-      { "uri": null, "name": "Against Helium Release 2026-02" }
+      {
+        "uri": null,
+        "name": "For Helium Release 2026-02"
+      },
+      {
+        "uri": null,
+        "name": "Against Helium Release 2026-02"
+      }
     ]
   },
   {
     "name": "Helium Release Proposal: 2026-03",
     "uri": "https://gist.githubusercontent.com/hiptron/296195e6f88633e648a615198c5a9924/raw/d52b319fa0d68dfdd83203b564cc697944585357/HRP-2026-03-Vote-Summary.md",
     "maxChoicesPerVoter": 1,
-    "tags": ["Release"],
+    "tags": [
+      "Release"
+    ],
     "choices": [
-      { "uri": null, "name": "For Helium Release 2026-03" },
-      { "uri": null, "name": "Against Helium Release 2026-03" }
+      {
+        "uri": null,
+        "name": "For Helium Release 2026-03"
+      },
+      {
+        "uri": null,
+        "name": "Against Helium Release 2026-03"
+      }
+    ]
+  },
+  {
+    "name": "Helium Release Proposal: 2026-04",
+    "uri": "https://gist.githubusercontent.com/hiptron/06c097d336e5952394b2b34497a724e6/raw/4af72f77e26dda71b0615542774a9503f325d125/HRP-2026-04-Vote-Summary.md",
+    "maxChoicesPerVoter": 1,
+    "tags": [
+      "Release"
+    ],
+    "choices": [
+      {
+        "uri": null,
+        "name": "For Helium Release 2026-04"
+      },
+      {
+        "uri": null,
+        "name": "Against Helium Release 2026-04"
+      }
     ]
   }
 ]
