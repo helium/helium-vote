@@ -53,7 +53,9 @@ const GovernanceProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const anchorProvider = useAnchorProvider();
   const { publicKey } = useWallet();
   const params = useParams();
-  const network: GovNetwork = (params.network as GovNetwork) || "hnt";
+  const network: GovNetwork = (params.network as string) in networksToMint
+    ? (params.network as GovNetwork)
+    : "hnt";
   const networkName = useMemo(() => networkToName[network], [network]);
   const mint = useMemo(() => networksToMint[network], [network]);
   const registrarKey = useMemo(() => mint && getRegistrarKey(mint), [mint]);

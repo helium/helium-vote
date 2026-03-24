@@ -8,6 +8,7 @@ import {
 import { WalletBoundary } from "@/components/WalletBoundary";
 import { useGovernance } from "@/providers/GovernanceProvider";
 import { PublicKey } from "@solana/web3.js";
+import { redirect } from "next/navigation";
 import React, { useMemo } from "react";
 
 export interface PositionsPageParams {
@@ -25,7 +26,13 @@ export default function PositionsPage({
   const { positionKey } = params;
   const { action } = searchParams || {};
   const { positions } = useGovernance();
-  const positionK = useMemo(() => new PublicKey(positionKey), [positionKey]);
+  const positionK = useMemo(() => {
+    try {
+      return new PublicKey(positionKey);
+    } catch {
+      redirect(`/${params.network}/positions`);
+    }
+  }, [positionKey, params.network]);
   const position = useMemo(
     () => positions?.find((p) => p.pubkey.equals(positionK)),
     [positions, positionK]

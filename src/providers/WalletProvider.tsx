@@ -9,11 +9,8 @@ import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
 import React, { FC, useMemo } from "react";
 import { clusterApiUrl } from "@solana/web3.js";
 import { toast } from "sonner";
-import {
-  CoinbaseWalletAdapter,
-  SolflareWalletAdapter,
-  WalletConnectWalletAdapter,
-} from "@solana/wallet-adapter-wallets";
+import { CoinbaseWalletAdapter } from "@solana/wallet-adapter-wallets";
+import { useWrappedReownAdapter } from "@jup-ag/jup-mobile-adapter";
 
 // Default styles that can be overridden by your app
 require("@solana/wallet-adapter-react-ui/styles.css");
@@ -27,19 +24,30 @@ export const WalletProvider: FC<React.PropsWithChildren> = ({ children }) => {
     []
   );
 
+  const { reownAdapter, jupiterAdapter } = useWrappedReownAdapter({
+    appKitOptions: {
+      metadata: {
+        name: "Helium Vote",
+        description: "Helium Network governance and voting",
+        url: "https://heliumvote.com",
+        icons: ["https://heliumvote.com/images/logo-roundel.svg"],
+      },
+      projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || "",
+      features: {
+        analytics: false,
+      },
+      enableWallets: false,
+    },
+  });
+
   const wallets = useMemo(
     () => [
-      // Ledger and backpack use wallet standard
-      new SolflareWalletAdapter(),
+      // Solflare, Ledger, and Backpack use wallet standard
       new CoinbaseWalletAdapter(),
-      new WalletConnectWalletAdapter({
-        network: WalletAdapterNetwork.Mainnet,
-        options: {
-          projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID,
-        },
-      }),
+      reownAdapter,
+      jupiterAdapter,
     ],
-    []
+    [reownAdapter, jupiterAdapter]
   );
 
   return (
