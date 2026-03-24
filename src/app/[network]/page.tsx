@@ -6,6 +6,8 @@ import { LegacyProposalCard } from "@/components/LegacyProposalCard";
 import { Header } from "@/components/Header";
 import { RealmProposalCard } from "@/components/RealmProposalCard";
 
+export const dynamicParams = false;
+
 export async function generateStaticParams() {
   const networks = ["hnt", "mobile", "iot"];
   return networks.map((network) => ({ network }));
