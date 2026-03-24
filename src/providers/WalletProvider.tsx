@@ -11,7 +11,6 @@ import { clusterApiUrl } from "@solana/web3.js";
 import { toast } from "sonner";
 import {
   CoinbaseWalletAdapter,
-  SolflareWalletAdapter,
   WalletConnectWalletAdapter,
 } from "@solana/wallet-adapter-wallets";
 
@@ -29,8 +28,7 @@ export const WalletProvider: FC<React.PropsWithChildren> = ({ children }) => {
 
   const wallets = useMemo(
     () => [
-      // Ledger and backpack use wallet standard
-      new SolflareWalletAdapter(),
+      // Solflare, Ledger, and Backpack use wallet standard
       new CoinbaseWalletAdapter(),
       new WalletConnectWalletAdapter({
         network: WalletAdapterNetwork.Mainnet,
