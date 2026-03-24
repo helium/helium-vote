@@ -3,10 +3,19 @@ import { Header } from "@/components/Header";
 import { Proposal } from "@/components/Proposal";
 import { formMetaTags, getProposalContent } from "@/lib/utils";
 import { PublicKey } from "@solana/web3.js";
+import { notFound } from "next/navigation";
 import React from "react";
 
 interface ProposalPageParams extends NetworkPageParams {
   proposalKey: string;
+}
+
+function parseProposalKey(key: string): PublicKey {
+  try {
+    return new PublicKey(key);
+  } catch {
+    notFound();
+  }
 }
 
 export const generateMetadata = async ({
@@ -15,7 +24,7 @@ export const generateMetadata = async ({
   params: ProposalPageParams;
 }) => {
   const { proposalKey } = params;
-  const pKey = new PublicKey(proposalKey);
+  const pKey = parseProposalKey(proposalKey);
   const { name } = await getProposalContent(pKey);
 
   return formMetaTags({
@@ -31,7 +40,7 @@ export default async function ProposalPage({
   params: ProposalPageParams;
 }) {
   const { proposalKey } = params;
-  const pKey = new PublicKey(params.proposalKey);
+  const pKey = parseProposalKey(proposalKey);
   const { content, name } = await getProposalContent(pKey);
 
   return (

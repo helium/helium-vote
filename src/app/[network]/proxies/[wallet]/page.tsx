@@ -24,7 +24,12 @@ export default async function ProxyPage({
   params: { wallet: string; network: string };
 }) {
   const voteService = getVoteService({ mint: networksToMint[network] });
-  const wallet = new PublicKey(walletRaw);
+  let wallet: PublicKey;
+  try {
+    wallet = new PublicKey(walletRaw);
+  } catch {
+    return notFound();
+  }
   const queryClient = new QueryClient();
 
   // Do not use prefetch here, because we want to error when it errors

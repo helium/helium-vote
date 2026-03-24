@@ -3,7 +3,6 @@ import { Header } from "@/components/Header";
 import { RealmProposal } from "@/components/RealmProposal";
 import { fetchRealmProposal } from "@/data/votes";
 import { IRealmProposal } from "@/lib/types";
-import { get } from "http";
 import React from "react";
 
 interface RealmProposalPageParams extends NetworkPageParams {
