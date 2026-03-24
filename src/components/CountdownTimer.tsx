@@ -27,11 +27,10 @@ export const CountdownTimer: FC<{
     <Countdown
       key={deadlineDate.toString()}
       date={deadlineDate}
+      onComplete={() => setCountdownCompleted(true)}
       renderer={({ days, hours, minutes, seconds, completed }) => {
         if (completed) {
-          setCountdownCompleted(true);
-        } else {
-          setCountdownCompleted(false);
+          return <div>Voting closed</div>;
         }
         return `${days}d ${hours}h ${minutes}m ${seconds}s`;
       }}
