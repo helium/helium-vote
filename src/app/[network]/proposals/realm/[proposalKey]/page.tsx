@@ -21,7 +21,8 @@ interface GistResponse {
 }
 
 const getContent = async (gist: string) => {
-  const response = await fetch(gist, { next: { revalidate: 60 * 60 * 24 } });
+  const url = gist.replace(/^http:\/\//, "https://");
+  const response = await fetch(url, { next: { revalidate: 60 * 60 * 24 } });
   const data: GistResponse = await response.json();
   const file = Object.values(data.files)[0];
   return file.content;

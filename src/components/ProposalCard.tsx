@@ -38,7 +38,8 @@ export const ProposalCard: FC<{
     result: desc,
   } = useAsync(async () => {
     if (proposal && proposal.uri) {
-      const { data } = await axios.get(proposal.uri);
+      const uri = proposal.uri.replace(/^http:\/\//, "https://");
+      const { data } = await axios.get(uri);
       const htmlContent = markdownParser.render(data);
       const firstParagraphMatch = htmlContent.match(/<p>(.*?)<\/p>/i);
       return firstParagraphMatch

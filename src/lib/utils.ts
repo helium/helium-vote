@@ -420,7 +420,8 @@ export const getProposalContent = async (proposalKey: PublicKey) => {
     new PublicKey(proposalKey)
   );
 
-  const res = await fetch(proposal.uri, { next: { revalidate: 60 * 60 * 24 } });
+  const uri = proposal.uri.replace(/^http:\/\//, "https://");
+  const res = await fetch(uri, { next: { revalidate: 60 * 60 * 24 } });
   const content = await res.text();
   return { content, name: proposal.name };
 };
