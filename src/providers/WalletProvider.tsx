@@ -12,18 +12,13 @@ import { toast } from "sonner";
 import { CoinbaseWalletAdapter } from "@solana/wallet-adapter-wallets";
 import { useWrappedReownAdapter } from "@jup-ag/jup-mobile-adapter";
 
-// Default styles that can be overridden by your app
 require("@solana/wallet-adapter-react-ui/styles.css");
 
-export const WalletProvider: FC<React.PropsWithChildren> = ({ children }) => {
-  // You can also provide a custom RPC endpoint.
-  const endpoint = useMemo(
-    () =>
-      process.env.NEXT_PUBLIC_SOLANA_URL ||
-      clusterApiUrl(WalletAdapterNetwork.Mainnet),
-    []
-  );
+export const endpoint =
+  process.env.NEXT_PUBLIC_SOLANA_URL ||
+  clusterApiUrl(WalletAdapterNetwork.Mainnet);
 
+const WalletAdapterProvider: FC<React.PropsWithChildren> = ({ children }) => {
   const { reownAdapter, jupiterAdapter } = useWrappedReownAdapter({
     appKitOptions: {
       metadata: {
@@ -42,7 +37,6 @@ export const WalletProvider: FC<React.PropsWithChildren> = ({ children }) => {
 
   const wallets = useMemo(
     () => [
-      // Solflare, Ledger, and Backpack use wallet standard
       new CoinbaseWalletAdapter(),
       reownAdapter,
       jupiterAdapter,
@@ -51,14 +45,22 @@ export const WalletProvider: FC<React.PropsWithChildren> = ({ children }) => {
   );
 
   return (
+    <SolanaWalletProvider
+      wallets={wallets}
+      autoConnect
+      onError={(err) => err.message.length && toast(err.message)}
+    >
+      <WalletModalProvider>{children}</WalletModalProvider>
+    </SolanaWalletProvider>
+  );
+};
+
+export const WalletProvider: FC<React.PropsWithChildren> = ({ children }) => {
+  return (
     <ConnectionProvider endpoint={endpoint}>
-      <SolanaWalletProvider
-        wallets={wallets}
-        autoConnect
-        onError={(err) => err.message.length && toast(err.message)}
-      >
-        <WalletModalProvider>{children}</WalletModalProvider>
-      </SolanaWalletProvider>
+      {children}
     </ConnectionProvider>
   );
 };
+
+export { WalletAdapterProvider };
