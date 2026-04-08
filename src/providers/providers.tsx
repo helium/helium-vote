@@ -3,6 +3,7 @@
 import React, { FC } from "react";
 import { WalletProvider, WalletAdapterProvider } from "./WalletProvider";
 import { AccountProvider } from "./AccountProvider";
+import { BlockchainApiProvider } from "./BlockchainApiProvider";
 import { GovernanceProvider } from "./GovernanceProvider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
@@ -23,7 +24,9 @@ export const Providers: FC<React.PropsWithChildren> = ({ children }) => {
       <WalletProvider>
         <AccountProvider>
           <WalletAdapterProvider>
-            <GovernanceProvider>{children}</GovernanceProvider>
+            <BlockchainApiProvider>
+              <GovernanceProvider>{children}</GovernanceProvider>
+            </BlockchainApiProvider>
           </WalletAdapterProvider>
         </AccountProvider>
       </WalletProvider>

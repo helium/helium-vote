@@ -1,31 +1,30 @@
 "use client";
 
-import { EPOCH_LENGTH, onInstructions, secsToDays } from "@/lib/utils";
+import { EPOCH_LENGTH, secsToDays } from "@/lib/utils";
 import { useGovernance } from "@/providers/GovernanceProvider";
 import { TASK_QUEUE, useDelegationClaimBot } from "@helium/automation-hooks";
-import {
-  useAnchorProvider,
-  useSolanaUnixNow,
-} from "@helium/helium-react-hooks";
+import { useSolanaUnixNow } from "@helium/helium-react-hooks";
 import { delegatedPositionKey } from "@helium/helium-sub-daos-sdk";
 import { RiUserSharedFill } from "react-icons/ri";
 import { toNumber } from "@helium/spl-utils";
 import {
   PositionWithMeta,
   SubDaoWithMeta,
-  useAssignProxies,
-  useClaimPositionRewards,
-  useClosePosition,
-  useDelegatePosition,
-  useExtendPosition,
-  useFlipPositionLockupKind,
-  useRelinquishPositionVotes,
-  useSplitPosition,
   useSubDaos,
-  useTransferPosition,
-  useUnassignProxies,
-  useUndelegatePosition,
 } from "@helium/voter-stake-registry-hooks";
+import {
+  useAssignProxiesMutation,
+  useUnassignProxiesMutation,
+  useFlipLockupKindMutation,
+  useClaimRewardsMutation,
+  useClosePositionMutation,
+  useDelegatePositionMutation,
+  useUndelegatePositionMutation,
+  useExtendPositionMutation,
+  useSplitPositionMutation,
+  useTransferPositionMutation,
+  useRelinquishPositionVotesMutation,
+} from "@/hooks/useGovernanceMutations";
 import { WalletSignTransactionError } from "@solana/wallet-adapter-base";
 import BN from "bn.js";
 import classNames from "classnames";
@@ -53,8 +52,8 @@ import { ReclaimPositionPrompt } from "./ReclaimPositionPrompt";
 import { SplitPositionPrompt } from "./SplitPositionPrompt";
 import { UpdatePositionDelegationPrompt } from "./UpdatePositionDelegationPrompt";
 import { ProxyPositionPrompt } from "./ProxyPositionPrompt";
-import { PublicKey } from "@solana/web3.js";
-import { MOBILE_SUB_DAO_KEY } from "@/lib/constants";
+import { IOT_SUB_DAO_KEY, MOBILE_SUB_DAO_KEY } from "@/lib/constants";
+import { IOT_MINT, MOBILE_MINT } from "@helium/spl-utils";
 import { delegationClaimBotKey } from "@helium/hpl-crons-sdk";
 
 export type PositionAction =
@@ -107,7 +106,6 @@ export const PositionManager: FC<PositionManagerProps> = ({
 }) => {
   const unixNow = useSolanaUnixNow() || Date.now() / 1000;
   const [action, setAction] = useState<PositionAction | undefined>(initAction);
-  const provider = useAnchorProvider();
   const {
     mintAcc,
     network,
@@ -169,15 +167,12 @@ export const PositionManager: FC<PositionManagerProps> = ({
     setAction(undefined);
   }, [refetchState, setAction]);
 
-  const { isPending: isAssigningProxy, mutateAsync: assignProxies } =
-    useAssignProxies();
-  const { isPending: isRevokingProxy, mutateAsync: unassignProxies } =
-    useUnassignProxies();
-  const isUpdatingProxy = isAssigningProxy || isRevokingProxy;
-  const { loading: isFlipping, flipPositionLockupKind } =
-    useFlipPositionLockupKind();
-  const { loading: isClaiming, claimPositionRewards } =
-    useClaimPositionRewards();
+  const assignProxiesMutation = useAssignProxiesMutation();
+  const unassignProxiesMutation = useUnassignProxiesMutation();
+  const isUpdatingProxy =
+    assignProxiesMutation.isPending || unassignProxiesMutation.isPending;
+  const flipLockupKindMutation = useFlipLockupKindMutation();
+  const claimRewardsMutation = useClaimRewardsMutation();
   const { result: subDaos } = useSubDaos();
   const delegationClaimBotK = useMemo(
     () =>
@@ -213,29 +208,13 @@ export const PositionManager: FC<PositionManagerProps> = ({
     }
   }, [subDaos, subDao, position?.delegatedSubDao]);
 
-  const {
-    loading: isDelegating,
-    delegatePosition,
-    rentFee: solFees,
-    prepaidTxFees,
-  } = useDelegatePosition({
-    automationEnabled,
-    position,
-    subDao: subDao || undefined,
-  });
-
-  const { loading: isUndelegating, undelegatePosition } = useUndelegatePosition(
-    {
-      position,
-    }
-  );
-
-  const { loading: isTransfering, transferPosition } = useTransferPosition();
-  const { loading: isSplitting, splitPosition } = useSplitPosition();
-  const { loading: isExtending, extendPosition } = useExtendPosition();
-  const { loading: isReclaiming, closePosition } = useClosePosition();
-  const { loading: isRelinquishing, relinquishPositionVotes } =
-    useRelinquishPositionVotes();
+  const delegateMutation = useDelegatePositionMutation();
+  const undelegateMutation = useUndelegatePositionMutation();
+  const transferMutation = useTransferPositionMutation();
+  const splitMutation = useSplitPositionMutation();
+  const extendMutation = useExtendPositionMutation();
+  const closeMutation = useClosePositionMutation();
+  const relinquishVotesMutation = useRelinquishPositionVotesMutation();
 
   const handleUpdateProxy = async ({
     proxy,
@@ -248,25 +227,28 @@ export const PositionManager: FC<PositionManagerProps> = ({
   }) => {
     try {
       if (isRevoke) {
-        await unassignProxies({
-          positions: [position],
-          onInstructions: onInstructions(provider, {
-            useFirstEstimateForAll: true,
-          }),
-        });
-      } else {
-        await assignProxies({
-          positions: [position],
-          recipient: new PublicKey(proxy || ""),
-          expirationTime: new BN(expirationTime || 0),
-          onInstructions: async (instructionArrays) => {
-            for (const instructions of instructionArrays) {
-              await onInstructions(provider, {
-                useFirstEstimateForAll: true,
-              })(instructions);
-            }
+        await unassignProxiesMutation.submit(
+          {
+            proxyKey: position.proxy?.nextVoter?.toBase58() || "",
+            positionMints: [position.mint.toBase58()],
           },
-        });
+          {
+            header: "Revoke Proxy",
+            message: "Revoking proxy assignment",
+          }
+        );
+      } else {
+        await assignProxiesMutation.submit(
+          {
+            proxyKey: proxy || "",
+            positionMints: [position.mint.toBase58()],
+            expirationTime: expirationTime || 0,
+          },
+          {
+            header: "Assign Proxy",
+            message: "Assigning proxy voter",
+          }
+        );
       }
       toast(`Proxy ${isRevoke ? "revoked" : "assigned"}`);
     } catch (e: any) {
@@ -281,13 +263,16 @@ export const PositionManager: FC<PositionManagerProps> = ({
 
   const handleRelinquishPositionVotes = async () => {
     try {
-      await relinquishPositionVotes({
-        position,
-        organization,
-        onInstructions: onInstructions(provider, {
-          useFirstEstimateForAll: true,
-        }),
-      });
+      await relinquishVotesMutation.submit(
+        {
+          positionMint: position.mint.toBase58(),
+          organization: organization.toBase58(),
+        },
+        {
+          header: "Relinquish Votes",
+          message: "Relinquishing all votes from position",
+        }
+      );
 
       toast("Votes Relinquished");
     } catch (e: any) {
@@ -299,10 +284,15 @@ export const PositionManager: FC<PositionManagerProps> = ({
 
   const handleClosePosition = async () => {
     try {
-      await closePosition({
-        position,
-        onInstructions: onInstructions(provider),
-      });
+      await closeMutation.submit(
+        {
+          positionMint: position.mint.toBase58(),
+        },
+        {
+          header: "Reclaim Position",
+          message: "Closing and reclaiming position",
+        }
+      );
       router.replace(`/${network}/positions`);
 
       toast("Position Reclaimed");
@@ -315,10 +305,15 @@ export const PositionManager: FC<PositionManagerProps> = ({
 
   const handleFlipPositionLockupKind = async () => {
     try {
-      await flipPositionLockupKind({
-        position,
-        onInstructions: onInstructions(provider),
-      });
+      await flipLockupKindMutation.submit(
+        {
+          positionMint: position.mint.toBase58(),
+        },
+        {
+          header: "Flip Lockup Kind",
+          message: `Switching position to ${isConstant ? "decaying" : "constant"}`,
+        }
+      );
 
       toast("Position flipped");
       setAction(undefined);
@@ -334,13 +329,15 @@ export const PositionManager: FC<PositionManagerProps> = ({
 
   const handleClaimPositionRewards = async () => {
     try {
-      await claimPositionRewards({
-        position,
-        onInstructions: onInstructions(provider, {
-          useFirstEstimateForAll: true,
-          maxInstructionsPerTx: 8,
-        }),
-      });
+      await claimRewardsMutation.submit(
+        {
+          positionMints: [position.mint.toBase58()],
+        },
+        {
+          header: "Claim Rewards",
+          message: "Claiming delegation rewards",
+        }
+      );
 
       toast("Rewards claimed");
     } catch (e: any) {
@@ -352,14 +349,22 @@ export const PositionManager: FC<PositionManagerProps> = ({
 
   const handleDelegatePosition = async () => {
     try {
-      await delegatePosition({
-        onInstructions: onInstructions(provider),
-      });
+      await delegateMutation.submit(
+        {
+          positionMints: [position.mint.toBase58()],
+          subDaoMint: subDao?.pubkey.equals(IOT_SUB_DAO_KEY) ? IOT_MINT.toBase58() : MOBILE_MINT.toBase58(),
+          automationEnabled,
+        },
+        {
+          header: "Delegate Position",
+          message: "Delegating position to subnetwork",
+        }
+      );
 
       toast("Delegation updated");
       reset();
     } catch (e: any) {
-      console.error(e)
+      console.error(e);
       if (!(e instanceof WalletSignTransactionError)) {
         toast(e.message || "Delegation failed, please try again");
       }
@@ -368,9 +373,15 @@ export const PositionManager: FC<PositionManagerProps> = ({
 
   const handleUndelegatePosition = async () => {
     try {
-      await undelegatePosition({
-        onInstructions: onInstructions(provider),
-      });
+      await undelegateMutation.submit(
+        {
+          positionMint: position.mint.toBase58(),
+        },
+        {
+          header: "Undelegate Position",
+          message: "Undelegating position",
+        }
+      );
 
       toast("Position undelegated");
       reset();
@@ -383,11 +394,16 @@ export const PositionManager: FC<PositionManagerProps> = ({
 
   const handleExtendPosition = async (values: LockTokensFormValues) => {
     try {
-      await extendPosition({
-        position,
-        lockupPeriodsInDays: values.lockupPeriodInDays,
-        onInstructions: onInstructions(provider),
-      });
+      await extendMutation.submit(
+        {
+          positionMint: position.mint.toBase58(),
+          lockupPeriodsInDays: values.lockupPeriodInDays,
+        },
+        {
+          header: "Extend Position",
+          message: "Extending position lockup period",
+        }
+      );
 
       toast("Position extended");
     } catch (e: any) {
@@ -399,13 +415,18 @@ export const PositionManager: FC<PositionManagerProps> = ({
 
   const handleSplitPosition = async (values: LockTokensFormValues) => {
     try {
-      await splitPosition({
-        sourcePosition: position,
-        amount: values.amount,
-        lockupKind: values.lockupKind,
-        lockupPeriodsInDays: values.lockupPeriodInDays,
-        onInstructions: onInstructions(provider),
-      });
+      await splitMutation.submit(
+        {
+          sourcePositionMint: position.mint.toBase58(),
+          amount: values.amount.toString(),
+          lockupKind: values.lockupKind as "cliff" | "constant",
+          lockupPeriodsInDays: values.lockupPeriodInDays,
+        },
+        {
+          header: "Split Position",
+          message: "Splitting position",
+        }
+      );
 
       toast("Position split");
       reset();
@@ -421,12 +442,17 @@ export const PositionManager: FC<PositionManagerProps> = ({
     amount: number
   ) => {
     try {
-      await transferPosition({
-        sourcePosition: position,
-        amount,
-        targetPosition,
-        onInstructions: onInstructions(provider),
-      });
+      await transferMutation.submit(
+        {
+          sourcePositionMint: position.mint.toBase58(),
+          targetPositionMint: targetPosition.mint.toBase58(),
+          amount: amount.toString(),
+        },
+        {
+          header: "Merge Position",
+          message: "Merging positions",
+        }
+      );
 
       if (amount === maxActionableAmount) {
         router.replace(`/${network}/positions`);
@@ -464,8 +490,8 @@ export const PositionManager: FC<PositionManagerProps> = ({
             <div className="flex flex-col p-4 border-b-2 border-background">
               <PositionCallout
                 position={position}
-                isClaiming={isClaiming}
-                isReclaiming={isReclaiming}
+                isClaiming={claimRewardsMutation.isPending}
+                isReclaiming={closeMutation.isPending}
                 setManagerAction={setAction}
                 handleClaimRewards={handleClaimPositionRewards}
               />
@@ -537,8 +563,8 @@ export const PositionManager: FC<PositionManagerProps> = ({
             <PositionActionBoundary
               position={position}
               action={action}
-              isClaiming={isClaiming}
-              isRelinquishing={isRelinquishing}
+              isClaiming={claimRewardsMutation.isPending}
+              isRelinquishing={relinquishVotesMutation.isPending}
               setManagerAction={setAction}
               handleClaimRewards={handleClaimPositionRewards}
               handleRelinquishVotes={handleRelinquishPositionVotes}
@@ -566,7 +592,7 @@ export const PositionManager: FC<PositionManagerProps> = ({
               {action === "flip" && (
                 <FlipPositionPrompt
                   position={position}
-                  isSubmitting={isFlipping}
+                  isSubmitting={flipLockupKindMutation.isPending}
                   onCancel={() => setAction(undefined)}
                   onConfirm={handleFlipPositionLockupKind}
                 />
@@ -574,7 +600,7 @@ export const PositionManager: FC<PositionManagerProps> = ({
               {action === "reclaim" && (
                 <ReclaimPositionPrompt
                   position={position}
-                  isSubmitting={isReclaiming}
+                  isSubmitting={closeMutation.isPending}
                   onCancel={() => setAction(undefined)}
                   onConfirm={handleClosePosition}
                 />
@@ -582,7 +608,7 @@ export const PositionManager: FC<PositionManagerProps> = ({
               {action === "delegate" && (
                 <UpdatePositionDelegationPrompt
                   position={position}
-                  isSubmitting={isDelegating || isUndelegating}
+                  isSubmitting={delegateMutation.isPending || undelegateMutation.isPending}
                   onCancel={() => setAction(undefined)}
                   onConfirm={handleDelegatePosition}
                   onUndelegate={handleUndelegatePosition}
@@ -590,8 +616,8 @@ export const PositionManager: FC<PositionManagerProps> = ({
                   setAutomationEnabled={setAutomationEnabled}
                   subDao={subDao}
                   setSubDao={setSubDao}
-                  solFees={solFees}
-                  prepaidTxFees={prepaidTxFees}
+                  solFees={delegateMutation.estimatedSolFee?.uiAmount ?? 0}
+                  prepaidTxFees={0}
                 />
               )}
               {action === "undelegate" && <div>Test</div>}
@@ -599,7 +625,7 @@ export const PositionManager: FC<PositionManagerProps> = ({
                 <ExtendPositionPrompt
                   position={position}
                   maxActionableAmount={maxActionableAmount}
-                  isSubmitting={isExtending}
+                  isSubmitting={extendMutation.isPending}
                   onCancel={() => setAction(undefined)}
                   onConfirm={handleExtendPosition}
                 />
@@ -608,7 +634,7 @@ export const PositionManager: FC<PositionManagerProps> = ({
                 <SplitPositionPrompt
                   position={position}
                   maxActionableAmount={maxActionableAmount}
-                  isSubmitting={isSplitting}
+                  isSubmitting={splitMutation.isPending}
                   onCancel={() => setAction(undefined)}
                   onConfirm={handleSplitPosition}
                 />
@@ -618,7 +644,7 @@ export const PositionManager: FC<PositionManagerProps> = ({
                   position={position}
                   positions={mergablePositions}
                   maxActionableAmount={maxActionableAmount}
-                  isSubmitting={isTransfering}
+                  isSubmitting={transferMutation.isPending}
                   onCancel={() => setAction(undefined)}
                   onConfirm={handleMergePosition}
                 />

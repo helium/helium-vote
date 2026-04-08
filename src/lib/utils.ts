@@ -1,28 +1,17 @@
 import { AnchorProvider } from "@coral-xyz/anchor";
 import { init as initProp } from "@helium/proposal-sdk";
-import {
-  HELIUM_COMMON_LUT,
-  HELIUM_COMMON_LUT_DEVNET,
-  batchInstructionsToTxsWithPriorityFee,
-  bulkSendTransactions,
-  sendAndConfirmWithRetry,
-  toVersionedTx,
-} from "@helium/spl-utils";
 import { PositionWithMeta } from "@helium/voter-stake-registry-hooks";
 import { Mint } from "@solana/spl-token";
 import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
 import {
   Connection,
-  Keypair,
   PublicKey,
-  TransactionInstruction,
   clusterApiUrl,
 } from "@solana/web3.js";
 import BN from "bn.js";
 import { clsx, type ClassValue } from "clsx";
 import { Metadata } from "next";
 import { twMerge } from "tailwind-merge";
-import { MAX_TRANSACTIONS_PER_SIGNATURE_BATCH } from "./constants";
 import { ILegacyProposal, ProposalState, ProposalV0 } from "./types";
 
 export const DAYS_PER_YEAR = 365;
@@ -293,104 +282,6 @@ export const precision = (a: number) => {
   return p;
 };
 
-export const onInstructions =
-  (
-    provider?: AnchorProvider,
-    {
-      maxInstructionsPerTx,
-      useFirstEstimateForAll = false,
-    }: { maxInstructionsPerTx?: number; useFirstEstimateForAll?: boolean } = {}
-  ) =>
-  async (
-    instructions: TransactionInstruction[] | TransactionInstruction[][],
-    sigs?: Keypair[]
-  ) => {
-    if (useFirstEstimateForAll) {
-      // Sort instructions array so longest groups are first
-      instructions.sort((a, b) => {
-        const lengthA = Array.isArray(a) ? a.length : 1;
-        const lengthB = Array.isArray(b) ? b.length : 1;
-        return lengthB - lengthA;
-      });
-    }
-
-    // Sort instructions array so longest groups are first
-    instructions.sort((a, b) => {
-      const lengthA = Array.isArray(a) ? a.length : 1;
-      const lengthB = Array.isArray(b) ? b.length : 1;
-      return lengthB - lengthA;
-    });
-
-    if (provider) {
-      const computeScaleUp = 1.4;
-
-      if (sigs) {
-        const transactions = await batchInstructionsToTxsWithPriorityFee(
-          provider,
-          instructions,
-          {
-            basePriorityFee: 2,
-            extraSigners: sigs,
-            addressLookupTableAddresses: [
-              provider.connection.rpcEndpoint.includes("test")
-                ? HELIUM_COMMON_LUT_DEVNET
-                : HELIUM_COMMON_LUT,
-            ],
-            useFirstEstimateForAll,
-            computeScaleUp,
-            maxInstructionsPerTx,
-          }
-        );
-        const asVersionedTx = transactions.map(toVersionedTx);
-        let i = 0;
-        for (const tx of await provider.wallet.signAllTransactions(
-          asVersionedTx
-        )) {
-          const draft = transactions[i];
-          sigs.forEach((sig) => {
-            if (draft.signers?.some((s) => s.publicKey.equals(sig.publicKey))) {
-              tx.sign([sig]);
-            }
-          });
-
-          await sendAndConfirmWithRetry(
-            provider.connection,
-            Buffer.from(tx.serialize()),
-            {
-              skipPreflight: true,
-            },
-            "confirmed"
-          );
-          i++;
-        }
-      } else {
-        const transactions = await batchInstructionsToTxsWithPriorityFee(
-          provider,
-          instructions,
-          {
-            basePriorityFee: 2,
-            addressLookupTableAddresses: [
-              provider.connection.rpcEndpoint.includes("test")
-                ? HELIUM_COMMON_LUT_DEVNET
-                : HELIUM_COMMON_LUT,
-            ],
-            useFirstEstimateForAll,
-            computeScaleUp,
-            maxInstructionsPerTx,
-          }
-        );
-
-        await bulkSendTransactions(
-          provider,
-          transactions,
-          undefined,
-          5,
-          sigs,
-          MAX_TRANSACTIONS_PER_SIGNATURE_BATCH
-        );
-      }
-    }
-  };
 
 export const abbreviateNumber = (number: number) => {
   let newNumber = number;

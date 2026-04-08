@@ -4,15 +4,14 @@ import { ContentSection } from "@/components/ContentSection";
 import { Header } from "@/components/Header";
 import { DelegateAllPositionsPrompt } from "@/components/PositionManager/DelegateAllPositionsPrompt";
 import { IOT_SUB_DAO_KEY, MOBILE_SUB_DAO_KEY } from "@/lib/constants";
-import { onInstructions } from "@/lib/utils";
+import { IOT_MINT, MOBILE_MINT } from "@helium/spl-utils";
 import { useGovernance } from "@/providers/GovernanceProvider";
+import { useDelegatePositionMutation } from "@/hooks/useGovernanceMutations";
 import {
-  useAnchorProvider,
   useSolanaUnixNow,
 } from "@helium/helium-react-hooks";
 import {
   SubDaoWithMeta,
-  useDelegatePositions,
 } from "@helium/voter-stake-registry-hooks";
 import { WalletSignTransactionError } from "@solana/wallet-adapter-base";
 import BN from "bn.js";
@@ -26,7 +25,8 @@ export default function DelegateAllPositionsPage() {
   const { positions, subDaos } = useGovernance();
   const [subDao, setSubDao] = useState<SubDaoWithMeta | null>(null);
   const [automationEnabled, setAutomationEnabled] = useState(true);
-  const provider = useAnchorProvider();
+
+  const delegateMutation = useDelegatePositionMutation();
 
   const now = useSolanaUnixNow();
   const delegatedPositions = useMemo(
@@ -42,19 +42,6 @@ export default function DelegateAllPositionsPage() {
       ) || [],
     [positions, now]
   );
-
-  const {
-    delegatePositions,
-    rentFee: solFees = 0,
-    prepaidTxFees = 0,
-    insufficientBalance = false,
-    error,
-    loading,
-  } = useDelegatePositions({
-    automationEnabled,
-    positions: unexpiredPositions,
-    subDao: subDao || undefined,
-  });
 
   useEffect(() => {
     if (!subDaos || !delegatedPositions || subDao) return;
@@ -102,9 +89,17 @@ export default function DelegateAllPositionsPage() {
 
   const handleConfirm = async () => {
     try {
-      await delegatePositions({
-        onInstructions: onInstructions(provider),
-      });
+      await delegateMutation.submit(
+        {
+          positionMints: unexpiredPositions.map((p) => p.mint.toBase58()),
+          subDaoMint: subDao?.pubkey.equals(IOT_SUB_DAO_KEY) ? IOT_MINT.toBase58() : MOBILE_MINT.toBase58(),
+          automationEnabled,
+        },
+        {
+          header: "Delegate All Positions",
+          message: "Delegating all positions to subnetwork",
+        }
+      );
       toast("Delegations updated");
       router.replace(`/${network}/positions`);
     } catch (e: any) {
@@ -121,18 +116,18 @@ export default function DelegateAllPositionsPage() {
       <ContentSection>
         <DelegateAllPositionsPrompt
           positions={unexpiredPositions}
-          isSubmitting={loading}
+          isSubmitting={delegateMutation.isPending}
           onCancel={() => router.back()}
           onConfirm={handleConfirm}
           automationEnabled={automationEnabled}
           setAutomationEnabled={setAutomationEnabled}
           subDao={subDao}
           setSubDao={setSubDao}
-          solFees={solFees}
-          prepaidTxFees={prepaidTxFees}
-          error={error ? String(error) : undefined}
-          loading={loading}
-          insufficientBalance={!!insufficientBalance}
+          solFees={delegateMutation.estimatedSolFee?.uiAmount ?? 0}
+          prepaidTxFees={0}
+          error={delegateMutation.error ? String(delegateMutation.error) : undefined}
+          loading={delegateMutation.isPending}
+          insufficientBalance={false}
         />
       </ContentSection>
     </>

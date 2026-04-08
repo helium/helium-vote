@@ -1,15 +1,17 @@
 "use client";
 
 import { networksToMint } from "@/lib/constants";
-import { ellipsisMiddle, humanReadable, onInstructions } from "@/lib/utils";
+import { ellipsisMiddle, humanReadable } from "@/lib/utils";
 import { useGovernance } from "@/providers/GovernanceProvider";
-import { useAnchorProvider, useMint } from "@helium/helium-react-hooks";
+import { useMint } from "@helium/helium-react-hooks";
 import {
   proxyQuery,
-  useAssignProxies,
   useProxiedTo,
-  useUnassignProxies,
 } from "@helium/voter-stake-registry-hooks";
+import {
+  useAssignProxiesMutation,
+  useUnassignProxiesMutation,
+} from "@/hooks/useGovernanceMutations";
 import { VoteService, getRegistrarKey } from "@helium/voter-stake-registry-sdk";
 import { PublicKey } from "@solana/web3.js";
 import { useQuery } from "@tanstack/react-query";
@@ -44,8 +46,8 @@ export function ProxyProfile({ wallet: walletRaw }: { wallet: string }) {
   const detail = proxy.detail;
   const { info: mintAcc } = useMint(mint);
   const decimals = mintAcc?.decimals;
-  const { mutateAsync: assignProxies } = useAssignProxies();
-  const { mutateAsync: unassignProxies } = useUnassignProxies();
+  const assignProxiesMutation = useAssignProxiesMutation();
+  const unassignProxiesMutation = useUnassignProxiesMutation();
   const { votingPower, positions } = useProxiedTo(wallet);
   const { result: networks } = useAsync(
     async (vs: VoteService | undefined) => {
@@ -165,8 +167,6 @@ export function ProxyProfile({ wallet: walletRaw }: { wallet: string }) {
     </div>
   );
 
-  const provider = useAnchorProvider();
-
   return (
     <ContentSection className="flex-1 py-8 max-md:py-0 max-md:!px-0">
       <Card className="max-md:flex-1 max-md:rounded-none">
@@ -211,17 +211,20 @@ export function ProxyProfile({ wallet: walletRaw }: { wallet: string }) {
           </div>
 
           <AssignProxyModal
-            onSubmit={(args) => {
-              return assignProxies({
-                ...args,
-                onInstructions: async (instructionArrays) => {
-                  for (const instructions of instructionArrays) {
-                    await onInstructions(provider, {
-                      useFirstEstimateForAll: true,
-                    })(instructions);
-                  }
+            onSubmit={async (args) => {
+              await assignProxiesMutation.submit(
+                {
+                  proxyKey: args.recipient.toBase58(),
+                  positionMints: args.positions.map((p) =>
+                    p.mint.toBase58()
+                  ),
+                  expirationTime: args.expirationTime.toNumber(),
                 },
-              });
+                {
+                  header: "Assign Proxy",
+                  message: "Assigning proxy voter",
+                }
+              );
             }}
             wallet={wallet}
           >
@@ -232,14 +235,20 @@ export function ProxyProfile({ wallet: walletRaw }: { wallet: string }) {
             />
           </AssignProxyModal>
           <RevokeProxyModal
-            onSubmit={(args) =>
-              unassignProxies({
-                ...args,
-                onInstructions: onInstructions(provider, {
-                  useFirstEstimateForAll: true,
-                }),
-              })
-            }
+            onSubmit={async (args) => {
+              await unassignProxiesMutation.submit(
+                {
+                  proxyKey: walletRaw,
+                  positionMints: args.positions.map((p) =>
+                    p.mint.toBase58()
+                  ),
+                },
+                {
+                  header: "Revoke Proxy",
+                  message: "Revoking proxy assignment",
+                }
+              );
+            }}
             wallet={wallet}
           >
             <RevokeProxyButton
@@ -313,31 +322,40 @@ export function ProxyProfile({ wallet: walletRaw }: { wallet: string }) {
             </div>
             <div className="max-md:hidden flex flex-col gap-3 mt-3">
               <AssignProxyModal
-                onSubmit={(args) => {
-                  return assignProxies({
-                    ...args,
-                    onInstructions: async (instructionArrays) => {
-                      for (const instructions of instructionArrays) {
-                        await onInstructions(provider, {
-                          useFirstEstimateForAll: true,
-                        })(instructions);
-                      }
+                onSubmit={async (args) => {
+                  await assignProxiesMutation.submit(
+                    {
+                      proxyKey: args.recipient.toBase58(),
+                      positionMints: args.positions.map((p) =>
+                        p.mint.toBase58()
+                      ),
+                      expirationTime: args.expirationTime.toNumber(),
                     },
-                  });
+                    {
+                      header: "Assign Proxy",
+                      message: "Assigning proxy voter",
+                    }
+                  );
                 }}
                 wallet={wallet}
               >
                 <ProxyButton />
               </AssignProxyModal>
               <RevokeProxyModal
-                onSubmit={(args) =>
-                  unassignProxies({
-                    ...args,
-                    onInstructions: onInstructions(provider, {
-                      useFirstEstimateForAll: true,
-                    }),
-                  })
-                }
+                onSubmit={async (args) => {
+                  await unassignProxiesMutation.submit(
+                    {
+                      proxyKey: walletRaw,
+                      positionMints: args.positions.map((p) =>
+                        p.mint.toBase58()
+                      ),
+                    },
+                    {
+                      header: "Revoke Proxy",
+                      message: "Revoking proxy assignment",
+                    }
+                  );
+                }}
                 wallet={wallet}
               >
                 <RevokeProxyButton />
