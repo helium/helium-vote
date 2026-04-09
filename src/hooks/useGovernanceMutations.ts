@@ -230,6 +230,17 @@ export function useTransferPositionMutation() {
   });
 }
 
+export function useTransferPositionOwnershipMutation() {
+  return useGovernanceMutation({
+    method: "transferPositionOwnership",
+    buildTag: (p: any) =>
+      `gov-transferOwnership-${hashTagParams({
+        position: p.positionMint,
+        to: p.to,
+      })}`,
+  });
+}
+
 // --- Delegation Mutations ---
 
 export function useDelegatePositionMutation() {

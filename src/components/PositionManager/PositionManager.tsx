@@ -23,12 +23,14 @@ import {
   useExtendPositionMutation,
   useSplitPositionMutation,
   useTransferPositionMutation,
+  useTransferPositionOwnershipMutation,
   useRelinquishPositionVotesMutation,
 } from "@/hooks/useGovernanceMutations";
+import { useWallet } from "@/hooks/useWallet";
 import { WalletSignTransactionError } from "@solana/wallet-adapter-base";
 import BN from "bn.js";
 import classNames from "classnames";
-import { ArrowUpFromDot, CheckCheck, Merge, Split } from "lucide-react";
+import { ArrowUpFromDot, CheckCheck, Merge, Send, Split } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, {
   FC,
@@ -50,6 +52,7 @@ import { PositionActionBoundary } from "./PositionActionBoundary";
 import { PositionCallout } from "./PositionCallout";
 import { ReclaimPositionPrompt } from "./ReclaimPositionPrompt";
 import { SplitPositionPrompt } from "./SplitPositionPrompt";
+import { TransferOwnershipPrompt } from "./TransferOwnershipPrompt";
 import { UpdatePositionDelegationPrompt } from "./UpdatePositionDelegationPrompt";
 import { ProxyPositionPrompt } from "./ProxyPositionPrompt";
 import { IOT_SUB_DAO_KEY, MOBILE_SUB_DAO_KEY } from "@/lib/constants";
@@ -64,7 +67,8 @@ export type PositionAction =
   | "split"
   | "merge"
   | "reclaim"
-  | "proxy";
+  | "proxy"
+  | "transferOwnership";
 
 export interface PositionManagerProps {
   initAction?: PositionAction;
@@ -114,6 +118,7 @@ export const PositionManager: FC<PositionManagerProps> = ({
     refetch: refetchState,
   } = useGovernance();
   const isHNT = network === "hnt";
+  const { publicKey: walletPublicKey } = useWallet();
   const router = useRouter();
   const { lockup, isDelegated } = position;
   const isConstant = Object.keys(lockup.kind)[0] === "constant";
@@ -214,6 +219,7 @@ export const PositionManager: FC<PositionManagerProps> = ({
   const splitMutation = useSplitPositionMutation();
   const extendMutation = useExtendPositionMutation();
   const closeMutation = useClosePositionMutation();
+  const transferOwnershipMutation = useTransferPositionOwnershipMutation();
   const relinquishVotesMutation = useRelinquishPositionVotesMutation();
 
   const handleUpdateProxy = async ({
@@ -467,6 +473,29 @@ export const PositionManager: FC<PositionManagerProps> = ({
     }
   };
 
+  const handleTransferOwnership = async (destinationWallet: string) => {
+    try {
+      await transferOwnershipMutation.submit(
+        {
+          from: walletPublicKey!.toBase58(),
+          to: destinationWallet,
+          positionMint: position.mint.toBase58(),
+        },
+        {
+          header: "Transfer Ownership",
+          message: "Transferring position ownership",
+        }
+      );
+
+      router.replace(`/${network}/positions`);
+      toast("Position ownership transferred");
+    } catch (e: any) {
+      if (!(e instanceof WalletSignTransactionError)) {
+        toast(e.message || "Transfer failed, please try again");
+      }
+    }
+  };
+
   useAsync(async () => {
     if (action) {
       const actionFunctions = {
@@ -547,6 +576,14 @@ export const PositionManager: FC<PositionManagerProps> = ({
                     disabled={!isHNT}
                   >
                     Merge Position
+                  </PositionAction>
+                  <PositionAction
+                    active={action === "transferOwnership"}
+                    Icon={Send}
+                    onClick={() => setAction("transferOwnership")}
+                    disabled={!isHNT}
+                  >
+                    Transfer Ownership
                   </PositionAction>
                 </div>
                 <span className="flex flex-grow h-[1px] bg-foreground/30 mx-2" />
@@ -647,6 +684,15 @@ export const PositionManager: FC<PositionManagerProps> = ({
                   isSubmitting={transferMutation.isPending}
                   onCancel={() => setAction(undefined)}
                   onConfirm={handleMergePosition}
+                />
+              )}
+              {action === "transferOwnership" && (
+                <TransferOwnershipPrompt
+                  position={position}
+                  walletAddress={walletPublicKey?.toBase58() || ""}
+                  isSubmitting={transferOwnershipMutation.isPending}
+                  onCancel={() => setAction(undefined)}
+                  onConfirm={handleTransferOwnership}
                 />
               )}
             </PositionActionBoundary>

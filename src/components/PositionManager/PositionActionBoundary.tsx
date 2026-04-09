@@ -28,7 +28,7 @@ export const PositionActionBoundary: FC<
   const { hasRewards, isDelegated, numActiveVotes } = position;
   const hasVotes = numActiveVotes > 0;
   const hasBlockers = hasRewards || isDelegated || hasVotes;
-  const canDoWhileBlocked = action === "delegate" || action == "proxy";
+  const canDoWhileBlocked = action === "delegate" || action === "proxy" || action === "transferOwnership";
 
   if (!action) {
     return children;

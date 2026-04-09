@@ -318,10 +318,10 @@
     bs58 "^4.0.1"
     react-async-hook "^4.0.0"
 
-"@helium/blockchain-api@^0.11.15":
-  version "0.11.16"
-  resolved "https://registry.yarnpkg.com/@helium/blockchain-api/-/blockchain-api-0.11.16.tgz#160d0f0a3d7edcc15ff57404c38b7ee403723d55"
-  integrity sha512-hpwrFq7mOBq72Nnql4dzR2SanxFcO0K0Gnx5ds8E2RlTxeMb5R64CMEfbIlfb4ugB0Hf8V7bD0VaXIakPbxTzQ==
+"@helium/blockchain-api@^0.11.17":
+  version "0.11.17"
+  resolved "https://registry.yarnpkg.com/@helium/blockchain-api/-/blockchain-api-0.11.17.tgz#586e17be6d4e079af049f98911a8599705ee0b43"
+  integrity sha512-ajaxZrdCJQ6N4U1034BusYOp5dSFooVeoMii38lTv23qyH2rfhUk+ASsGhxSf2NyDB3myAQYBdBvR1MglysxDQ==
   dependencies:
     "@orpc/contract" "^1.13.2"
     zod "^4.3.5"
