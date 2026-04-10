@@ -487,8 +487,10 @@ export const PositionManager: FC<PositionManagerProps> = ({
         }
       );
 
-      router.replace(`/${network}/positions`);
       toast("Position ownership transferred");
+      await new Promise((resolve) => setTimeout(resolve, 3000));
+      refetchState();
+      router.replace(`/${network}/positions`);
     } catch (e: any) {
       if (!(e instanceof WalletSignTransactionError)) {
         toast(e.message || "Transfer failed, please try again");
