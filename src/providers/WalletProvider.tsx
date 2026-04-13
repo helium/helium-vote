@@ -30,8 +30,9 @@ const WalletAdapterProvider: FC<React.PropsWithChildren> = ({ children }) => {
       projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || "",
       features: {
         analytics: false,
+        socials: false,
+        email: false,
       },
-      enableWallets: false,
     },
   });
 
