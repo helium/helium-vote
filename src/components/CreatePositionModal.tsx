@@ -1,9 +1,8 @@
 "use client";
 
-import { daysToSecs, onInstructions } from "@/lib/utils";
+import { daysToSecs } from "@/lib/utils";
 import { useGovernance } from "@/providers/GovernanceProvider";
 import {
-  useAnchorProvider,
   useMint,
   useOwnedAmount,
 } from "@helium/helium-react-hooks";
@@ -11,8 +10,8 @@ import { HNT_MINT, toBN, toNumber } from "@helium/spl-utils";
 import {
   PositionWithMeta,
   calcLockupMultiplier,
-  useCreatePosition,
 } from "@helium/voter-stake-registry-hooks";
+import { useCreatePositionMutation } from "@/hooks/useGovernanceMutations";
 import { WalletSignTransactionError } from "@solana/wallet-adapter-base";
 import { useWallet } from "@/hooks/useWallet";
 import { PublicKey } from "@solana/web3.js";
@@ -30,26 +29,23 @@ import { SubDaoSelection } from "./SubDaoSelection";
 import { Button } from "./ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
 import { PositionPreview } from "./PositionPreview";
-import { MOBILE_SUB_DAO_KEY } from "@/lib/constants";
+import { IOT_SUB_DAO_KEY, MOBILE_SUB_DAO_KEY } from "@/lib/constants";
+import { IOT_MINT, MOBILE_MINT } from "@helium/spl-utils";
 import { DataSplitBars } from "./DataSplitBars";
 import { AutomationSettings } from "./AutomationSettings";
 
 export const CreatePositionModal: FC<React.PropsWithChildren<{}>> = ({
   children,
 }) => {
-  const provider = useAnchorProvider();
   const [step, setStep] = useState(1);
   const [open, setOpen] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formValues, setFormValues] = useState<LockTokensFormValues>();
   const [selectedSubDaoPk, setSelectedSubDaoPk] = useState<PublicKey>();
   const [automationEnabled, setAutomationEnabled] = useState(true);
   const { publicKey: wallet } = useWallet();
   const { mint, subDaos, registrar, refetch: refetchState } = useGovernance();
   const { amount: ownedAmount, decimals } = useOwnedAmount(wallet, mint);
-  const { error: createPositionError, createPosition, rentFee, prepaidTxFees, insufficientBalance } = useCreatePosition({
-    automationEnabled,
-  });
+  const createPositionMutation = useCreatePositionMutation();
   const steps = useMemo(() => (mint.equals(HNT_MINT) ? 3 : 2), [mint]);
 
   useEffect(() => {
@@ -107,7 +103,7 @@ export const CreatePositionModal: FC<React.PropsWithChildren<{}>> = ({
   );
 
   const handleOpenChange = () => {
-    setIsSubmitting(false);
+    createPositionMutation.reset();
     setFormValues(undefined);
     setOpen(!open);
     setStep(1);
@@ -121,42 +117,42 @@ export const CreatePositionModal: FC<React.PropsWithChildren<{}>> = ({
   const handleLockTokens = async () => {
     try {
       const { amount, lockupPeriodInDays, lockupKind } = formValues!;
-      setIsSubmitting(true);
 
       if (decimals) {
         const amountToLock = toBN(amount, decimals);
-        await createPosition({
-          amount: amountToLock,
-          lockupPeriodsInDays: lockupPeriodInDays,
-          lockupKind: lockupKind,
-          mint,
-          ...(subDaos && selectedSubDaoPk
-            ? {
-                subDao: subDaos.find((subDao) =>
-                  subDao.pubkey.equals(selectedSubDaoPk!)
-                )!,
-              }
-            : {}),
-          onInstructions: onInstructions(provider),
-        });
+        await createPositionMutation.submit(
+          {
+            amount: amountToLock.toString(),
+            mint: mint.toBase58(),
+            lockupKind: lockupKind as "cliff" | "constant",
+            lockupPeriodsInDays: lockupPeriodInDays,
+            ...(subDaos && selectedSubDaoPk
+              ? {
+                  subDaoMint: selectedSubDaoPk.equals(IOT_SUB_DAO_KEY)
+                    ? IOT_MINT.toBase58()
+                    : MOBILE_MINT.toBase58(),
+                  automationEnabled,
+                }
+              : {}),
+          },
+          {
+            header: "Create Position",
+            message: "Locking tokens and creating position",
+          }
+        );
 
         toast.success("Position created successfully");
-        setIsSubmitting(false);
-
-        if (!createPositionError) {
-          setOpen(false);
-          refetchState();
-        } else {
-          toast(createPositionError.message);
-        }
+        setOpen(false);
+        refetchState();
       }
     } catch (e: any) {
-      setIsSubmitting(false);
       if (!(e instanceof WalletSignTransactionError)) {
         toast(e.message || "Position creation failed, please try again");
       }
     }
   };
+
+  const isSubmitting = createPositionMutation.isPending;
 
   const verb =
     (step === 1 && "Create") ||
@@ -215,8 +211,8 @@ export const CreatePositionModal: FC<React.PropsWithChildren<{}>> = ({
               <AutomationSettings
                 automationEnabled={automationEnabled}
                 setAutomationEnabled={setAutomationEnabled}
-                solFees={rentFee}
-                prepaidTxFees={prepaidTxFees}
+                solFees={createPositionMutation.estimatedSolFee?.uiAmount ?? 0}
+                prepaidTxFees={0}
               />
 
               <div className="flex flex-col gap-4 p-4 text-sm bg-slate-600 rounded">
@@ -250,9 +246,8 @@ export const CreatePositionModal: FC<React.PropsWithChildren<{}>> = ({
               <Button
                 className="flex-grow text-foreground gap-2"
                 onClick={() => setStep(step + 1)}
-                disabled={!!insufficientBalance}
               >
-                {insufficientBalance ? "Insufficient SOL" : "Review"}
+                Review
               </Button>
             </div>
           </>

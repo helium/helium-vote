@@ -1,14 +1,16 @@
 "use client";
 
 import { VoteChoiceWithMeta } from "@/lib/types";
-import { onInstructions } from "@/lib/utils";
 import { useGovernance } from "@/providers/GovernanceProvider";
-import { useAnchorProvider } from "@helium/helium-react-hooks";
 import {
-  useAssignProxies,
   useRelinquishVote,
   useVote,
 } from "@helium/voter-stake-registry-hooks";
+import {
+  useVoteMutation,
+  useRelinquishVoteMutation,
+  useAssignProxiesMutation,
+} from "@/hooks/useGovernanceMutations";
 import { WalletSignTransactionError } from "@solana/wallet-adapter-base";
 import { PublicKey } from "@solana/web3.js";
 import { FC, useMemo, useState } from "react";
@@ -26,7 +28,6 @@ export const VoteOptions: FC<{
   const {
     didVote,
     canVote,
-    vote,
     loading: voting,
     voters,
   } = useVote(proposalKey);
@@ -42,21 +43,35 @@ export const VoteOptions: FC<{
   );
   const canProxy = !!unproxiedPositions?.length;
 
+  const positionMints = useMemo(
+    () => positions?.map((p) => p.mint.toBase58()) || [],
+    [positions]
+  );
+
   const {
     canRelinquishVote,
-    relinquishVote,
     loading: relinquishing,
   } = useRelinquishVote(proposalKey);
-  const provider = useAnchorProvider();
+
+  const voteMutation = useVoteMutation();
+  const relinquishVoteMutation = useRelinquishVoteMutation();
+  const assignProxiesMutation = useAssignProxiesMutation();
 
   const handleVote = (choice: VoteChoiceWithMeta) => async () => {
-    if (canVote(choice.index) && provider) {
+    if (canVote(choice.index)) {
       try {
         setCurrVote(choice.index);
-        await vote({
-          choice: choice.index,
-          onInstructions: onInstructions(provider),
-        });
+        await voteMutation.submit(
+          {
+            proposalKey: proposalKey.toBase58(),
+            positionMints,
+            choice: choice.index,
+          },
+          {
+            header: "Cast Vote",
+            message: `Voting for ${choice.name}`,
+          }
+        );
         toast("Vote submitted");
       } catch (e: any) {
         console.error(e);
@@ -72,12 +87,17 @@ export const VoteOptions: FC<{
     if (canRelinquishVote(choice.index)) {
       try {
         setCurrVote(choice.index);
-        await relinquishVote({
-          choice: choice.index,
-          onInstructions: onInstructions(provider, {
-            useFirstEstimateForAll: true,
-          }),
-        });
+        await relinquishVoteMutation.submit(
+          {
+            proposalKey: proposalKey.toBase58(),
+            positionMints,
+            choice: choice.index,
+          },
+          {
+            header: "Relinquish Vote",
+            message: `Relinquishing vote for ${choice.name}`,
+          }
+        );
         toast("Vote relinquished");
       } catch (e: any) {
         console.error(e);
@@ -88,8 +108,6 @@ export const VoteOptions: FC<{
       }
     }
   };
-
-  const { mutateAsync: assignProxies } = useAssignProxies();
 
   return (
     <div className="flex flex-col gap-2">
@@ -118,17 +136,20 @@ export const VoteOptions: FC<{
               precedence over a proxy.
             </p>
             <AssignProxyModal
-              onSubmit={(args) => {
-                return assignProxies({
-                  ...args,
-                  onInstructions: async (instructionArrays) => {
-                    for (const instructions of instructionArrays) {
-                      await onInstructions(provider, {
-                        useFirstEstimateForAll: true,
-                      })(instructions);
-                    }
+              onSubmit={async (args) => {
+                await assignProxiesMutation.submit(
+                  {
+                    proxyKey: args.recipient.toBase58(),
+                    positionMints: args.positions.map((p) =>
+                      p.mint.toBase58()
+                    ),
+                    expirationTime: args.expirationTime.toNumber(),
                   },
-                });
+                  {
+                    header: "Assign Proxy",
+                    message: "Assigning proxy voter",
+                  }
+                );
               }}
             >
               <ProxyButton />
@@ -139,7 +160,10 @@ export const VoteOptions: FC<{
       {choices.map((r, index) => (
         <VoteOption
           key={r.name}
-          voting={currVote === r.index && (voting || relinquishing)}
+          voting={
+            currVote === r.index &&
+            (voting || relinquishing || voteMutation.isPending || relinquishVoteMutation.isPending)
+          }
           option={r}
           voters={voters?.[r.index] || []}
           didVote={didVote?.[r.index]}

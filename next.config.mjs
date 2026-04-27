@@ -27,6 +27,12 @@ const nextConfig = {
         port: "",
         pathname: "/**/**",
       },
+      {
+        protocol: "https",
+        hostname: "entities.nft.helium.io",
+        port: "",
+        pathname: "/**/**",
+      },
       ...(process.env.NODE_ENV === "development" ? [
         {
           protocol: "http",

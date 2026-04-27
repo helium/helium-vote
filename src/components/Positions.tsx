@@ -7,26 +7,22 @@ import { FaStar, FaCircleArrowRight } from "react-icons/fa6";
 import { Loader2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import BN from "bn.js";
-import { useClaimAllPositionsRewards } from "@helium/voter-stake-registry-hooks";
 import { PositionCard, PositionCardSkeleton } from "./PositionCard";
 import { useWallet } from "@/hooks/useWallet";
 import { toast } from "sonner";
 import { Skeleton } from "./ui/skeleton";
 import { CreatePositionButton } from "./CreatePositionButton";
-import { onInstructions } from "@/lib/utils";
-import {
-  useAnchorProvider,
-  useSolanaUnixNow,
-} from "@helium/helium-react-hooks";
 import { ContentSection } from "./ContentSection";
 import { WalletSignTransactionError } from "@solana/wallet-adapter-base";
 import { useRouter } from "next/navigation";
 import { AssignProxyModal } from "./AssignProxyModal";
 import { ProxyButton } from "./ProxyButton";
-import { useAssignProxies } from "@helium/voter-stake-registry-hooks";
+import {
+  useClaimRewardsMutation,
+  useAssignProxiesMutation,
+} from "@/hooks/useGovernanceMutations";
 
 export const Positions: FC = () => {
-  const provider = useAnchorProvider();
   const { connecting } = useWallet();
   const {
     loading: loadingGov,
@@ -95,21 +91,21 @@ export const Positions: FC = () => {
     [unProxiedPositions]
   );
 
-  const { loading: claimingAllRewards, claimAllPositionsRewards } =
-    useClaimAllPositionsRewards();
-
-  const { mutateAsync: assignProxies } = useAssignProxies();
+  const claimRewardsMutation = useClaimRewardsMutation();
+  const assignProxiesMutation = useAssignProxiesMutation();
 
   const handleClaimRewards = async () => {
     if (positionsWithRewards) {
       try {
-        await claimAllPositionsRewards({
-          positions: positionsWithRewards,
-          onInstructions: onInstructions(provider, {
-            useFirstEstimateForAll: true,
-            maxInstructionsPerTx: 8,
-          }),
-        });
+        await claimRewardsMutation.submit(
+          {
+            positionMints: positionsWithRewards.map((p) => p.mint.toBase58()),
+          },
+          {
+            header: "Claim All Rewards",
+            message: "Claiming rewards for all positions",
+          }
+        );
 
         toast("Rewards claimed!");
         refetchState();
@@ -175,12 +171,19 @@ export const Positions: FC = () => {
                     <AssignProxyModal
                       includeProxied
                       onSubmit={async (args) => {
-                        await assignProxies({
-                          ...args,
-                          onInstructions: onInstructions(provider, {
-                            useFirstEstimateForAll: true,
-                          }),
-                        });
+                        await assignProxiesMutation.submit(
+                          {
+                            proxyKey: args.recipient.toBase58(),
+                            positionMints: args.positions.map((p) =>
+                              p.mint.toBase58()
+                            ),
+                            expirationTime: args.expirationTime.toNumber(),
+                          },
+                          {
+                            header: "Assign Proxy",
+                            message: "Assigning proxy voter to all positions",
+                          }
+                        );
                         refetchState();
                       }}
                     >
@@ -201,15 +204,15 @@ export const Positions: FC = () => {
                 <Button
                   variant="default"
                   className="text-foreground flex flex-row gap-2 items-center"
-                  disabled={!hasRewards || claimingAllRewards}
+                  disabled={!hasRewards || claimRewardsMutation.isPending}
                   onClick={handleClaimRewards}
                 >
-                  {claimingAllRewards ? (
+                  {claimRewardsMutation.isPending ? (
                     <Loader2 className="size-4 animate-spin" />
                   ) : (
                     <FaStar className="size-4" />
                   )}
-                  {claimingAllRewards ? "Claiming Rewards..." : "Claim Rewards"}
+                  {claimRewardsMutation.isPending ? "Claiming Rewards..." : "Claim Rewards"}
                 </Button>
               </>
             )}
