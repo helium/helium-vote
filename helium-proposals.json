@@ -368,5 +368,25 @@
       { "uri": null, "name": "For HIP-149" },
       { "uri": null, "name": "Against HIP-149" }
     ]
+  },
+  {
+    "name": "HIP-149: Advisory Council Election",
+    "uri": "https://gist.githubusercontent.com/hiptron/60b0b7c20cbb37186054f88d86c29771/raw/21a55ba9f000133cb0dbddb1a2269345c0fa15da/election-summary.md",
+    "maxChoicesPerVoter": 5,
+    "tags": ["advisory-council"],
+    "choices": [
+      { "uri": null, "name": "Adrian Clint (@waveformiot)" },
+      { "uri": null, "name": "Chris Ferebee (@ferebee)" },
+      { "uri": null, "name": "Eric Eife (@eme0967)" },
+      { "uri": null, "name": "Jacob Brady (@jhbr821)" },
+      { "uri": null, "name": "James Fayal (@jmf1)" },
+      { "uri": null, "name": "Jeremy Harris (@jpharris1981)" },
+      { "uri": null, "name": "Jeremy Mahrle (@jaym2518)" },
+      { "uri": null, "name": "Keith Rettig (@keith_rettig)" },
+      { "uri": null, "name": "Omar Henry (@maknbank)" },
+      { "uri": null, "name": "Pepe Ortiz (@perro69696969)" },
+      { "uri": null, "name": "Samuel Andrews, MD (@andrewsmd)" },
+      { "uri": null, "name": "Thomas Kuit (@tommyy3858)" }
+    ]
   }
 ]
