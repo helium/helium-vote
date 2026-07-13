@@ -371,7 +371,7 @@
   },
   {
     "name": "HIP-149: Advisory Council Election",
-    "uri": "https://gist.githubusercontent.com/hiptron/60b0b7c20cbb37186054f88d86c29771/raw/21a55ba9f000133cb0dbddb1a2269345c0fa15da/hip149.md",
+    "uri": "https://gist.githubusercontent.com/hiptron/60b0b7c20cbb37186054f88d86c29771/raw/e4cdc86e89a079f22d12406bfd81bca1ee2024c0/hip149.md",
     "maxChoicesPerVoter": 5,
     "tags": ["advisory-council"],
     "choices": [
