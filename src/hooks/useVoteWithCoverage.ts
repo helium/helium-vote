@@ -57,42 +57,62 @@ export const useVoteWithCoverage = ({
         positionMints,
         choice: choice.index,
       };
+      const submitOptions = {
+        header: "Cast Vote",
+        message: `Voting for ${choice.name}`,
+      };
+
+      // Read the skip report off an ALL_POSITIONS_SKIPPED throw, else rethrow.
+      const skipReportOrThrow = (e: unknown): SkippedPosition[] => {
+        if (isAllPositionsSkippedError(e)) return readSkippedFromError(e);
+        throw e;
+      };
+
+      // Submit the vote — building it fresh unless a prepared response is
+      // supplied — and return its skip report. One build per call.
+      const submitVote = async (
+        prepared?: Awaited<ReturnType<typeof voteMutation.prepare>>
+      ): Promise<SkippedPosition[]> => {
+        const built = prepared ?? (await voteMutation.prepare(params));
+        await voteMutation.submit(params, submitOptions, built);
+        return readSkipped(built);
+      };
+
       setVotingChoice(choice.index);
       try {
         // 1. Build the vote — the skip report rides along on the response.
+        let prepared: Awaited<ReturnType<typeof voteMutation.prepare>>;
         let initialSkipped: SkippedPosition[];
         try {
-          const prepared = await voteMutation.prepare(params);
+          prepared = await voteMutation.prepare(params);
           initialSkipped = readSkipped(prepared);
         } catch (e) {
-          if (isAllPositionsSkippedError(e)) {
-            reportAllSkipped(readSkippedFromError(e));
-            return;
-          }
-          throw e;
+          reportAllSkipped(skipReportOrThrow(e));
+          return;
         }
 
-        // 2. Warn before submitting if any position hit its choice cap.
+        // 2. Warn before submitting if any position hit its choice cap. If the
+        //    dialog was shown the blockhash may have gone stale, so drop the
+        //    prepared build and let submit rebuild.
         const { maxChoices } = partitionSkips(initialSkipped);
+        let reusable: typeof prepared | undefined = prepared;
         if (maxChoices.length > 0) {
           const proceed = await confirmMaxChoices(maxChoices);
           if (!proceed) return;
+          reusable = undefined;
         }
 
-        // 3. Submit (re-builds server-side; safe after the dialog delay).
+        // 3. Submit. A user cancel or all-positions-skipped short-circuits, but
+        //    any other failure (including a partial batch landing) falls through
+        //    to coverage verification — the markers are ground truth.
         try {
-          await voteMutation.submit(params, {
-            header: "Cast Vote",
-            message: `Voting for ${choice.name}`,
-          });
+          await submitVote(reusable);
         } catch (e) {
+          if (e instanceof WalletSignTransactionError) return;
           if (isAllPositionsSkippedError(e)) {
             reportAllSkipped(readSkippedFromError(e));
             return;
           }
-          if (e instanceof WalletSignTransactionError) return;
-          toast((e as Error)?.message || "Vote failed, please try again");
-          return;
         }
 
         // 4. Verify on-chain coverage with at most one transparent retry.
@@ -105,23 +125,13 @@ export const useVoteWithCoverage = ({
             fetchMarkers: (mints) =>
               fetchVoteMarkerChoices(connection, proposalKey, mints),
             resubmit: async () => {
-              try {
-                const prepared = await voteMutation.prepare(params);
-                await voteMutation.submit(params, {
-                  header: "Cast Vote",
-                  message: `Voting for ${choice.name}`,
-                });
-                return readSkipped(prepared);
-              } catch (e) {
-                if (isAllPositionsSkippedError(e)) {
-                  return readSkippedFromError(e);
-                }
-                throw e;
-              }
+              const skipped = await submitVote().catch(skipReportOrThrow);
+              // Let the resubmitted vote settle before the second marker read.
+              await new Promise((r) => setTimeout(r, MARKER_SETTLE_MS));
+              return skipped;
             },
             initialSkipped,
           });
-          toast.dismiss(verifying);
 
           if (result.covered) {
             toast("Vote submitted");

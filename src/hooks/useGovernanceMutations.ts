@@ -58,7 +58,7 @@ function responseHasMore(r: unknown): r is { hasMore: boolean } {
 
 function useGovernanceMutation<
   M extends GovernanceMethod,
-  TParams = ApiParams<M>,
+  TParams = ApiParams<M>
 >(config: {
   method: M;
   buildTag: (params: TParams) => string;
@@ -92,15 +92,19 @@ function useGovernanceMutation<
     [wallet, resolveApiParams, apiFn]
   );
 
-  const prepare = useCallback(
-    (params: TParams) => callApi(params),
-    [callApi]
-  );
+  const prepare = useCallback((params: TParams) => callApi(params), [callApi]);
 
   const submit = useCallback(
-    (params: TParams, options: GovernanceSubmitOptions) =>
+    (
+      params: TParams,
+      options: GovernanceSubmitOptions,
+      // A response previously returned by `prepare`. When supplied, `submit`
+      // reuses it instead of rebuilding the transaction, so a prepare→submit
+      // pair costs a single build.
+      prepared?: Awaited<ReturnType<typeof callApi>>
+    ) =>
       wrapMutate(async () => {
-        const response = await callApi(params);
+        const response = prepared ?? (await callApi(params));
         const tag = config.buildTag(params);
         const walletAddress = requireWallet(wallet);
         const fetchMore =
