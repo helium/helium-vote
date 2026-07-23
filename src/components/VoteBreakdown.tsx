@@ -39,51 +39,68 @@ export const VoteBreakdown: FC<{
     votesForProposalQuery({
       voteService,
       proposal: proposalKey,
-    })
+    }),
   );
   const { info: proposal, loading: loadingProp } = useProposal(proposalKey);
   const { info: proposalConfig, loading: loadingConf } = useProposalConfig(
-    proposal?.proposalConfig
+    proposal?.proposalConfig,
   );
   const { info: registrar, loading: loadingReg } = useRegistrar(
-    proposalConfig?.voteController
+    proposalConfig?.voteController,
   );
   const decimals = useMint(registrar?.votingMints[0].mint)?.info?.decimals;
-  const totalVotes = useMemo(
-    () =>
-      (proposal?.choices || []).reduce((acc, { weight }) => {
-        return acc.add(weight);
-      }, new BN(0)),
-    [proposal?.choices]
-  );
-
   const groupedSortedVotes = useMemo(() => {
     if (decimals) {
       const grouped = Object.values(
-        (votes || []).reduce((acc, vote) => {
-          const key = vote.voter;
-          if (!acc[key]) {
-            acc[key] = {
-              voter: vote.voter,
-              choices: [],
-              totalWeight: new BN(0),
-              proxyName: vote.proxyName,
-            };
-          }
+        (votes || []).reduce(
+          (acc, vote) => {
+            const key = vote.voter;
+            if (!acc[key]) {
+              acc[key] = {
+                voter: vote.voter,
+                choices: [],
+                totalWeight: new BN(0),
+                proxyName: vote.proxyName,
+              };
+            }
 
-          acc[key].choices.push(vote.choiceName);
-          acc[key].totalWeight = acc[key].totalWeight.add(new BN(vote.weight));
-          return acc;
-        }, {} as Record<string, { voter: string; choices: string[]; totalWeight: BN; proxyName?: string }>)
+            acc[key].choices.push(vote.choiceName);
+            // Each row carries the wallet's full vote power for that choice,
+            // so summing rows would multiply it by the number of choices
+            acc[key].totalWeight = BN.max(
+              acc[key].totalWeight,
+              new BN(vote.weight),
+            );
+            return acc;
+          },
+          {} as Record<
+            string,
+            {
+              voter: string;
+              choices: string[];
+              totalWeight: BN;
+              proxyName?: string;
+            }
+          >,
+        ),
       );
 
       const sortedMarkers = grouped.sort((a, b) =>
-        toNumber(b.totalWeight.sub(a.totalWeight), decimals)
+        toNumber(b.totalWeight.sub(a.totalWeight), decimals),
       );
 
       return sortedMarkers;
     }
   }, [votes, decimals]);
+
+  const totalVotes = useMemo(
+    () =>
+      (groupedSortedVotes || []).reduce(
+        (acc, { totalWeight }) => acc.add(totalWeight),
+        new BN(0),
+      ),
+    [groupedSortedVotes],
+  );
 
   const csvData = useMemo(() => {
     const rows: string[][] = [];
@@ -117,7 +134,7 @@ export const VoteBreakdown: FC<{
 
   const displayedVotes = useMemo(
     () => (groupedSortedVotes || []).slice(0, displayCount),
-    [groupedSortedVotes, displayCount]
+    [groupedSortedVotes, displayCount],
   );
 
   const handleCSVDownload = () => {
@@ -133,7 +150,7 @@ export const VoteBreakdown: FC<{
         `${proposal?.name
           .toLowerCase()
           .split(" ")
-          .join("_")}_vote_breakdown.csv`
+          .join("_")}_vote_breakdown.csv`,
       );
       link.style.visibility = "hidden";
       document.body.appendChild(link);
@@ -144,7 +161,7 @@ export const VoteBreakdown: FC<{
 
   const isLoading = useMemo(
     () => loadingVotes || loadingProp || loadingConf || loadingReg,
-    [loadingVotes, loadingProp, loadingConf, loadingReg]
+    [loadingVotes, loadingProp, loadingConf, loadingReg],
   );
 
   return (
@@ -185,7 +202,7 @@ export const VoteBreakdown: FC<{
                 key={vote.voter}
                 className={classNames(
                   "!hover:bg-initial",
-                  i % 2 === 0 ? "bg-slate-700" : "bg-slate-800"
+                  i % 2 === 0 ? "bg-slate-700" : "bg-slate-800",
                 )}
               >
                 <TableCell>
