@@ -125,7 +125,16 @@ export const useVoteWithCoverage = ({
             fetchMarkers: (mints) =>
               fetchVoteMarkerChoices(connection, proposalKey, mints),
             resubmit: async () => {
-              const skipped = await submitVote().catch(skipReportOrThrow);
+              let skipped: SkippedPosition[] | undefined;
+              try {
+                skipped = await submitVote();
+              } catch (e) {
+                // A cancelled or partially-failed retry still ends in the final
+                // marker diff — report ground truth, not a generic error.
+                if (isAllPositionsSkippedError(e)) {
+                  skipped = readSkippedFromError(e);
+                }
+              }
               // Let the resubmitted vote settle before the second marker read.
               await new Promise((r) => setTimeout(r, MARKER_SETTLE_MS));
               return skipped;
