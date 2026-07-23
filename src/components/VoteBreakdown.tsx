@@ -28,12 +28,7 @@ import classNames from "classnames";
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import { useGovernance } from "@/providers/GovernanceProvider";
-
-// The vote-service rows now carry the casting proxy wallet(s)/name(s) for owner
-// rows that voted via proxy (empty for direct votes).
-// TODO: import from @helium/blockchain-api once the skip-report release ships.
-type CastingProxy = { wallet: string; name: string | null };
-type VoteRow = { castingProxies?: CastingProxy[] };
+import { CastingProxy, VoteRow } from "@/lib/voteServiceContract";
 
 export const VoteBreakdown: FC<{
   proposalKey: PublicKey;
@@ -102,7 +97,14 @@ export const VoteBreakdown: FC<{
 
   const csvData = useMemo(() => {
     const rows: string[][] = [];
-    rows.push(["Owner", "Choices", "Vote Power", "Percentage", "Proxy Name"]);
+    rows.push([
+      "Owner",
+      "Choices",
+      "Vote Power",
+      "Percentage",
+      "Proxy Name",
+      "Voted Via",
+    ]);
 
     (groupedSortedVotes || []).forEach((vote) => {
       const owner = vote.voter;
@@ -114,6 +116,9 @@ export const VoteBreakdown: FC<{
         .div(new BN(1000))
         .toNumber()
         .toFixed(2);
+      const votedVia = vote.castingProxies
+        .map((p) => p.name ?? ellipsisMiddle(p.wallet))
+        .join("; ");
 
       rows.push([
         owner,
@@ -121,6 +126,7 @@ export const VoteBreakdown: FC<{
         voteWeight || "",
         percentage,
         vote.proxyName || "",
+        votedVia,
       ]);
     });
 
@@ -163,20 +169,20 @@ export const VoteBreakdown: FC<{
   );
 
   return (
-    <div className="flex flex-grow flex-col gap-4">
+    <div className="flex flex-col flex-grow gap-4">
       <div className="flex flex-row justify-between">
         <h4>Voter Breakdown</h4>
         <span className="cursor-pointer underline" onClick={handleCSVDownload}>
           Download as CSV
         </span>
       </div>
-      <Table className="mt-4 text-base">
+      <Table className="text-base mt-4">
         {groupedSortedVotes && groupedSortedVotes.length > displayCount && (
           <TableCaption></TableCaption>
         )}
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[100px] rounded-tl-md bg-slate-900 text-muted-foreground">
+            <TableHead className="bg-slate-900 rounded-tl-md w-[100px] text-muted-foreground">
               OWNER
             </TableHead>
             <TableHead className="bg-slate-900 text-muted-foreground">
@@ -188,7 +194,7 @@ export const VoteBreakdown: FC<{
             <TableHead className="bg-slate-900 text-muted-foreground">
               PERCENTAGE
             </TableHead>
-            <TableHead className="rounded-tr-md bg-slate-900 text-muted-foreground">
+            <TableHead className="bg-slate-900 rounded-tr-md text-muted-foreground">
               PROXY NAME
             </TableHead>
           </TableRow>
@@ -251,12 +257,12 @@ export const VoteBreakdown: FC<{
           </TableBody>
         )}
       </Table>
-      <div className="flex flex-row md:mx-auto md:block">
+      <div className="flex flex-row md:block md:mx-auto">
         <Button
           variant="secondary"
           onClick={() => setDisplayCount(displayCount + 6)}
           size="sm"
-          className="w-full gap-2 rounded-full md:w-auto"
+          className="gap-2 w-full md:w-auto rounded-full"
         >
           Show More
           <FaChevronDown />

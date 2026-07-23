@@ -2,7 +2,10 @@
 
 import { VoteChoiceWithMeta } from "@/lib/types";
 import { useGovernance } from "@/providers/GovernanceProvider";
-import { useRelinquishVote, useVote } from "@helium/voter-stake-registry-hooks";
+import {
+  useRelinquishVote,
+  useVote,
+} from "@helium/voter-stake-registry-hooks";
 import {
   useRelinquishVoteMutation,
   useAssignProxiesMutation,
@@ -35,7 +38,12 @@ export const VoteOptions: FC<{
   proposalKey: PublicKey;
 }> = ({ choices = [], maxChoicesPerVoter, proposalKey }) => {
   const [currVote, setCurrVote] = useState(0);
-  const { didVote, canVote, loading: voting, voters } = useVote(proposalKey);
+  const {
+    didVote,
+    canVote,
+    loading: voting,
+    voters,
+  } = useVote(proposalKey);
 
   const { positions } = useGovernance();
 
@@ -53,8 +61,10 @@ export const VoteOptions: FC<{
     [positions]
   );
 
-  const { canRelinquishVote, loading: relinquishing } =
-    useRelinquishVote(proposalKey);
+  const {
+    canRelinquishVote,
+    loading: relinquishing,
+  } = useRelinquishVote(proposalKey);
 
   const relinquishVoteMutation = useRelinquishVoteMutation();
   const assignProxiesMutation = useAssignProxiesMutation();
@@ -123,7 +133,7 @@ export const VoteOptions: FC<{
           (Vote for up to {maxChoicesPerVoter} of {choices.length} options)
         </p>
       </div>
-      <div className="flex flex-col gap-2 rounded-sm bg-gray-700 p-4">
+      <div className="flex flex-col p-4 bg-gray-700 rounded-sm gap-2">
         <p className="text-sm">
           Vote by clicking on an option below. Click again to remove your vote.
         </p>
@@ -131,7 +141,7 @@ export const VoteOptions: FC<{
           <>
             <div className="relative flex items-center">
               <div className="flex-grow border-t border-slate-500"></div>
-              <span className="mx-4 flex-shrink text-sm font-semibold text-slate-500">
+              <span className="flex-shrink mx-4 text-sm font-semibold text-slate-500">
                 OR
               </span>
               <div className="flex-grow border-t border-slate-500"></div>
@@ -146,7 +156,9 @@ export const VoteOptions: FC<{
                 await assignProxiesMutation.submit(
                   {
                     proxyKey: args.recipient.toBase58(),
-                    positionMints: args.positions.map((p) => p.mint.toBase58()),
+                    positionMints: args.positions.map((p) =>
+                      p.mint.toBase58()
+                    ),
                     expirationTime: args.expirationTime.toNumber(),
                   },
                   {
