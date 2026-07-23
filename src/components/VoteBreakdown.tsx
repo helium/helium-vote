@@ -29,6 +29,12 @@ import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import { useGovernance } from "@/providers/GovernanceProvider";
 
+// The vote-service rows now carry the casting proxy wallet(s)/name(s) for owner
+// rows that voted via proxy (empty for direct votes).
+// TODO: import from @helium/blockchain-api once the skip-report release ships.
+type CastingProxy = { wallet: string; name: string | null };
+type VoteRow = { castingProxies?: CastingProxy[] };
+
 export const VoteBreakdown: FC<{
   proposalKey: PublicKey;
 }> = ({ proposalKey }) => {
@@ -68,13 +74,22 @@ export const VoteBreakdown: FC<{
               choices: [],
               totalWeight: new BN(0),
               proxyName: vote.proxyName,
+              castingProxies: [],
             };
           }
 
           acc[key].choices.push(vote.choiceName);
           acc[key].totalWeight = acc[key].totalWeight.add(new BN(vote.weight));
+
+          const seen = new Set(acc[key].castingProxies.map((p) => p.wallet));
+          for (const proxy of (vote as VoteRow).castingProxies ?? []) {
+            if (!seen.has(proxy.wallet)) {
+              seen.add(proxy.wallet);
+              acc[key].castingProxies.push(proxy);
+            }
+          }
           return acc;
-        }, {} as Record<string, { voter: string; choices: string[]; totalWeight: BN; proxyName?: string }>)
+        }, {} as Record<string, { voter: string; choices: string[]; totalWeight: BN; proxyName?: string; castingProxies: CastingProxy[] }>)
       );
 
       const sortedMarkers = grouped.sort((a, b) =>
@@ -148,20 +163,20 @@ export const VoteBreakdown: FC<{
   );
 
   return (
-    <div className="flex flex-col flex-grow gap-4">
+    <div className="flex flex-grow flex-col gap-4">
       <div className="flex flex-row justify-between">
         <h4>Voter Breakdown</h4>
         <span className="cursor-pointer underline" onClick={handleCSVDownload}>
           Download as CSV
         </span>
       </div>
-      <Table className="text-base mt-4">
+      <Table className="mt-4 text-base">
         {groupedSortedVotes && groupedSortedVotes.length > displayCount && (
           <TableCaption></TableCaption>
         )}
         <TableHeader>
           <TableRow>
-            <TableHead className="bg-slate-900 rounded-tl-md w-[100px] text-muted-foreground">
+            <TableHead className="w-[100px] rounded-tl-md bg-slate-900 text-muted-foreground">
               OWNER
             </TableHead>
             <TableHead className="bg-slate-900 text-muted-foreground">
@@ -173,7 +188,7 @@ export const VoteBreakdown: FC<{
             <TableHead className="bg-slate-900 text-muted-foreground">
               PERCENTAGE
             </TableHead>
-            <TableHead className="bg-slate-900 rounded-tr-md text-muted-foreground">
+            <TableHead className="rounded-tr-md bg-slate-900 text-muted-foreground">
               PROXY NAME
             </TableHead>
           </TableRow>
@@ -196,6 +211,14 @@ export const VoteBreakdown: FC<{
                   >
                     {ellipsisMiddle(vote.voter)}
                   </Link>
+                  {vote.castingProxies.length > 0 && (
+                    <div className="text-xs text-muted-foreground">
+                      via{" "}
+                      {vote.castingProxies
+                        .map((p) => p.name ?? ellipsisMiddle(p.wallet))
+                        .join(", ")}
+                    </div>
+                  )}
                 </TableCell>
                 <TableCell>{vote.choices.join(", ")}</TableCell>
                 <TableCell>
@@ -228,12 +251,12 @@ export const VoteBreakdown: FC<{
           </TableBody>
         )}
       </Table>
-      <div className="flex flex-row md:block md:mx-auto">
+      <div className="flex flex-row md:mx-auto md:block">
         <Button
           variant="secondary"
           onClick={() => setDisplayCount(displayCount + 6)}
           size="sm"
-          className="gap-2 w-full md:w-auto rounded-full"
+          className="w-full gap-2 rounded-full md:w-auto"
         >
           Show More
           <FaChevronDown />
