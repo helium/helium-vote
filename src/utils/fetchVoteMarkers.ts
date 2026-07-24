@@ -11,6 +11,8 @@ const getProgram = (connection: Connection) => {
   let program = programCache.get(connection);
   if (!program) {
     program = init(new AnchorProvider(connection, {} as any, {}));
+    // Evict failed inits so a transient IDL-fetch error isn't cached forever.
+    program.catch(() => programCache.delete(connection));
     programCache.set(connection, program);
   }
   return program;

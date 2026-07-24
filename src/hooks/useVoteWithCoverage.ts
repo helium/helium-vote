@@ -102,7 +102,9 @@ export const useVoteWithCoverage = ({
         //    any other failure (including a partial batch landing) falls through
         //    to coverage verification — the markers are ground truth.
         try {
-          await submitVote(reusable);
+          // A rebuild after the dialog may skip newly-capped positions, so
+          // take the submit's skip report over the stale prepare's.
+          initialSkipped = await submitVote(reusable);
         } catch (e) {
           if (e instanceof WalletSignTransactionError) return;
           if (isAllPositionsSkippedError(e)) {
@@ -151,8 +153,18 @@ export const useVoteWithCoverage = ({
               },
             );
           }
+        } catch (e) {
+          console.error(e);
+          toast(
+            "Couldn't verify your vote on-chain. Refresh to confirm it registered.",
+          );
         } finally {
           toast.dismiss(verifying);
+        }
+      } catch (e: any) {
+        console.error(e);
+        if (!(e instanceof WalletSignTransactionError)) {
+          toast(e.message || "Vote failed, please try again");
         }
       } finally {
         setVotingChoice(null);

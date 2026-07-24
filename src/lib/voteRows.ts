@@ -17,8 +17,6 @@ export type GroupedVote = {
   castingProxies: CastingProxy[];
 };
 
-// Group vote-service rows into one entry per voter, sorted by weight
-// descending, with casting proxies deduped by wallet.
 export const groupVoteRows = (
   rows: VoteRowInput[],
   decimals: number,

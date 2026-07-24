@@ -69,7 +69,7 @@ export const runCoverageVerification = async (args: {
     args;
 
   let skipped = initialSkipped;
-  const check = async () =>
+  const readUncovered = async () =>
     findUncoveredMints({
       positionMints,
       skipped,
@@ -77,10 +77,10 @@ export const runCoverageVerification = async (args: {
       choice,
     });
 
-  let uncoveredMints = await check();
+  let uncoveredMints = await readUncovered();
   if (uncoveredMints.length > 0) {
     skipped = mergeSkips(skipped, await resubmit());
-    uncoveredMints = await check();
+    uncoveredMints = await readUncovered();
   }
 
   return {
