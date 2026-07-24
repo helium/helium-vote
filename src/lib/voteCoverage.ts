@@ -1,7 +1,7 @@
 import { SkippedPosition } from "@/lib/governanceContract";
 
 export const partitionSkips = (
-  skipped: SkippedPosition[] | undefined
+  skipped: SkippedPosition[] | undefined,
 ): { maxChoices: SkippedPosition[]; alreadyVoted: SkippedPosition[] } => {
   const maxChoices: SkippedPosition[] = [];
   const alreadyVoted: SkippedPosition[] = [];
@@ -16,17 +16,17 @@ export const partitionSkips = (
 // are excluded from the set we expect to see covered on-chain.
 const expectedMints = (
   positionMints: string[],
-  skipped: SkippedPosition[] | undefined
+  skipped: SkippedPosition[] | undefined,
 ): string[] => {
   const excluded = new Set(
-    partitionSkips(skipped).maxChoices.map((s) => s.positionMint)
+    partitionSkips(skipped).maxChoices.map((s) => s.positionMint),
   );
   return positionMints.filter((m) => !excluded.has(m));
 };
 
 const markerCoversChoice = (
   choices: number[] | null | undefined,
-  choice: number
+  choice: number,
 ): boolean => !!choices && choices.includes(choice);
 
 export const findUncoveredMints = (args: {
@@ -37,7 +37,7 @@ export const findUncoveredMints = (args: {
 }): string[] => {
   const { positionMints, skipped, markersByMint, choice } = args;
   return expectedMints(positionMints, skipped).filter(
-    (mint) => !markerCoversChoice(markersByMint.get(mint), choice)
+    (mint) => !markerCoversChoice(markersByMint.get(mint), choice),
   );
 };
 
@@ -45,7 +45,7 @@ export const findUncoveredMints = (args: {
 // initial one can only add exclusions — never resurrect a covered mint.
 const mergeSkips = (
   initial: SkippedPosition[] | undefined,
-  retry: SkippedPosition[] | undefined
+  retry: SkippedPosition[] | undefined,
 ): SkippedPosition[] | undefined => {
   if (!retry) return initial;
   const byMint = new Map<string, SkippedPosition>();
@@ -64,7 +64,6 @@ export const runCoverageVerification = async (args: {
   covered: boolean;
   uncoveredMints: string[];
   expectedCount: number;
-  retried: boolean;
 }> => {
   const { positionMints, choice, fetchMarkers, resubmit, initialSkipped } =
     args;
@@ -77,10 +76,7 @@ export const runCoverageVerification = async (args: {
     markersByMint,
     choice,
   });
-  let retried = false;
-
   if (uncoveredMints.length > 0) {
-    retried = true;
     skipped = mergeSkips(skipped, await resubmit());
     markersByMint = await fetchMarkers(positionMints);
     uncoveredMints = findUncoveredMints({
@@ -95,6 +91,5 @@ export const runCoverageVerification = async (args: {
     covered: uncoveredMints.length === 0,
     uncoveredMints,
     expectedCount: expectedMints(positionMints, skipped).length,
-    retried,
   };
 };

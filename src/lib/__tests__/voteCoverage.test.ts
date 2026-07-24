@@ -124,7 +124,6 @@ describe("runCoverageVerification", () => {
       covered: true,
       uncoveredMints: [],
       expectedCount: 1,
-      retried: false,
     });
   });
 
@@ -149,7 +148,6 @@ describe("runCoverageVerification", () => {
       covered: true,
       uncoveredMints: [],
       expectedCount: 1,
-      retried: true,
     });
   });
 
@@ -170,7 +168,6 @@ describe("runCoverageVerification", () => {
       covered: false,
       uncoveredMints: ["a"],
       expectedCount: 1,
-      retried: true,
     });
   });
 
@@ -201,7 +198,6 @@ describe("runCoverageVerification", () => {
       covered: true,
       uncoveredMints: [],
       expectedCount: 3,
-      retried: false,
     });
   });
 
@@ -239,7 +235,6 @@ describe("runCoverageVerification", () => {
       covered: false,
       uncoveredMints: ["c"],
       expectedCount: 3,
-      retried: true,
     });
   });
 
@@ -277,7 +272,6 @@ describe("runCoverageVerification", () => {
       covered: true,
       uncoveredMints: [],
       expectedCount: 1,
-      retried: true,
     });
   });
 });

@@ -22,14 +22,14 @@ const MARKER_SETTLE_MS = 2000;
 // The component supplies this to gate on a pre-vote max-choices warning:
 // resolves true to proceed, false to cancel.
 export type ConfirmMaxChoices = (
-  skipped: SkippedPosition[]
+  skipped: SkippedPosition[],
 ) => Promise<boolean>;
 
 const reportAllSkipped = (skipped: SkippedPosition[]) => {
   const { maxChoices, alreadyVoted } = partitionSkips(skipped);
   if (maxChoices.length > 0) {
     toast(
-      `${maxChoices.length} of your positions cannot support this candidate — they already used all their choices.`
+      `${maxChoices.length} of your positions cannot support this candidate — they already used all their choices.`,
     );
   } else if (alreadyVoted.length > 0) {
     toast("You've already voted for this option with these positions.");
@@ -50,7 +50,7 @@ export const useVoteWithCoverage = ({
   const castVote = useCallback(
     async function cast(
       choice: VoteChoiceWithMeta,
-      confirmMaxChoices: ConfirmMaxChoices
+      confirmMaxChoices: ConfirmMaxChoices,
     ): Promise<void> {
       const params = {
         proposalKey: proposalKey.toBase58(),
@@ -62,16 +62,10 @@ export const useVoteWithCoverage = ({
         message: `Voting for ${choice.name}`,
       };
 
-      // Read the skip report off an ALL_POSITIONS_SKIPPED throw, else rethrow.
-      const skipReportOrThrow = (e: unknown): SkippedPosition[] => {
-        if (isAllPositionsSkippedError(e)) return readSkippedFromError(e);
-        throw e;
-      };
-
       // Submit the vote — building it fresh unless a prepared response is
       // supplied — and return its skip report. One build per call.
       const submitVote = async (
-        prepared?: Awaited<ReturnType<typeof voteMutation.prepare>>
+        prepared?: Awaited<ReturnType<typeof voteMutation.prepare>>,
       ): Promise<SkippedPosition[]> => {
         const built = prepared ?? (await voteMutation.prepare(params));
         await voteMutation.submit(params, submitOptions, built);
@@ -87,7 +81,8 @@ export const useVoteWithCoverage = ({
           prepared = await voteMutation.prepare(params);
           initialSkipped = readSkipped(prepared);
         } catch (e) {
-          reportAllSkipped(skipReportOrThrow(e));
+          if (!isAllPositionsSkippedError(e)) throw e;
+          reportAllSkipped(readSkippedFromError(e));
           return;
         }
 
@@ -118,26 +113,25 @@ export const useVoteWithCoverage = ({
         // 4. Verify on-chain coverage with at most one transparent retry.
         const verifying = toast.loading("Verifying your vote on-chain…");
         try {
-          await new Promise((r) => setTimeout(r, MARKER_SETTLE_MS));
           const result = await runCoverageVerification({
             positionMints,
             choice: choice.index,
-            fetchMarkers: (mints) =>
-              fetchVoteMarkerChoices(connection, proposalKey, mints),
+            // Let the confirmed on-chain state settle before each marker read.
+            fetchMarkers: async (mints) => {
+              await new Promise((r) => setTimeout(r, MARKER_SETTLE_MS));
+              return fetchVoteMarkerChoices(connection, proposalKey, mints);
+            },
             resubmit: async () => {
-              let skipped: SkippedPosition[] | undefined;
               try {
-                skipped = await submitVote();
+                return await submitVote();
               } catch (e) {
                 // A cancelled or partially-failed retry still ends in the final
                 // marker diff — report ground truth, not a generic error.
                 if (isAllPositionsSkippedError(e)) {
-                  skipped = readSkippedFromError(e);
+                  return readSkippedFromError(e);
                 }
+                return undefined;
               }
-              // Let the resubmitted vote settle before the second marker read.
-              await new Promise((r) => setTimeout(r, MARKER_SETTLE_MS));
-              return skipped;
             },
             initialSkipped,
           });
@@ -154,7 +148,7 @@ export const useVoteWithCoverage = ({
                     cast(choice, confirmMaxChoices);
                   },
                 },
-              }
+              },
             );
           }
         } finally {
@@ -164,7 +158,7 @@ export const useVoteWithCoverage = ({
         setVotingChoice(null);
       }
     },
-    [proposalKey, positionMints, voteMutation, connection]
+    [proposalKey, positionMints, voteMutation, connection],
   );
 
   return { castVote, votingChoice };

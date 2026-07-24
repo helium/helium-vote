@@ -40,14 +40,14 @@ export const VoteBreakdown: FC<{
     votesForProposalQuery({
       voteService,
       proposal: proposalKey,
-    })
+    }),
   );
   const { info: proposal, loading: loadingProp } = useProposal(proposalKey);
   const { info: proposalConfig, loading: loadingConf } = useProposalConfig(
-    proposal?.proposalConfig
+    proposal?.proposalConfig,
   );
   const { info: registrar, loading: loadingReg } = useRegistrar(
-    proposalConfig?.voteController
+    proposalConfig?.voteController,
   );
   const decimals = useMint(registrar?.votingMints[0].mint)?.info?.decimals;
   const totalVotes = useMemo(
@@ -55,40 +55,60 @@ export const VoteBreakdown: FC<{
       (proposal?.choices || []).reduce((acc, { weight }) => {
         return acc.add(weight);
       }, new BN(0)),
-    [proposal?.choices]
+    [proposal?.choices],
   );
 
   const groupedSortedVotes = useMemo(() => {
     if (decimals) {
+      // The vote-service rows carry `castingProxies`; widen the query result
+      // once here instead of casting per row.
+      const rows = (votes || []) as (NonNullable<typeof votes>[number] &
+        VoteRow)[];
+      const seenProxyWallets: Record<string, Set<string>> = {};
       const grouped = Object.values(
-        (votes || []).reduce((acc, vote) => {
-          const key = vote.voter;
-          if (!acc[key]) {
-            acc[key] = {
-              voter: vote.voter,
-              choices: [],
-              totalWeight: new BN(0),
-              proxyName: vote.proxyName,
-              castingProxies: [],
-            };
-          }
-
-          acc[key].choices.push(vote.choiceName);
-          acc[key].totalWeight = acc[key].totalWeight.add(new BN(vote.weight));
-
-          const seen = new Set(acc[key].castingProxies.map((p) => p.wallet));
-          for (const proxy of (vote as VoteRow).castingProxies ?? []) {
-            if (!seen.has(proxy.wallet)) {
-              seen.add(proxy.wallet);
-              acc[key].castingProxies.push(proxy);
+        rows.reduce(
+          (acc, vote) => {
+            const key = vote.voter;
+            if (!acc[key]) {
+              acc[key] = {
+                voter: vote.voter,
+                choices: [],
+                totalWeight: new BN(0),
+                proxyName: vote.proxyName,
+                castingProxies: [],
+              };
+              seenProxyWallets[key] = new Set();
             }
-          }
-          return acc;
-        }, {} as Record<string, { voter: string; choices: string[]; totalWeight: BN; proxyName?: string; castingProxies: CastingProxy[] }>)
+
+            acc[key].choices.push(vote.choiceName);
+            acc[key].totalWeight = acc[key].totalWeight.add(
+              new BN(vote.weight),
+            );
+
+            const seen = seenProxyWallets[key];
+            for (const proxy of vote.castingProxies ?? []) {
+              if (!seen.has(proxy.wallet)) {
+                seen.add(proxy.wallet);
+                acc[key].castingProxies.push(proxy);
+              }
+            }
+            return acc;
+          },
+          {} as Record<
+            string,
+            {
+              voter: string;
+              choices: string[];
+              totalWeight: BN;
+              proxyName?: string;
+              castingProxies: CastingProxy[];
+            }
+          >,
+        ),
       );
 
       const sortedMarkers = grouped.sort((a, b) =>
-        toNumber(b.totalWeight.sub(a.totalWeight), decimals)
+        toNumber(b.totalWeight.sub(a.totalWeight), decimals),
       );
 
       return sortedMarkers;
@@ -138,7 +158,7 @@ export const VoteBreakdown: FC<{
 
   const displayedVotes = useMemo(
     () => (groupedSortedVotes || []).slice(0, displayCount),
-    [groupedSortedVotes, displayCount]
+    [groupedSortedVotes, displayCount],
   );
 
   const handleCSVDownload = () => {
@@ -154,7 +174,7 @@ export const VoteBreakdown: FC<{
         `${proposal?.name
           .toLowerCase()
           .split(" ")
-          .join("_")}_vote_breakdown.csv`
+          .join("_")}_vote_breakdown.csv`,
       );
       link.style.visibility = "hidden";
       document.body.appendChild(link);
@@ -165,7 +185,7 @@ export const VoteBreakdown: FC<{
 
   const isLoading = useMemo(
     () => loadingVotes || loadingProp || loadingConf || loadingReg,
-    [loadingVotes, loadingProp, loadingConf, loadingReg]
+    [loadingVotes, loadingProp, loadingConf, loadingReg],
   );
 
   return (
@@ -206,7 +226,7 @@ export const VoteBreakdown: FC<{
                 key={vote.voter}
                 className={classNames(
                   "!hover:bg-initial",
-                  i % 2 === 0 ? "bg-slate-700" : "bg-slate-800"
+                  i % 2 === 0 ? "bg-slate-700" : "bg-slate-800",
                 )}
               >
                 <TableCell>
