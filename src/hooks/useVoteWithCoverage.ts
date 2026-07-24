@@ -9,6 +9,7 @@ import {
 } from "@/lib/governanceContract";
 import { partitionSkips, runCoverageVerification } from "@/lib/voteCoverage";
 import { fetchVoteMarkerChoices } from "@/utils/fetchVoteMarkers";
+import { sleep } from "@helium/spl-utils";
 import { useVoteMutation } from "@/hooks/useGovernanceMutations";
 import { WalletSignTransactionError } from "@solana/wallet-adapter-base";
 import { useConnection } from "@solana/wallet-adapter-react";
@@ -116,9 +117,8 @@ export const useVoteWithCoverage = ({
           const result = await runCoverageVerification({
             positionMints,
             choice: choice.index,
-            // Let the confirmed on-chain state settle before each marker read.
             fetchMarkers: async (mints) => {
-              await new Promise((r) => setTimeout(r, MARKER_SETTLE_MS));
+              await sleep(MARKER_SETTLE_MS);
               return fetchVoteMarkerChoices(connection, proposalKey, mints);
             },
             resubmit: async () => {

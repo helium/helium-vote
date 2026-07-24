@@ -12,7 +12,6 @@ import {
 } from "@helium/voter-stake-registry-hooks";
 import { useMint } from "@helium/helium-react-hooks";
 import BN from "bn.js";
-import { toNumber } from "@helium/spl-utils";
 import {
   Table,
   TableBody,
@@ -28,7 +27,10 @@ import classNames from "classnames";
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import { useGovernance } from "@/providers/GovernanceProvider";
-import { CastingProxy, VoteRow } from "@/lib/voteServiceContract";
+import { CastingProxy } from "@/lib/voteServiceContract";
+import { groupVoteRows } from "@/lib/voteRows";
+
+const proxyLabel = (p: CastingProxy) => p.name ?? ellipsisMiddle(p.wallet);
 
 export const VoteBreakdown: FC<{
   proposalKey: PublicKey;
@@ -52,61 +54,7 @@ export const VoteBreakdown: FC<{
   const decimals = useMint(registrar?.votingMints[0].mint)?.info?.decimals;
   const groupedSortedVotes = useMemo(() => {
     if (decimals) {
-      // The vote-service rows carry `castingProxies`; widen the query result
-      // once here instead of casting per row.
-      const rows = (votes || []) as (NonNullable<typeof votes>[number] &
-        VoteRow)[];
-      const seenProxyWallets: Record<string, Set<string>> = {};
-      const grouped = Object.values(
-        rows.reduce(
-          (acc, vote) => {
-            const key = vote.voter;
-            if (!acc[key]) {
-              acc[key] = {
-                voter: vote.voter,
-                choices: [],
-                totalWeight: new BN(0),
-                proxyName: vote.proxyName,
-                castingProxies: [],
-              };
-              seenProxyWallets[key] = new Set();
-            }
-
-            acc[key].choices.push(vote.choiceName);
-            // Each row carries the wallet's full vote power for that choice,
-            // so summing rows would multiply it by the number of choices
-            acc[key].totalWeight = BN.max(
-              acc[key].totalWeight,
-              new BN(vote.weight),
-            );
-
-            const seen = seenProxyWallets[key];
-            for (const proxy of vote.castingProxies ?? []) {
-              if (!seen.has(proxy.wallet)) {
-                seen.add(proxy.wallet);
-                acc[key].castingProxies.push(proxy);
-              }
-            }
-            return acc;
-          },
-          {} as Record<
-            string,
-            {
-              voter: string;
-              choices: string[];
-              totalWeight: BN;
-              proxyName?: string;
-              castingProxies: CastingProxy[];
-            }
-          >,
-        ),
-      );
-
-      const sortedMarkers = grouped.sort((a, b) =>
-        toNumber(b.totalWeight.sub(a.totalWeight), decimals),
-      );
-
-      return sortedMarkers;
+      return groupVoteRows(votes || [], decimals);
     }
   }, [votes, decimals]);
 
@@ -140,9 +88,7 @@ export const VoteBreakdown: FC<{
         .div(new BN(1000))
         .toNumber()
         .toFixed(2);
-      const votedVia = vote.castingProxies
-        .map((p) => p.name ?? ellipsisMiddle(p.wallet))
-        .join("; ");
+      const votedVia = vote.castingProxies.map(proxyLabel).join("; ");
 
       rows.push([
         owner,
@@ -243,10 +189,7 @@ export const VoteBreakdown: FC<{
                   </Link>
                   {vote.castingProxies.length > 0 && (
                     <div className="text-xs text-muted-foreground">
-                      via{" "}
-                      {vote.castingProxies
-                        .map((p) => p.name ?? ellipsisMiddle(p.wallet))
-                        .join(", ")}
+                      via {vote.castingProxies.map(proxyLabel).join(", ")}
                     </div>
                   )}
                 </TableCell>

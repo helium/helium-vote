@@ -2,10 +2,7 @@
 
 import { VoteChoiceWithMeta } from "@/lib/types";
 import { useGovernance } from "@/providers/GovernanceProvider";
-import {
-  useRelinquishVote,
-  useVote,
-} from "@helium/voter-stake-registry-hooks";
+import { useRelinquishVote, useVote } from "@helium/voter-stake-registry-hooks";
 import {
   useRelinquishVoteMutation,
   useAssignProxiesMutation,
@@ -14,7 +11,6 @@ import {
   useVoteWithCoverage,
   type ConfirmMaxChoices,
 } from "@/hooks/useVoteWithCoverage";
-import { SkippedPosition } from "@/lib/governanceContract";
 import { WalletSignTransactionError } from "@solana/wallet-adapter-base";
 import { PublicKey } from "@solana/web3.js";
 import { FC, useCallback, useMemo, useState } from "react";
@@ -38,33 +34,26 @@ export const VoteOptions: FC<{
   proposalKey: PublicKey;
 }> = ({ choices = [], maxChoicesPerVoter, proposalKey }) => {
   const [currVote, setCurrVote] = useState(0);
-  const {
-    didVote,
-    canVote,
-    loading: voting,
-    voters,
-  } = useVote(proposalKey);
+  const { didVote, canVote, loading: voting, voters } = useVote(proposalKey);
 
   const { positions } = useGovernance();
 
   const unproxiedPositions = useMemo(
     () =>
       positions?.filter(
-        (p) => !p.proxy || p.proxy.nextVoter.equals(PublicKey.default)
+        (p) => !p.proxy || p.proxy.nextVoter.equals(PublicKey.default),
       ),
-    [positions]
+    [positions],
   );
   const canProxy = !!unproxiedPositions?.length;
 
   const positionMints = useMemo(
     () => positions?.map((p) => p.mint.toBase58()) || [],
-    [positions]
+    [positions],
   );
 
-  const {
-    canRelinquishVote,
-    loading: relinquishing,
-  } = useRelinquishVote(proposalKey);
+  const { canRelinquishVote, loading: relinquishing } =
+    useRelinquishVote(proposalKey);
 
   const relinquishVoteMutation = useRelinquishVoteMutation();
   const assignProxiesMutation = useAssignProxiesMutation();
@@ -81,11 +70,11 @@ export const VoteOptions: FC<{
   } | null>(null);
 
   const confirmMaxChoices = useCallback<ConfirmMaxChoices>(
-    (skipped: SkippedPosition[]) =>
+    (skipped) =>
       new Promise<boolean>((resolve) =>
-        setWarning({ count: skipped.length, resolve })
+        setWarning({ count: skipped.length, resolve }),
       ),
-    []
+    [],
   );
 
   const resolveWarning = (proceed: boolean) => {
@@ -112,7 +101,7 @@ export const VoteOptions: FC<{
           {
             header: "Relinquish Vote",
             message: `Relinquishing vote for ${choice.name}`,
-          }
+          },
         );
         toast("Vote relinquished");
       } catch (e: any) {
@@ -156,15 +145,13 @@ export const VoteOptions: FC<{
                 await assignProxiesMutation.submit(
                   {
                     proxyKey: args.recipient.toBase58(),
-                    positionMints: args.positions.map((p) =>
-                      p.mint.toBase58()
-                    ),
+                    positionMints: args.positions.map((p) => p.mint.toBase58()),
                     expirationTime: args.expirationTime.toNumber(),
                   },
                   {
                     header: "Assign Proxy",
                     message: "Assigning proxy voter",
-                  }
+                  },
                 );
               }}
             >
