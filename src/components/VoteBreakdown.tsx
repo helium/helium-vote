@@ -50,14 +50,6 @@ export const VoteBreakdown: FC<{
     proposalConfig?.voteController,
   );
   const decimals = useMint(registrar?.votingMints[0].mint)?.info?.decimals;
-  const totalVotes = useMemo(
-    () =>
-      (proposal?.choices || []).reduce((acc, { weight }) => {
-        return acc.add(weight);
-      }, new BN(0)),
-    [proposal?.choices],
-  );
-
   const groupedSortedVotes = useMemo(() => {
     if (decimals) {
       // The vote-service rows carry `castingProxies`; widen the query result
@@ -81,7 +73,10 @@ export const VoteBreakdown: FC<{
             }
 
             acc[key].choices.push(vote.choiceName);
-            acc[key].totalWeight = acc[key].totalWeight.add(
+            // Each row carries the wallet's full vote power for that choice,
+            // so summing rows would multiply it by the number of choices
+            acc[key].totalWeight = BN.max(
+              acc[key].totalWeight,
               new BN(vote.weight),
             );
 
@@ -114,6 +109,15 @@ export const VoteBreakdown: FC<{
       return sortedMarkers;
     }
   }, [votes, decimals]);
+
+  const totalVotes = useMemo(
+    () =>
+      (groupedSortedVotes || []).reduce(
+        (acc, { totalWeight }) => acc.add(totalWeight),
+        new BN(0),
+      ),
+    [groupedSortedVotes],
+  );
 
   const csvData = useMemo(() => {
     const rows: string[][] = [];
