@@ -171,8 +171,8 @@ export const VoteOptions: FC<{
           option={r}
           voters={voters?.[r.index] || []}
           didVote={didVote?.[r.index]}
-          canVote={canVote(r.index)}
-          canRelinquishVote={canRelinquishVote(r.index)}
+          canVote={!!canVote(r.index)}
+          canRelinquishVote={!!canRelinquishVote(r.index)}
           onVote={handleVote(r)}
           onRelinquishVote={handleRelinquish(r)}
         />
