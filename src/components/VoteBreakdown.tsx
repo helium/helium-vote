@@ -12,7 +12,6 @@ import {
 } from "@helium/voter-stake-registry-hooks";
 import { useMint } from "@helium/helium-react-hooks";
 import BN from "bn.js";
-import { toNumber } from "@helium/spl-utils";
 import {
   Table,
   TableBody,
@@ -28,6 +27,10 @@ import classNames from "classnames";
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import { useGovernance } from "@/providers/GovernanceProvider";
+import { CastingProxy } from "@/lib/voteServiceContract";
+import { groupVoteRows } from "@/lib/voteRows";
+
+const proxyLabel = (p: CastingProxy) => p.name ?? ellipsisMiddle(p.wallet);
 
 export const VoteBreakdown: FC<{
   proposalKey: PublicKey;
@@ -39,55 +42,41 @@ export const VoteBreakdown: FC<{
     votesForProposalQuery({
       voteService,
       proposal: proposalKey,
-    })
+    }),
   );
   const { info: proposal, loading: loadingProp } = useProposal(proposalKey);
   const { info: proposalConfig, loading: loadingConf } = useProposalConfig(
-    proposal?.proposalConfig
+    proposal?.proposalConfig,
   );
   const { info: registrar, loading: loadingReg } = useRegistrar(
-    proposalConfig?.voteController
+    proposalConfig?.voteController,
   );
   const decimals = useMint(registrar?.votingMints[0].mint)?.info?.decimals;
-  const totalVotes = useMemo(
-    () =>
-      (proposal?.choices || []).reduce((acc, { weight }) => {
-        return acc.add(weight);
-      }, new BN(0)),
-    [proposal?.choices]
-  );
-
   const groupedSortedVotes = useMemo(() => {
     if (decimals) {
-      const grouped = Object.values(
-        (votes || []).reduce((acc, vote) => {
-          const key = vote.voter;
-          if (!acc[key]) {
-            acc[key] = {
-              voter: vote.voter,
-              choices: [],
-              totalWeight: new BN(0),
-              proxyName: vote.proxyName,
-            };
-          }
-
-          acc[key].choices.push(vote.choiceName);
-          acc[key].totalWeight = acc[key].totalWeight.add(new BN(vote.weight));
-          return acc;
-        }, {} as Record<string, { voter: string; choices: string[]; totalWeight: BN; proxyName?: string }>)
-      );
-
-      const sortedMarkers = grouped.sort((a, b) =>
-        toNumber(b.totalWeight.sub(a.totalWeight), decimals)
-      );
-
-      return sortedMarkers;
+      return groupVoteRows(votes || [], decimals);
     }
   }, [votes, decimals]);
 
+  const totalVotes = useMemo(
+    () =>
+      (groupedSortedVotes || []).reduce(
+        (acc, { totalWeight }) => acc.add(totalWeight),
+        new BN(0),
+      ),
+    [groupedSortedVotes],
+  );
+
   const csvData = useMemo(() => {
     const rows: string[][] = [];
-    rows.push(["Owner", "Choices", "Vote Power", "Percentage", "Proxy Name"]);
+    rows.push([
+      "Owner",
+      "Choices",
+      "Vote Power",
+      "Percentage",
+      "Proxy Name",
+      "Voted Via",
+    ]);
 
     (groupedSortedVotes || []).forEach((vote) => {
       const owner = vote.voter;
@@ -99,6 +88,7 @@ export const VoteBreakdown: FC<{
         .div(new BN(1000))
         .toNumber()
         .toFixed(2);
+      const votedVia = vote.castingProxies.map(proxyLabel).join("; ");
 
       rows.push([
         owner,
@@ -106,6 +96,7 @@ export const VoteBreakdown: FC<{
         voteWeight || "",
         percentage,
         vote.proxyName || "",
+        votedVia,
       ]);
     });
 
@@ -117,7 +108,7 @@ export const VoteBreakdown: FC<{
 
   const displayedVotes = useMemo(
     () => (groupedSortedVotes || []).slice(0, displayCount),
-    [groupedSortedVotes, displayCount]
+    [groupedSortedVotes, displayCount],
   );
 
   const handleCSVDownload = () => {
@@ -133,7 +124,7 @@ export const VoteBreakdown: FC<{
         `${proposal?.name
           .toLowerCase()
           .split(" ")
-          .join("_")}_vote_breakdown.csv`
+          .join("_")}_vote_breakdown.csv`,
       );
       link.style.visibility = "hidden";
       document.body.appendChild(link);
@@ -144,7 +135,7 @@ export const VoteBreakdown: FC<{
 
   const isLoading = useMemo(
     () => loadingVotes || loadingProp || loadingConf || loadingReg,
-    [loadingVotes, loadingProp, loadingConf, loadingReg]
+    [loadingVotes, loadingProp, loadingConf, loadingReg],
   );
 
   return (
@@ -185,7 +176,7 @@ export const VoteBreakdown: FC<{
                 key={vote.voter}
                 className={classNames(
                   "!hover:bg-initial",
-                  i % 2 === 0 ? "bg-slate-700" : "bg-slate-800"
+                  i % 2 === 0 ? "bg-slate-700" : "bg-slate-800",
                 )}
               >
                 <TableCell>
@@ -196,6 +187,11 @@ export const VoteBreakdown: FC<{
                   >
                     {ellipsisMiddle(vote.voter)}
                   </Link>
+                  {vote.castingProxies.length > 0 && (
+                    <div className="text-xs text-muted-foreground">
+                      via {vote.castingProxies.map(proxyLabel).join(", ")}
+                    </div>
+                  )}
                 </TableCell>
                 <TableCell>{vote.choices.join(", ")}</TableCell>
                 <TableCell>
