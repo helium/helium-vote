@@ -82,12 +82,9 @@ export const VoteBreakdown: FC<{
       const owner = vote.voter;
       const choices = vote.choices.join(" ");
       const voteWeight = humanReadable(vote.totalWeight, decimals);
-      const percentage = vote.totalWeight
-        .mul(new BN(100000))
-        .div(totalVotes)
-        .div(new BN(1000))
-        .toNumber()
-        .toFixed(2);
+      const percentage = (
+        vote.totalWeight.mul(new BN(100000)).div(totalVotes).toNumber() / 1000
+      ).toFixed(2);
       const votedVia = vote.castingProxies.map(proxyLabel).join("; ");
 
       rows.push([
@@ -199,12 +196,12 @@ export const VoteBreakdown: FC<{
                 </TableCell>
                 <TableCell className="text-right">
                   {/* Add two decimals precision */}
-                  {vote.totalWeight
-                    .mul(new BN(100000))
-                    .div(totalVotes)
-                    .div(new BN(1000))
-                    .toNumber()
-                    .toFixed(2)}
+                  {(
+                    vote.totalWeight
+                      .mul(new BN(100000))
+                      .div(totalVotes)
+                      .toNumber() / 1000
+                  ).toFixed(2)}
                   %
                 </TableCell>
                 <TableCell>
