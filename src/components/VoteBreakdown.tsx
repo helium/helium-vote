@@ -80,7 +80,7 @@ export const VoteBreakdown: FC<{
 
     (groupedSortedVotes || []).forEach((vote) => {
       const owner = vote.voter;
-      const choices = vote.choices.join(" ");
+      const choices = vote.choices.join("; ");
       const voteWeight = humanReadable(vote.totalWeight, decimals);
       const percentage = (
         vote.totalWeight.mul(new BN(100000)).div(totalVotes).toNumber() / 1000
