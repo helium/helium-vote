@@ -1,14 +1,10 @@
-// Local structural mirrors of the additive `governance.vote` skip-report fields.
-// TODO: import from @helium/blockchain-api once the skip-report release ships.
+import type { SkipReason, SkippedPosition } from "@helium/blockchain-api";
 
-export type SkipReason = "maxChoicesReached" | "alreadyVotedThisChoice";
+export type { SkipReason, SkippedPosition };
 
-export interface SkippedPosition {
-  positionMint: string;
-  reason: SkipReason;
-}
-
-// oRPC error code thrown when every position was skipped.
+// oRPC error code thrown when every position was skipped. The package exports
+// the error *definition* (status/message/data schema); the code string clients
+// see is its key.
 export const ALL_POSITIONS_SKIPPED = "ALL_POSITIONS_SKIPPED";
 
 // Older servers (during the deploy window) omit `skipped` entirely.

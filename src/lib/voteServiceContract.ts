@@ -1,8 +1,11 @@
-// Local structural mirror of the additive `votesForProposal` casting-proxy
-// fields. The vote-service rows carry the casting proxy wallet(s)/name(s)
-// for owner rows that voted via proxy (empty for direct votes).
-// TODO: import from @helium/blockchain-api once the skip-report release ships.
+import type { ProposalWithVotes } from "@helium/voter-stake-registry-sdk";
 
-export type CastingProxy = { wallet: string; name: string | null };
+// The SDK defines `CastingProxy` but doesn't re-export it from its index, so
+// derive it from the exported `ProposalWithVotes` vote rows.
+export type CastingProxy =
+  ProposalWithVotes["votes"][number]["castingProxies"][number];
 
+// The SDK's `Vote` type declares `castingProxies` as required, but deployed
+// vote-service instances may predate the column — keep it optional here so
+// readers stay defensive during the rollout window.
 export type VoteRow = { castingProxies?: CastingProxy[] };
