@@ -388,5 +388,15 @@
       { "uri": null, "name": "Samuel Andrews, MD" },
       { "uri": null, "name": "Thomas Kuit" }
     ]
+  },
+  {
+    "name": "HIP-150: Mobile Deployer Prioritization",
+    "uri": "https://gist.githubusercontent.com/hiptron/6f42c230f4ba4116023425e07314869c/raw/a8f643e6c8f73a501d1693a22f8bdeacab002f88/HIP-150-Vote-Summary.md",
+    "maxChoicesPerVoter": 1,
+    "tags": ["Economic", "Technical"],
+    "choices": [
+      { "uri": null, "name": "For HIP-150" },
+      { "uri": null, "name": "Against HIP-150" }
+    ]
   }
 ]
