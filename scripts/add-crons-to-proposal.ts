@@ -4,10 +4,13 @@ import yargs from "yargs/yargs";
 import { init as initProposal } from "@helium/proposal-sdk";
 import { PublicKey, SystemProgram } from "@solana/web3.js";
 import { loadKeypair, sendInstructionsOrSquads } from "./utils";
-import { init as initTuktuk, taskKey } from "@helium/tuktuk-sdk";
+import {
+  init as initTuktuk,
+  nextAvailableTaskIds,
+  taskKey,
+} from "@helium/tuktuk-sdk";
 import { init as initHsd, daoKey } from "@helium/helium-sub-daos-sdk";
 import {
-  nextAvailableTaskIds,
   queueAuthorityKey,
   TASK_QUEUE_ID,
 } from "@helium/hpl-crons-sdk";
@@ -56,7 +59,7 @@ export async function run(args: any = process.argv) {
   );
 
   const queue = await tuktukProgram.account.taskQueueV0.fetch(TASK_QUEUE_ID);
-  const freeTask = nextAvailableTaskIds(queue.taskBitmap, 1)[0];
+  const freeTask = nextAvailableTaskIds(queue.taskBitmap, 1, false, queue.capacity)[0];
 
   const resolveIx = await hplCronsProgram.methods
     .queueResolveProposalV0({
