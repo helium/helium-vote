@@ -146,7 +146,7 @@ export async function run(args: any = process.argv) {
     .prepare();
 
   const queue = await tuktukProgram.account.taskQueueV0.fetch(TASK_QUEUE_ID);
-  const freeTask = nextAvailableTaskIds(queue.taskBitmap, 1)[0];
+  const freeTask = nextAvailableTaskIds(queue.taskBitmap, 1, false, queue.capacity)[0];
   const resolveIx = await hplCronsProgram.methods
     .queueResolveProposalV0({
       freeTaskId: freeTask,
