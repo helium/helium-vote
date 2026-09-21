@@ -21,6 +21,7 @@ import {
   useClaimRewardsMutation,
   useAssignProxiesMutation,
 } from "@/hooks/useGovernanceMutations";
+import { useDelegationEpochCounts } from "@/hooks/useDelegationEpochCounts";
 
 export const Positions: FC = () => {
   const { connecting } = useWallet();
@@ -86,9 +87,10 @@ export const Positions: FC = () => {
     [unProxiedPositions]
   );
 
+  const epochCountsFor = useDelegationEpochCounts();
   const positionsWithRewards = useMemo(
-    () => unProxiedPositions?.filter((p) => p.hasRewards),
-    [unProxiedPositions]
+    () => unProxiedPositions?.filter((p) => epochCountsFor(p).hasRewards),
+    [unProxiedPositions, epochCountsFor]
   );
 
   const claimRewardsMutation = useClaimRewardsMutation();

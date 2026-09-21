@@ -7,6 +7,7 @@ import {
   getTimeLeftFromNowFmt,
   humanReadable,
 } from "@/lib/utils";
+import { usePositionEpochCounts } from "@/hooks/useDelegationEpochCounts";
 import { useGovernance } from "@/providers/GovernanceProvider";
 import { useSolanaUnixNow } from "@helium/helium-react-hooks";
 import { PositionWithMeta } from "@helium/voter-stake-registry-hooks";
@@ -34,6 +35,7 @@ export const PositionCallout: FC<{
   handleClaimRewards,
 }) => {
   const { lockup, isDelegated, hasGenesisMultiplier } = position;
+  const { hasRewards } = usePositionEpochCounts(position);
   const { loading: loadingGov, network, mintAcc, subDaos } = useGovernance();
   const isHNT = network === "hnt";
   const unixNow = useSolanaUnixNow() || Date.now() / 1000;
@@ -191,7 +193,7 @@ export const PositionCallout: FC<{
               <Button
                 variant="secondary"
                 className="flex-1 gap-2"
-                disabled={!position.hasRewards || isClaiming || !isHNT}
+                disabled={!hasRewards || isClaiming || !isHNT}
                 onClick={handleClaimRewards}
               >
                 {isClaiming && <Loader2 className="size-5 animate-spin" />}

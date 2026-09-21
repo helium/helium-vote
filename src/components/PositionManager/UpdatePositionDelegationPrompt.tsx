@@ -1,5 +1,7 @@
 "use client";
 
+import { usePositionEpochCounts } from "@/hooks/useDelegationEpochCounts";
+import { unissuedRewardsMessage } from "@/lib/delegationEpochCounts";
 import { removeNullBytes } from "@/lib/utils";
 import { useGovernance } from "@/providers/GovernanceProvider";
 import { useSolanaUnixNow } from "@helium/helium-react-hooks";
@@ -50,6 +52,12 @@ export const UpdatePositionDelegationPrompt: FC<{
   const { subDaos } = useGovernance();
   const unixNow = useSolanaUnixNow() || Date.now() / 1000;
   const { lockup, isDelegated, delegatedSubDao } = position;
+  const { unissuedRequiredEpochCount } = usePositionEpochCounts(position);
+  // The API's undelegate build claims any required epochs itself (looping via
+  // hasMore), so the only thing that blocks it is rewards not yet issued for
+  // some of those epochs — nothing can be claimed for them yet, so the user
+  // has to wait rather than "claim first".
+  const undelegateBlocked = unissuedRequiredEpochCount > 0;
   const lockupKind = Object.keys(lockup.kind)[0] as string;
   const isConstant = lockupKind === "constant";
   const isDecayed = !isConstant && lockup.endTs.lte(new BN(unixNow));
@@ -241,7 +249,9 @@ export const UpdatePositionDelegationPrompt: FC<{
                   </Button>
                   <Button
                     className="flex-1 text-foreground gap-2"
-                    disabled={isSubmitting}
+                    disabled={
+                      isSubmitting || (isUndelegating && undelegateBlocked)
+                    }
                     onClick={handleSubmit}
                   >
                     {isSubmitting && (
@@ -254,6 +264,11 @@ export const UpdatePositionDelegationPrompt: FC<{
                       : "Confirm"}
                   </Button>
                 </div>
+                {isUndelegating && undelegateBlocked && (
+                  <p className="text-xs text-muted-foreground text-center">
+                    {unissuedRewardsMessage(unissuedRequiredEpochCount)}
+                  </p>
+                )}
                 <p className="text-xs text-muted-foreground text-center">
                   A network fee will be required
                 </p>

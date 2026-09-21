@@ -1,6 +1,8 @@
 import type { TokenAmountOutput } from "@helium/blockchain-api";
+import { useQueryClient } from "@tanstack/react-query";
 import { useCallback, useState } from "react";
 import { useBlockchainApi } from "@/providers/BlockchainApiProvider";
+import { delegationEpochCountsKey } from "./useDelegationEpochCounts";
 import { useWallet } from "./useWallet";
 import {
   useGovernanceSubmit,
@@ -67,6 +69,7 @@ function useGovernanceMutation<
   const client = useBlockchainApi();
   const { submit: submitTxn } = useGovernanceSubmit();
   const { publicKey: wallet } = useWallet();
+  const queryClient = useQueryClient();
   const { isPending, error, reset, wrapMutate } = useMutationState();
   const [estimatedSolFee, setEstimatedSolFee] =
     useState<TokenAmountOutput | null>(null);
@@ -114,9 +117,28 @@ function useGovernanceMutation<
                 return apiFn({ walletAddress, ...apiParams });
               }
             : undefined;
-        return submitTxn(response, { ...options, tag }, fetchMore);
+        const result = await submitTxn(
+          response,
+          { ...options, tag },
+          fetchMore,
+        );
+        // Claiming, delegating and undelegating all move a delegation's epoch
+        // counts, so drop the cached ones rather than gate on stale numbers.
+        await queryClient.invalidateQueries({
+          queryKey: delegationEpochCountsKey(walletAddress),
+        });
+        return result;
       }),
-    [wrapMutate, callApi, wallet, submitTxn, config, resolveApiParams, apiFn]
+    [
+      wrapMutate,
+      callApi,
+      wallet,
+      submitTxn,
+      config,
+      resolveApiParams,
+      apiFn,
+      queryClient,
+    ],
   );
 
   const resetAll = useCallback(() => {
