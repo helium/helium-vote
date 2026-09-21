@@ -1,3 +1,5 @@
+import { usePositionEpochCounts } from "@/hooks/useDelegationEpochCounts";
+import { unissuedRewardsMessage } from "@/lib/delegationEpochCounts";
 import { PositionWithMeta } from "@helium/voter-stake-registry-hooks";
 import { Loader2, X } from "lucide-react";
 import React, { FC } from "react";
@@ -25,9 +27,13 @@ export const PositionActionBoundary: FC<
   handleClaimRewards,
   handleRelinquishVotes,
 }) => {
-  const { hasRewards, isDelegated, numActiveVotes } = position;
+  const { isDelegated, numActiveVotes } = position;
+  const { hasRewards, requiredUnclaimedEpochCount, unissuedRequiredEpochCount } =
+    usePositionEpochCounts(position);
+  // What close_delegation_v0 requires claimed, per the API — issued or not.
+  const needsClaim = requiredUnclaimedEpochCount > 0;
   const hasVotes = numActiveVotes > 0;
-  const hasBlockers = hasRewards || isDelegated || hasVotes;
+  const hasBlockers = needsClaim || isDelegated || hasVotes;
   const canDoWhileBlocked = action === "delegate" || action === "proxy" || action === "transferOwnership";
 
   if (!action) {
@@ -54,14 +60,19 @@ export const PositionActionBoundary: FC<
               </div>
               <div className="flex flex-col gap-2">
                 <div className="flex flex-row gap-2 items-center">
-                  {hasRewards && <FaCircle className="text-slate-500 size-5" />}
-                  {!hasRewards && (
+                  {needsClaim && <FaCircle className="text-slate-500 size-5" />}
+                  {!needsClaim && (
                     <FaCircleCheck className="text-success-foreground size-5" />
                   )}
                   <span>
                     <span className="font-bold">Claim</span> your rewards
                   </span>
                 </div>
+                {unissuedRequiredEpochCount > 0 && (
+                  <span className="text-sm">
+                    {unissuedRewardsMessage(unissuedRequiredEpochCount)}
+                  </span>
+                )}
                 <div className="flex flex-row gap-2 items-center">
                   {isDelegated && (
                     <FaCircle className="text-slate-500 size-5" />

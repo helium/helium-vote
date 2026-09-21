@@ -31,7 +31,7 @@ export const ExtendPositionPrompt: FC<{
   const [formValues, setFormValues] = useState<LockTokensFormValues>();
   const { mint, network, registrar } = useGovernance();
   const unixNow = useSolanaUnixNow() || Date.now() / 1000;
-  const { lockup, hasRewards, isDelegated, votingMint } = position;
+  const { lockup, isDelegated, votingMint } = position;
   const lockupKind = Object.keys(lockup.kind)[0] as string;
   const isConstant = lockupKind === "constant";
   const minLockupTimeInDays = Math.ceil(

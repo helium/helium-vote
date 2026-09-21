@@ -1,5 +1,6 @@
 "use client";
 
+import { usePositionEpochCounts } from "@/hooks/useDelegationEpochCounts";
 import { PositionWithMeta } from "@helium/voter-stake-registry-hooks";
 import React, { FC } from "react";
 import { Button } from "../ui/button";
@@ -12,7 +13,8 @@ export const FlipPositionPrompt: FC<{
   onCancel: () => void;
   onConfirm: () => Promise<void>;
 }> = ({ position, isSubmitting, onCancel, onConfirm }) => {
-  const { lockup, hasRewards, isDelegated } = position;
+  const { lockup, isDelegated } = position;
+  const { requiredUnclaimedEpochCount } = usePositionEpochCounts(position);
   const lockupKind = Object.keys(lockup.kind)[0] as string;
   const isConstant = lockupKind === "constant";
 
@@ -41,7 +43,9 @@ export const FlipPositionPrompt: FC<{
           </Button>
           <Button
             className="text-foreground gap-2 flex-1"
-            disabled={isSubmitting || hasRewards || isDelegated}
+            disabled={
+              isSubmitting || requiredUnclaimedEpochCount > 0 || isDelegated
+            }
             onClick={handleSubmit}
           >
             {isSubmitting && <Loader2 className="size-5 animate-spin" />}
