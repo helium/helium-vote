@@ -114,7 +114,9 @@ export async function run(args: any = process.argv) {
   const queue = await tuktukProgram.account.taskQueueV0.fetch(TASK_QUEUE_ID);
   const freeTasks = nextAvailableTaskIds(
     queue.taskBitmap,
-    proposals.length - organization.numProposals
+    proposals.length - organization.numProposals,
+    false,
+    queue.capacity
   );
   let freeTaskIdx = 0;
   const proposalConfig = argv.proposalConfig
