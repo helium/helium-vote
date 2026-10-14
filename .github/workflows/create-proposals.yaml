@@ -26,7 +26,7 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'yarn'
 
-      - run: yarn install
+      - run: yarn install --frozen-lockfile
         shell: bash
 
       - run: echo "$DEPLOY_KEYPAIR" > ./deploy-keypair.json && chmod 600 ./deploy-keypair.json
