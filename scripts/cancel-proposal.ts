@@ -1,4 +1,4 @@
-import * as anchor from "@coral-xyz/anchor";
+import * as anchor from "@anchor-lang/core";
 import { init } from "@helium/proposal-sdk";
 import { init as initState } from "@helium/state-controller-sdk";
 import { PublicKey } from "@solana/web3.js";

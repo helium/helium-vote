@@ -2,6 +2,9 @@
 
 const { hideBin } = require("yargs/helpers");
 
+// Remove after one proven v1 Squads run.
+process.env.HPL_TX_VERSION ??= "v0";
+
 const args = hideBin(process.argv);
 const script = args[0];
 
