@@ -9,7 +9,7 @@ on:
       - main
 
 env:
-  NODE_VERSION: 20
+  NODE_VERSION: 22
   HPL_TX_VERSION: v0
 
 jobs:
