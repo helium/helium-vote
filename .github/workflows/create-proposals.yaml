@@ -10,6 +10,7 @@ on:
 
 env:
   NODE_VERSION: 20
+  HPL_TX_VERSION: v0
 
 jobs:
   create:

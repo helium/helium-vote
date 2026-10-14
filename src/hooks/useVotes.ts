@@ -1,4 +1,4 @@
-import { AnchorProvider, Program } from "@coral-xyz/anchor";
+import { AnchorProvider, Program } from "@anchor-lang/core";
 import { VoterStakeRegistry } from "@helium/idls/lib/types/voter_stake_registry";
 import { init } from "@helium/voter-stake-registry-sdk";
 import { useConnection } from "@solana/wallet-adapter-react";

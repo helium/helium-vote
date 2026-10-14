@@ -1,4 +1,4 @@
-import * as anchor from "@coral-xyz/anchor";
+import * as anchor from "@anchor-lang/core";
 import { init as initOrg } from "@helium/organization-sdk";
 import { init as initProp } from "@helium/proposal-sdk";
 import { sendInstructions, withPriorityFees } from "@helium/spl-utils";

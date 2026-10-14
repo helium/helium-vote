@@ -1286,6 +1286,10 @@ const nextConfig = {
         __dirname,
         "./node_modules/@solana/wallet-adapter-react"
       ),
+      "@coral-xyz/anchor": path.resolve(
+        __dirname,
+        "./node_modules/@anchor-lang/core"
+      ),
     };
     return config;
   },

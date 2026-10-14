@@ -1,4 +1,4 @@
-import * as anchor from "@coral-xyz/anchor";
+import * as anchor from "@anchor-lang/core";
 import os from "os";
 import yargs from "yargs/yargs";
 import { init as initProposal } from "@helium/proposal-sdk";

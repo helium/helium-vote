@@ -1,7 +1,7 @@
 "use client";
 
 import { useWallet } from "@/hooks/useWallet";
-import { Wallet } from "@coral-xyz/anchor";
+import { Wallet } from "@anchor-lang/core";
 import { useAnchorProvider, useMint } from "@helium/helium-react-hooks";
 import { organizationKey } from "@helium/organization-sdk";
 import { HNT_MINT, IOT_MINT, MOBILE_MINT } from "@helium/spl-utils";

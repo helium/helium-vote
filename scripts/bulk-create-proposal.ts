@@ -1,5 +1,5 @@
-import * as anchor from "@coral-xyz/anchor";
-import { BN } from "@coral-xyz/anchor";
+import * as anchor from "@anchor-lang/core";
+import { BN } from "@anchor-lang/core";
 import { daoKey, init as initHsd } from "@helium/helium-sub-daos-sdk";
 import {
   TASK_QUEUE_ID,
