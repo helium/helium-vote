@@ -1,12 +1,12 @@
 "use client";
 
+import { toApiAmount } from "@/lib/tokenAmount";
 import { EPOCH_LENGTH, secsToDays } from "@/lib/utils";
 import { useGovernance } from "@/providers/GovernanceProvider";
 import { TASK_QUEUE, useDelegationClaimBot } from "@helium/automation-hooks";
 import { useSolanaUnixNow } from "@helium/helium-react-hooks";
 import { delegatedPositionKey } from "@helium/helium-sub-daos-sdk";
 import { RiUserSharedFill } from "react-icons/ri";
-import { toNumber } from "@helium/spl-utils";
 import {
   PositionWithMeta,
   SubDaoWithMeta,
@@ -43,7 +43,7 @@ import React, {
 import { useAsync } from "react-async-hook";
 import { toast } from "sonner";
 import { ContentSection } from "../ContentSection";
-import { LockTokensFormValues } from "../LockTokensForm";
+import { LockTokensFormValues, LockupValues } from "../LockTokensForm";
 import { Card, CardContent } from "../ui/card";
 import { ExtendPositionPrompt } from "./ExtendPositionPrompt";
 import { FlipPositionPrompt } from "./FlipPositionPrompt";
@@ -111,7 +111,6 @@ export const PositionManager: FC<PositionManagerProps> = ({
   const unixNow = useSolanaUnixNow() || Date.now() / 1000;
   const [action, setAction] = useState<PositionAction | undefined>(initAction);
   const {
-    mintAcc,
     network,
     positions,
     organization,
@@ -163,9 +162,7 @@ export const PositionManager: FC<PositionManagerProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [position, unixNow, positions]);
 
-  const maxActionableAmount = mintAcc
-    ? toNumber(position.amountDepositedNative, mintAcc)
-    : 0;
+  const maxActionableAmount = position.amountDepositedNative;
 
   const reset = useCallback(() => {
     refetchState();
@@ -398,7 +395,7 @@ export const PositionManager: FC<PositionManagerProps> = ({
     }
   };
 
-  const handleExtendPosition = async (values: LockTokensFormValues) => {
+  const handleExtendPosition = async (values: LockupValues) => {
     try {
       await extendMutation.submit(
         {
@@ -424,7 +421,7 @@ export const PositionManager: FC<PositionManagerProps> = ({
       await splitMutation.submit(
         {
           sourcePositionMint: position.mint.toBase58(),
-          amount: values.amount.toString(),
+          amount: toApiAmount(values.amount),
           lockupKind: values.lockupKind as "cliff" | "constant",
           lockupPeriodsInDays: values.lockupPeriodInDays,
         },
@@ -445,14 +442,14 @@ export const PositionManager: FC<PositionManagerProps> = ({
 
   const handleMergePosition = async (
     targetPosition: PositionWithMeta,
-    amount: number
+    amount: BN
   ) => {
     try {
       await transferMutation.submit(
         {
           sourcePositionMint: position.mint.toBase58(),
           targetPositionMint: targetPosition.mint.toBase58(),
-          amount: amount.toString(),
+          amount: toApiAmount(amount),
         },
         {
           header: "Merge Position",
@@ -460,7 +457,7 @@ export const PositionManager: FC<PositionManagerProps> = ({
         }
       );
 
-      if (amount === maxActionableAmount) {
+      if (amount.eq(position.amountDepositedNative)) {
         router.replace(`/${network}/positions`);
       }
 

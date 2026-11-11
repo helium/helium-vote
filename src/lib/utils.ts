@@ -1,7 +1,6 @@
 import { AnchorProvider } from "@anchor-lang/core";
 import { init as initProp } from "@helium/proposal-sdk";
 import { PositionWithMeta } from "@helium/voter-stake-registry-hooks";
-import { Mint } from "@solana/spl-token";
 import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
 import {
   Connection,
@@ -241,10 +240,6 @@ export const humanReadable = (
   return `${roundedIntegerPart}${roundedDecimalPart}`;
 };
 
-export const getMintMinAmountAsDecimal = (mint: Mint) => {
-  return 1 * 10 ** -mint.decimals;
-};
-
 export const getPositionVoteMultiplier = (position: PositionWithMeta) => {
   const { lockup } = position;
   const lockupKind = Object.keys(lockup.kind)[0] as string;
@@ -268,18 +263,6 @@ export const getPositionVoteMultiplier = (position: PositionWithMeta) => {
       ? position.votingMint.genesisVotePowerMultiplier
       : 1)
   ).toFixed(2);
-};
-
-export const precision = (a: number) => {
-  if (!Number.isFinite(a)) return 0;
-  let e = 1;
-  let p = 0;
-  while (Math.round(a * e) / e !== a) {
-    e *= 10;
-    // eslint-disable-next-line no-plusplus
-    p++;
-  }
-  return p;
 };
 
 

@@ -1,12 +1,10 @@
 "use client";
 
+import { toApiAmount } from "@/lib/tokenAmount";
 import { daysToSecs } from "@/lib/utils";
 import { useGovernance } from "@/providers/GovernanceProvider";
-import {
-  useMint,
-  useOwnedAmount,
-} from "@helium/helium-react-hooks";
-import { HNT_MINT, toBN, toNumber } from "@helium/spl-utils";
+import { useOwnedAmount } from "@helium/helium-react-hooks";
+import { HNT_MINT } from "@helium/spl-utils";
 import {
   PositionWithMeta,
   calcLockupMultiplier,
@@ -44,7 +42,7 @@ export const CreatePositionModal: FC<React.PropsWithChildren<{}>> = ({
   const [automationEnabled, setAutomationEnabled] = useState(true);
   const { publicKey: wallet } = useWallet();
   const { mint, subDaos, registrar, refetch: refetchState } = useGovernance();
-  const { amount: ownedAmount, decimals } = useOwnedAmount(wallet, mint);
+  const { amount: ownedAmount } = useOwnedAmount(wallet, mint);
   const createPositionMutation = useCreatePositionMutation();
   const steps = useMemo(() => (mint.equals(HNT_MINT) ? 3 : 2), [mint]);
 
@@ -57,10 +55,7 @@ export const CreatePositionModal: FC<React.PropsWithChildren<{}>> = ({
     }
   }, [subDaos, selectedSubDaoPk, setSelectedSubDaoPk]);
 
-  const maxLockupAmount =
-    ownedAmount && decimals
-      ? toNumber(new BN(ownedAmount.toString()), decimals)
-      : 0;
+  const maxLockupAmount = new BN(ownedAmount?.toString() ?? 0);
 
   const handleCalcLockupMultiplier = useCallback(
     (lockupPeriodInDays: number) =>
@@ -77,7 +72,6 @@ export const CreatePositionModal: FC<React.PropsWithChildren<{}>> = ({
   const handleGoBack = () => {
     setStep(step - 1);
   };
-  const { info: mintAcc } = useMint(mint);
 
   const draftPosition: Partial<PositionWithMeta> | undefined = useMemo(
     () =>
@@ -94,12 +88,12 @@ export const CreatePositionModal: FC<React.PropsWithChildren<{}>> = ({
               ? ({ cliff: {} } as any)
               : ({ decay: {} } as any),
         },
-        amountDepositedNative: toBN(formValues!.amount, mintAcc?.decimals || 6),
+        amountDepositedNative: formValues!.amount,
         delegatedSubDao: selectedSubDaoPk,
         // @ts-ignore
         registrar: registrar?.pubkey,
       },
-    [formValues, mintAcc, selectedSubDaoPk, registrar]
+    [formValues, selectedSubDaoPk, registrar]
   );
 
   const handleOpenChange = () => {
@@ -118,33 +112,30 @@ export const CreatePositionModal: FC<React.PropsWithChildren<{}>> = ({
     try {
       const { amount, lockupPeriodInDays, lockupKind } = formValues!;
 
-      if (decimals) {
-        const amountToLock = toBN(amount, decimals);
-        await createPositionMutation.submit(
-          {
-            amount: amountToLock.toString(),
-            mint: mint.toBase58(),
-            lockupKind: lockupKind as "cliff" | "constant",
-            lockupPeriodsInDays: lockupPeriodInDays,
-            ...(subDaos && selectedSubDaoPk
-              ? {
-                  subDaoMint: selectedSubDaoPk.equals(IOT_SUB_DAO_KEY)
-                    ? IOT_MINT.toBase58()
-                    : MOBILE_MINT.toBase58(),
-                  automationEnabled,
-                }
-              : {}),
-          },
-          {
-            header: "Create Position",
-            message: "Locking tokens and creating position",
-          }
-        );
+      await createPositionMutation.submit(
+        {
+          amount: toApiAmount(amount),
+          mint: mint.toBase58(),
+          lockupKind: lockupKind as "cliff" | "constant",
+          lockupPeriodsInDays: lockupPeriodInDays,
+          ...(subDaos && selectedSubDaoPk
+            ? {
+                subDaoMint: selectedSubDaoPk.equals(IOT_SUB_DAO_KEY)
+                  ? IOT_MINT.toBase58()
+                  : MOBILE_MINT.toBase58(),
+                automationEnabled,
+              }
+            : {}),
+        },
+        {
+          header: "Create Position",
+          message: "Locking tokens and creating position",
+        }
+      );
 
-        toast.success("Position created successfully");
-        setOpen(false);
-        refetchState();
-      }
+      toast.success("Position created successfully");
+      setOpen(false);
+      refetchState();
     } catch (e: any) {
       if (!(e instanceof WalletSignTransactionError)) {
         toast(e.message || "Position creation failed, please try again");
