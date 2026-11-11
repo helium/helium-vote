@@ -3,6 +3,7 @@ import { Header } from "@/components/Header";
 import { RealmProposal } from "@/components/RealmProposal";
 import { fetchRealmProposal } from "@/data/votes";
 import { IRealmProposal } from "@/lib/types";
+import { formProposalMetaTags } from "@/lib/utils";
 import React from "react";
 
 interface RealmProposalPageParams extends NetworkPageParams {
@@ -25,6 +26,22 @@ const getContent = async (gist: string) => {
   const data: GistResponse = await response.json();
   const file = Object.values(data.files)[0];
   return file.content;
+};
+
+export const generateMetadata = async ({
+  params,
+}: {
+  params: RealmProposalPageParams;
+}) => {
+  const { proposalKey } = params;
+  const proposal: IRealmProposal | null = fetchRealmProposal(proposalKey);
+  return formProposalMetaTags(
+    proposal && {
+      name: proposal.name,
+      description: proposal.summary,
+      path: `/${proposal.network}/proposals/realm/${proposalKey}`,
+    }
+  );
 };
 
 const RealmProposalPage = async ({
