@@ -16,6 +16,7 @@ Configure your `.env`:
 | Variable | Description |
 |----------|-------------|
 | `NEXT_PUBLIC_SOLANA_URL` | Solana RPC endpoint |
+| `NEXT_PUBLIC_HELIUM_TRANSACTION_API` | Helium blockchain API URL, which builds and submits transactions |
 | `NEXT_PUBLIC_HELIUM_VOTE_URI` | Helium vote service API URL |
 | `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID` | WalletConnect project ID from [dashboard.walletconnect.com](https://dashboard.walletconnect.com) |
 
@@ -32,3 +33,14 @@ Proposals live in `helium-proposals.json`. To add one, open a PR with a new entr
 ## Local Development (with proxies)
 
 For most frontend work, pointing `NEXT_PUBLIC_SOLANA_URL` and `NEXT_PUBLIC_HELIUM_VOTE_URI` at mainnet is sufficient. For localnet, the vote service, and proxy testing, see [helium-program-library](https://github.com/helium/helium-program-library).
+
+## Devnet
+
+heliumvote.com runs on mainnet only. It ignores the network setting in your wallet, so it always uses mainnet funds.
+
+To use devnet, run a local build:
+
+1. Set `NEXT_PUBLIC_SOLANA_URL` to a devnet RPC endpoint.
+2. Set `NEXT_PUBLIC_HELIUM_TRANSACTION_API` and `NEXT_PUBLIC_HELIUM_VOTE_URI` to services that index devnet.
+3. Set your wallet to devnet.
+4. Run `yarn dev`.
