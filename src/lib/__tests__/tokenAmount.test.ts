@@ -6,9 +6,11 @@ import {
 import BN from "bn.js";
 import { describe, expect, it } from "vitest";
 import {
+  baseUnits,
   formatTokenAmount,
   isTokenAmountEdit,
   isTokenAmountInput,
+  normalizeTokenAmountInput,
   parseTokenAmount,
   toApiAmount,
 } from "../tokenAmount";
@@ -31,6 +33,7 @@ describe("isTokenAmountInput", () => {
   it("rejects decimals for a mint with no decimals", () => {
     expect(isTokenAmountInput("1.5", 0)).toBe(false);
     expect(isTokenAmountInput("15", 0)).toBe(true);
+    expect(isTokenAmountInput("1.", 0)).toBe(false);
   });
 
   it("accepts any fraction length while the mint is loading", () => {
@@ -61,9 +64,30 @@ describe("isTokenAmountEdit", () => {
   });
 });
 
+describe("normalizeTokenAmountInput", () => {
+  it("reads a comma as the decimal separator", () => {
+    expect(normalizeTokenAmountInput("1,5")).toBe("1.5");
+  });
+
+  it("leaves text that has a point or no comma unchanged", () => {
+    expect(normalizeTokenAmountInput("1,000.5")).toBe("1,000.5");
+    expect(normalizeTokenAmountInput("12")).toBe("12");
+  });
+
+  it("leaves several commas with no point unchanged", () => {
+    expect(normalizeTokenAmountInput("1,000,000")).toBe("1,000,000");
+  });
+
+  it("gives an edit the field accepts for a comma decimal", () => {
+    expect(isTokenAmountEdit("1", normalizeTokenAmountInput("1,5"), 6)).toBe(
+      true
+    );
+  });
+});
+
 // The parsed kind, with a valid amount written in base units.
 const parse = (raw: string, decimals: number | undefined, balance: number) => {
-  const result = parseTokenAmount(raw, decimals, new BN(balance));
+  const result = parseTokenAmount(raw, decimals, baseUnits(new BN(balance)));
   return result.kind === "valid" ? result.amount.toString() : result.kind;
 };
 
@@ -104,7 +128,7 @@ describe("parseTokenAmount", () => {
   });
 
   it("keeps every digit of an amount too large for a float", () => {
-    const balance = new BN("13446333427367269");
+    const balance = baseUnits(new BN("13446333427367269"));
     const result = parseTokenAmount("134463334.27367269", 8, balance);
     expect(result.kind === "valid" && result.amount.eq(balance)).toBe(true);
   });
@@ -112,21 +136,21 @@ describe("parseTokenAmount", () => {
 
 describe("formatTokenAmount", () => {
   it("writes small amounts without exponent notation", () => {
-    expect(formatTokenAmount(new BN(1), 8)).toBe("0.00000001");
+    expect(formatTokenAmount(baseUnits(new BN(1)), 8)).toBe("0.00000001");
   });
 
   it("drops trailing fraction zeros but keeps whole-number zeros", () => {
-    expect(formatTokenAmount(new BN(100_000_000), 6)).toBe("100");
-    expect(formatTokenAmount(new BN(1_500_000), 6)).toBe("1.5");
-    expect(formatTokenAmount(new BN(0), 6)).toBe("0");
-    expect(formatTokenAmount(new BN(15), 0)).toBe("15");
+    expect(formatTokenAmount(baseUnits(new BN(100_000_000)), 6)).toBe("100");
+    expect(formatTokenAmount(baseUnits(new BN(1_500_000)), 6)).toBe("1.5");
+    expect(formatTokenAmount(baseUnits(new BN(0)), 6)).toBe("0");
+    expect(formatTokenAmount(baseUnits(new BN(15)), 0)).toBe("15");
   });
 
   it("gives text that parses back to the same amount", () => {
     for (const amount of ["100981957", "13446333427367269", "1"]) {
-      const raw = formatTokenAmount(new BN(amount), 8);
+      const raw = formatTokenAmount(baseUnits(new BN(amount)), 8);
       expect(isTokenAmountInput(raw, 8)).toBe(true);
-      const result = parseTokenAmount(raw, 8, new BN(amount));
+      const result = parseTokenAmount(raw, 8, baseUnits(new BN(amount)));
       expect(result.kind === "valid" && result.amount.toString()).toBe(amount);
     }
   });
@@ -142,7 +166,7 @@ describe("toApiAmount", () => {
 
   it("gives text that each position schema accepts", () => {
     for (const raw of ["0.00005", "1.5", "134463334.27367269"]) {
-      const result = parseTokenAmount(raw, 8, new BN("13446333427367269"));
+      const result = parseTokenAmount(raw, 8, baseUnits(new BN("13446333427367269")));
       if (result.kind !== "valid") throw new Error(raw);
       for (const schema of schemas) {
         expect(schema.safeParse(toApiAmount(result.amount)).success).toBe(true);
@@ -151,7 +175,7 @@ describe("toApiAmount", () => {
   });
 
   it("gives base units, not decimal text", () => {
-    expect(toApiAmount(new BN(150_000_000))).toBe("150000000");
+    expect(toApiAmount(baseUnits(new BN(150_000_000)))).toBe("150000000");
     for (const schema of schemas) {
       expect(schema.safeParse("1.5").success).toBe(false);
     }

@@ -8,6 +8,7 @@ import React, { FC, useCallback, useState } from "react";
 import { LockTokensForm, LockupValues } from "../LockTokensForm";
 import { StepIndicator } from "../StepIndicator";
 import { useGovernance } from "@/providers/GovernanceProvider";
+import { BaseUnits } from "@/lib/tokenAmount";
 import {
   daysToSecs,
   getFormattedStringFromDays,
@@ -22,7 +23,7 @@ import { ConfirmationItem } from "./ConfirmationItem";
 
 export const ExtendPositionPrompt: FC<{
   position: PositionWithMeta;
-  maxActionableAmount: BN;
+  maxActionableAmount: BaseUnits;
   isSubmitting?: boolean;
   onCancel: () => void;
   onConfirm: (values: LockupValues) => Promise<void>;

@@ -28,7 +28,7 @@ const getContent = async (gist: string) => {
   return file.content;
 };
 
-export const generateMetadata = async ({
+export const generateMetadata = ({
   params,
 }: {
   params: RealmProposalPageParams;

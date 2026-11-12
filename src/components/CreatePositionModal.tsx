@@ -1,6 +1,6 @@
 "use client";
 
-import { toApiAmount } from "@/lib/tokenAmount";
+import { baseUnits, toApiAmount } from "@/lib/tokenAmount";
 import { daysToSecs } from "@/lib/utils";
 import { useGovernance } from "@/providers/GovernanceProvider";
 import { useOwnedAmount } from "@helium/helium-react-hooks";
@@ -55,7 +55,7 @@ export const CreatePositionModal: FC<React.PropsWithChildren<{}>> = ({
     }
   }, [subDaos, selectedSubDaoPk, setSelectedSubDaoPk]);
 
-  const maxLockupAmount = new BN(ownedAmount?.toString() ?? 0);
+  const maxLockupAmount = baseUnits(new BN(ownedAmount?.toString() ?? 0));
 
   const handleCalcLockupMultiplier = useCallback(
     (lockupPeriodInDays: number) =>

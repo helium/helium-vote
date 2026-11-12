@@ -10,7 +10,7 @@ interface LegacyProposalPageParams extends NetworkPageParams {
   proposalKey: string;
 }
 
-export const generateMetadata = async ({
+export const generateMetadata = ({
   params,
 }: {
   params: LegacyProposalPageParams;

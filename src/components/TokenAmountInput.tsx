@@ -1,13 +1,14 @@
 "use client";
 
 import {
+  BaseUnits,
   formatTokenAmount,
   isTokenAmountEdit,
+  normalizeTokenAmountInput,
   parseTokenAmount,
   TokenAmount,
 } from "@/lib/tokenAmount";
 import { useGovernance } from "@/providers/GovernanceProvider";
-import BN from "bn.js";
 import React, { FC, useState } from "react";
 import { Input } from "./ui/input";
 
@@ -21,7 +22,10 @@ type TokenAmountField = {
 
 // Keeps the text as the user types it, and parses it against `max` in the
 // mint of the current Network. Amounts are in the mint's smallest unit.
-export const useTokenAmountInput = (max: BN, initAmount?: BN) => {
+export const useTokenAmountInput = (
+  max: BaseUnits,
+  initAmount?: BaseUnits
+) => {
   const { mintAcc, network } = useGovernance();
   const decimals = mintAcc?.decimals;
   const [text, setText] = useState(() =>
@@ -47,8 +51,13 @@ export const useTokenAmountInput = (max: BN, initAmount?: BN) => {
   };
 };
 
-export const TokenAmountInput: FC<{ field: TokenAmountField }> = ({
+export const TokenAmountInput: FC<{
+  field: TokenAmountField;
+  // Shown when the amount is over `max`. Defaults to an insufficient balance.
+  exceedsMaxMessage?: string;
+}> = ({
   field: { text, amount, decimals, symbol, setText },
+  exceedsMaxMessage,
 }) => (
   <div className="flex flex-col gap-1">
     <Input
@@ -59,13 +68,16 @@ export const TokenAmountInput: FC<{ field: TokenAmountField }> = ({
       value={text}
       aria-invalid={amount.kind === "exceedsBalance" || amount.kind === "invalid"}
       onChange={({ target }) => {
-        if (isTokenAmountEdit(text, target.value, decimals)) {
-          setText(target.value);
+        const next = normalizeTokenAmountInput(target.value);
+        if (isTokenAmountEdit(text, next, decimals)) {
+          setText(next);
         }
       }}
     />
     {amount.kind === "exceedsBalance" && (
-      <p className="text-xs text-red-500">Insufficient {symbol} balance</p>
+      <p className="text-xs text-red-500">
+        {exceedsMaxMessage ?? `Insufficient ${symbol} balance`}
+      </p>
     )}
     {amount.kind === "invalid" && (
       <p className="text-xs text-red-500">

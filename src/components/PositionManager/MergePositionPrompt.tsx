@@ -1,6 +1,6 @@
 "use client";
 
-import { formatTokenAmount } from "@/lib/tokenAmount";
+import { BaseUnits, formatTokenAmount } from "@/lib/tokenAmount";
 import {
   getMinDurationFmt,
   getTimeLeftFromNowFmt,
@@ -10,7 +10,6 @@ import { useGovernance } from "@/providers/GovernanceProvider";
 import { PositionWithMeta } from "@helium/voter-stake-registry-hooks";
 import { Mint } from "@solana/spl-token";
 import { PublicKey } from "@solana/web3.js";
-import BN from "bn.js";
 import classNames from "classnames";
 import { Loader2, X } from "lucide-react";
 import React, { FC, useState } from "react";
@@ -58,10 +57,13 @@ const PositionBlurb = ({
 export const MergePositionPrompt: FC<{
   position: PositionWithMeta;
   positions: PositionWithMeta[];
-  maxActionableAmount: BN;
+  maxActionableAmount: BaseUnits;
   isSubmitting?: boolean;
   onCancel: () => void;
-  onConfirm: (position: PositionWithMeta, amount: BN) => Promise<void>;
+  onConfirm: (
+    position: PositionWithMeta,
+    amount: BaseUnits
+  ) => Promise<void>;
 }> = ({
   position,
   positions,
@@ -130,18 +132,22 @@ export const MergePositionPrompt: FC<{
             <div className="flex flex-row justify-between items-center text-xs">
               <span>Lockup Amount</span>
               <div className="flex flex-row gap-1 items-center">
-                <span
-                  className="underline cursor-pointer"
+                <button
+                  type="button"
                   onClick={setMax}
+                  className="underline cursor-pointer"
                 >
                   Max Amount:
-                </span>
+                </button>
                 <span>
                   {maxText} {upperNetwork}
                 </span>
               </div>
             </div>
-            <TokenAmountInput field={field} />
+            <TokenAmountInput
+              field={field}
+              exceedsMaxMessage="Amount exceeds position balance"
+            />
           </div>
           <div className="flex flex-col gap-4">
             <div className="flex flex-col flex-shrink gap-2 mt-4">
@@ -217,7 +223,7 @@ export const MergePositionPrompt: FC<{
               </Button>
               <Button
                 className="flex-1 text-foreground gap-2"
-                disabled={isSubmitting}
+                disabled={isSubmitting || amount.kind !== "valid"}
                 onClick={handleSubmit}
               >
                 {isSubmitting && <Loader2 className="size-5 animate-spin" />}

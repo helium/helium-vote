@@ -7,7 +7,7 @@ import {
   getTimeLeftFromNowFmt,
   secsToDays,
 } from "@/lib/utils";
-import { formatTokenAmount } from "@/lib/tokenAmount";
+import { BaseUnits, baseUnits, formatTokenAmount } from "@/lib/tokenAmount";
 import { useGovernance } from "@/providers/GovernanceProvider";
 import { useSolanaUnixNow } from "@helium/helium-react-hooks";
 import {
@@ -26,7 +26,7 @@ import { ConfirmationItem } from "./ConfirmationItem";
 
 export const SplitPositionPrompt: FC<{
   position: PositionWithMeta;
-  maxActionableAmount: BN;
+  maxActionableAmount: BaseUnits;
   isSubmitting?: boolean;
   onCancel: () => void;
   onConfirm: (values: LockTokensFormValues) => Promise<void>;
@@ -71,7 +71,7 @@ export const SplitPositionPrompt: FC<{
 
   const upperNetwork = network.toUpperCase();
   // Step 2 shows only after a valid amount, which needs the mint.
-  const formatAmount = (amount: BN) =>
+  const formatAmount = (amount: BaseUnits) =>
     mintAcc ? formatTokenAmount(amount, mintAcc.decimals) : "";
   return (
     <div className="flex flex-col h-full p-8 max-md:p-4 max-w-2xl mx-auto overflow-auto md:justify-center">
@@ -129,7 +129,7 @@ export const SplitPositionPrompt: FC<{
                 }}
                 title="Position #1"
                 description={`${
-                  formatAmount(maxActionableAmount.sub(formValues.amount))
+                  formatAmount(baseUnits(maxActionableAmount.sub(formValues.amount)))
                 } ${upperNetwork} for ${
                   isConstant
                     ? getMinDurationFmt(

@@ -1,7 +1,11 @@
 import { organizationKey } from "@helium/organization-sdk";
 import { PublicKey } from "@solana/web3.js";
 import { describe, expect, it } from "vitest";
-import { organizationNetwork, parseGovNetwork } from "../constants";
+import {
+  networkToName,
+  organizationNetwork,
+  parseGovNetwork,
+} from "../constants";
 
 describe("parseGovNetwork", () => {
   it("accepts each Network", () => {
@@ -13,6 +17,14 @@ describe("parseGovNetwork", () => {
   it("rejects other text", () => {
     expect(parseGovNetwork("foo")).toBeUndefined();
     expect(parseGovNetwork("HNT")).toBeUndefined();
+  });
+});
+
+describe("networkToName", () => {
+  it("names the Organization of each Network", () => {
+    expect(networkToName.hnt).toBe("Helium");
+    expect(networkToName.mobile).toBe("Helium MOBILE");
+    expect(networkToName.iot).toBe("Helium IOT");
   });
 });
 

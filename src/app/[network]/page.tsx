@@ -26,7 +26,7 @@ const networkDescriptions: Record<GovNetwork, string> = {
   iot: "Vote on Helium IOT network proposals with veIOT, and browse the results of past IOT votes.",
 };
 
-export const generateMetadata = async ({
+export const generateMetadata = ({
   params,
 }: {
   params: NetworkPageParams;

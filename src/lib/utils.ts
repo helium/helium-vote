@@ -10,6 +10,7 @@ import {
 import BN from "bn.js";
 import { clsx, type ClassValue } from "clsx";
 import { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { twMerge } from "tailwind-merge";
 import { ILegacyProposal, ProposalState, ProposalV0 } from "./types";
 import { organizationNetwork } from "./constants";
@@ -76,16 +77,16 @@ export const formMetaTags = (args?: {
     twitter: {
       title: metaTitle,
       description: metaDescription,
-      image: metaImage,
+      images: [metaImage],
       card: "summary_large_image",
       site: "@helium",
     },
     openGraph: {
       title: metaTitle,
       description: metaDescription,
-      image: metaImage,
+      images: [metaImage],
       url: metaUrl,
-      site_name: "Helium Vote",
+      siteName: "Helium Vote",
       locale: "en_US",
       type: "website",
     },
@@ -324,14 +325,26 @@ export const getProposalContent = async (proposalKey: PublicKey) => {
     new PublicKey(proposalKey)
   );
 
-  const uri = proposal.uri.replace(/^http:\/\//, "https://");
+  const network = organizationNetwork(proposal.namespace);
+  if (!network) notFound();
+
+  const uri = proposal.uri.replace(/^http:\/\//i, "https://");
+  if (!isHttpsUrl(uri)) notFound();
   const res = await fetch(uri, { next: { revalidate: 60 * 60 * 24 } });
   const content = await res.text();
   return {
     content,
     name: proposal.name,
-    network: organizationNetwork(proposal.namespace),
+    network,
   };
+};
+
+const isHttpsUrl = (uri: string) => {
+  try {
+    return new URL(uri).protocol === "https:";
+  } catch {
+    return false;
+  }
 };
 
 export function debounce<T extends unknown[], U>(

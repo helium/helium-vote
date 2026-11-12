@@ -1,7 +1,7 @@
 "use client";
 
+import { BaseUnits } from "@/lib/tokenAmount";
 import { getFormattedStringFromDays, yearsToDays } from "@/lib/utils";
-import BN from "bn.js";
 import { useGovernance } from "@/providers/GovernanceProvider";
 import classNames from "classnames";
 import { Loader2 } from "lucide-react";
@@ -54,8 +54,7 @@ export interface LockupValues {
 }
 
 export interface LockTokensFormValues extends LockupValues {
-  // In the mint's smallest unit.
-  amount: BN;
+  amount: BaseUnits;
 }
 
 // Extend changes only the lockup, so it submits no amount.
@@ -74,7 +73,7 @@ export const LockTokensForm: FC<
     initValues?: Partial<LockTokensFormValues>;
     minLockupTimeInDays?: number;
     maxLockupTimeInDays?: number;
-    maxLockupAmount: BN;
+    maxLockupAmount: BaseUnits;
     isSubmitting?: boolean;
     submitText?: string;
     cancelText?: string;
@@ -189,18 +188,24 @@ export const LockTokensForm: FC<
             <div className="flex flex-row justify-between items-center text-sm">
               <span>Lockup Amount</span>
               <div className="flex flex-row gap-1 items-center">
-                <span
-                  className="underline cursor-pointer"
+                <button
+                  type="button"
                   onClick={setMax}
+                  className="underline cursor-pointer"
                 >
                   Max Amount:
-                </span>
+                </button>
                 <span>
                   {maxText} {upperNetwork}
                 </span>
               </div>
             </div>
-            <TokenAmountInput field={field} />
+            <TokenAmountInput
+              field={field}
+              exceedsMaxMessage={
+                mode === "split" ? "Amount exceeds position balance" : undefined
+              }
+            />
             {mode === "lock" && (
               <div className="p-2 text-xs bg-slate-600 rounded">
                 ve{upperNetwork} is computed as a factor of token amount and

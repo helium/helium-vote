@@ -23,15 +23,14 @@ export const generateMetadata = async ({
 }: {
   params: ProposalPageParams;
 }) => {
-  const { network, proposalKey } = params;
+  const { proposalKey } = params;
   const pKey = parseProposalKey(proposalKey);
   const proposal = await getProposalContent(pKey);
-  const canonicalNetwork = proposal.network ?? network;
 
   return formProposalMetaTags({
     name: proposal.name,
     description: `Vote on ${proposal.name}`,
-    path: `/${canonicalNetwork}/proposals/${proposalKey}`,
+    path: `/${proposal.network}/proposals/${proposalKey}`,
   });
 };
 

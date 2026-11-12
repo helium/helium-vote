@@ -1,6 +1,6 @@
 "use client";
 
-import { toApiAmount } from "@/lib/tokenAmount";
+import { BaseUnits, baseUnits, toApiAmount } from "@/lib/tokenAmount";
 import { EPOCH_LENGTH, secsToDays } from "@/lib/utils";
 import { useGovernance } from "@/providers/GovernanceProvider";
 import { TASK_QUEUE, useDelegationClaimBot } from "@helium/automation-hooks";
@@ -162,7 +162,7 @@ export const PositionManager: FC<PositionManagerProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [position, unixNow, positions]);
 
-  const maxActionableAmount = position.amountDepositedNative;
+  const maxActionableAmount = baseUnits(position.amountDepositedNative);
 
   const reset = useCallback(() => {
     refetchState();
@@ -442,7 +442,7 @@ export const PositionManager: FC<PositionManagerProps> = ({
 
   const handleMergePosition = async (
     targetPosition: PositionWithMeta,
-    amount: BN
+    amount: BaseUnits
   ) => {
     try {
       await transferMutation.submit(
