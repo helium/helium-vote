@@ -7,6 +7,7 @@ import {
   getTimeLeftFromNowFmt,
   secsToDays,
 } from "@/lib/utils";
+import { BaseUnits, baseUnits, formatTokenAmount } from "@/lib/tokenAmount";
 import { useGovernance } from "@/providers/GovernanceProvider";
 import { useSolanaUnixNow } from "@helium/helium-react-hooks";
 import {
@@ -25,14 +26,14 @@ import { ConfirmationItem } from "./ConfirmationItem";
 
 export const SplitPositionPrompt: FC<{
   position: PositionWithMeta;
-  maxActionableAmount: number;
+  maxActionableAmount: BaseUnits;
   isSubmitting?: boolean;
   onCancel: () => void;
   onConfirm: (values: LockTokensFormValues) => Promise<void>;
 }> = ({ position, maxActionableAmount, isSubmitting, onCancel, onConfirm }) => {
   const [step, setStep] = useState(1);
   const [formValues, setFormValues] = useState<LockTokensFormValues>();
-  const { mint, network, registrar } = useGovernance();
+  const { mint, mintAcc, network, registrar } = useGovernance();
   const unixNow = useSolanaUnixNow() || Date.now() / 1000;
   const { lockup, votingMint } = position;
   const lockupKind = Object.keys(lockup.kind)[0] as string;
@@ -69,6 +70,9 @@ export const SplitPositionPrompt: FC<{
   };
 
   const upperNetwork = network.toUpperCase();
+  // Step 2 shows only after a valid amount, which needs the mint.
+  const formatAmount = (amount: BaseUnits) =>
+    mintAcc ? formatTokenAmount(amount, mintAcc.decimals) : "";
   return (
     <div className="flex flex-col h-full p-8 max-md:p-4 max-w-2xl mx-auto overflow-auto md:justify-center">
       <div className="hidden max-md:flex flex-row w-full justify-end mb-4">
@@ -125,7 +129,7 @@ export const SplitPositionPrompt: FC<{
                 }}
                 title="Position #1"
                 description={`${
-                  maxActionableAmount - formValues.amount
+                  formatAmount(baseUnits(maxActionableAmount.sub(formValues.amount)))
                 } ${upperNetwork} for ${
                   isConstant
                     ? getMinDurationFmt(
@@ -141,9 +145,9 @@ export const SplitPositionPrompt: FC<{
                   src: `/images/${network}.svg`,
                 }}
                 title="Position #2"
-                description={`${
+                description={`${formatAmount(
                   formValues.amount
-                } ${upperNetwork} for ${getFormattedStringFromDays(
+                )} ${upperNetwork} for ${getFormattedStringFromDays(
                   formValues.lockupPeriodInDays
                 )}`}
               />

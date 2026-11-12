@@ -1,6 +1,7 @@
 "use client";
 
 import { useWallet } from "@/hooks/useWallet";
+import { GovNetwork, networkToName, parseGovNetwork } from "@/lib/constants";
 import { Wallet } from "@anchor-lang/core";
 import { useAnchorProvider, useMint } from "@helium/helium-react-hooks";
 import { organizationKey } from "@helium/organization-sdk";
@@ -18,15 +19,7 @@ import { useParams } from "next/navigation";
 import { FC, ReactNode, createContext, useContext, useEffect, useMemo } from "react";
 import { useAsync } from "react-async-hook";
 
-type GovNetwork = "hnt" | "mobile" | "iot";
-type NetworkToName = { [K in GovNetwork]: string };
 type NetworkToMint = { [K in GovNetwork]: PublicKey };
-
-const networkToName: NetworkToName = {
-  hnt: "Helium",
-  mobile: "Helium MOBILE",
-  iot: "Helium IOT",
-};
 
 const networksToMint: NetworkToMint = {
   hnt: HNT_MINT,
@@ -53,9 +46,7 @@ const GovernanceProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const anchorProvider = useAnchorProvider();
   const { publicKey } = useWallet();
   const params = useParams();
-  const network: GovNetwork = (params.network as string) in networksToMint
-    ? (params.network as GovNetwork)
-    : "hnt";
+  const network = parseGovNetwork(params.network as string) ?? "hnt";
   const networkName = useMemo(() => networkToName[network], [network]);
   const mint = useMemo(() => networksToMint[network], [network]);
   const registrarKey = useMemo(() => mint && getRegistrarKey(mint), [mint]);

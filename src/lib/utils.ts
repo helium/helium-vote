@@ -1,7 +1,6 @@
 import { AnchorProvider } from "@anchor-lang/core";
 import { init as initProp } from "@helium/proposal-sdk";
 import { PositionWithMeta } from "@helium/voter-stake-registry-hooks";
-import { Mint } from "@solana/spl-token";
 import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
 import {
   Connection,
@@ -11,8 +10,11 @@ import {
 import BN from "bn.js";
 import { clsx, type ClassValue } from "clsx";
 import { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { twMerge } from "tailwind-merge";
 import { ILegacyProposal, ProposalState, ProposalV0 } from "./types";
+import { organizationNetwork } from "./constants";
+import { SITE_URL } from "./routes.mjs";
 
 export const DAYS_PER_YEAR = 365;
 export const SECS_PER_DAY = 86400;
@@ -32,6 +34,19 @@ export const ellipsisMiddle = (wallet: string): string => {
   return start + middle + end;
 };
 
+// Search engines show about 160 characters of a description.
+const DESCRIPTION_LENGTH = 160;
+
+export const truncateDescription = (text: string) => {
+  const flat = text.replace(/\s+/g, " ").trim();
+  if (flat.length <= DESCRIPTION_LENGTH) return flat;
+  // Cut at the last word boundary that leaves room for the ellipsis, or
+  // mid-word when there is none.
+  const lastSpace = flat.lastIndexOf(" ", DESCRIPTION_LENGTH - 1);
+  const end = lastSpace > 0 ? lastSpace : DESCRIPTION_LENGTH - 1;
+  return flat.slice(0, end) + "…";
+};
+
 export const formMetaTags = (args?: {
   title?: string;
   description?: string;
@@ -41,18 +56,19 @@ export const formMetaTags = (args?: {
   const { title, description, openGraphImageAbsoluteUrl, url } = args || {};
   const metaTitle = title ? `${title} — Helium Vote` : "Helium Vote";
   const metaDescription = description
-    ? description
+    ? truncateDescription(description)
     : "Helium Vote is where the Helium Community comes together to make decisions on the Network.";
   const metaImage = openGraphImageAbsoluteUrl
     ? openGraphImageAbsoluteUrl
-    : "https://heliumvote.com/images/o-g.png";
-  const metaUrl = url ? url : "https://heliumvote.com";
+    : `${SITE_URL}/images/o-g.png`;
+  const metaUrl = url ? url : SITE_URL;
 
   return {
-    metadataBase: new URL("https://heliumvote.com"),
+    metadataBase: new URL(SITE_URL),
     icons: ["/favicon.ico"],
     title: metaTitle,
     description: metaDescription,
+    ...(url ? { alternates: { canonical: url } } : {}),
     itemProps: {
       name: metaTitle,
       description: metaDescription,
@@ -61,21 +77,33 @@ export const formMetaTags = (args?: {
     twitter: {
       title: metaTitle,
       description: metaDescription,
-      image: metaImage,
+      images: [metaImage],
       card: "summary_large_image",
       site: "@helium",
     },
     openGraph: {
       title: metaTitle,
       description: metaDescription,
-      image: metaImage,
+      images: [metaImage],
       url: metaUrl,
-      site_name: "Helium Vote",
+      siteName: "Helium Vote",
       locale: "en_US",
       type: "website",
     },
   } as Metadata;
 };
+
+// Metadata for a proposal page. An unknown proposal gets the site defaults.
+export const formProposalMetaTags = (
+  proposal: { name: string; description: string; path: string } | null
+) =>
+  proposal
+    ? formMetaTags({
+        title: proposal.name,
+        description: proposal.description,
+        url: `${SITE_URL}${proposal.path}`,
+      })
+    : formMetaTags();
 
 export const getLegacyProposalState = (
   proposal: ILegacyProposal
@@ -241,10 +269,6 @@ export const humanReadable = (
   return `${roundedIntegerPart}${roundedDecimalPart}`;
 };
 
-export const getMintMinAmountAsDecimal = (mint: Mint) => {
-  return 1 * 10 ** -mint.decimals;
-};
-
 export const getPositionVoteMultiplier = (position: PositionWithMeta) => {
   const { lockup } = position;
   const lockupKind = Object.keys(lockup.kind)[0] as string;
@@ -270,18 +294,6 @@ export const getPositionVoteMultiplier = (position: PositionWithMeta) => {
   ).toFixed(2);
 };
 
-export const precision = (a: number) => {
-  if (!Number.isFinite(a)) return 0;
-  let e = 1;
-  let p = 0;
-  while (Math.round(a * e) / e !== a) {
-    e *= 10;
-    // eslint-disable-next-line no-plusplus
-    p++;
-  }
-  return p;
-};
-
 
 export const abbreviateNumber = (number: number) => {
   let newNumber = number;
@@ -295,8 +307,9 @@ export const abbreviateNumber = (number: number) => {
   return newNumber.toPrecision(3) + suffixes[suffixNum];
 };
 
-export const getProposalContent = async (proposalKey: PublicKey) => {
-  const provider = new AnchorProvider(
+// A provider with no wallet, for server-side reads.
+export const readOnlyProvider = () =>
+  new AnchorProvider(
     new Connection(
       process.env.NEXT_PUBLIC_SOLANA_URL ||
         clusterApiUrl(WalletAdapterNetwork.Mainnet),
@@ -306,15 +319,32 @@ export const getProposalContent = async (proposalKey: PublicKey) => {
     {}
   );
 
-  const proposalSdk = await initProp(provider);
+export const getProposalContent = async (proposalKey: PublicKey) => {
+  const proposalSdk = await initProp(readOnlyProvider());
   const proposal = await proposalSdk.account.proposalV0.fetch(
     new PublicKey(proposalKey)
   );
 
-  const uri = proposal.uri.replace(/^http:\/\//, "https://");
+  const network = organizationNetwork(proposal.namespace);
+  if (!network) notFound();
+
+  const uri = proposal.uri.replace(/^http:\/\//i, "https://");
+  if (!isHttpsUrl(uri)) notFound();
   const res = await fetch(uri, { next: { revalidate: 60 * 60 * 24 } });
   const content = await res.text();
-  return { content, name: proposal.name };
+  return {
+    content,
+    name: proposal.name,
+    network,
+  };
+};
+
+const isHttpsUrl = (uri: string) => {
+  try {
+    return new URL(uri).protocol === "https:";
+  } catch {
+    return false;
+  }
 };
 
 export function debounce<T extends unknown[], U>(

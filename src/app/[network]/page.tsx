@@ -5,17 +5,40 @@ import { NetworkBanner } from "@/components/NetworkBanner";
 import { LegacyProposalCard } from "@/components/LegacyProposalCard";
 import { Header } from "@/components/Header";
 import { RealmProposalCard } from "@/components/RealmProposalCard";
+import { GovNetwork, govNetworks } from "@/lib/constants";
+import { SITE_URL } from "@/lib/routes.mjs";
+import { formMetaTags } from "@/lib/utils";
 
 export const dynamicParams = false;
 
 export async function generateStaticParams() {
-  const networks = ["hnt", "mobile", "iot"];
-  return networks.map((network) => ({ network }));
+  return govNetworks.map((network) => ({ network }));
 }
 
+// The [network] layout returns 404 for any other `network`.
 export interface NetworkPageParams {
-  network: string;
+  network: GovNetwork;
 }
+
+const networkDescriptions: Record<GovNetwork, string> = {
+  hnt: "Vote on Helium Improvement Proposals (HIPs) with veHNT, and browse the results of past Helium governance votes.",
+  mobile: "Vote on Helium MOBILE network proposals with veMOBILE, and browse the results of past MOBILE votes.",
+  iot: "Vote on Helium IOT network proposals with veIOT, and browse the results of past IOT votes.",
+};
+
+export const generateMetadata = ({
+  params,
+}: {
+  params: NetworkPageParams;
+}) => {
+  const { network } = params;
+
+  return formMetaTags({
+    title: `${network.toUpperCase()} Proposals`,
+    description: networkDescriptions[network],
+    url: `${SITE_URL}/${network}`,
+  });
+};
 
 export default async function NetworkPage({
   params,

@@ -1,11 +1,7 @@
 "use client";
 
-import {
-  getFormattedStringFromDays,
-  getMintMinAmountAsDecimal,
-  precision,
-  yearsToDays,
-} from "@/lib/utils";
+import { BaseUnits } from "@/lib/tokenAmount";
+import { getFormattedStringFromDays, yearsToDays } from "@/lib/utils";
 import { useGovernance } from "@/providers/GovernanceProvider";
 import classNames from "classnames";
 import { Loader2 } from "lucide-react";
@@ -16,6 +12,7 @@ import { Button } from "./ui/button";
 import { Checkbox } from "./ui/checkbox";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "./ui/hover-card";
 import { Input } from "./ui/input";
+import { TokenAmountInput, useTokenAmountInput } from "./TokenAmountInput";
 
 export const defaultLockupPeriods = [
   {
@@ -50,41 +47,53 @@ export enum LockupKind {
   constant = "constant",
 }
 
-export interface LockTokensFormValues {
+export interface LockupValues {
   lockupKind: LockupKind;
-  amount: number;
   lockupPeriod: (typeof defaultLockupPeriods)[0];
   lockupPeriodInDays: number;
 }
 
-export const LockTokensForm: FC<{
-  initValues?: Partial<LockTokensFormValues>;
-  mode?: "lock" | "extend" | "split";
-  minLockupTimeInDays?: number;
-  maxLockupTimeInDays?: number;
-  maxLockupAmount: number;
-  isSubmitting?: boolean;
-  submitText?: string;
-  cancelText?: string;
-  calcMultiplierFn: (lockupPeriodInDays: number) => number;
-  onCancel?: () => void;
-  onSubmit: (values: LockTokensFormValues) => Promise<void>;
-}> = ({
-  initValues,
-  mode = "lock",
-  minLockupTimeInDays = 0,
-  maxLockupTimeInDays = 1460, // 4 years
-  maxLockupAmount,
-  calcMultiplierFn,
-  isSubmitting = false,
-  submitText = "Submit",
-  cancelText = "Cancel",
-  onCancel,
-  onSubmit,
-}) => {
-  const { network, mintAcc } = useGovernance();
-  const mintMinAmount = mintAcc ? getMintMinAmountAsDecimal(mintAcc) : 1;
-  const currentPrecision = precision(mintMinAmount);
+export interface LockTokensFormValues extends LockupValues {
+  amount: BaseUnits;
+}
+
+// Extend changes only the lockup, so it submits no amount.
+type ModeProps =
+  | {
+      mode?: "lock" | "split";
+      onSubmit: (values: LockTokensFormValues) => Promise<void>;
+    }
+  | {
+      mode: "extend";
+      onSubmit: (values: LockupValues) => Promise<void>;
+    };
+
+export const LockTokensForm: FC<
+  {
+    initValues?: Partial<LockTokensFormValues>;
+    minLockupTimeInDays?: number;
+    maxLockupTimeInDays?: number;
+    maxLockupAmount: BaseUnits;
+    isSubmitting?: boolean;
+    submitText?: string;
+    cancelText?: string;
+    calcMultiplierFn: (lockupPeriodInDays: number) => number;
+    onCancel?: () => void;
+  } & ModeProps
+> = (props) => {
+  const {
+    initValues,
+    minLockupTimeInDays = 0,
+    maxLockupTimeInDays = 1460, // 4 years
+    maxLockupAmount,
+    calcMultiplierFn,
+    isSubmitting = false,
+    submitText = "Submit",
+    cancelText = "Cancel",
+    onCancel,
+  } = props;
+  const mode = props.mode ?? "lock";
+  const { network } = useGovernance();
   const hasMinLockup = minLockupTimeInDays && minLockupTimeInDays > 0;
   const hasMaxLockup = maxLockupTimeInDays && maxLockupTimeInDays !== Infinity;
 
@@ -103,7 +112,10 @@ export const LockTokensForm: FC<{
     ),
   ];
 
-  const [amount, setAmount] = useState<number | undefined>(initValues?.amount);
+  const { field, maxText, setMax } = useTokenAmountInput(
+    maxLockupAmount,
+    initValues?.amount
+  );
 
   const [lockupKind, setLockupKind] = useState(
     initValues?.lockupKind || LockupKind.cliff
@@ -136,31 +148,17 @@ export const LockTokensForm: FC<{
     }
   }, [lockupPeriod, showCustomDuration, setLockupPeriodInDays]);
 
-  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = e.target.value;
-
-    if (!Number(val)) {
-      setAmount(undefined);
-      return;
-    }
-
-    setAmount(
-      parseFloat(
-        Math.max(Number(mintMinAmount), Number(e.target.value)).toFixed(
-          currentPrecision
-        )
-      )
-    );
-  };
-
-  const handleSubmit = async () => {
-    await onSubmit({
-      lockupKind,
-      lockupPeriod,
-      amount: amount!,
-      lockupPeriodInDays,
-    });
-  };
+  const needsAmount = mode !== "extend";
+  // The submit action, or undefined while the amount is not valid.
+  const lockup = { lockupKind, lockupPeriod, lockupPeriodInDays };
+  const { amount } = field;
+  const submit =
+    props.mode === "extend"
+      ? () => props.onSubmit(lockup)
+      : amount.kind === "valid"
+        ? () => props.onSubmit({ ...lockup, amount: amount.amount })
+        : undefined;
+  const canSubmit = !isSubmitting && !!lockupPeriod.value && !!submit;
 
   const handleToggleLockupKind = () =>
     setLockupKind(
@@ -185,29 +183,28 @@ export const LockTokensForm: FC<{
       ) : null}
 
       <div className="flex flex-col gap-4">
-        {["lock", "split"].includes(mode) && (
+        {needsAmount && (
           <div className="flex flex-col gap-1">
             <div className="flex flex-row justify-between items-center text-sm">
               <span>Lockup Amount</span>
               <div className="flex flex-row gap-1 items-center">
-                <span
+                <button
+                  type="button"
+                  onClick={setMax}
                   className="underline cursor-pointer"
-                  onClick={() => setAmount(maxLockupAmount)}
                 >
                   Max Amount:
-                </span>
+                </button>
                 <span>
-                  {maxLockupAmount} {upperNetwork}
+                  {maxText} {upperNetwork}
                 </span>
               </div>
             </div>
-            <Input
-              placeholder="Enter amount"
-              min={mintMinAmount}
-              value={amount}
-              type="number"
-              onChange={handleAmountChange}
-              step={mintMinAmount}
+            <TokenAmountInput
+              field={field}
+              exceedsMaxMessage={
+                mode === "split" ? "Amount exceeds position balance" : undefined
+              }
             />
             {mode === "lock" && (
               <div className="p-2 text-xs bg-slate-600 rounded">
@@ -328,7 +325,7 @@ export const LockTokensForm: FC<{
           </div>
         </div>
 
-        {["lock", "split"].includes(mode) && (
+        {needsAmount && (
           <div className="flex flex-col gap-1">
             <LockupChart
               type={lockupKind}
@@ -379,32 +376,11 @@ export const LockTokensForm: FC<{
           )}
           <Button
             className="flex-grow text-foreground gap-2"
-            onClick={handleSubmit}
-            disabled={
-              {
-                lock:
-                  !amount ||
-                  amount > maxLockupAmount ||
-                  !lockupPeriod.value ||
-                  lockupPeriod.value === 0 ||
-                  isSubmitting,
-                extend:
-                  !lockupPeriod.value ||
-                  lockupPeriod.value === 0 ||
-                  isSubmitting,
-                split:
-                  !amount ||
-                  amount > maxLockupAmount ||
-                  !lockupPeriod.value ||
-                  lockupPeriod.value === 0 ||
-                  isSubmitting,
-              }[mode]
-            }
+            onClick={submit}
+            disabled={!canSubmit}
           >
             {isSubmitting && <Loader2 className="size-5 animate-spin" />}
-            {!amount || amount <= maxLockupAmount
-              ? submitText
-              : `Insufficient ${upperNetwork}`}
+            {submitText}
           </Button>
         </div>
       </div>

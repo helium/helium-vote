@@ -5,9 +5,10 @@ import {
   calcLockupMultiplier,
 } from "@helium/voter-stake-registry-hooks";
 import React, { FC, useCallback, useState } from "react";
-import { LockTokensForm, LockTokensFormValues } from "../LockTokensForm";
+import { LockTokensForm, LockupValues } from "../LockTokensForm";
 import { StepIndicator } from "../StepIndicator";
 import { useGovernance } from "@/providers/GovernanceProvider";
+import { BaseUnits } from "@/lib/tokenAmount";
 import {
   daysToSecs,
   getFormattedStringFromDays,
@@ -22,13 +23,13 @@ import { ConfirmationItem } from "./ConfirmationItem";
 
 export const ExtendPositionPrompt: FC<{
   position: PositionWithMeta;
-  maxActionableAmount: number;
+  maxActionableAmount: BaseUnits;
   isSubmitting?: boolean;
   onCancel: () => void;
-  onConfirm: (values: LockTokensFormValues) => Promise<void>;
+  onConfirm: (values: LockupValues) => Promise<void>;
 }> = ({ position, maxActionableAmount, isSubmitting, onCancel, onConfirm }) => {
   const [step, setStep] = useState(1);
-  const [formValues, setFormValues] = useState<LockTokensFormValues>();
+  const [formValues, setFormValues] = useState<LockupValues>();
   const { mint, network, registrar } = useGovernance();
   const unixNow = useSolanaUnixNow() || Date.now() / 1000;
   const { lockup, isDelegated, votingMint } = position;
@@ -54,7 +55,7 @@ export const ExtendPositionPrompt: FC<{
     [mint, registrar]
   );
 
-  const handleFormSubmit = async (values: LockTokensFormValues) => {
+  const handleFormSubmit = async (values: LockupValues) => {
     setFormValues(values);
     setStep(step + 1);
   };

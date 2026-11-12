@@ -1,11 +1,10 @@
 "use client";
 
+import { BaseUnits, formatTokenAmount } from "@/lib/tokenAmount";
 import {
   getMinDurationFmt,
-  getMintMinAmountAsDecimal,
   getTimeLeftFromNowFmt,
   humanReadable,
-  precision,
 } from "@/lib/utils";
 import { useGovernance } from "@/providers/GovernanceProvider";
 import { PositionWithMeta } from "@helium/voter-stake-registry-hooks";
@@ -18,7 +17,7 @@ import { FaCircleArrowRight } from "react-icons/fa6";
 import { PositionCard } from "../PositionCard";
 import { StepIndicator } from "../StepIndicator";
 import { Button } from "../ui/button";
-import { Input } from "../ui/input";
+import { TokenAmountInput, useTokenAmountInput } from "../TokenAmountInput";
 import { ConfirmationItem } from "./ConfirmationItem";
 
 const PositionBlurb = ({
@@ -58,10 +57,13 @@ const PositionBlurb = ({
 export const MergePositionPrompt: FC<{
   position: PositionWithMeta;
   positions: PositionWithMeta[];
-  maxActionableAmount: number;
+  maxActionableAmount: BaseUnits;
   isSubmitting?: boolean;
   onCancel: () => void;
-  onConfirm: (position: PositionWithMeta, amount: number) => Promise<void>;
+  onConfirm: (
+    position: PositionWithMeta,
+    amount: BaseUnits
+  ) => Promise<void>;
 }> = ({
   position,
   positions,
@@ -72,35 +74,16 @@ export const MergePositionPrompt: FC<{
 }) => {
   const [step, setStep] = useState(1);
   const [selectedPosPk, setSelectedPosPk] = useState<PublicKey>();
-  const [amount, setAmount] = useState<number>();
   const { mintAcc, network } = useGovernance();
-  const mintMinAmount = mintAcc ? getMintMinAmountAsDecimal(mintAcc) : 1;
-  const currentPrecision = precision(mintMinAmount);
+  const { field, maxText, setMax } = useTokenAmountInput(maxActionableAmount);
+  const { amount } = field;
 
   const selectedPosition =
     selectedPosPk && positions.find((pos) => pos.pubkey.equals(selectedPosPk))!;
 
-  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = e.target.value;
-
-    if (!Number(val)) {
-      setAmount(undefined);
-      return;
-    }
-
-    setAmount(
-      parseFloat(
-        Math.max(
-          Number(mintMinAmount),
-          Math.min(Number(maxActionableAmount), Number(e.target.value))
-        ).toFixed(currentPrecision)
-      )
-    );
-  };
-
   const handleSubmit = async () => {
-    if (amount && selectedPosition) {
-      await onConfirm(selectedPosition, amount);
+    if (amount.kind === "valid" && selectedPosition) {
+      await onConfirm(selectedPosition, amount.amount);
     }
   };
 
@@ -149,25 +132,21 @@ export const MergePositionPrompt: FC<{
             <div className="flex flex-row justify-between items-center text-xs">
               <span>Lockup Amount</span>
               <div className="flex flex-row gap-1 items-center">
-                <span
+                <button
+                  type="button"
+                  onClick={setMax}
                   className="underline cursor-pointer"
-                  onClick={() => setAmount(maxActionableAmount)}
                 >
                   Max Amount:
-                </span>
+                </button>
                 <span>
-                  {maxActionableAmount} {upperNetwork}
+                  {maxText} {upperNetwork}
                 </span>
               </div>
             </div>
-            <Input
-              placeholder="Enter amount"
-              max={maxActionableAmount}
-              min={mintMinAmount}
-              value={amount}
-              type="number"
-              onChange={handleAmountChange}
-              step={mintMinAmount}
+            <TokenAmountInput
+              field={field}
+              exceedsMaxMessage="Amount exceeds position balance"
             />
           </div>
           <div className="flex flex-col gap-4">
@@ -198,7 +177,7 @@ export const MergePositionPrompt: FC<{
               </Button>
               <Button
                 className="flex-1 text-foreground"
-                disabled={!amount || !selectedPosPk}
+                disabled={amount.kind !== "valid" || !selectedPosPk}
                 onClick={() => setStep(step + 1)}
               >
                 Review
@@ -226,6 +205,12 @@ export const MergePositionPrompt: FC<{
               className="rounded-r-md bg-gradient-to-b from-background to-background/30 max-md:rounded-tr-none max-md:rounded-b-md"
             />
           </div>
+          {amount.kind === "valid" && mintAcc && (
+            <p className="mt-4 text-sm text-center">
+              Moving {formatTokenAmount(amount.amount, mintAcc.decimals)}{" "}
+              {upperNetwork}
+            </p>
+          )}
           <div className="flex flex-col max-md:flex-grow justify-end gap-2 mt-4">
             <div className="flex flex-row justify-between items-center gap-2">
               <Button
@@ -238,7 +223,7 @@ export const MergePositionPrompt: FC<{
               </Button>
               <Button
                 className="flex-1 text-foreground gap-2"
-                disabled={isSubmitting}
+                disabled={isSubmitting || amount.kind !== "valid"}
                 onClick={handleSubmit}
               >
                 {isSubmitting && <Loader2 className="size-5 animate-spin" />}

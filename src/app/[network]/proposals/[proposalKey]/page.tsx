@@ -1,7 +1,7 @@
 import { NetworkPageParams } from "@/app/[network]/page";
 import { Header } from "@/components/Header";
 import { Proposal } from "@/components/Proposal";
-import { formMetaTags, getProposalContent } from "@/lib/utils";
+import { formProposalMetaTags, getProposalContent } from "@/lib/utils";
 import { PublicKey } from "@solana/web3.js";
 import { notFound } from "next/navigation";
 import React from "react";
@@ -25,12 +25,12 @@ export const generateMetadata = async ({
 }) => {
   const { proposalKey } = params;
   const pKey = parseProposalKey(proposalKey);
-  const { name } = await getProposalContent(pKey);
+  const proposal = await getProposalContent(pKey);
 
-  return formMetaTags({
-    title: name,
-    description: `Vote on ${name}`,
-    url: `https://heliumvote.com/${proposalKey}`,
+  return formProposalMetaTags({
+    name: proposal.name,
+    description: `Vote on ${proposal.name}`,
+    path: `/${proposal.network}/proposals/${proposalKey}`,
   });
 };
 

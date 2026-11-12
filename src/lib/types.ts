@@ -1,5 +1,6 @@
 import { IdlAccounts } from "@anchor-lang/core";
 import { Proposal } from "@helium/modular-governance-idls/lib/types/proposal";
+import { GovNetwork } from "./constants";
 
 export type ProposalState =
   | "active"
@@ -29,6 +30,7 @@ export interface IRealmProposal {
   gist: string;
   github: string;
   summary: string;
+  network: GovNetwork;
   outcomes: { value: string; votes: number }[];
 }
 
