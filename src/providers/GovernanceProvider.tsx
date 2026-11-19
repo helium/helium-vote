@@ -167,7 +167,7 @@ const useGovernance = () => {
       voteService ??
       new VoteService({
         baseURL: process.env.NEXT_PUBLIC_HELIUM_VOTE_URI,
-        registrar: getRegistrarKey(HNT_MINT),
+        registrar: getRegistrarKey(context.mint),
       }),
     numActiveVotes,
     positions,
